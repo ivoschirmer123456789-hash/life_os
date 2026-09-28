@@ -7827,7 +7827,17 @@ function LifeOSV18(){
  },[lifeAccess]);
 
  const startLifeProCheckout=async()=>{
-   if(realPlan==='PRO'||realPlan==='OWNER')return;
+   if(realPlan==='PRO'){
+     setToast('LIFE OS PRO JÁ ESTÁ ATIVO');
+     setTimeout(()=>setToast(''),2200);
+     return;
+   }
+   if(realPlan==='OWNER'){
+     setShowPlanChoice(false);
+     setToast('OWNER · ENTRE COM UMA CONTA FREE PARA TESTAR O CHECKOUT');
+     setTimeout(()=>setToast(''),3200);
+     return;
+   }
    try{
      if(!window.lifeSupabase)throw new Error('Conexão indisponível.');
      const {data:{session}}=await window.lifeSupabase.auth.getSession();
@@ -7838,8 +7848,10 @@ function LifeOSV18(){
      if(!data?.checkout_url)throw new Error(data?.error||'Checkout indisponível.');
      window.location.href=data.checkout_url;
    }catch(e){
-     setToast('Não foi possível abrir o PRO agora.');
-     setTimeout(()=>setToast(''),2600);
+     console.error('LIFE PRO checkout:',e);
+     const msg=String(e?.message||'').trim();
+     setToast(msg?('PRO · '+msg.toUpperCase().slice(0,110)):'NÃO FOI POSSÍVEL ABRIR O PRO AGORA');
+     setTimeout(()=>setToast(''),4200);
    }
  };
 
@@ -9394,7 +9406,14 @@ function LifeOSV18(){
    setSpot(false);setQ('');
  };
  const down=e=>{let p=e.touches?e.touches[0]:e;drag.current={sx:p.clientX,sy:p.clientY,ox:fab.x,oy:fab.y??innerHeight-160,m:false}};const move=e=>{if(!drag.current)return;let p=e.touches?e.touches[0]:e,d=drag.current,nx=Math.max(8,Math.min(innerWidth-58,d.ox+p.clientX-d.sx)),ny=Math.max(66,Math.min(innerHeight-145,d.oy+p.clientY-d.sy));if(Math.abs(p.clientX-d.sx)+Math.abs(p.clientY-d.sy)>6)d.m=true;setFab({x:nx,y:ny})};const up=()=>{if(!drag.current)return;save('l18_fab',fab);if(!drag.current.m)setSheet('capture');drag.current=null};
- const openLifePro=()=>{ if(realPlan==='PRO'||realPlan==='OWNER')return; setShowPlanChoice(true); };
+ const openLifePro=()=>{
+   if(hasV18Pro){
+     setToast(realPlan==='OWNER'?'OWNER · ACESSO COMPLETO':'LIFE OS PRO JÁ ESTÁ ATIVO');
+     setTimeout(()=>setToast(''),2200);
+     return;
+   }
+   setShowPlanChoice(true);
+ };
  const v18ProOnly = new Set(['Evolução']);
  const v18Go = (area) => {
    if(v18ProOnly.has(area) && !hasV18Pro){ setView('Hoje'); setToast('RECURSO PRO · DESBLOQUEIE O LIFE COMPLETO'); setTimeout(()=>setToast(''),2600); return; }
@@ -9496,7 +9515,7 @@ showPlanChoice&&!hasV18Pro&&<div onClick={()=>setShowPlanChoice(false)} style={{
         <div style={{display:'grid',gap:10,fontSize:12,color:'#e8dfc1',lineHeight:1.45}}>
           <span>✦ Tudo do FREE, com uma experiência mais completa</span><span>✦ Transforme suas respostas em um treino personalizado</span><span>✦ Organize sua alimentação com planejamento personalizado</span><span>✦ Explore uma biblioteca ampliada de receitas e filtros</span><span>✦ Enxergue seu histórico com evolução e análises avançadas</span><span>✦ LIFE AI avançado com contexto cruzado, memória, Workspace e histórico de ações</span><span>✦ Desbloqueie os recursos avançados do LIFE</span><span>✦ Menos limites entre você e o sistema completo</span>
         </div>
-        <button type="button" onClick={startLifeProCheckout} style={{width:'100%',marginTop:24,padding:14,borderRadius:12,border:'1px solid #f5d76e',background:'linear-gradient(135deg,#8a6a12,#d4af37,#f5d76e)',color:'#171006',fontWeight:950,boxShadow:'0 10px 35px rgba(212,175,55,.22)',cursor:'pointer'}}>DESBLOQUEAR LIFE OS PRO →</button>
+        <button type="button" onClick={startLifeProCheckout} style={{width:'100%',marginTop:24,padding:14,borderRadius:12,border:'1px solid #f5d76e',background:'linear-gradient(135deg,#8a6a12,#d4af37,#f5d76e)',color:'#171006',fontWeight:950,boxShadow:'0 10px 35px rgba(212,175,55,.22)',cursor:'pointer'}}>{realPlan==='OWNER'?'OWNER · USE UMA CONTA FREE PARA TESTAR →':'DESBLOQUEAR LIFE OS PRO →'}</button>
         <div style={{fontSize:9,color:'#8f835f',textAlign:'center',marginTop:9}}>Assinatura mensal · checkout seguro</div>
       </div>
     </div>
