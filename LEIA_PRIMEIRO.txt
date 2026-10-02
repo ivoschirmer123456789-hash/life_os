@@ -1,0 +1,5 @@
+LIFE OS 3.2 — ATUALIZAÇÃO
+
+Envie todos os arquivos e pastas deste pacote para a raiz do mesmo repositório GitHub do LIFE OS.
+Quando o GitHub perguntar sobre arquivos com o mesmo nome, esta versão deve substituir os anteriores.
+A Vercel fará um novo deploy automaticamente.

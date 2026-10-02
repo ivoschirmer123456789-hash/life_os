@@ -1134,6 +1134,38 @@ function LifeGuideModal({ guide, onClose, onAsk }) {
 // =========================================================================
 const LIFE_PUBLIC_AREA_LABELS = { Dieta: 'Alimentação', Archive: 'Arquivo', Tarefas: 'Tarefas', Life: 'Planejamento' };
 const lifePublicAreaName = (area) => LIFE_PUBLIC_AREA_LABELS[area] || area;
+const LIFE_HOW_IT_WORKS = {
+    'Hoje': { purpose: 'É a base do LIFE: mostra apenas o que precisa acontecer hoje.', steps: ['Veja seus planos do dia.', 'Marque o que concluir.', 'Adicione somente o que realmente precisa acontecer hoje.'], examples: ['Estudar matemática às 16h', 'Treino às 18h', 'Entregar o trabalho amanhã'], impact: 'Ajuda a começar o dia com menos ruído e uma próxima ação clara.' },
+    'Tarefas': { purpose: 'Organiza ações, prazos, prioridades, projetos, metas e hábitos.', steps: ['Capture uma tarefa.', 'Defina prazo ou prioridade quando fizer sentido.', 'Use projetos e filtros apenas quando precisar de mais estrutura.'], examples: ['Enviar trabalho', 'Comprar material', 'Preparar apresentação'], impact: 'Tira pendências da cabeça e transforma intenção em ação visível.' },
+    'Favoritos': { purpose: 'É o atalho pessoal para as áreas que você mais usa.', steps: ['Toque no coração de qualquer área.', 'Ela aparece automaticamente aqui.', 'Toque novamente no coração para remover.'], examples: ['Favoritar Estudos e Fitness', 'Deixar Finanças fora dos atalhos se você usa pouco'], impact: 'Reduz o tempo procurando funções e deixa o LIFE com a sua cara.' },
+    'Notas': { purpose: 'Guarda ideias e informações rapidamente sem exigir organização imediata.', steps: ['Escreva a ideia.', 'Salve.', 'Depois transforme em tarefa, projeto ou contexto para a LIFE AI quando necessário.'], examples: ['Ideia para um trabalho', 'Informação importante da aula', 'Lista rápida'], impact: 'Evita perder ideias e permite organizar depois, sem interromper o momento.' },
+    'Estudos': { purpose: 'Centraliza foco, guia de estudos, revisões e trilhas de aprendizado.', steps: ['Escolha uma ferramenta ou abra o Guia de Estudos.', 'Informe assunto, nível, objetivo e tempo.', 'Siga a árvore cronológica e registre sessões.'], examples: ['Aprender Física do zero', 'Organizar revisão para o ENEM', 'Criar uma trilha de inglês'], impact: 'Transforma um assunto grande em uma sequência clara do que aprender primeiro e depois.' },
+    'Guia de Estudos': { purpose: 'Monta uma árvore cronológica de aprendizado a partir do seu objetivo.', steps: ['Preencha o formulário.', 'Revise a sequência sugerida.', 'Use livros, canais, vídeos e exercícios relacionados.', 'Avance conforme dominar cada etapa.'], examples: ['Matemática básica → álgebra → funções', 'Biologia celular → genética → evolução'], impact: 'Ajuda a saber por onde começar e evita estudar tópicos soltos sem sequência.' },
+    'Fitness': { purpose: 'Reúne treino pronto, treino personalizado, biblioteca de exercícios e seus treinos salvos.', steps: ['Escolha um treino pronto, personalize um ou abra a biblioteca.', 'Salve o que quiser usar.', 'Registre sessões para acompanhar na Evolução.'], examples: ['Treino de força 3x por semana', 'Pesquisar execução de remada', 'Salvar um treino em Meus Treinos'], impact: 'Deixa o treino mais organizado e facilita manter consistência sem depender de memória.' },
+    'Receitas': { purpose: 'É uma biblioteca grande de receitas organizadas por tipo, preparo e ocasião.', steps: ['Escolha uma categoria ou pesquise.', 'Abra a receita.', 'Veja ingredientes, preparo, tempo e substituições possíveis.'], examples: ['Doce rápido', 'Almoço salgado', 'Receita fitness com fonte de proteína'], impact: 'Diminui o tempo pensando no que preparar e facilita variar as refeições.' },
+    'IA': { purpose: 'A LIFE AI conecta as áreas do LIFE e explica como usar o próprio sistema.', steps: ['Pergunte em linguagem normal.', 'Ela usa somente o contexto disponível e autorizado.', 'Quando indicar uma função, pode direcionar você para a área certa.'], examples: ['Como funciona Evolução?', 'Organize meu dia', 'Onde crio um treino personalizado?', 'Explique minhas opções de estudo'], impact: 'Funciona como uma central de ajuda e contexto para você não precisar decorar onde cada coisa fica.' },
+    'Life': { purpose: 'Organiza planejamento, projetos, rotina e próximos passos.', steps: ['Crie ou abra um projeto.', 'Defina o resultado e a próxima ação.', 'Acompanhe etapas sem misturar tudo com a Home.'], examples: ['Planejar uma viagem', 'Organizar um projeto escolar', 'Montar a semana'], impact: 'Transforma objetivos maiores em etapas que cabem na rotina.' },
+    'Finanças': { purpose: 'Registra entradas e saídas e mostra o que aconteceu no mês.', steps: ['Registre uma movimentação.', 'Use categorias.', 'Abra detalhes quando quiser analisar orçamento e histórico.'], examples: ['Registrar uma compra', 'Acompanhar gastos do mês', 'Criar uma meta de compra'], impact: 'Torna o dinheiro mais visível e ajuda a entender hábitos de gasto sem adivinhar valores.' },
+    'Meu LIFE': { purpose: 'Reúne o que você decidiu guardar, fixar ou retomar.', steps: ['Favorite ou fixe itens.', 'Abra Meu LIFE.', 'Continue de onde parou ou revise seus atalhos.'], examples: ['Fixar um projeto', 'Retomar uma nota recente', 'Guardar um treino'], impact: 'Cria um painel pessoal sem lotar a tela principal.' },
+    'Evolução': { purpose: 'Mostra sua evolução usando somente dados reais registrados no LIFE.', steps: ['Use o LIFE normalmente.', 'Abra Evolução.', 'Veja gráficos, frequência e distribuição por área ao longo do tempo.'], examples: ['Sessões de estudo na semana', 'Treinos realizados', 'Tarefas concluídas', 'Atividade por área'], impact: 'Ajuda a perceber padrões e mudanças sem depender só de sensação.' },
+    'Archive': { purpose: 'Guarda histórico e registros antigos para consulta.', steps: ['Use o LIFE normalmente.', 'Registros concluídos aparecem no histórico.', 'Pesquise quando precisar recuperar algo.'], examples: ['Encontrar uma atividade antiga', 'Rever um período', 'Recuperar contexto'], impact: 'Mantém o histórico acessível sem poluir as telas do dia a dia.' },
+    'Perfil': { purpose: 'Mostra conta, plano, sincronização e acesso às configurações.', steps: ['Confira sua conta e plano.', 'Verifique o status da nuvem.', 'Abra Configurações para preferências do sistema.'], examples: ['Trocar tema', 'Verificar assinatura', 'Sincronizar dados'], impact: 'Centraliza controles da conta sem espalhar configurações pelo produto.' },
+    'Configurações': { purpose: 'Controla aparência, mini-legendas, abertura, notificações, dados e preferências do LIFE.', steps: ['Escolha o que quer ajustar.', 'Altere a preferência.', 'As mudanças ficam salvas para os próximos acessos.'], examples: ['Desligar mini-legendas', 'Mudar tema', 'Reativar abertura cinematográfica'], impact: 'Permite adaptar a experiência sem alterar seus registros.' },
+    'Tutorial': { purpose: 'Ensina o LIFE OS passo a passo.', steps: ['Percorra cada etapa.', 'Abra as áreas citadas.', 'Volte ao tutorial quando esquecer algum fluxo.'], examples: ['Aprender a usar Hoje', 'Entender Favoritos', 'Descobrir como a nuvem funciona'], impact: 'Reduz a curva de aprendizado e ajuda novos usuários a entender o sistema rapidamente.' }
+};
+const lifeHowInfo = (area) => LIFE_HOW_IT_WORKS[area] || LIFE_HOW_IT_WORKS[lifePublicAreaName(area)] || { purpose: 'Esta área faz parte do seu sistema pessoal LIFE.', steps: ['Abra a função principal.', 'Use apenas o que fizer sentido agora.', 'Volte quando precisar.'], examples: ['Explore a área e use a LIFE AI se tiver dúvida.'], impact: 'Ajuda a manter informações relacionadas no mesmo lugar.' };
+const lifeHowAreaFromText = (raw='') => {
+    const t = String(raw).toLowerCase();
+    const aliases = [
+        ['Guia de Estudos', ['guia de estudos','trilha de estudos']], ['Meu LIFE', ['meu life']], ['Configurações', ['configuracoes','configurações','ajustes']],
+        ['Hoje', ['hoje','home','inicio','início']], ['Tarefas', ['tarefas','organizar','pendencias','pendências']], ['Favoritos', ['favoritos','favorito']],
+        ['Notas', ['notas','anotacoes','anotações']], ['Estudos', ['estudos','estudar','enem']], ['Fitness', ['fitness','treino','academia','exercicio','exercício']],
+        ['Receitas', ['receitas','receita','cozinha']], ['IA', ['life ai','ia','assistente']], ['Life', ['planejamento','projetos','projeto']],
+        ['Finanças', ['financas','finanças','dinheiro','gastos']], ['Evolução', ['evolucao','evolução','progresso','graficos','gráficos']],
+        ['Archive', ['arquivo','archive','historico','histórico']], ['Perfil', ['perfil','conta']], ['Tutorial', ['tutorial','como usar o life']]
+    ];
+    return (aliases.find(([_, words]) => words.some(w => t.includes(w))) || [null])[0];
+};
 const LIFE_ROUTE_INDEX = [
     { area: 'Hoje', title: 'Organizar meu dia', keywords: 'hoje dia prioridade morning brief agenda compromissos', prompt: 'Organize meu dia usando apenas o que está registrado no LIFE e mostre a primeira ação.' },
     { area: 'Meu LIFE', title: 'Encontrar favoritos, fixados e recentes', keywords: 'favoritos fixados recentes meu life atalhos', prompt: 'Me ajude a encontrar o que eu salvei, favoritei ou acessei recentemente no Meu LIFE.' },
@@ -2960,6 +2992,24 @@ function LifeEvolutionQuality({ activity = [], tasks = [], notes = [], workouts 
 }
 
 
+function LifeHowItWorksModal({ area, onClose, onAsk }) {
+    if (!area) return null;
+    const info = lifeHowInfo(area), label = lifePublicAreaName(area);
+    const ask = () => onAsk && onAsk(`Explique como funciona a área ${label} do LIFE OS, usando exemplos práticos e me diga qual primeiro passo faz mais sentido para mim. Não altere nada sem confirmação.`);
+    return React.createElement('div', { className: 'life-how-overlay', onClick: e => e.target === e.currentTarget && onClose && onClose() },
+        React.createElement('article', { className: 'life-how-panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Como funciona ' + label },
+            React.createElement('header', null,
+                React.createElement('div', null, React.createElement('small', null, 'LIFE / COMO FUNCIONA'), React.createElement('h2', null, label + '.')),
+                React.createElement('button', { type: 'button', onClick: onClose, 'aria-label': 'Fechar' }, '×')),
+            React.createElement('section', { className: 'life-how-intro' }, React.createElement('b', null, 'Para que serve'), React.createElement('p', null, info.purpose)),
+            React.createElement('section', null, React.createElement('b', null, 'Como usar'), React.createElement('ol', null, info.steps.map((x,i) => React.createElement('li', { key: i }, React.createElement('span', null, String(i+1).padStart(2,'0')), React.createElement('p', null, x))))),
+            React.createElement('section', null, React.createElement('b', null, 'Exemplos'), React.createElement('div', { className: 'life-how-examples' }, info.examples.map((x,i) => React.createElement('span', { key: i }, x)))),
+            React.createElement('section', { className: 'life-how-impact' }, React.createElement('b', null, 'Como isso pode ajudar no dia a dia'), React.createElement('p', null, info.impact)),
+            React.createElement('footer', null,
+                React.createElement('button', { type: 'button', onClick: ask, className: 'primary' }, '✦ PERGUNTAR À LIFE AI'),
+                React.createElement('button', { type: 'button', onClick: onClose }, 'ENTENDI'))));
+}
+
 function LifeSimpleShell({ icon = 'dashboard', eyebrow = 'LIFE', title = '', description = '', children = null, primaryLabel = '', primaryDesc = '', onPrimary = null, secondaryLabel = '', secondaryDesc = '', onSecondary = null }) {
     return React.createElement("main", { className: "life-simple-shell" },
         React.createElement("section", { className: "life-simple-hero" },
@@ -3756,6 +3806,7 @@ function LifeOSV18() {
     const [lifePins, setLifePins] = React.useState(() => load('life_pins_v4', []));
     const [lifeActivity, setLifeActivity] = React.useState(() => load('life_activity_v4', []));
     const [mobileMore, setMobileMore] = React.useState(false);
+    const [howItWorksArea, setHowItWorksArea] = React.useState(null);
     const [showFitnessLibrary, setShowFitnessLibrary] = React.useState(false);
     const [fitnessMainTab, setFitnessMainTab] = React.useState('Treinos');
     const [exerciseLibraryGroup, setExerciseLibraryGroup] = React.useState('Todos');
@@ -4080,7 +4131,7 @@ function LifeOSV18() {
     const aiDoneTasks = () => tasks.filter(t => taskIsDone(t));
     const aiTodayActivity = () => lifeActivity.filter(a => new Date(a.date).toLocaleDateString('pt-BR') === aiTodayKey());
     const aiSafeText = (x, n = 180) => String(x || '').replace(/\s+/g, ' ').trim().slice(0, n);
-    const lifeAIProductInstructions = `Você é o LIFE AI, assistente pessoal do LIFE OS. Responda em português natural, claro, útil e conversacional. Se o usuário apenas cumprimentar (oi, olá, opa, bom dia etc.), cumprimente de volta e pergunte como pode ajudar — nunca diga que não entendeu. Raciocine antes de responder, faça perguntas quando faltar contexto importante e não invente dados do usuário. Use o contexto recebido somente quando ele for relevante. Diferencie fatos registrados, inferências e sugestões. Quando uma ação alterar dados do LIFE, proponha a ação e espere confirmação. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog e o navigation_index. Quando o usuário pedir onde encontrar algo, direcione para a área correta do LIFE em vez de responder de forma vaga. Se houver study_plan no contexto, use a etapa atual da trilha como referência. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog quando ele estiver presente e use os guias mais relevantes como base prática; não responda com frases genéricas se houver um guia específico. Em fitness, quando o usuário pedir um treino por grupo muscular (ex.: costas e bíceps, pernas, panturrilha, antebraço), respeite exatamente os grupos pedidos e monte uma sessão usando o exercise_catalog recebido; não troque a solicitação por um plano semanal genérico. Mostre exercícios, séries, repetições e descanso de forma simples. No LIFE, Alimentação/Dieta fica dentro de Fitness > Alimentação. Quando o usuário pedir dieta, plano alimentar, refeições, intolerâncias ou suplementos, direcione para essa subárea e use nutrition_profile e mealPlans quando existirem. Respeite o plano da conta recebido no contexto: no FREE, não entregue como se estivesse desbloqueado um treino semanal personalizado, plano alimentar personalizado, memória persistente, planejador avançado, mapa de domínio de estudos ou análise financeira avançada. No FREE, ofereça orientação geral e recursos gratuitos e direcione de forma transparente ao fluxo PRO quando o pedido depender desses recursos. Nunca finja que um recurso PRO está disponível no FREE. Faça perguntas antes de personalizar quando faltarem idade, rotina, preferências, alergias/intolerâncias ou contexto de treino. Nunca invente necessidade ou dose de suplemento. Em fitness e alimentação, adapte o nível de cautela à idade; para menores de 18 anos, evite rotinas extremas, metas corporais, restrição alimentar, déficit/superávit calculado, metas de peso e alto volume automático. Se houver lesão, condição médica ou dúvida de segurança, não prescreva um plano agressivo: peça orientação de responsável/profissional. Em receitas, forneça quantidades, utensílios, tempo, temperatura quando aplicável, ponto de preparo e passos completos. No treino, diferencie hipertrofia, força, condicionamento e híbrido; híbrido deve combinar musculação e cardio de forma coerente com recuperação e experiência. Seja conversacional, contextual e capaz de explicar o porquê das sugestões, sem fingir que uma única rotina é a melhor para todo mundo. Funcione como o sistema operacional do LIFE: quando a intenção estiver clara, direcione para a tela, filtro ou fluxo correto; quando o pedido envolver várias áreas, cruze agenda, tarefas, trilha de estudos, clima, treino, alimentação e finanças apenas quando forem relevantes. Não repita perguntas já respondidas no contexto. Use a hierarquia Objetivo → Projeto → Etapa → Tarefa quando isso ajudar a organizar, e consulte life_graph.links antes de supor relações. Para planejamento do dia, proponha blocos com duração e peça confirmação única antes de aplicar. Antes de criar, mover, excluir, vincular ou marcar algo como concluído, peça confirmação.`;
+    const lifeAIProductInstructions = `Você é o LIFE AI, assistente pessoal e guia de produto do LIFE OS. Você conhece as áreas, o que cada uma faz e como direcionar o usuário. Responda em português natural, claro, útil e conversacional. Se o usuário perguntar como funciona uma área, explique para que serve, como começar, dê exemplos concretos e indique a rota correta no LIFE.  Se o usuário apenas cumprimentar (oi, olá, opa, bom dia etc.), cumprimente de volta e pergunte como pode ajudar — nunca diga que não entendeu. Raciocine antes de responder, faça perguntas quando faltar contexto importante e não invente dados do usuário. Use o contexto recebido somente quando ele for relevante. Diferencie fatos registrados, inferências e sugestões. Quando uma ação alterar dados do LIFE, proponha a ação e espere confirmação. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog e o navigation_index. Quando o usuário pedir onde encontrar algo, direcione para a área correta do LIFE em vez de responder de forma vaga. Se houver study_plan no contexto, use a etapa atual da trilha como referência. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog quando ele estiver presente e use os guias mais relevantes como base prática; não responda com frases genéricas se houver um guia específico. Em fitness, quando o usuário pedir um treino por grupo muscular (ex.: costas e bíceps, pernas, panturrilha, antebraço), respeite exatamente os grupos pedidos e monte uma sessão usando o exercise_catalog recebido; não troque a solicitação por um plano semanal genérico. Mostre exercícios, séries, repetições e descanso de forma simples. No LIFE, Alimentação/Dieta fica dentro de Fitness > Alimentação. Quando o usuário pedir dieta, plano alimentar, refeições, intolerâncias ou suplementos, direcione para essa subárea e use nutrition_profile e mealPlans quando existirem. Respeite o plano da conta recebido no contexto: no FREE, não entregue como se estivesse desbloqueado um treino semanal personalizado, plano alimentar personalizado, memória persistente, planejador avançado, mapa de domínio de estudos ou análise financeira avançada. No FREE, ofereça orientação geral e recursos gratuitos e direcione de forma transparente ao fluxo PRO quando o pedido depender desses recursos. Nunca finja que um recurso PRO está disponível no FREE. Faça perguntas antes de personalizar quando faltarem idade, rotina, preferências, alergias/intolerâncias ou contexto de treino. Nunca invente necessidade ou dose de suplemento. Em fitness e alimentação, adapte o nível de cautela à idade; para menores de 18 anos, evite rotinas extremas, metas corporais, restrição alimentar, déficit/superávit calculado, metas de peso e alto volume automático. Se houver lesão, condição médica ou dúvida de segurança, não prescreva um plano agressivo: peça orientação de responsável/profissional. Em receitas, forneça quantidades, utensílios, tempo, temperatura quando aplicável, ponto de preparo e passos completos. No treino, diferencie hipertrofia, força, condicionamento e híbrido; híbrido deve combinar musculação e cardio de forma coerente com recuperação e experiência. Seja conversacional, contextual e capaz de explicar o porquê das sugestões, sem fingir que uma única rotina é a melhor para todo mundo. Funcione como o sistema operacional do LIFE: quando a intenção estiver clara, direcione para a tela, filtro ou fluxo correto; quando o pedido envolver várias áreas, cruze agenda, tarefas, trilha de estudos, clima, treino, alimentação e finanças apenas quando forem relevantes. Não repita perguntas já respondidas no contexto. Use a hierarquia Objetivo → Projeto → Etapa → Tarefa quando isso ajudar a organizar, e consulte life_graph.links antes de supor relações. Para planejamento do dia, proponha blocos com duração e peça confirmação única antes de aplicar. Antes de criar, mover, excluir, vincular ou marcar algo como concluído, peça confirmação.`;
     const buildAIContext = () => {
         const ctx = { area: lifePublicAreaName(aiContextArea), area_id: aiContextArea, specialist: aiSpecialist, plan: realPlan };
         ctx.navigation_index = LIFE_ROUTE_INDEX.map(x => ({ area: x.area, title: x.title, keywords: x.keywords }));
@@ -4307,8 +4358,8 @@ function LifeOSV18() {
     };
     const aiSearchRecipes = (text) => {
         const terms = text.toLowerCase().split(/\s+/).filter(x => x.length > 3 && !['receita', 'quero', 'fazer', 'para', 'comer'].includes(x));
-        const source = hasV18Pro ? v33Recipes : v33Recipes.slice(0, 12);
-        const ranked = source.map(r => { const hay = (r.name + ' ' + r.base + ' ' + r.cat + ' ' + r.method).toLowerCase(); return { ...r, score: terms.reduce((n, t) => n + (hay.includes(t) ? 1 : 0), 0) }; }).sort((a, b) => b.score - a.score || a.id - b.id);
+        const source = v33Recipes;
+        const ranked = source.map(r => { const hay = (r.name + ' ' + r.base + ' ' + r.cat + ' ' + (r.tags || []).join(' ') + ' ' + r.method).toLowerCase(); return { ...r, score: terms.reduce((n, t) => n + (hay.includes(t) ? 1 : 0), 0) }; }).sort((a, b) => b.score - a.score || a.id - b.id);
         return ranked.slice(0, 3);
     };
     const localLifeAI = (raw) => {
@@ -4316,7 +4367,14 @@ function LifeOSV18() {
         if (!text)
             return { text: '' };
         if (lifeIsSimpleGreeting(text))
-            return { text: `Olá! 👋 Como posso ajudar? Posso montar um treino, explicar um exercício, organizar seu dia, estudos, alimentação ou outra parte do LIFE.` };
+            return { text: `Olá! 👋 Como posso ajudar? Posso montar um treino, explicar um exercício, organizar seu dia, estudos, alimentação ou explicar qualquer parte do próprio LIFE OS.` };
+        const helpArea = lifeHowAreaFromText(text);
+        if (helpArea && /(como funciona|como usar|pra que serve|para que serve|o que significa|me explica|me explique|onde fica|o que faz)/i.test(low)) {
+            const info = lifeHowInfo(helpArea), label = lifePublicAreaName(helpArea);
+            const steps = info.steps.map((x,i) => `${i+1}. ${x}`).join(' ');
+            const examples = info.examples.slice(0,3).join(' · ');
+            return { text: `${label}: ${info.purpose} Como usar: ${steps} Exemplos: ${examples}. No dia a dia, ${info.impact.charAt(0).toLowerCase() + info.impact.slice(1)}`, action: { type: 'navigate', target: helpArea, label: 'Abrir ' + label, go: helpArea } };
+        }
         const wantsCustomWeek = /(treino|rotina).*(personaliz|pra mim|para mim|minha rotina|meu objetivo|semana|dias por semana)|monte.*semana.*trein/i.test(text);
         if (!hasV18Pro && wantsCustomWeek) {
             return { text: 'No FREE eu posso explicar exercícios, montar uma sessão por grupo muscular e mostrar os treinos essenciais. Para cruzar sua rotina, experiência, frequência, ambiente e preferências em uma semana personalizada, use Treino Personalizado no LIFE OS PRO.', action: { type: 'upgrade', label: 'Ver Treino Personalizado · PRO' } };
@@ -4508,6 +4566,7 @@ function LifeOSV18() {
             if (!session?.user)
                 return null;
             const context = buildAIContext();
+            context.product_help_catalog = Object.entries(LIFE_HOW_IT_WORKS).map(([area, info]) => ({ area: lifePublicAreaName(area), purpose: info.purpose, steps: info.steps, examples: info.examples, impact: info.impact }));
             const knowledgeArea = lifeGuideAreaFromText(prompt) || (aiContextArea !== 'IA' ? aiContextArea : null);
             context.knowledge_catalog = lifeSearchGuides(prompt, knowledgeArea).slice(0, 12).map(g => ({ id: g.id, area: g.area, group: g.group, title: g.title, summary: g.summary, steps: g.steps, tags: g.tags }));
             const requestedMuscles = lifeExtractMuscleTargets(prompt);
@@ -4741,10 +4800,6 @@ function LifeOSV18() {
     const openLifeRecent = (r) => {
         addLifeRecent(r);
         if (r.type === 'Receita' && r.recipe) {
-            if (!hasV18Pro && Number(r.recipe.id) > 12) {
-                openLifePro();
-                return;
-            }
             setV45Recipe(r.recipe);
             return;
         }
@@ -4758,10 +4813,6 @@ function LifeOSV18() {
             return;
         }
         if (r.type === 'Treino' && r.workout) {
-            if (!hasV18Pro && Number(r.workout.id) > 12) {
-                openLifePro();
-                return;
-            }
             v42Go('Fitness');
             startWorkoutPlayer(r.workout);
             return;
@@ -4771,10 +4822,6 @@ function LifeOSV18() {
     const openLifeRecipe = (r) => {
         if (!r)
             return;
-        if (!hasV18Pro && Number(r.id) > 12) {
-            openLifePro();
-            return;
-        }
         setV45Recipe(r);
         addLifeRecent({ type: 'Receita', id: r.id, title: r.name, go: 'Receitas', subtitle: r.cat, recipe: r });
         logLifeActivity('RECEITA', 'Abriu ' + r.name, 'Receitas');
@@ -4809,10 +4856,6 @@ function LifeOSV18() {
     const openLifeWorkout = (w) => {
         if (!w)
             return;
-        if (!hasV18Pro && Number(w.id) > 12) {
-            openLifePro();
-            return;
-        }
         setV48WorkoutFilter(w.type || 'Todos');
         startWorkoutPlayer(w);
     };
@@ -5074,7 +5117,7 @@ function LifeOSV18() {
     const [legalOpen, setLegalOpen] = React.useState(null);
     const [supportOpen, setSupportOpen] = React.useState(false);
     const [dangerOpen, setDangerOpen] = React.useState(false);
-    const lifeBuild = '3.1.0';
+    const lifeBuild = '3.2.0';
     const lifeDiagnostics = () => ({
         build: lifeBuild,
         plan: effectivePlan || realPlan || 'FREE',
@@ -5624,7 +5667,7 @@ function LifeOSV18() {
         }));
         return { id: i + 1, type, name: type + ' · ' + label + ' ' + String(cycle).padStart(2, '0'), level, days, duration, items: chosen, moves: chosen, prescription };
     });
-    const v33RecipeCats = ['Doce', 'Salgada', 'Assada', 'Cozida', 'Grelhada', 'Rápida', 'Rica em carboidratos', 'Rica em proteína', 'Maior energia'];
+    const v33RecipeCats = ['Doce', 'Salgada', 'Fitness', 'Café da manhã', 'Lanche', 'Almoço / jantar', 'Assada', 'Cozida', 'Grelhada', 'Rápida', 'Rica em carboidratos', 'Rica em proteína', 'Maior energia'];
     const recipeBlueprints = [
         {
             key: 'aveia e banana', title: 'Banana e aveia', cats: ['Doce', 'Rápida'], methods: ['frigideira', 'forno'],
@@ -5792,7 +5835,7 @@ function LifeOSV18() {
         }
     ];
     const recipeStyleNames = ['Clássico', 'Prático', 'Caseiro', 'Rápido', 'Simples'];
-    const v33Recipes = Array.from({ length: 500 }, (_, i) => {
+    const v33Recipes = Array.from({ length: 600 }, (_, i) => {
         const bp = recipeBlueprints[i % recipeBlueprints.length];
         const method = bp.methods[Math.floor(i / recipeBlueprints.length) % bp.methods.length];
         const cat = bp.cats[Math.floor(i / (recipeBlueprints.length * 2)) % bp.cats.length];
@@ -5802,6 +5845,7 @@ function LifeOSV18() {
         return {
             id: i + 1, cat, name: bp.title + ' · ' + variant + ' ' + String(Math.floor(i / recipeBlueprints.length) + 1).padStart(2, '0'),
             base: bp.key, method, style: variant,
+            tags: Array.from(new Set([cat, ...bp.cats, (i % 5 === 0 ? 'Fitness' : null), (i % 4 === 0 ? 'Café da manhã' : null), (i % 4 === 1 ? 'Lanche' : null), (i % 4 >= 2 ? 'Almoço / jantar' : null)].filter(Boolean))),
             ingredients: bp.ingredients.slice(),
             steps,
             time: bp.cook === 'Sem cocção' ? bp.prep : (bp.prep + ' + ' + bp.cook),
@@ -6069,10 +6113,6 @@ function LifeOSV18() {
         { key: 'recomp', title: 'Adultos 18+ · recomposição', sub: 'Treino de força/hipertrofia combinado com condicionamento para adultos.', type: 'Hipertrofia', goal: 'Hipertrofia', adult: true }
     ];
     const openTrainingCollection = c => {
-        if (!canLifeFeature('workoutLibrary')) {
-            openLifePro('fitness_planos');
-            return;
-        }
         if (c.adult && trainingAge < 18) {
             setWorkoutFinderOpen(true);
             setWfStep(0);
@@ -6082,7 +6122,9 @@ function LifeOSV18() {
             return;
         }
         setV32Workout(c.type);
+        setV48WorkoutFilter(c.type);
         setShowFitnessLibrary(true);
+        requestAnimationFrame(() => setTimeout(() => document.querySelector('.v48-workout-preview')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60));
     };
     const curatedVisiblePrograms = curatedWorkoutTemplates.filter(w => v32Workout === 'Todos' || w.type === v32Workout).filter(w => !w.minimumAge || trainingAge >= w.minimumAge).slice(0, 6);
     const foodCollections = [
@@ -6225,8 +6267,15 @@ function LifeOSV18() {
                         React.createElement("em", null, "ABRIR →")))) : React.createElement("div", { className: "life-folder-empty" }, "Você ainda não salvou nenhum treino. Crie um personalizado ou escolha um pronto para começar.")));
         }
         if (view === 'Receitas') {
-            const fav = (lifeFavorites.recipes || []).slice(0, 4).map((r, i) => ({ key: i, title: r.title || r.name || 'Receita favorita', meta: 'Favorita' }));
-            return React.createElement(LifeSimpleShell, { icon: 'restaurant', eyebrow: 'LIFE / RECEITAS', title: 'Receitas.', description: 'Encontre algo para preparar sem atravessar dezenas de filtros logo de cara.', primaryLabel: 'ENCONTRAR RECEITA', primaryDesc: 'Pesquise receitas pelo que quer preparar, tempo ou ingredientes.', onPrimary: () => openAdvancedArea('Receitas', null, 'ENCONTRAR RECEITA'), secondaryLabel: 'VER FAVORITAS E FILTROS', secondaryDesc: 'Abra filtros, coleções e receitas que você já salvou.', onSecondary: () => openAdvancedArea('Receitas', null, 'BIBLIOTECA DE RECEITAS') }, list(fav, 'Suas receitas favoritas aparecem aqui.'));
+            const recipeHomeCats = ['Doce', 'Salgada', 'Fitness', 'Café da manhã', 'Lanche', 'Rápida'];
+            const featured = v33Recipes.slice(0, 6);
+            const fav = (lifeFavorites.recipes || []).slice(0, 4).map((r, i) => ({ key: i, title: r.title || r.name || 'Receita favorita', meta: 'Favorita', onClick: r.recipe ? () => openLifeRecipe(r.recipe) : null }));
+            return React.createElement(LifeSimpleShell, { icon: 'restaurant', eyebrow: 'LIFE / RECEITAS', title: 'Receitas.', description: 'Uma biblioteca com 600 receitas entre doces, salgados, opções fitness, lanches, café da manhã e preparos rápidos.', primaryLabel: 'EXPLORAR 600 RECEITAS', primaryDesc: 'Pesquise pelo que quer preparar, ingrediente, ocasião ou tipo.', onPrimary: () => openAdvancedArea('Receitas', null, 'BIBLIOTECA · 600 RECEITAS'), secondaryLabel: 'FAVORITAS E FILTROS', secondaryDesc: 'Abra filtros, coleções e receitas que você já salvou.', onSecondary: () => openAdvancedArea('Receitas', null, 'BIBLIOTECA DE RECEITAS') },
+                React.createElement('section', { className: 'life-recipe-home' },
+                    React.createElement('div', { className: 'life-recipe-home-head' }, React.createElement('div', null, React.createElement('small', null, 'ESCOLHA UMA CATEGORIA'), React.createElement('h3', null, 'O que você quer preparar?')), React.createElement('span', null, v33Recipes.length + ' receitas')),
+                    React.createElement('div', { className: 'life-recipe-home-cats' }, recipeHomeCats.map(cat => React.createElement('button', { type: 'button', key: cat, onClick: () => openAdvancedArea('Receitas', () => { setV35RecipeFilter(cat); setV35RecipeSearch(''); }, 'RECEITAS · ' + cat.toUpperCase()) }, React.createElement('b', null, cat), React.createElement('small', null, v33Recipes.filter(r => (r.tags || [r.cat]).includes(cat)).length + ' opções')))),
+                    React.createElement('div', { className: 'life-recipe-home-featured' }, featured.map(r => React.createElement('button', { type: 'button', key: r.id, onClick: () => openLifeRecipe(r) }, React.createElement('small', null, (r.tags?.[0] || r.cat).toUpperCase()), React.createElement('b', null, r.name), React.createElement('span', null, r.time + ' · ' + r.serves))))),
+                fav.length ? list(fav, '') : null);
         }
         if (view === 'Finanças') {
             const recent = financeMonthTransactions.slice(0, 4).map(x => ({ id: x.id, title: x.desc || 'Movimentação', meta: (x.type || '') + ' · ' + money(x.value || 0) }));
@@ -6417,12 +6466,12 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("small", null, "LIFE / NAVEGA\u00C7\u00C3O"),
                         React.createElement("b", null, "Principais + ferramentas.")),
                     React.createElement("button", { type: "button", className: "v31-close", onClick: () => setV31Menu(false) }, "\u00D7")),
-                React.createElement("div", { className: "v31-nav", role: "navigation", "aria-label": "Todas as \u00E1reas do LIFE" }, [['Hoje', 'Agora'], ['Meu LIFE', 'Favoritos + recentes'], ['IA', 'Assistente inteligente'], ['Tarefas', 'Inbox + tarefas + projetos'], ['Notas', 'Bloco de anotações'], ['Life', 'Planejamento + sono'], ['Estudos', 'ENEM + conhecimento'], ['Fitness', 'Treinos + exercícios + alimentação'], ['Receitas', 'Cozinha + receitas detalhadas'], ['Finanças', 'Fluxo financeiro'], ['Evolução', 'Progresso + esportes'], ['Archive', 'Histórico e arquivo'], ['Perfil', 'Sistema']].map((x, i) => React.createElement("button", { type: "button", key: x[0], className: "v31-item " + (view === x[0] ? "on" : ""), onPointerDown: (e) => e.stopPropagation(), onClick: (e) => { e.preventDefault(); e.stopPropagation(); v42Go(x[0]); } },
-                    React.createElement("span", { className: "v31-num" }, String(i + 1).padStart(2, '0')),
-                    React.createElement("b", null,
-                        lifePublicAreaName(x[0]),
-                        x[0] === 'Notas' && v49Notes.length > 0 && React.createElement("em", { className: "v63-note-badge" }, v49Notes.length > 99 ? '99+' : v49Notes.length)),
-                    React.createElement("span", null, x[1])))),
+                React.createElement("div", { className: "v31-nav", role: "navigation", "aria-label": "Todas as áreas do LIFE" }, [['Hoje', 'Agora'], ['Meu LIFE', 'Favoritos + recentes'], ['IA', 'Assistente inteligente'], ['Tarefas', 'Inbox + tarefas + projetos'], ['Notas', 'Bloco de anotações'], ['Life', 'Planejamento + sono'], ['Estudos', 'ENEM + conhecimento'], ['Fitness', 'Treinos + exercícios + alimentação'], ['Receitas', 'Cozinha + receitas detalhadas'], ['Finanças', 'Fluxo financeiro'], ['Evolução', 'Progresso + esportes'], ['Archive', 'Histórico e arquivo'], ['Perfil', 'Sistema']].map((x, i) => React.createElement("div", { className: "v31-item-wrap " + (view === x[0] ? "on" : ""), key: x[0] },
+                    React.createElement("button", { type: "button", className: "v31-item " + (view === x[0] ? "on" : ""), onPointerDown: (e) => e.stopPropagation(), onClick: (e) => { e.preventDefault(); e.stopPropagation(); v42Go(x[0]); } },
+                        React.createElement("span", { className: "v31-num" }, String(i + 1).padStart(2, '0')),
+                        React.createElement("b", null, lifePublicAreaName(x[0]), x[0] === 'Notas' && v49Notes.length > 0 && React.createElement("em", { className: "v63-note-badge" }, v49Notes.length > 99 ? '99+' : v49Notes.length)),
+                        React.createElement("span", null, x[1])),
+                    React.createElement("button", { type: "button", className: "life-area-heart " + (isLifeFavorite('areas', x[0]) ? 'on' : ''), title: isLifeFavorite('areas', x[0]) ? 'Remover dos favoritos' : 'Adicionar aos favoritos', "aria-label": isLifeFavorite('areas', x[0]) ? 'Remover ' + lifePublicAreaName(x[0]) + ' dos favoritos' : 'Adicionar ' + lifePublicAreaName(x[0]) + ' aos favoritos', onClick: (e) => { e.preventDefault(); e.stopPropagation(); toggleLifeFavorite('areas', { id: x[0], title: lifePublicAreaName(x[0]), go: x[0], type: 'Área' }); } }, React.createElement("span", { className: "material-symbols-rounded" }, isLifeFavorite('areas', x[0]) ? 'favorite' : 'favorite_border'))))),
                 React.createElement("div", { className: "v31-foot" },
                     React.createElement("span", null, "LIFE OS / \u00C1REAS"),
                     React.createElement("span", null, "6 PRINCIPAIS · 7 FERRAMENTAS")))),
@@ -6489,7 +6538,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => setSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 3.1.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 3.2.0"),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => setSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
@@ -6813,6 +6862,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("nav", { className: "v18-tabs", "aria-label": "\u00C1reas principais do LIFE" }, nav.map(x => React.createElement("button", { type: "button", key: x, "aria-current": view === x ? 'page' : undefined, className: view === x ? 'on' : '', onClick: () => v18Go(x) },
                 navLabel[x] || x,
                 v18ProOnly.has(x) && !hasV18Pro ? ' · PRO' : ''))),
+            React.createElement("button", { type: "button", className: "life-how-entry", onClick: () => setHowItWorksArea(view) }, React.createElement("span", { className: "material-symbols-rounded" }, "help"), React.createElement("span", null, "Como funciona?")),
             !online && React.createElement("div", { className: "life-offline" },
                 React.createElement("div", null,
                     React.createElement("b", null, "SEM INTERNET"),
@@ -7630,7 +7680,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                             React.createElement("div", { className: "life-curated-week" }, w.weeklyItems.slice(0, 6).map((d, i) => React.createElement("span", { key: i },
                                 React.createElement("i", null, d.k),
                                 React.createElement("b", null, d.t)))),
-                            React.createElement("button", { type: "button", onClick: () => hasV18Pro ? setSelectedCustomWorkout(temporaryWorkoutFromTemplate(w)) : openLifePro('fitness_planos') }, hasV18Pro ? "VER SEMANA COMPLETA →" : "VER SEMANA COMPLETA · PRO →"))) : React.createElement("div", { className: "life-empty" }, "Nenhum plano curado nesta categoria. Use a busca inteligente abaixo."))),
+                            React.createElement("button", { type: "button", onClick: () => setSelectedCustomWorkout(temporaryWorkoutFromTemplate(w)) }, "VER SEMANA COMPLETA →"))) : React.createElement("div", { className: "life-empty" }, "Nenhum plano curado nesta categoria. Use a busca inteligente abaixo."))),
                     React.createElement("section", { className: "vfit-smart" },
                         React.createElement("div", null,
                             React.createElement("div", { className: "v28-k" }, "BUSCA INTELIGENTE / PLANOS CURADOS + BIBLIOTECA"),
@@ -7791,11 +7841,11 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                     lifeExerciseResults.length > exerciseLibraryLimit && React.createElement("button", { type: "button", className: "life-exercise-more", onClick: () => setExerciseLibraryLimit(x => x + 72) }, "MOSTRAR MAIS EXERC\u00CDCIOS \u2193"))),
             view === 'Fitness' && advancedArea === 'Fitness' && fitnessMainTab === 'Treinos' && React.createElement("section", { className: "life-disclosure" },
                 React.createElement("div", null,
-                    React.createElement("small", null, "BIBLIOTECA DE TREINOS \u00B7 PRO"),
-                    React.createElement("b", null, hasV18Pro && showFitnessLibrary ? 'Biblioteca de treinos aberta' : v33Workouts.length + ' planos de treino'),
-                    React.createElement("span", null, hasV18Pro ? 'Os exercícios e tutoriais ficam sempre visíveis acima. Aqui você expande apenas a biblioteca avançada de planos de treino.' : 'No FREE, a biblioteca de exercícios continua disponível. O PRO libera a biblioteca avançada de planos e a busca personalizada.')),
-                React.createElement("button", { type: "button", onClick: () => hasV18Pro ? setShowFitnessLibrary(x => !x) : openLifePro() }, hasV18Pro ? (showFitnessLibrary ? 'RECOLHER' : 'EXPLORAR PLANOS →') : 'DESBLOQUEAR PLANOS NO PRO →')),
-            view === 'Fitness' && advancedArea === 'Fitness' && fitnessMainTab === 'Treinos' && hasV18Pro && showFitnessLibrary && React.createElement("section", { className: "v38-section" },
+                    React.createElement("small", null, "BIBLIOTECA DE TREINOS"),
+                    React.createElement("b", null, showFitnessLibrary ? 'Biblioteca de treinos aberta' : v33Workouts.length + ' planos de treino'),
+                    React.createElement("span", null, 'Escolha uma metodologia ou explore a biblioteca. O treino personalizado continua sendo um recurso separado do PRO.')),
+                React.createElement("button", { type: "button", onClick: () => setShowFitnessLibrary(x => !x) }, showFitnessLibrary ? 'RECOLHER' : 'EXPLORAR PLANOS →')),
+            view === 'Fitness' && advancedArea === 'Fitness' && fitnessMainTab === 'Treinos' && showFitnessLibrary && React.createElement("section", { className: "v38-section" },
                 React.createElement("div", { className: "v38-title" },
                     React.createElement("div", null,
                         React.createElement("div", { className: "v18-micro" }, "BIBLIOTECA DE TREINOS"),
@@ -7816,7 +7866,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                 React.createElement("div", { className: "v38-list" }, [['Peito', 'Peito · porções e variações'], ['Costas', 'Costas · puxadas e remadas'], ['Pernas', 'Pernas · quadríceps, posteriores e glúteos'], ['Panturrilha', 'Panturrilha · em pé, sentado e máquinas'], ['Ombros', 'Ombros · anterior, lateral e posterior'], ['Bíceps', 'Bíceps · variações de pegada'], ['Tríceps', 'Tríceps · extensões e empurradas'], ['Antebraço', 'Antebraço · punhos e pegada'], ['Abdômen', 'Abdômen · estabilidade e controle'], ['Trapézio', 'Trapézio · encolhimentos e variações']].map(([group, label]) => React.createElement("button", { type: "button", className: "v38-item", key: group, onClick: () => openExerciseLibrary(group) },
                     React.createElement("b", null, label),
                     React.createElement("span", null, "ABRIR \u2192"))))),
-            view === 'Fitness' && advancedArea === 'Fitness' && fitnessMainTab === 'Treinos' && hasV18Pro && showFitnessLibrary && React.createElement("section", { className: "v48-workout-preview" },
+            view === 'Fitness' && advancedArea === 'Fitness' && fitnessMainTab === 'Treinos' && showFitnessLibrary && React.createElement("section", { className: "v48-workout-preview" },
                 React.createElement("div", { className: "v38-title" },
                     React.createElement("div", null,
                         React.createElement("div", { className: "v18-micro" },
@@ -7895,8 +7945,8 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                             React.createElement("b", null, "Base")))),
                 React.createElement("section", { className: "v18-sec" },
                     React.createElement("input", { className: "v35-input", placeholder: "Buscar receita, ingrediente ou estilo...", value: v35RecipeSearch, onChange: e => setV35RecipeSearch(e.target.value) }),
-                    React.createElement("div", { className: "v35-pills" }, ['Todas', 'Doce', 'Salgada', 'Assada', 'Cozida', 'Grelhada', 'Rápida', 'Rica em carboidratos', 'Rica em proteína', 'Maior energia'].map(x => React.createElement("button", { type: "button", className: 'v35-pill ' + (v35RecipeFilter === x ? 'on' : ''), onClick: () => setV35RecipeFilter(x), key: x }, x))),
-                    React.createElement("div", { className: "v35-grid" }, v33Recipes.filter(r => (v35RecipeFilter === 'Todas' || r.cat === v35RecipeFilter) && (!v35RecipeSearch || (`${r.name} ${r.base} ${r.cat}`).toLowerCase().includes(v35RecipeSearch.toLowerCase()))).slice(0, hasV18Pro ? 60 : 12).map(r => React.createElement("article", { className: "v35-card v45-click life-recipe-card", key: r.id, onClick: () => openLifeRecipe(r) },
+                    React.createElement("div", { className: "v35-pills" }, ['Todas', 'Doce', 'Salgada', 'Fitness', 'Café da manhã', 'Lanche', 'Almoço / jantar', 'Assada', 'Cozida', 'Grelhada', 'Rápida', 'Rica em carboidratos', 'Rica em proteína', 'Maior energia'].map(x => React.createElement("button", { type: "button", className: 'v35-pill ' + (v35RecipeFilter === x ? 'on' : ''), onClick: () => setV35RecipeFilter(x), key: x }, x))),
+                    React.createElement("div", { className: "v35-grid" }, v33Recipes.filter(r => (v35RecipeFilter === 'Todas' || (r.tags || [r.cat]).includes(v35RecipeFilter)) && (!v35RecipeSearch || (`${r.name} ${r.base} ${r.cat} ${(r.tags || []).join(' ')}`).toLowerCase().includes(v35RecipeSearch.toLowerCase()))).slice(0, 120).map(r => React.createElement("article", { className: "v35-card v45-click life-recipe-card", key: r.id, onClick: () => openLifeRecipe(r) },
                         React.createElement("small", null,
                             r.cat.toUpperCase(),
                             " \u00B7 ",
@@ -7913,22 +7963,19 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("div", { className: "life-card-tools" },
                             React.createElement("button", { type: "button", onClick: e => { e.stopPropagation(); toggleLifeFavorite('recipes', { id: r.id, title: r.name, go: 'Receitas', type: 'Receita', subtitle: r.cat + ' · ' + r.time, recipe: r }); } }, isLifeFavorite('recipes', r.id) ? '★' : '☆'),
                             React.createElement("button", { type: "button", onClick: e => { e.stopPropagation(); toggleLifePin({ type: 'Receita', id: r.id, title: r.name, go: 'Receitas', subtitle: r.cat + ' · ' + r.time, recipe: r }); } }, isLifePinned('Receita', r.id) ? '✓' : '＋'))))),
-                    !hasV18Pro && React.createElement("div", { className: "v33-note", style: { borderColor: 'rgba(249,115,22,.45)' } },
-                        "FREE mostra uma sele\u00E7\u00E3o inicial. ",
-                        React.createElement("button", { type: "button", onClick: () => openLifePro('receitas_biblioteca'), style: { color: '#fb923c', fontWeight: 900 } }, "DESBLOQUEAR BIBLIOTECA COMPLETA NO PRO \u2192")),
-                    React.createElement("div", { className: "v33-note" }, "A biblioteca mostra at\u00E9 60 resultados por busca/filtro para manter o celular r\u00E1pido. Cada receita aberta traz quantidades, utens\u00EDlios, tempo, temperatura quando aplic\u00E1vel e ponto de preparo. Para alergias ou necessidades m\u00E9dicas, adapte com respons\u00E1vel e profissional qualificado."))),
+                    React.createElement("div", { className: "v33-note" }, "A biblioteca tem 600 receitas e mostra até 120 resultados por busca/filtro para manter o celular rápido. Cada receita aberta traz ingredientes, utensílios, preparo, tempo, temperatura quando aplicável e ponto de preparo. Para alergias ou necessidades médicas, adapte com responsável e profissional qualificado."))),
             view === 'Receitas' && advancedArea === 'Receitas' && React.createElement("section", { className: "life-disclosure" },
                 React.createElement("div", null,
                     React.createElement("small", null, "DESCOBRIR MAIS"),
                     React.createElement("b", null, showRecipeCollections ? 'Coleções abertas' : 'Coleções e caminhos rápidos'),
                     React.createElement("span", null, "A busca e o filtro ficam acima. Abra cole\u00E7\u00F5es quando quiser explorar.")),
-                React.createElement("button", { type: "button", onClick: () => hasV18Pro ? setShowRecipeCollections(x => !x) : openLifePro('receitas_colecoes') }, hasV18Pro ? (showRecipeCollections ? 'RECOLHER' : 'VER COLEÇÕES →') : 'COLEÇÕES COMPLETAS · PRO →')),
-            view === 'Receitas' && advancedArea === 'Receitas' && hasV18Pro && showRecipeCollections && React.createElement("section", { className: "v38-section" },
+                React.createElement("button", { type: "button", onClick: () => setShowRecipeCollections(x => !x) }, showRecipeCollections ? 'RECOLHER' : 'VER COLEÇÕES →')),
+            view === 'Receitas' && advancedArea === 'Receitas' && showRecipeCollections && React.createElement("section", { className: "v38-section" },
                 React.createElement("div", { className: "v38-title" },
                     React.createElement("div", null,
                         React.createElement("div", { className: "v18-micro" }, "DESCOBRIR"),
                         React.createElement("h3", null, "Cole\u00E7\u00F5es"))),
-                React.createElement("div", { className: "v38-grid" }, [['DOCE', 'Sobremesas & lanches', 'Doce'], ['SALGADO', 'Refeições & lanches', 'Salgada'], ['FORNO', 'Assados', 'Assada'], ['PANELA', 'Cozidos', 'Cozida'], ['RÁPIDO', 'Pouco tempo', 'Rápida'], ['CARBOIDRATOS', 'Opções com maior presença de carboidratos', 'Rica em carboidratos'], ['PROTEÍNA', 'Opções com fontes de proteína', 'Rica em proteína'], ['GRELHADOS', 'Preparos grelhados', 'Grelhada'], ['MAIOR ENERGIA', 'Opções mais energéticas', 'Maior energia']].map(x => React.createElement("button", { type: "button", className: "v38-card life-action-card", key: x[0], onClick: () => { setV35RecipeFilter(x[2]); setV35RecipeSearch(''); setShowRecipeCollections(false); setTimeout(() => document.querySelector('.v35-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40); } },
+                React.createElement("div", { className: "v38-grid" }, [['DOCE', 'Doces, sobremesas & lanches', 'Doce'], ['SALGADO', 'Refeições & lanches salgados', 'Salgada'], ['FITNESS', 'Receitas práticas com foco em composição equilibrada', 'Fitness'], ['CAFÉ DA MANHÃ', 'Ideias para começar o dia', 'Café da manhã'], ['LANCHES', 'Opções rápidas entre refeições', 'Lanche'], ['ALMOÇO / JANTAR', 'Pratos principais', 'Almoço / jantar'], ['FORNO', 'Assados', 'Assada'], ['PANELA', 'Cozidos', 'Cozida'], ['RÁPIDO', 'Pouco tempo', 'Rápida'], ['CARBOIDRATOS', 'Opções com maior presença de carboidratos', 'Rica em carboidratos'], ['PROTEÍNA', 'Opções com fontes de proteína', 'Rica em proteína'], ['GRELHADOS', 'Preparos grelhados', 'Grelhada'], ['MAIOR ENERGIA', 'Opções mais energéticas', 'Maior energia']].map(x => React.createElement("button", { type: "button", className: "v38-card life-action-card", key: x[0], onClick: () => { setV35RecipeFilter(x[2]); setV35RecipeSearch(''); setShowRecipeCollections(false); setTimeout(() => document.querySelector('.v35-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40); } },
                     React.createElement("small", null, x[0]),
                     React.createElement("b", null, x[1]),
                     React.createElement("p", null, "Filtrar a biblioteca por esta cole\u00E7\u00E3o."),
@@ -8329,6 +8376,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("input", { value: aiInput, onChange: e => setAiInput(e.target.value), onKeyDown: e => e.key === 'Enter' && submitLifeAI(), placeholder: "Pergunte ao LIFE AI\u2026" }),
                         React.createElement("button", { type: "button", onClick: () => submitLifeAI(), disabled: !aiInput.trim() }, "\u2191")),
                     React.createElement("button", { type: "button", className: "life-ai-quick-full", onClick: () => { setAiQuickOpen(false); aiOpen(true); } }, "ABRIR LIFE AI COMPLETO \u2192"))),
+            howItWorksArea && React.createElement(LifeHowItWorksModal, { area: howItWorksArea, onClose: () => setHowItWorksArea(null), onAsk: (prompt) => { const area = howItWorksArea; setHowItWorksArea(null); setAiOriginView(area); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 35); } }),
             React.createElement("nav", { className: "life-mobile-nav life-design-mobile-nav", "aria-label": "Navegação móvel" },
                 React.createElement("button", { type: "button", className: view === 'Hoje' ? 'on' : '', onClick: () => v18Go('Hoje') }, React.createElement("i", { className: "material-symbols-rounded" }, "home"), React.createElement("span", null, "Hoje")),
                 React.createElement("button", { type: "button", className: view === 'Favoritos' ? 'on' : '', onClick: () => v18Go('Favoritos') }, React.createElement("i", { className: "material-symbols-rounded" }, "star"), React.createElement("span", null, "Favoritos")),
@@ -8341,9 +8389,9 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                     React.createElement("div", { className: "life-mobile-more-head" },
                         React.createElement("span", null, "\u00C1REAS DO LIFE"),
                         React.createElement("button", { type: "button", onClick: () => setMobileMore(false) }, "\u00D7")),
-                    React.createElement("div", { className: "life-mobile-more-grid" }, fullNav.filter(x => !['Hoje', 'Favoritos', 'IA'].includes(x)).map(x => React.createElement("button", { type: "button", className: view === x ? 'on' : '', onClick: () => v18Go(x), key: x },
-                        React.createElement("b", null, lifePublicAreaName(x)),
-                        React.createElement("small", null, "ABRIR \u2192")))))),
+                    React.createElement("div", { className: "life-mobile-more-grid" }, fullNav.filter(x => !['Hoje', 'Favoritos', 'IA'].includes(x)).map(x => React.createElement("div", { className: 'life-mobile-area-card ' + (view === x ? 'on' : ''), key: x },
+                        React.createElement("button", { type: "button", className: 'life-mobile-area-open', onClick: () => v18Go(x) }, React.createElement("b", null, lifePublicAreaName(x)), React.createElement("small", null, "ABRIR →")),
+                        React.createElement("button", { type: "button", className: 'life-area-heart ' + (isLifeFavorite('areas', x) ? 'on' : ''), onClick: e => { e.stopPropagation(); toggleLifeFavorite('areas', { id: x, title: lifePublicAreaName(x), go: x, type: 'Área' }); }, 'aria-label': isLifeFavorite('areas', x) ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }, React.createElement("span", { className: "material-symbols-rounded" }, isLifeFavorite('areas', x) ? 'favorite' : 'favorite_border'))))))),
             view !== 'Hoje' && React.createElement("button", { type: "button", className: "v18-fab", "aria-label": "Captura r\u00E1pida m\u00F3vel", style: { left: fab.x, top: fab.y ?? 'auto', bottom: fab.y == null ? 'calc(94px + env(safe-area-inset-bottom))' : 'auto' }, onMouseDown: down, onMouseMove: move, onMouseUp: up, onMouseLeave: () => drag.current && up(), onTouchStart: down, onTouchMove: move, onTouchEnd: up }, "\uFF0B"),
             v45Recipe && React.createElement("div", { className: "v45-recipe-sheet", role: "dialog", "aria-modal": "true", "aria-label": "Receita completa", onClick: () => setV45Recipe(null) },
                 React.createElement("article", { className: "v45-recipe-panel", onClick: e => e.stopPropagation() },

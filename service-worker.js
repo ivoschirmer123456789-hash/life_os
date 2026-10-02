@@ -1,4 +1,4 @@
-const LIFE_CACHE='life-os-3.1.0';
+const LIFE_CACHE='life-os-3.2.0';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
   './manifest.webmanifest','./assets/css/utilities.css','./assets/css/life.css','./assets/css/product.css','./assets/css/final.css',

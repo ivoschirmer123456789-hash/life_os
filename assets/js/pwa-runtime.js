@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  window.LIFE_BUILD={version:'3.1.0',name:'Final Edition'};
+  window.LIFE_BUILD={version:'3.2.0',name:'Final Edition'};
   window.LIFE_SINGLE_FILE=false;
   if(!('serviceWorker' in navigator)) return;
   window.addEventListener('load',()=>{
