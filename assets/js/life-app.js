@@ -5074,7 +5074,7 @@ function LifeOSV18() {
     const [legalOpen, setLegalOpen] = React.useState(null);
     const [supportOpen, setSupportOpen] = React.useState(false);
     const [dangerOpen, setDangerOpen] = React.useState(false);
-    const lifeBuild = '3.0.0';
+    const lifeBuild = '3.1.0';
     const lifeDiagnostics = () => ({
         build: lifeBuild,
         plan: effectivePlan || realPlan || 'FREE',
@@ -5134,7 +5134,15 @@ function LifeOSV18() {
     const [intro, setIntro] = React.useState(() => {
         try {
             const cfg = { ...lifeSettingsDefaults, ...JSON.parse(localStorage.getItem('life_settings_v1') || '{}') };
-            return cfg.opening !== false;
+            const releaseKey = 'life_release_intro_310';
+            const firstRunOfRelease = localStorage.getItem(releaseKey) !== '1';
+            if (firstRunOfRelease) {
+                localStorage.setItem(releaseKey, '1');
+                sessionStorage.removeItem('life_intro_seen');
+                return true;
+            }
+            const seenThisSession = sessionStorage.getItem('life_intro_seen') === '1';
+            return cfg.opening !== false && !seenThisSession;
         }
         catch (e) {
             return true;
@@ -6344,7 +6352,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                 "OWNER \u00B7 VISUALIZANDO COMO ",
                 effectivePlan),
             React.createElement("button", { type: "button", onClick: () => { localStorage.setItem('life_owner_preview', 'OWNER'); setOwnerPreview('OWNER'); window.dispatchEvent(new CustomEvent('life:owner-preview', { detail: { mode: 'OWNER' } })); } }, "VOLTAR PARA OWNER")),
-        !hasV18Pro && React.createElement("section", { className: "life-free-conversion-strip" },
+        !hasV18Pro && view === 'Perfil' && React.createElement("section", { className: "life-free-conversion-strip" },
             React.createElement("div", null,
                 React.createElement("small", null, "LIFE FREE"),
                 React.createElement("b", null, "Você está usando a versão essencial."),
@@ -6481,20 +6489,19 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => setSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 3.0.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 3.1.0"),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => setSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
                 React.createElement("span", null, "AGORA"),
                 React.createElement("span", null, focus ? fmt(seconds) : (next?.n || 'LIVRE'))),
-            React.createElement("button", { type: "button", className: "life-pro-status", title: hasV18Pro ? "Abrir conta e assinatura" : "Conhecer LIFE OS PRO", "aria-label": hasV18Pro ? "Abrir conta e assinatura" : "Conhecer LIFE OS PRO", onClick: () => hasV18Pro ? v42Go('Perfil') : openLifePro() }, realPlan === 'OWNER' ? (effectivePlan === 'OWNER' ? '◆ OWNER' : '◆ OWNER · VISUALIZAÇÃO ' + effectivePlan) : hasV18Pro ? '◆ PRO ATIVO' : '◇ FREE · VER PRO'),
-            React.createElement("button", { type: "button", className: 'life-sync-chip ' + cloudStatus, onClick: () => cloudStatus === 'conflict' ? v42Go('Configurações') : pushLifeCloud(true), title: cloudStatus === 'conflict' ? 'Há alterações em mais de um dispositivo' : 'Status da sincronização', "aria-label": "Status da sincronização" },
+            (hasV18Pro || realPlan === 'OWNER') && React.createElement("button", { type: "button", className: "life-pro-status", title: "Abrir conta e assinatura", "aria-label": "Abrir conta e assinatura", onClick: () => v42Go('Perfil') }, realPlan === 'OWNER' ? (effectivePlan === 'OWNER' ? '◆ OWNER' : '◆ OWNER · ' + effectivePlan) : '◆ PRO'),
+            cloudStatus === 'conflict' && React.createElement("button", { type: "button", className: 'life-sync-chip conflict', onClick: () => v42Go('Configurações'), title: 'Há alterações em mais de um dispositivo', "aria-label": "Revisar sincronização" },
                 React.createElement("i", null),
-                React.createElement("span", null, cloudStatus === 'synced' ? 'SINCRONIZADO' : cloudStatus === 'syncing' ? 'SALVANDO' : cloudStatus === 'conflict' ? 'REVISAR NUVEM' : 'LOCAL')),
+                React.createElement("span", null, 'REVISAR NUVEM')),
             React.createElement("button", { type: "button", className: "life-theme-toggle", onClick: toggleLifeTheme, title: lifeTheme === 'night' ? 'Modo noturno — mudar para modo diurno' : 'Modo diurno — mudar para modo noturno', "aria-label": lifeTheme === 'night' ? 'Ativar modo diurno' : 'Ativar modo noturno' },
                 React.createElement("span", { className: "life-theme-icon" }, lifeTheme === 'night' ? '☾' : '☀'),
                 React.createElement("span", { className: "life-theme-label" }, lifeTheme === 'night' ? 'NOTURNO' : 'DIURNO')),
-            React.createElement("button", { type: "button", className: "life-ai-header", onClick: () => aiOpen(true), title: "Abrir LIFE AI", "aria-label": "Abrir LIFE AI" }, "\u2726 LIFE AI"),
             React.createElement("button", { type: "button", className: "life-notify-trigger", onClick: () => { setNotificationCenterOpen(true); markNotificationsRead(); }, title: "Notifica\u00E7\u00F5es e lembretes", "aria-label": "Abrir notifica\u00E7\u00F5es" },
                 React.createElement("span", null, "\u2662"),
                 unreadNotifications > 0 && React.createElement("b", null, unreadNotifications > 99 ? '99+' : unreadNotifications)),
@@ -6502,13 +6509,13 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                 React.createElement("span", null, "\u2699"),
                 React.createElement("em", null, "AJUSTES")),
             React.createElement("button", { type: "button", className: "v18-btn ghost hidden sm:block", onClick: () => setSpot(true), title: "Buscar no LIFE", "aria-label": "Abrir busca global" }, "\u2318 K")),
-        !hasV18Pro && LIFE_UPGRADE_COPY[view] && React.createElement("section", { className: "life-free-upgrade-rail" },
+        !hasV18Pro && view !== 'Hoje' && advancedArea === view && LIFE_UPGRADE_COPY[view] && React.createElement("section", { className: "life-free-upgrade-rail" },
             React.createElement("div", null,
                 React.createElement("small", null, "LIFE OS FREE"),
                 React.createElement("b", null, LIFE_UPGRADE_COPY[view][0]),
                 React.createElement("span", null, LIFE_UPGRADE_COPY[view][1])),
             React.createElement("button", { type: "button", onClick: () => openLifePro(view === 'Fitness' ? 'treino_personalizado' : view === 'Estudos' ? 'estudos_mastery' : view === 'Finanças' ? 'financas_analise' : view === 'Archive' ? 'archive' : 'header') }, "VER O QUE O PRO LIBERA →")),
-        view !== 'IA' && !['Configurações','Tutorial','Guia de Estudos','Favoritos'].includes(view) && React.createElement(LifeSmartHub, { area: view, onGo: v42Go, onAsk: (prompt) => { setAiOriginView(view); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
+        view !== 'IA' && view !== 'Hoje' && advancedArea === view && !['Configurações','Tutorial','Guia de Estudos','Favoritos'].includes(view) && React.createElement(LifeSmartHub, { area: view, onGo: v42Go, onAsk: (prompt) => { setAiOriginView(view); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
         (settingsOpen || view === 'Configurações') && React.createElement("div", { className: "life-settings-overlay " + (view === 'Configurações' ? 'life-settings-page-mode' : ''), onClick: e => { if (settingsOpen && e.target === e.currentTarget)
                 setSettingsOpen(false); } },
             React.createElement("section", { className: "life-settings-panel", role: view === 'Configurações' ? "main" : "dialog", "aria-modal": view === 'Configurações' ? undefined : "true", "aria-label": "Configura\u00E7\u00F5es do LIFE" },
@@ -8288,8 +8295,8 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                                 React.createElement("button", { type: "button", onClick: exportLifeData }, "EXPORTAR MEUS DADOS")),
                             React.createElement("p", { className: "v18-why mt-3" }, "A sincroniza\u00E7\u00E3o \u00E9 limitada aos dados da sua conta. Prefer\u00EAncias e registros pessoais permanecem separados das permiss\u00F5es do seu plano.")))),
                 React.createElement(LifeKnowledgeLibrary, { area: "Perfil", onOpen: setSelectedLifeGuide, onAsk: askLifeGuide })),
-            view !== 'IA' && React.createElement(LifeAreaDepthStudio, { area: view, onAsk: (prompt) => { setAiOriginView(view === 'Fitness' && advancedArea === 'Fitness' && fitnessMainTab === 'Alimentação' ? 'Dieta' : view); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
-            view !== 'IA' && React.createElement("button", { type: "button", className: "life-ai-orb", onClick: () => aiOpen(false), "aria-label": "Abrir LIFE AI" },
+            view !== 'IA' && view !== 'Hoje' && advancedArea === view && !['Configurações','Tutorial','Guia de Estudos','Favoritos'].includes(view) && React.createElement(LifeAreaDepthStudio, { area: view, onAsk: (prompt) => { setAiOriginView(view === 'Fitness' && advancedArea === 'Fitness' && fitnessMainTab === 'Alimentação' ? 'Dieta' : view); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
+            view !== 'IA' && view !== 'Hoje' && React.createElement("button", { type: "button", className: "life-ai-orb", onClick: () => aiOpen(false), "aria-label": "Abrir LIFE AI" },
                 React.createElement("i", null, "\u2726"),
                 React.createElement("span", null, "LIFE AI")),
             aiQuickOpen && React.createElement("div", { className: "life-ai-quickwrap", onClick: e => { if (e.target === e.currentTarget)
@@ -8337,7 +8344,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                     React.createElement("div", { className: "life-mobile-more-grid" }, fullNav.filter(x => !['Hoje', 'Favoritos', 'IA'].includes(x)).map(x => React.createElement("button", { type: "button", className: view === x ? 'on' : '', onClick: () => v18Go(x), key: x },
                         React.createElement("b", null, lifePublicAreaName(x)),
                         React.createElement("small", null, "ABRIR \u2192")))))),
-            React.createElement("button", { type: "button", className: "v18-fab", "aria-label": "Captura r\u00E1pida m\u00F3vel", style: { left: fab.x, top: fab.y ?? 'auto', bottom: fab.y == null ? 'calc(94px + env(safe-area-inset-bottom))' : 'auto' }, onMouseDown: down, onMouseMove: move, onMouseUp: up, onMouseLeave: () => drag.current && up(), onTouchStart: down, onTouchMove: move, onTouchEnd: up }, "\uFF0B"),
+            view !== 'Hoje' && React.createElement("button", { type: "button", className: "v18-fab", "aria-label": "Captura r\u00E1pida m\u00F3vel", style: { left: fab.x, top: fab.y ?? 'auto', bottom: fab.y == null ? 'calc(94px + env(safe-area-inset-bottom))' : 'auto' }, onMouseDown: down, onMouseMove: move, onMouseUp: up, onMouseLeave: () => drag.current && up(), onTouchStart: down, onTouchMove: move, onTouchEnd: up }, "\uFF0B"),
             v45Recipe && React.createElement("div", { className: "v45-recipe-sheet", role: "dialog", "aria-modal": "true", "aria-label": "Receita completa", onClick: () => setV45Recipe(null) },
                 React.createElement("article", { className: "v45-recipe-panel", onClick: e => e.stopPropagation() },
                     React.createElement("div", { className: "v45-recipe-top" },

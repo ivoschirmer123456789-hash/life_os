@@ -1,7 +1,7 @@
-const LIFE_CACHE='life-os-3.0.0';
+const LIFE_CACHE='life-os-3.1.0';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
-  './manifest.webmanifest','./assets/css/utilities.css','./assets/css/life.css','./assets/css/product.css',
+  './manifest.webmanifest','./assets/css/utilities.css','./assets/css/life.css','./assets/css/product.css','./assets/css/final.css',
   './assets/js/config.js','./assets/js/life-app.js','./assets/js/supabase-auth.js','./assets/js/quality-runtime.js','./assets/js/product-runtime.js','./assets/js/design-runtime.js','./assets/js/pwa-runtime.js',
   './assets/icons/icon.svg','./assets/icons/icon-192.png','./assets/icons/icon-512.png'
 ];

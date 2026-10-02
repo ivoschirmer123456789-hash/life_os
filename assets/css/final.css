@@ -1,0 +1,302 @@
+/* LIFE OS 3.1 — Final Experience Layer
+   Purpose: calm hierarchy, readable light theme, cleaner first-level screens,
+   consistent transitions and premium desktop/mobile spacing. */
+
+:root{
+  --life-final-orange:#f97316;
+  --life-final-orange-2:#ff9a58;
+  --life-final-bg:#07090c;
+  --life-final-surface:#0d1014;
+  --life-final-surface-2:#12161b;
+  --life-final-line:rgba(255,255,255,.075);
+  --life-final-text:#f4f6f8;
+  --life-final-muted:#8a949f;
+  --life-final-shadow:0 24px 72px rgba(0,0,0,.24);
+  --life-final-radius:22px;
+}
+
+html,body{background:var(--life-final-bg)}
+body{font-family:"Plus Jakarta Sans",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+.v18{background:radial-gradient(900px 520px at 88% -12%,rgba(var(--area-rgb,249,115,22),.08),transparent 63%),#07090c!important;color:var(--life-final-text)!important}
+.v18-shell{width:min(1180px,calc(100% - 38px))!important;max-width:1180px!important;margin-inline:auto!important}
+
+/* ---------- Header: status without visual noise ---------- */
+.v18-top{
+  height:64px!important;
+  padding-left:max(20px,calc((100vw - 1180px)/2))!important;
+  padding-right:max(20px,calc((100vw - 1180px)/2))!important;
+  gap:9px!important;
+  background:rgba(7,9,12,.84)!important;
+  border-bottom:1px solid rgba(255,255,255,.055)!important;
+  box-shadow:0 8px 32px rgba(0,0,0,.14)!important;
+  backdrop-filter:blur(24px) saturate(130%)!important;
+}
+.v18{padding-top:64px!important}
+.v18-logo{font-size:13px!important;letter-spacing:.16em!important}
+.v18-code{font-size:8px!important;color:#65707a!important;letter-spacing:.14em!important}
+.v18-chip,.v18-island,.life-theme-toggle,.life-notify-trigger,.life-settings-trigger,.v18-top .v18-btn.ghost,.life-pro-status,.life-sync-chip{
+  min-height:34px!important;border-radius:11px!important;border:1px solid rgba(255,255,255,.07)!important;background:rgba(255,255,255,.025)!important;color:#9aa4ae!important;box-shadow:none!important
+}
+.v18-chip,.v18-island{padding:0 11px!important;font-size:8px!important}
+.v18-island{margin-left:auto!important;max-width:230px!important}
+.life-theme-toggle{padding:0 10px!important;gap:6px!important}
+.life-notify-trigger,.life-settings-trigger,.v18-top .v18-btn.ghost{width:auto!important;padding:0 10px!important}
+.life-settings-trigger em{display:none!important}
+.life-sync-chip.conflict{border-color:rgba(249,115,22,.34)!important;color:#ff9a58!important;background:rgba(249,115,22,.06)!important}
+.life-pro-status{color:#d8dde2!important}
+
+/* ---------- Primary navigation ---------- */
+.v18-tabs{
+  margin-top:18px!important;
+  padding:5px!important;
+  gap:3px!important;
+  border:1px solid rgba(255,255,255,.065)!important;
+  border-radius:16px!important;
+  background:rgba(255,255,255,.018)!important;
+  overflow:auto!important;
+}
+.v18-tabs button{
+  min-height:36px!important;
+  padding:0 14px!important;
+  border-radius:11px!important;
+  color:#7f8994!important;
+  font-size:10px!important;
+  letter-spacing:.01em!important;
+  font-weight:750!important;
+  transition:background .18s ease,color .18s ease,transform .18s ease!important;
+}
+.v18-tabs button:hover{background:rgba(255,255,255,.035)!important;color:#dbe0e5!important}
+.v18-tabs button.on{background:#f3f5f6!important;color:#0a0c0f!important;box-shadow:0 6px 18px rgba(0,0,0,.18)!important}
+.v18-tabs button.on:after{display:none!important}
+
+/* ---------- Today: the product home, not another dashboard ---------- */
+.life-today-minimal{
+  max-width:900px!important;
+  padding:clamp(34px,5vw,58px) 0 54px!important;
+  min-height:calc(100vh - 145px)!important;
+}
+.life-today-minimal-head{padding-bottom:24px!important;border-bottom:1px solid rgba(255,255,255,.06)!important;align-items:flex-end!important}
+.life-today-minimal-greeting>small{font-size:9px!important;letter-spacing:.15em!important;color:#7c8792!important}
+.life-today-minimal-greeting h1{font-size:clamp(44px,6vw,68px)!important;line-height:.96!important;letter-spacing:-.055em!important;margin:8px 0 10px!important}
+.life-today-minimal-greeting p{font-size:12px!important;line-height:1.65!important;color:#87919b!important;max-width:590px!important}
+.life-today-minimal-status{gap:7px!important}
+.life-today-minimal-status span{padding:7px 10px!important;font-size:8px!important;border-color:rgba(255,255,255,.07)!important;background:rgba(255,255,255,.022)!important;color:#8d97a0!important}
+.life-today-plan-card{
+  margin-top:24px!important;
+  border-radius:24px!important;
+  border:1px solid rgba(255,255,255,.075)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.016))!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.18)!important;
+}
+.life-today-plan-head{padding:22px 23px 16px!important}
+.life-today-plan-head small{font-size:8px!important;letter-spacing:.16em!important}
+.life-today-plan-head h2{font-size:clamp(24px,3vw,32px)!important;margin-top:5px!important}
+.life-today-plan-count b{font-size:20px!important}.life-today-plan-count span{font-size:8px!important}
+.life-today-progress{margin:0 23px!important;height:3px!important}
+.life-today-checklist{padding:8px 23px 2px!important}
+.life-today-item{min-height:64px!important;grid-template-columns:34px minmax(0,1fr) 22px!important}
+.life-today-item-copy b{font-size:13px!important;line-height:1.4!important}
+.life-today-item-copy small,.life-today-item-copy em{font-size:7.5px!important}
+.life-today-add{margin:12px 23px 0!important;padding-top:13px!important}
+.life-today-add input{height:44px!important;border-radius:12px!important;background:#0b0e12!important;font-size:11px!important;padding:0 14px!important}
+.life-today-add button{height:44px!important;border-radius:12px!important;background:#f3f5f6!important}
+.life-today-plan-foot{padding:14px 23px 20px!important}.life-today-plan-foot>span,.life-today-plan-foot button{font-size:8px!important}
+.life-today-ai-strip{margin-top:12px!important;padding:13px 3px!important}
+.life-today-ai-strip small{font-size:7px!important}.life-today-ai-strip b{font-size:10px!important;color:#a9b1b9!important}.life-today-ai-strip>button{font-size:8px!important;padding:8px 12px!important}
+
+/* ---------- Simple first-level areas ---------- */
+.life-simple-shell,.life-ai-simple-page,.life-guide-page{width:min(1080px,100%)!important;max-width:1080px!important;margin-inline:auto!important}
+.life-simple-shell{padding:clamp(32px,5vw,62px) 0 105px!important}
+.life-simple-hero{padding-bottom:28px!important;border-bottom:1px solid rgba(255,255,255,.06)!important}
+.life-simple-copy small,.life-ai-simple-head>small,.life-guide-intro>small{font-size:9px!important;letter-spacing:.15em!important;color:#ff8a45!important}
+.life-simple-copy h1,.life-ai-simple-head h1,.life-guide-intro h1{font-size:clamp(42px,6vw,66px)!important;line-height:.95!important;letter-spacing:-.055em!important}
+.life-simple-copy p,.life-ai-simple-head p,.life-guide-intro p{font-size:12px!important;line-height:1.68!important;color:#89939d!important;max-width:650px!important}
+.life-simple-icon{background:rgba(var(--area-rgb),.075)!important;border-color:rgba(var(--area-rgb),.15)!important}
+.life-simple-body{padding-top:26px!important}
+.life-simple-actions{gap:10px!important;margin-top:24px!important}
+.life-simple-actions button{min-height:42px!important;border-radius:12px!important;font-size:9px!important;padding:0 14px!important}
+.life-simple-action-wrap small{font-size:8px!important;line-height:1.5!important;color:#77818c!important}
+.life-simple-list{margin-top:20px!important;border-top:1px solid rgba(255,255,255,.06)!important}
+.life-simple-row{min-height:62px!important;padding:12px 4px!important;border-bottom:1px solid rgba(255,255,255,.055)!important}
+.life-simple-row-index{font-size:8px!important;color:#59636d!important}.life-simple-row-copy b{font-size:12px!important}.life-simple-row-copy small{font-size:8px!important;color:#727d87!important}
+.life-simple-empty{font-size:10px!important;color:#77818b!important;padding:28px 0!important}
+
+.life-function-grid{gap:11px!important}
+.life-function-card{
+  min-height:168px!important;
+  border-radius:20px!important;
+  padding:19px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.03),rgba(255,255,255,.012))!important;
+  border-color:rgba(255,255,255,.075)!important;
+  box-shadow:none!important;
+}
+.life-function-card:hover{transform:translateY(-2px)!important;border-color:rgba(var(--area-rgb),.24)!important;box-shadow:0 18px 48px rgba(0,0,0,.16)!important}
+.life-function-card b{font-size:15px!important;margin-top:18px!important}.life-function-card .life-function-desc{font-size:9px!important;line-height:1.58!important;color:#808a94!important}.life-function-card em{font-size:7.5px!important}
+
+/* ---------- Evolution ---------- */
+.life-evolution-topline{gap:10px!important}.life-evolution-topline>div,.life-evolution-panel{background:rgba(255,255,255,.022)!important;border:1px solid rgba(255,255,255,.065)!important;box-shadow:none!important}
+.life-evolution-topline>div{padding:18px!important;border-radius:17px!important}.life-evolution-topline b{font-size:30px!important}.life-evolution-topline span{font-size:8px!important;color:#7f8994!important}
+.life-evolution-panel{padding:20px!important;border-radius:20px!important}.life-evolution-panel h3{font-size:18px!important}.life-evolution-panel p{font-size:9px!important;line-height:1.6!important;color:#7f8994!important}
+
+/* ---------- LIFE AI: cleaner, ChatGPT-like ---------- */
+.life-ai-simple-page{padding-top:32px!important;min-height:calc(100vh - 135px)!important}
+.life-ai-context-links{padding:13px 0 4px!important}.life-ai-context-links button{padding:8px 11px!important;font-size:8px!important;border-radius:999px!important;background:rgba(255,255,255,.025)!important}
+.life-ai-simple-thread{gap:20px!important;padding-top:24px!important}
+.life-ai-simple-message{max-width:820px!important;grid-template-columns:32px minmax(0,1fr)!important;gap:12px!important}.life-ai-simple-message.user{grid-template-columns:minmax(0,1fr) 32px!important}
+.life-ai-simple-avatar{width:32px!important;height:32px!important;border-radius:10px!important}
+.life-ai-simple-bubble{padding:14px 16px!important;border-radius:17px!important;background:rgba(255,255,255,.025)!important;border-color:rgba(255,255,255,.07)!important}
+.life-ai-simple-bubble small{font-size:7px!important}.life-ai-simple-bubble p{font-size:11px!important;line-height:1.72!important}
+.life-ai-simple-message.user .life-ai-simple-bubble{background:#eef1f3!important;color:#11151a!important}
+.life-ai-simple-compose-wrap{background:linear-gradient(transparent,#07090c 28%)!important}
+.life-ai-simple-compose{border-radius:19px!important;padding:8px!important;background:#0d1115!important;border-color:rgba(255,255,255,.095)!important;box-shadow:0 22px 65px rgba(0,0,0,.28)!important}
+.life-ai-simple-compose textarea{font-size:12px!important;line-height:1.5!important;min-height:50px!important}
+.life-ai-simple-foot{font-size:8px!important}.life-ai-simple-foot button{font-size:8px!important}
+
+/* ---------- Page transitions: visible, elegant, never a fake loading screen ---------- */
+.life-page-transition{
+  pointer-events:none!important;
+  display:block!important;
+  background:transparent!important;
+  backdrop-filter:none!important;
+}
+.life-page-transition-inner{
+  position:fixed!important;
+  top:78px!important;
+  right:max(18px,calc((100vw - 1180px)/2))!important;
+  width:auto!important;
+  min-width:210px!important;
+  max-width:min(360px,calc(100vw - 36px))!important;
+  height:auto!important;
+  margin:0!important;
+  padding:12px 14px!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+  border-radius:14px!important;
+  background:rgba(13,16,20,.94)!important;
+  box-shadow:0 18px 52px rgba(0,0,0,.28)!important;
+  display:grid!important;
+  grid-template-columns:8px minmax(0,1fr)!important;
+  column-gap:10px!important;
+  align-items:center!important;
+  animation:lifeFinalNavIn .22s cubic-bezier(.2,.8,.2,1) both!important;
+}
+.life-page-transition.out .life-page-transition-inner{animation:lifeFinalNavOut .18s ease forwards!important}
+.life-page-transition-mark{grid-row:1/4!important;width:7px!important;height:7px!important;margin:0!important;align-self:start!important;margin-top:4px!important}
+.life-page-transition small{font-size:7px!important;letter-spacing:.15em!important;text-align:left!important;color:#737d87!important}
+.life-page-transition b{font-size:13px!important;letter-spacing:-.02em!important;margin:2px 0 0!important;text-align:left!important;color:#eef1f4!important}
+.life-page-transition i{grid-column:2!important;width:100%!important;height:2px!important;margin:6px 0 0!important;background:linear-gradient(90deg,#f97316,transparent)!important;transform-origin:left!important}
+@keyframes lifeFinalNavIn{from{transform:translateY(-8px);opacity:0}to{transform:none;opacity:1}}
+@keyframes lifeFinalNavOut{to{transform:translateY(-5px);opacity:0}}
+
+/* ---------- Light theme: graphite + white, not beige/gold ---------- */
+.life-theme-day{
+  --day-bg:#f4f6f8!important;
+  --day-surface:#ffffff!important;
+  --day-surface-soft:#f8fafb!important;
+  --day-orange-soft:#fff3eb!important;
+  --day-orange-soft-2:#ffe8d8!important;
+  --day-line:#e2e6ea!important;
+  --day-line-strong:#d5dbe0!important;
+  --day-ink:#161a1f!important;
+  --day-muted:#69727c!important;
+  --day-orange:#ed6714!important;
+  --day-orange-2:#f97316!important;
+  --day-shadow:0 16px 42px rgba(23,31,38,.065)!important;
+  background:radial-gradient(900px 500px at 88% -12%,rgba(var(--area-rgb,249,115,22),.055),transparent 64%),#f4f6f8!important;
+  color:#161a1f!important;
+}
+.life-theme-day:before{background:linear-gradient(120deg,rgba(255,255,255,.45),transparent 34%,rgba(249,115,22,.018))!important}
+.life-theme-day .v53-context{opacity:.26!important;background:radial-gradient(circle at 82% 8%,rgba(var(--area-rgb),.08),transparent 36%)!important}
+.life-theme-day .v35-ambient,.life-theme-day .v36-neon-bg{opacity:.018!important}
+.life-theme-day .v18-top{background:rgba(255,255,255,.88)!important;border-color:#e6e9ec!important;box-shadow:0 7px 28px rgba(25,34,42,.055)!important}
+.life-theme-day .v18-logo{color:#15191e!important}.life-theme-day .v18-logo em{color:#f97316!important}.life-theme-day .v18-code{color:#929aa2!important}
+.life-theme-day .v18-chip,.life-theme-day .v18-island,.life-theme-day .life-theme-toggle,.life-theme-day .life-notify-trigger,.life-theme-day .life-settings-trigger,.life-theme-day .v18-top .v18-btn.ghost,.life-theme-day .life-pro-status,.life-theme-day .life-sync-chip{
+  background:#fff!important;border-color:#e3e7ea!important;color:#66707a!important;box-shadow:0 4px 16px rgba(25,34,42,.035)!important
+}
+.life-theme-day .v18-island span{color:#e06414!important}.life-theme-day .v18-dot{background:#f97316!important;box-shadow:0 0 12px rgba(249,115,22,.28)!important}
+.life-theme-day .v18-tabs{background:rgba(255,255,255,.82)!important;border-color:#e2e6e9!important;box-shadow:0 8px 25px rgba(25,34,42,.04)!important}
+.life-theme-day .v18-tabs button{color:#68727c!important}.life-theme-day .v18-tabs button:hover{background:#f5f7f8!important;color:#20262c!important}.life-theme-day .v18-tabs button.on{background:#171b20!important;color:#fff!important;box-shadow:0 6px 18px rgba(20,25,30,.14)!important}
+
+.life-theme-day .life-today-minimal-head{border-color:#e1e5e8!important}.life-theme-day .life-today-minimal-greeting>small{color:#7e8790!important}.life-theme-day .life-today-minimal-greeting h1{color:#15191e!important}.life-theme-day .life-today-minimal-greeting p{color:#6d7680!important}
+.life-theme-day .life-today-minimal-status span{background:#fff!important;border-color:#e3e7ea!important;color:#6d7680!important}
+.life-theme-day .life-today-plan-card{background:#fff!important;border-color:#e3e7ea!important;box-shadow:0 20px 55px rgba(25,34,42,.065)!important}
+.life-theme-day .life-today-plan-head h2,.life-theme-day .life-today-item-copy b,.life-theme-day .life-today-empty b{color:#171b20!important}
+.life-theme-day .life-today-plan-count span,.life-theme-day .life-today-item-copy small{color:#7a838c!important}.life-theme-day .life-today-item{border-color:#edf0f2!important}.life-theme-day .life-today-item.next{background:linear-gradient(90deg,rgba(249,115,22,.045),transparent 58%)!important}
+.life-theme-day .life-today-check{border-color:#d9dee3!important}.life-theme-day .life-today-item.done .life-today-check{background:#1d2329!important;border-color:#1d2329!important;color:#fff!important}
+.life-theme-day .life-today-add{border-color:#edf0f2!important}.life-theme-day .life-today-add input{background:#f7f9fa!important;border-color:#e1e5e8!important;color:#1c2127!important}.life-theme-day .life-today-add button{background:#1a1f24!important;color:#fff!important}.life-theme-day .life-today-plan-foot button{color:#d75e15!important}
+.life-theme-day .life-today-ai-strip{color:#727b84!important}.life-theme-day .life-today-ai-strip b{color:#59636d!important}.life-theme-day .life-today-ai-strip>button{background:#fff!important;border-color:#e2e6e9!important;color:#394149!important}
+
+.life-theme-day .life-simple-hero{border-color:#e1e5e8!important}.life-theme-day .life-simple-copy h1,.life-theme-day .life-ai-simple-head h1,.life-theme-day .life-guide-intro h1{color:#15191e!important}.life-theme-day .life-simple-copy p,.life-theme-day .life-ai-simple-head p,.life-theme-day .life-guide-intro p{color:#6d7680!important}
+.life-theme-day .life-function-card,.life-theme-day .life-folder-row,.life-theme-day .life-evolution-panel,.life-theme-day .life-evolution-topline>div,.life-theme-day .life-ai-simple-bubble,.life-theme-day .life-ai-simple-compose,.life-theme-day .life-simple-note textarea{
+  background:#fff!important;border-color:#e2e6ea!important;box-shadow:0 10px 32px rgba(25,34,42,.045)!important
+}
+.life-theme-day .life-function-card:hover{border-color:rgba(var(--area-rgb),.25)!important;box-shadow:0 16px 40px rgba(25,34,42,.07)!important}
+.life-theme-day .life-function-card b,.life-theme-day .life-folder-row b,.life-theme-day .life-evolution-panel h3,.life-theme-day .life-simple-row-copy b{color:#171b20!important}.life-theme-day .life-function-card .life-function-desc,.life-theme-day .life-folder-row small,.life-theme-day .life-evolution-panel p,.life-theme-day .life-simple-row-copy small{color:#717b84!important}
+.life-theme-day .life-simple-list,.life-theme-day .life-simple-row,.life-theme-day .life-simple-hero{border-color:#e6eaed!important}
+.life-theme-day .life-simple-actions button{background:#fff!important;border-color:#e0e5e8!important;color:#394149!important}.life-theme-day .life-simple-actions .primary,.life-theme-day .life-simple-actions button:first-child{background:#171b20!important;color:#fff!important;border-color:#171b20!important}
+.life-theme-day .life-ai-context-links button{background:#fff!important;border-color:#e2e6e9!important;color:#65707a!important}.life-theme-day .life-ai-context-links button.on{background:#fff3eb!important;border-color:#f1c6a8!important;color:#c95610!important}
+.life-theme-day .life-ai-simple-message.assistant .life-ai-simple-bubble{background:#fff!important;color:#171b20!important}.life-theme-day .life-ai-simple-message.user .life-ai-simple-bubble{background:#171b20!important;color:#fff!important}.life-theme-day .life-ai-simple-avatar{background:#fff!important;border-color:#e2e6e9!important;color:#343c44!important}.life-theme-day .life-ai-simple-compose-wrap{background:linear-gradient(transparent,#f4f6f8 30%)!important}.life-theme-day .life-ai-simple-compose textarea{color:#171b20!important}.life-theme-day .life-ai-simple-compose button{background:#171b20!important;color:#fff!important}
+.life-theme-day .life-page-transition-inner{background:rgba(255,255,255,.96)!important;border-color:#e2e6ea!important;box-shadow:0 18px 48px rgba(22,28,34,.12)!important}.life-theme-day .life-page-transition b{color:#171b20!important}.life-theme-day .life-page-transition small{color:#7a838c!important}
+.life-theme-day .life-design-mobile-nav{background:rgba(255,255,255,.94)!important;border-color:#dfe4e7!important;box-shadow:0 16px 48px rgba(25,34,42,.12)!important}.life-theme-day .life-design-mobile-nav button{color:#7a838c!important}.life-theme-day .life-design-mobile-nav button.on{background:#f2f4f6!important;color:#171b20!important}.life-theme-day .life-design-mobile-nav .life-design-nav-add i{background:#171b20!important;color:#fff!important}
+
+/* Entry/auth in day mode: white/graphite, same product language */
+.life-entry-day{background:#f4f6f8!important;color:#171b20!important}.life-entry-day:before{background:radial-gradient(circle at 76% 18%,rgba(249,115,22,.10),transparent 28%),radial-gradient(circle at 20% 80%,rgba(20,25,30,.04),transparent 22%)!important}.life-entry-day .life-entry-card{background:rgba(255,255,255,.94)!important;border-color:#e2e6ea!important;box-shadow:0 30px 90px rgba(22,28,34,.10)!important}.life-entry-day .life-entry-card>small{color:#e26113!important}.life-entry-day .life-entry-card p,.life-entry-day .life-entry-note{color:#6e7780!important}.life-entry-day .life-entry-actions button{background:#fff!important;border-color:#dfe4e7!important;color:#343c44!important}.life-entry-day .life-entry-actions .primary{background:#171b20!important;border-color:#171b20!important;color:#fff!important}
+html[data-life-theme="day"] #life-auth{background:#f4f6f8!important;color:#171b20!important}html[data-life-theme="day"] #life-auth .la-shell{background:#fff!important;border-color:#e1e5e8!important;box-shadow:0 32px 100px rgba(22,28,34,.11)!important}html[data-life-theme="day"] #life-auth .la-showcase{background:radial-gradient(circle at 72% 20%,rgba(249,115,22,.12),transparent 28%),linear-gradient(145deg,#ffffff,#f4f6f8 68%,#fff)!important;color:#171b20!important}html[data-life-theme="day"] .la-showcase-brand,html[data-life-theme="day"] .la-showcase-copy h2,html[data-life-theme="day"] .la-showcase-grid b{color:#171b20!important}html[data-life-theme="day"] .la-showcase-brand em,html[data-life-theme="day"] .la-showcase-copy small,html[data-life-theme="day"] .la-eyebrow{color:#e26113!important}html[data-life-theme="day"] .la-showcase-copy p,html[data-life-theme="day"] .la-showcase-grid span{color:#6e7780!important}html[data-life-theme="day"] #life-auth .la-box{background:#fff!important;color:#171b20!important}html[data-life-theme="day"] .la-input{background:#f7f9fa!important;border-color:#e0e5e8!important;color:#171b20!important}html[data-life-theme="day"] .la-btn{background:#171b20!important;color:#fff!important}html[data-life-theme="day"] .la-alt{background:#fff!important;color:#343c44!important;border-color:#dfe4e7!important}html[data-life-theme="day"] .la-link{color:#65707a!important}
+
+/* Free plan messaging belongs where the user asks for plan details, not on Home. */
+.life-free-conversion-strip{border-radius:18px!important;margin:18px auto!important;max-width:1080px!important;background:rgba(249,115,22,.045)!important;border:1px solid rgba(249,115,22,.16)!important;box-shadow:none!important}
+.life-theme-day .life-free-conversion-strip{background:#fff8f3!important;border-color:#f1d2bf!important}
+.life-free-upgrade-rail{max-width:1080px!important;margin:18px auto!important;border-radius:16px!important}
+
+/* ---------- Mobile ---------- */
+@media(max-width:820px){
+  .v18{padding-top:56px!important;padding-left:13px!important;padding-right:13px!important}
+  .v18-top{height:56px!important;padding:0 13px!important;gap:6px!important}
+  .v18-code,.life-theme-label,.v18-top .v18-btn.ghost{display:none!important}
+  .v18-chip{max-width:120px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+  .v18-island{max-width:106px!important;padding:0 8px!important}.v18-island span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .life-theme-toggle,.life-notify-trigger,.life-settings-trigger{min-width:34px!important;padding:0 8px!important}
+  .v18-shell{width:100%!important}
+  .life-today-minimal{padding:24px 0 26px!important}
+  .life-today-minimal-head{display:block!important;padding-bottom:20px!important}.life-today-minimal-greeting h1{font-size:clamp(42px,13vw,58px)!important}.life-today-minimal-greeting p{font-size:11px!important}.life-today-minimal-status{justify-content:flex-start!important;margin-top:14px!important}
+  .life-today-plan-card{margin-top:18px!important;border-radius:20px!important}.life-today-plan-head{padding:19px 16px 14px!important}.life-today-progress{margin:0 16px!important}.life-today-checklist{padding:7px 16px 2px!important}.life-today-add{margin:10px 16px 0!important}.life-today-plan-foot{padding:13px 16px 18px!important}.life-today-ai-strip{padding:13px 1px!important}
+  .life-simple-shell{padding:25px 0 96px!important}.life-simple-copy h1,.life-ai-simple-head h1,.life-guide-intro h1{font-size:clamp(40px,13vw,56px)!important}.life-simple-copy p,.life-ai-simple-head p,.life-guide-intro p{font-size:11px!important}
+  .life-function-grid,.life-study-home-grid{grid-template-columns:1fr!important}.life-function-card{min-height:138px!important;padding:17px!important}.life-function-card b{font-size:14px!important}.life-function-card .life-function-desc{font-size:9px!important}
+  .life-page-transition-inner{top:68px!important;right:10px!important;max-width:calc(100vw - 20px)!important;min-width:180px!important;padding:11px 12px!important}
+  .life-page-transition b{font-size:12px!important}
+  .life-ai-simple-page{padding-top:20px!important}.life-ai-simple-bubble p{font-size:11px!important}.life-ai-simple-compose-wrap{bottom:75px!important}
+  .life-design-mobile-nav{left:8px!important;right:8px!important;bottom:max(7px,env(safe-area-inset-bottom))!important;border-radius:18px!important;padding:6px 4px!important}
+  .life-design-mobile-nav button span{font-size:7px!important}.life-design-mobile-nav button i{font-size:20px!important}.life-design-mobile-nav .life-design-nav-add i{width:42px!important;height:42px!important;border-radius:14px!important;display:grid!important;place-items:center!important}
+}
+
+@media(max-width:480px){
+  .v18-chip{display:none!important}.v18-island{margin-left:auto!important}
+  .life-today-plan-head h2{font-size:23px!important}.life-today-item-copy b{font-size:12px!important}
+  .life-today-ai-strip b{font-size:9px!important;max-width:210px!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .life-page-transition-inner{animation:none!important}
+}
+
+/* Defensive decluttering for the Home even if an older render path survives. */
+.life-area-hoje .life-free-conversion-strip,
+.life-area-hoje .life-free-upgrade-rail,
+.life-area-hoje .life-smart-hub,
+.life-area-hoje .life-depth-studio,
+.life-area-hoje .life-ai-orb,
+.life-area-hoje .v18-fab{display:none!important}
+
+/* LIFE OS 3.1 FINAL — hard neutral day canvas. This selector intentionally
+   matches the legacy .life-theme-day.v18 specificity so older warm gradients
+   can never win even when both declarations use !important. */
+.life-theme-day.v18{
+  background:radial-gradient(760px 380px at 88% -10%,rgba(var(--area-rgb,249,115,22),.045),transparent 64%),#f4f6f8!important;
+  color:#161a1f!important;
+}
+.life-theme-day .v53-context{opacity:.10!important;background:radial-gradient(circle at 82% 8%,rgba(var(--area-rgb),.055),transparent 38%)!important}
+.life-theme-day .v35-ambient,.life-theme-day .v36-neon-bg{display:none!important}
+.life-theme-day .v18-shell:before,.life-theme-day .v18-shell:after{opacity:.18!important}
+/* Remove the legacy dark vignette from the light theme. */
+.life-theme-day.v18:after{
+  background:radial-gradient(ellipse at center,transparent 66%,rgba(24,30,36,.045) 100%)!important;
+}

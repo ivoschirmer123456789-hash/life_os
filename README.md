@@ -1,4 +1,4 @@
-# LIFE OS 3.0 — Product Edition
+# LIFE OS 3.1 — Final Edition
 
 ## O que subir
 Suba **a pasta inteira** deste projeto para um repositório GitHub. A Vercel usa `index.html` como entrada automaticamente.
@@ -31,3 +31,7 @@ Estrutura principal:
 
 ## Sobre chaves
 A chave pública/anon do Supabase pode existir no frontend desde que RLS/policies estejam corretas. **Nunca coloque `service_role`, segredos de Mercado Pago ou outras chaves privadas nesses arquivos.**
+
+
+## Final visual correction
+The 3.1 Final Edition includes a rebuilt light theme, a deliberately minimal Today screen, quieter global navigation, and release-level visual overrides in `assets/css/final.css`. See `docs/FINAL_AUDIT.md`.
