@@ -1,0 +1,21 @@
+LIFE OS 3.0 — COMEÇE AQUI
+
+Você NÃO precisa mexer arquivo por arquivo.
+
+Para publicar:
+1. Extraia o ZIP.
+2. Abra a pasta LIFE_OS_3_Product_Edition.
+3. Envie TODOS os arquivos e pastas dessa pasta para o mesmo repositório do GitHub.
+4. Na Vercel, importe esse repositório.
+5. Framework: Other.
+6. Build Command: deixe vazio.
+7. Clique em Deploy.
+
+IMPORTANTE:
+- Não renomeie as pastas assets, database ou docs.
+- Não mova os arquivos de lugar.
+- index.html é o aplicativo principal.
+- landing.html é a página pública de apresentação.
+- service-worker.js + manifest.webmanifest fazem a instalação/PWA funcionar.
+
+Depois do primeiro deploy, teste login, Supabase, Mercado Pago e LIFE AI no link publicado.

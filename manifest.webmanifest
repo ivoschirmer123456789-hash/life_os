@@ -1,0 +1,43 @@
+{
+  "name": "LIFE OS",
+  "short_name": "LIFE",
+  "description": "Seu sistema pessoal para organizar o que importa agora.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07080b",
+  "theme_color": "#07080b",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Abrir LIFE",
+      "short_name": "LIFE",
+      "url": "./"
+    },
+    {
+      "name": "Conhecer o LIFE",
+      "short_name": "Sobre",
+      "url": "./landing.html"
+    }
+  ],
+  "categories": [
+    "productivity",
+    "lifestyle",
+    "education"
+  ]
+}
