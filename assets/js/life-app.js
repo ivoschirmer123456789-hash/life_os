@@ -1082,6 +1082,77 @@ function LifeKnowledgeLibrary({ area, onOpen, onAsk }) {
             React.createElement("button", { type: "button", onClick: askQuery }, "\u2726 PERGUNTAR \u00C0 LIFE AI")),
         filtered.length > limit && React.createElement("button", { type: "button", className: "life-knowledge-more", onClick: () => setLimit(x => x + 6) }, "MOSTRAR MAIS \u2193"));
 }
+
+function LifeUniversalLibrary({ workouts = [], recipes = [], studyRecs = {}, hasPro = false, onGuide, onExercise, onWorkout, onRecipe, onAsk, onGo }) {
+    const [query, setQuery] = React.useState('');
+    const [kind, setKind] = React.useState('Tudo');
+    const [limit, setLimit] = React.useState(24);
+    const norm = (x) => lifeGuideNorm(String(x || ''));
+    const resources = React.useMemo(() => Object.entries(studyRecs || {}).flatMap(([group, list]) => (list || []).map((x, i) => ({
+        id: 'resource_' + group + '_' + i,
+        kind: 'Estudos',
+        icon: x[0] === 'LIVRO' ? 'menu_book' : x[0] === 'ASSISTIR' ? 'smart_display' : 'school',
+        title: x[1],
+        meta: group + ' · ' + x[0],
+        description: x[2] || x[3] || '',
+        search: [group, ...(x || [])].join(' '),
+        open: () => onGuide && onGuide({ area: 'Estudos', group, glyph: x[0] === 'LIVRO' ? 'B' : '▶', title: x[1], summary: x[2] || 'Recurso de estudo.', tags: [group, x[0]].filter(Boolean), steps: [x[3] || 'Use este recurso como complemento ao seu objetivo atual.', 'Anote o que aprendeu e conecte à etapa atual do seu Guia de Estudos.', 'Volte ao LIFE para registrar a próxima sessão ou revisão.'], avoid: ['Consumir conteúdo sem saber o que quer aprender.', 'Usar uma única fonte como resposta para todo assunto.'], good: ['Conecte o recurso a um tópico específico.', 'Compare fontes quando precisão for importante.'], tip: 'Use recursos externos como apoio à sua trilha, não como uma lista infinita para consumir.', prompt: 'Me ajude a usar o recurso ' + x[1] + ' no meu objetivo de estudos atual.' })
+    }))), [studyRecs, onGuide]);
+    const guides = React.useMemo(() => LIFE_AREA_GUIDES.map(g => ({ id: 'guide_' + g.id, kind: 'Guias', icon: 'auto_stories', title: g.title, meta: lifePublicAreaName(g.area) + ' · ' + g.group, description: g.summary, search: [g.area,g.group,g.title,g.summary,...(g.tags||[])].join(' '), open: () => onGuide && onGuide(g) })), [onGuide]);
+    const exercises = React.useMemo(() => IRON_EXERCISE_LIBRARY.map(ex => ({ id: 'exercise_' + ex.id, kind: 'Exercícios', icon: 'exercise', title: ex.name, meta: lifeExerciseGroup(ex) + ' · ' + lifeExerciseMeta(ex).equipment, description: lifeExerciseMeta(ex).movement + ' · ' + lifeExerciseMeta(ex).difficulty, search: [ex.name,lifeExerciseGroup(ex),lifeExerciseMeta(ex).equipment,lifeExerciseMeta(ex).movement,lifeExerciseMeta(ex).primary].join(' '), open: () => onExercise && onExercise(ex) })), [onExercise]);
+    const workoutItems = React.useMemo(() => (workouts || []).map(w => ({ id: 'workout_' + w.id, kind: 'Treinos', icon: 'fitness_center', title: w.name, meta: (w.type || 'Treino') + (w.days ? ' · ' + w.days + 'x/sem' : ''), description: w.summary || (w.items || []).slice(0,4).join(' · '), search: [w.name,w.type,w.level,w.goal,(w.items||[]).join(' ')].join(' '), open: () => onWorkout && onWorkout(w) })), [workouts, onWorkout]);
+    const recipeItems = React.useMemo(() => (recipes || []).map(r => ({ id: 'recipe_' + r.id, kind: 'Receitas', icon: 'restaurant', title: r.name, meta: (r.cat || 'Receita') + (r.time ? ' · ' + r.time : ''), description: r.base || r.style || r.method || 'Receita da biblioteca LIFE.', search: [r.name,r.cat,r.base,r.style,r.method,(r.ingredients||[]).join(' ')].join(' '), open: () => onRecipe && onRecipe(r) })), [recipes, onRecipe]);
+    const all = React.useMemo(() => [...guides, ...resources, ...exercises, ...workoutItems, ...recipeItems], [guides, resources, exercises, workoutItems, recipeItems]);
+    const counts = React.useMemo(() => all.reduce((a,x) => { a[x.kind]=(a[x.kind]||0)+1; return a; }, {}), [all]);
+    const kinds = ['Tudo','Guias','Estudos','Exercícios','Treinos','Receitas'];
+    const nq = norm(query).trim();
+    const words = nq.split(/\s+/).filter(Boolean);
+    const visible = React.useMemo(() => {
+        let pool = kind === 'Tudo' ? all : all.filter(x => x.kind === kind);
+        if (!nq) {
+            if (kind === 'Tudo') {
+                const featured=[];
+                kinds.slice(1).forEach(k => featured.push(...pool.filter(x=>x.kind===k).slice(0,5)));
+                return featured.slice(0,limit);
+            }
+            return pool.slice(0,limit);
+        }
+        return pool.map(x => {
+            const hay = norm([x.title,x.meta,x.description,x.search].join(' '));
+            const score = words.reduce((n,w)=>n+(hay.includes(w)?2:0),0) + (hay.startsWith(nq)?3:0) + (norm(x.title).includes(nq)?4:0);
+            return {...x,score};
+        }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score || a.title.localeCompare(b.title)).slice(0,limit);
+    }, [all,kind,nq,query,limit]);
+    React.useEffect(()=>setLimit(24),[kind,query]);
+    const ask = () => onAsk && onAsk(query.trim() ? ('Encontre na Biblioteca do LIFE algo relacionado a: ' + query.trim() + '. Diga qual item ou área devo abrir e por quê.') : 'Me ajude a encontrar o conteúdo certo dentro da Biblioteca do LIFE. Pergunte o que eu quero aprender, cozinhar, treinar ou consultar.');
+    return React.createElement('main',{className:'life-universal-library'},
+        React.createElement('header',{className:'life-library-hero'},
+            React.createElement('div',null,
+                React.createElement('small',null,'LIFE / BIBLIOTECA'),
+                React.createElement('h1',null,'Tudo que você pode consultar.'),
+                React.createElement('p',null,'Guias do LIFE, estudos, exercícios, treinos e receitas em uma única busca. Você não precisa lembrar em qual aba cada coisa estava.')),
+            React.createElement('div',{className:'life-library-total'},React.createElement('b',null,all.length.toLocaleString('pt-BR')),React.createElement('span',null,'itens indexados'))),
+        React.createElement('section',{className:'life-library-search'},
+            React.createElement('span',{className:'material-symbols-rounded'},'search'),
+            React.createElement('input',{value:query,onChange:e=>setQuery(e.target.value),placeholder:'Pesquise qualquer coisa no LIFE…',autoComplete:'off'}),
+            query && React.createElement('button',{type:'button',onClick:()=>setQuery(''),'aria-label':'Limpar busca'},'×')),
+        React.createElement('div',{className:'life-library-kinds'},kinds.map(k=>React.createElement('button',{type:'button',key:k,className:kind===k?'on':'',onClick:()=>setKind(k)},
+            React.createElement('b',null,k),React.createElement('span',null,k==='Tudo'?all.length:(counts[k]||0))))),
+        !nq && kind==='Tudo' && React.createElement('section',{className:'life-library-shortcuts'},
+            React.createElement('button',{type:'button',onClick:()=>onGo&&onGo('Estudos')},React.createElement('span',{className:'material-symbols-rounded'},'school'),React.createElement('div',null,React.createElement('b',null,'Aprender'),React.createElement('small',null,'Guias, livros e referências'))),
+            React.createElement('button',{type:'button',onClick:()=>onGo&&onGo('Fitness')},React.createElement('span',{className:'material-symbols-rounded'},'exercise'),React.createElement('div',null,React.createElement('b',null,'Treinar'),React.createElement('small',null,'Exercícios e treinos'))),
+            React.createElement('button',{type:'button',onClick:()=>onGo&&onGo('Receitas')},React.createElement('span',{className:'material-symbols-rounded'},'restaurant'),React.createElement('div',null,React.createElement('b',null,'Cozinhar'),React.createElement('small',null,'Receitas e técnicas'))),
+            React.createElement('button',{type:'button',onClick:ask},React.createElement('span',{className:'material-symbols-rounded'},'auto_awesome'),React.createElement('div',null,React.createElement('b',null,'Perguntar à IA'),React.createElement('small',null,'Descreva o que procura')))),
+        React.createElement('div',{className:'life-library-result-head'},
+            React.createElement('b',null,nq ? visible.length + ' resultado(s)' : (kind==='Tudo'?'Seleção da Biblioteca':kind)),
+            React.createElement('span',null,nq?'Busca inteligente por título, categoria e conteúdo':'Toque em qualquer item para abrir')),
+        visible.length ? React.createElement('section',{className:'life-library-grid'},visible.map(item=>React.createElement('button',{type:'button',className:'life-library-card',key:item.id,onClick:item.open},
+            React.createElement('span',{className:'life-library-icon material-symbols-rounded'},item.icon),
+            React.createElement('div',null,React.createElement('small',null,item.kind.toUpperCase()+' · '+item.meta),React.createElement('b',null,item.title),React.createElement('p',null,item.description)),
+            React.createElement('span',{className:'material-symbols-rounded life-library-arrow'},'arrow_forward')))) : React.createElement('section',{className:'life-library-empty'},React.createElement('span',{className:'material-symbols-rounded'},'search_off'),React.createElement('b',null,'Nada com esse nome.'),React.createElement('p',null,'A LIFE AI pode interpretar o que você quis dizer e indicar o conteúdo ou a área certa.'),React.createElement('button',{type:'button',onClick:ask},'✦ PERGUNTAR À LIFE AI')),
+        ((kind==='Tudo'?all.length:(counts[kind]||0))>limit && !nq) && React.createElement('button',{type:'button',className:'life-library-more',onClick:()=>setLimit(x=>x+24)},'MOSTRAR MAIS ↓'));
+}
+
 function LifeGuideModal({ guide, onClose, onAsk }) {
     if (!guide)
         return null;
@@ -1138,6 +1209,7 @@ const LIFE_HOW_IT_WORKS = {
     'Hoje': { purpose: 'É a base do LIFE: mostra apenas o que precisa acontecer hoje.', steps: ['Veja seus planos do dia.', 'Marque o que concluir.', 'Adicione somente o que realmente precisa acontecer hoje.'], examples: ['Estudar matemática às 16h', 'Treino às 18h', 'Entregar o trabalho amanhã'], impact: 'Ajuda a começar o dia com menos ruído e uma próxima ação clara.' },
     'Tarefas': { purpose: 'Organiza ações, prazos, prioridades, projetos, metas e hábitos.', steps: ['Capture uma tarefa.', 'Defina prazo ou prioridade quando fizer sentido.', 'Use projetos e filtros apenas quando precisar de mais estrutura.'], examples: ['Enviar trabalho', 'Comprar material', 'Preparar apresentação'], impact: 'Tira pendências da cabeça e transforma intenção em ação visível.' },
     'Favoritos': { purpose: 'É o atalho pessoal para as áreas que você mais usa.', steps: ['Toque no coração de qualquer área.', 'Ela aparece automaticamente aqui.', 'Toque novamente no coração para remover.'], examples: ['Favoritar Estudos e Fitness', 'Deixar Finanças fora dos atalhos se você usa pouco'], impact: 'Reduz o tempo procurando funções e deixa o LIFE com a sua cara.' },
+    'Biblioteca': { purpose: 'É a central de consulta do LIFE: reúne guias, estudos, exercícios, treinos, receitas e referências em uma única busca.', steps: ['Pesquise qualquer assunto ou conteúdo.', 'Filtre por tipo quando quiser reduzir os resultados.', 'Abra o item sem precisar descobrir em qual aba ele estava.', 'Use a LIFE AI quando quiser interpretar, comparar ou encontrar algo mais específico.'], examples: ['Pesquisar remada e abrir um exercício', 'Encontrar uma receita rápida', 'Buscar revisão espaçada', 'Abrir um treino pronto ou um guia do LIFE'], impact: 'Reduz a sensação de estar procurando funções espalhadas e transforma o LIFE em uma biblioteca única, pesquisável e conectada.' },
     'Notas': { purpose: 'Guarda ideias e informações rapidamente sem exigir organização imediata.', steps: ['Escreva a ideia.', 'Salve.', 'Depois transforme em tarefa, projeto ou contexto para a LIFE AI quando necessário.'], examples: ['Ideia para um trabalho', 'Informação importante da aula', 'Lista rápida'], impact: 'Evita perder ideias e permite organizar depois, sem interromper o momento.' },
     'Estudos': { purpose: 'Centraliza foco, guia de estudos, revisões e trilhas de aprendizado.', steps: ['Escolha uma ferramenta ou abra o Guia de Estudos.', 'Informe assunto, nível, objetivo e tempo.', 'Siga a árvore cronológica e registre sessões.'], examples: ['Aprender Física do zero', 'Organizar revisão para o ENEM', 'Criar uma trilha de inglês'], impact: 'Transforma um assunto grande em uma sequência clara do que aprender primeiro e depois.' },
     'Guia de Estudos': { purpose: 'Monta uma árvore cronológica de aprendizado a partir do seu objetivo.', steps: ['Preencha o formulário.', 'Revise a sequência sugerida.', 'Use livros, canais, vídeos e exercícios relacionados.', 'Avance conforme dominar cada etapa.'], examples: ['Matemática básica → álgebra → funções', 'Biologia celular → genética → evolução'], impact: 'Ajuda a saber por onde começar e evita estudar tópicos soltos sem sequência.' },
@@ -1159,7 +1231,7 @@ const lifeHowAreaFromText = (raw='') => {
     const aliases = [
         ['Guia de Estudos', ['guia de estudos','trilha de estudos']], ['Meu LIFE', ['meu life']], ['Configurações', ['configuracoes','configurações','ajustes']],
         ['Hoje', ['hoje','home','inicio','início']], ['Tarefas', ['tarefas','organizar','pendencias','pendências']], ['Favoritos', ['favoritos','favorito']],
-        ['Notas', ['notas','anotacoes','anotações']], ['Estudos', ['estudos','estudar','enem']], ['Fitness', ['fitness','treino','academia','exercicio','exercício']],
+        ['Notas', ['notas','anotacoes','anotações']], ['Biblioteca', ['biblioteca','buscar conteudo','buscar conteúdo','consultar','acervo']], ['Estudos', ['estudos','estudar','enem']], ['Fitness', ['fitness','treino','academia','exercicio','exercício']],
         ['Receitas', ['receitas','receita','cozinha']], ['IA', ['life ai','ia','assistente']], ['Life', ['planejamento','projetos','projeto']],
         ['Finanças', ['financas','finanças','dinheiro','gastos']], ['Evolução', ['evolucao','evolução','progresso','graficos','gráficos']],
         ['Archive', ['arquivo','archive','historico','histórico']], ['Perfil', ['perfil','conta']], ['Tutorial', ['tutorial','como usar o life']]
@@ -1170,6 +1242,7 @@ const LIFE_ROUTE_INDEX = [
     { area: 'Hoje', title: 'Organizar meu dia', keywords: 'hoje dia prioridade morning brief agenda compromissos', prompt: 'Organize meu dia usando apenas o que está registrado no LIFE e mostre a primeira ação.' },
     { area: 'Meu LIFE', title: 'Encontrar favoritos, fixados e recentes', keywords: 'favoritos fixados recentes meu life atalhos', prompt: 'Me ajude a encontrar o que eu salvei, favoritei ou acessei recentemente no Meu LIFE.' },
     { area: 'Favoritos', title: 'Abrir minhas áreas favoritas', keywords: 'favoritos abas areas atalhos favoritos', prompt: 'Mostre minhas áreas favoritas e me direcione para a que eu escolher.' },
+    { area: 'Biblioteca', title: 'Pesquisar toda a Biblioteca LIFE', keywords: 'biblioteca busca guias estudos livros exercicios treinos receitas consultar acervo', prompt: 'Pesquise na Biblioteca LIFE e me mostre o conteúdo mais útil entre guias, estudos, exercícios, treinos e receitas.' },
     { area: 'IA', title: 'Conversar com LIFE AI', keywords: 'ia assistente perguntar ajuda chat life ai', prompt: 'Quero ajuda para decidir qual área do LIFE devo usar agora.' },
     { area: 'Tarefas', title: 'Criar e organizar tarefas', keywords: 'tarefas afazeres pendencias checklist meta habito revisão semanal', prompt: 'Organize minhas tarefas e transforme itens vagos em próximas ações claras.' },
     { area: 'Notas', title: 'Pesquisar e organizar anotações', keywords: 'notas anotacoes ideias lembretes pensamentos', prompt: 'Me ajude a organizar minhas anotações e transformar o que for acionável em próximos passos.' },
@@ -4122,7 +4195,7 @@ function LifeOSV18() {
     }, [notificationPrefs.morning, notificationPrefs.night, notificationPrefs.morningTime, notificationPrefs.nightTime]);
     const aiAreaMap = {
         'Estudos': 'Estudos', 'Fitness': 'Fitness', 'Dieta': 'Alimentação', 'Receitas': 'Alimentação', 'Finanças': 'Finanças',
-        'Life': 'Planejamento', 'Hoje': 'Planejamento', 'Tarefas': 'Organização', 'Meu LIFE': 'Organização', 'Evolução': 'Evolução', 'Archive': 'Organização', 'Perfil': 'Sistema', 'Notas': 'Organização', 'IA': 'Geral'
+        'Life': 'Planejamento', 'Hoje': 'Planejamento', 'Tarefas': 'Organização', 'Meu LIFE': 'Organização', 'Evolução': 'Evolução', 'Archive': 'Organização', 'Perfil': 'Sistema', 'Notas': 'Organização', 'Biblioteca': 'Geral', 'IA': 'Geral'
     };
     const aiContextArea = (view === 'IA' ? aiOriginView : view) || 'Hoje';
     const aiSpecialist = aiManualSpecialist === 'Auto' ? (aiAreaMap[aiContextArea] || 'Geral') : aiManualSpecialist;
@@ -4131,7 +4204,7 @@ function LifeOSV18() {
     const aiDoneTasks = () => tasks.filter(t => taskIsDone(t));
     const aiTodayActivity = () => lifeActivity.filter(a => new Date(a.date).toLocaleDateString('pt-BR') === aiTodayKey());
     const aiSafeText = (x, n = 180) => String(x || '').replace(/\s+/g, ' ').trim().slice(0, n);
-    const lifeAIProductInstructions = `Você é o LIFE AI, assistente pessoal e guia de produto do LIFE OS. Você conhece as áreas, o que cada uma faz e como direcionar o usuário. Responda em português natural, claro, útil e conversacional. Se o usuário perguntar como funciona uma área, explique para que serve, como começar, dê exemplos concretos e indique a rota correta no LIFE.  Se o usuário apenas cumprimentar (oi, olá, opa, bom dia etc.), cumprimente de volta e pergunte como pode ajudar — nunca diga que não entendeu. Raciocine antes de responder, faça perguntas quando faltar contexto importante e não invente dados do usuário. Use o contexto recebido somente quando ele for relevante. Diferencie fatos registrados, inferências e sugestões. Quando uma ação alterar dados do LIFE, proponha a ação e espere confirmação. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog e o navigation_index. Quando o usuário pedir onde encontrar algo, direcione para a área correta do LIFE em vez de responder de forma vaga. Se houver study_plan no contexto, use a etapa atual da trilha como referência. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog quando ele estiver presente e use os guias mais relevantes como base prática; não responda com frases genéricas se houver um guia específico. Em fitness, quando o usuário pedir um treino por grupo muscular (ex.: costas e bíceps, pernas, panturrilha, antebraço), respeite exatamente os grupos pedidos e monte uma sessão usando o exercise_catalog recebido; não troque a solicitação por um plano semanal genérico. Mostre exercícios, séries, repetições e descanso de forma simples. No LIFE, Alimentação/Dieta fica dentro de Fitness > Alimentação. Quando o usuário pedir dieta, plano alimentar, refeições, intolerâncias ou suplementos, direcione para essa subárea e use nutrition_profile e mealPlans quando existirem. Respeite o plano da conta recebido no contexto: no FREE, não entregue como se estivesse desbloqueado um treino semanal personalizado, plano alimentar personalizado, memória persistente, planejador avançado, mapa de domínio de estudos ou análise financeira avançada. No FREE, ofereça orientação geral e recursos gratuitos e direcione de forma transparente ao fluxo PRO quando o pedido depender desses recursos. Nunca finja que um recurso PRO está disponível no FREE. Faça perguntas antes de personalizar quando faltarem idade, rotina, preferências, alergias/intolerâncias ou contexto de treino. Nunca invente necessidade ou dose de suplemento. Em fitness e alimentação, adapte o nível de cautela à idade; para menores de 18 anos, evite rotinas extremas, metas corporais, restrição alimentar, déficit/superávit calculado, metas de peso e alto volume automático. Se houver lesão, condição médica ou dúvida de segurança, não prescreva um plano agressivo: peça orientação de responsável/profissional. Em receitas, forneça quantidades, utensílios, tempo, temperatura quando aplicável, ponto de preparo e passos completos. No treino, diferencie hipertrofia, força, condicionamento e híbrido; híbrido deve combinar musculação e cardio de forma coerente com recuperação e experiência. Seja conversacional, contextual e capaz de explicar o porquê das sugestões, sem fingir que uma única rotina é a melhor para todo mundo. Funcione como o sistema operacional do LIFE: quando a intenção estiver clara, direcione para a tela, filtro ou fluxo correto; quando o pedido envolver várias áreas, cruze agenda, tarefas, trilha de estudos, clima, treino, alimentação e finanças apenas quando forem relevantes. Não repita perguntas já respondidas no contexto. Use a hierarquia Objetivo → Projeto → Etapa → Tarefa quando isso ajudar a organizar, e consulte life_graph.links antes de supor relações. Para planejamento do dia, proponha blocos com duração e peça confirmação única antes de aplicar. Antes de criar, mover, excluir, vincular ou marcar algo como concluído, peça confirmação.`;
+    const lifeAIProductInstructions = `Você é o LIFE AI, assistente pessoal e guia de produto do LIFE OS. Você conhece as áreas, o que cada uma faz e como direcionar o usuário. A Biblioteca é a busca central do produto e reúne guias, recursos de estudo, exercícios, treinos e receitas em um único lugar. Responda em português natural, claro, útil e conversacional. Se o usuário perguntar como funciona uma área, explique para que serve, como começar, dê exemplos concretos e indique a rota correta no LIFE.  Se o usuário apenas cumprimentar (oi, olá, opa, bom dia etc.), cumprimente de volta e pergunte como pode ajudar — nunca diga que não entendeu. Raciocine antes de responder, faça perguntas quando faltar contexto importante e não invente dados do usuário. Use o contexto recebido somente quando ele for relevante. Diferencie fatos registrados, inferências e sugestões. Quando uma ação alterar dados do LIFE, proponha a ação e espere confirmação. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog e o navigation_index. Quando o usuário pedir onde encontrar algo, direcione para a área correta do LIFE em vez de responder de forma vaga. Se houver study_plan no contexto, use a etapa atual da trilha como referência. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog quando ele estiver presente e use os guias mais relevantes como base prática; não responda com frases genéricas se houver um guia específico. Em fitness, quando o usuário pedir um treino por grupo muscular (ex.: costas e bíceps, pernas, panturrilha, antebraço), respeite exatamente os grupos pedidos e monte uma sessão usando o exercise_catalog recebido; não troque a solicitação por um plano semanal genérico. Mostre exercícios, séries, repetições e descanso de forma simples. No LIFE, Alimentação/Dieta fica dentro de Fitness > Alimentação. Quando o usuário pedir dieta, plano alimentar, refeições, intolerâncias ou suplementos, direcione para essa subárea e use nutrition_profile e mealPlans quando existirem. Respeite o plano da conta recebido no contexto: no FREE, não entregue como se estivesse desbloqueado um treino semanal personalizado, plano alimentar personalizado, memória persistente, planejador avançado, mapa de domínio de estudos ou análise financeira avançada. No FREE, ofereça orientação geral e recursos gratuitos e direcione de forma transparente ao fluxo PRO quando o pedido depender desses recursos. Nunca finja que um recurso PRO está disponível no FREE. Faça perguntas antes de personalizar quando faltarem idade, rotina, preferências, alergias/intolerâncias ou contexto de treino. Nunca invente necessidade ou dose de suplemento. Em fitness e alimentação, adapte o nível de cautela à idade; para menores de 18 anos, evite rotinas extremas, metas corporais, restrição alimentar, déficit/superávit calculado, metas de peso e alto volume automático. Se houver lesão, condição médica ou dúvida de segurança, não prescreva um plano agressivo: peça orientação de responsável/profissional. Em receitas, forneça quantidades, utensílios, tempo, temperatura quando aplicável, ponto de preparo e passos completos. No treino, diferencie hipertrofia, força, condicionamento e híbrido; híbrido deve combinar musculação e cardio de forma coerente com recuperação e experiência. Seja conversacional, contextual e capaz de explicar o porquê das sugestões, sem fingir que uma única rotina é a melhor para todo mundo. Funcione como o sistema operacional do LIFE: quando a intenção estiver clara, direcione para a tela, filtro ou fluxo correto; quando o pedido envolver várias áreas, cruze agenda, tarefas, trilha de estudos, clima, treino, alimentação e finanças apenas quando forem relevantes. Não repita perguntas já respondidas no contexto. Use a hierarquia Objetivo → Projeto → Etapa → Tarefa quando isso ajudar a organizar, e consulte life_graph.links antes de supor relações. Para planejamento do dia, proponha blocos com duração e peça confirmação única antes de aplicar. Antes de criar, mover, excluir, vincular ou marcar algo como concluído, peça confirmação.`;
     const buildAIContext = () => {
         const ctx = { area: lifePublicAreaName(aiContextArea), area_id: aiContextArea, specialist: aiSpecialist, plan: realPlan };
         ctx.navigation_index = LIFE_ROUTE_INDEX.map(x => ({ area: x.area, title: x.title, keywords: x.keywords }));
@@ -5117,7 +5190,7 @@ function LifeOSV18() {
     const [legalOpen, setLegalOpen] = React.useState(null);
     const [supportOpen, setSupportOpen] = React.useState(false);
     const [dangerOpen, setDangerOpen] = React.useState(false);
-    const lifeBuild = '3.2.0';
+    const lifeBuild = '3.3.0';
     const lifeDiagnostics = () => ({
         build: lifeBuild,
         plan: effectivePlan || realPlan || 'FREE',
@@ -5177,7 +5250,7 @@ function LifeOSV18() {
     const [intro, setIntro] = React.useState(() => {
         try {
             const cfg = { ...lifeSettingsDefaults, ...JSON.parse(localStorage.getItem('life_settings_v1') || '{}') };
-            const releaseKey = 'life_release_intro_310';
+            const releaseKey = 'life_release_intro_330';
             const firstRunOfRelease = localStorage.getItem(releaseKey) !== '1';
             if (firstRunOfRelease) {
                 localStorage.setItem(releaseKey, '1');
@@ -6012,7 +6085,7 @@ function LifeOSV18() {
         }
         v42Go(area);
     };
-    const fullNav = ['Hoje', 'Tarefas', 'Favoritos', 'Notas', 'Estudos', 'Fitness', 'Receitas', 'IA', 'Life', 'Finanças', 'Meu LIFE', 'Evolução', 'Archive', 'Perfil'];
+    const fullNav = ['Hoje', 'Tarefas', 'Favoritos', 'Biblioteca', 'Notas', 'Estudos', 'Fitness', 'Receitas', 'IA', 'Life', 'Finanças', 'Meu LIFE', 'Evolução', 'Archive', 'Perfil', 'Tutorial', 'Configurações'];
     const basePrimaryNav = ['Hoje', 'Tarefas', 'Estudos', 'Fitness', 'Finanças', 'IA'];
     const focusTarget = ({ Organização: 'Tarefas', Estudos: 'Estudos', Fitness: 'Fitness', Finanças: 'Finanças', Planejamento: 'Life' })[v33Profile.focusArea];
     const nav = focusTarget ? ['Hoje', focusTarget, ...basePrimaryNav.filter(x => x !== 'Hoje' && x !== focusTarget)].slice(0, 6) : basePrimaryNav;
@@ -6024,7 +6097,7 @@ function LifeOSV18() {
         const r = [];
         const push = x => { if (r.length < 45 && !r.some(y => y.type === x.type && String(y.id) === String(x.id)))
             r.push(x); };
-        const allAreas = ['Hoje', 'Tarefas', 'Notas', 'Life', 'Estudos', 'Fitness', 'Receitas', 'Finanças', 'IA', 'Meu LIFE', 'Evolução', 'Archive', 'Perfil'];
+        const allAreas = ['Hoje', 'Tarefas', 'Notas', 'Biblioteca', 'Life', 'Estudos', 'Fitness', 'Receitas', 'Finanças', 'IA', 'Meu LIFE', 'Evolução', 'Archive', 'Perfil'];
         allAreas.forEach(x => { const label = lifePublicAreaName(x); if (lifeNormalizeText(x + ' ' + label).includes(term))
             push({ type: 'ÁREA', text: label, go: x, id: x }); });
         const special = { aguardando: t => t.waiting, 'sem data': t => !t.dueAt && !t.waiting, atrasad: t => lifeTaskStatusV4(t) === 'Atrasada', '7 dias': t => ['Hoje', '7 dias', 'Atrasada'].includes(lifeTaskStatusV4(t)) };
@@ -6305,6 +6378,21 @@ function LifeOSV18() {
                         React.createElement("div", { className: "life-evolution-area-bars" }, Object.entries(groupCount).map(([k,v]) => React.createElement("div", { key: k }, React.createElement("span", null, k), React.createElement("i", null, React.createElement("em", { style: { width: Math.round(v / mx * 100) + '%' } })), React.createElement("b", null, v))))),
                     React.createElement("div", { className: "life-simple-actions" }, React.createElement("div", { className: "life-simple-action-wrap" }, React.createElement("button", { type: "button", className: "primary", onClick: () => openAdvancedArea('Evolução') }, "ABRIR HISTÓRICO COMPLETO"), React.createElement("small", { className: "life-function-desc" }, "Veja registros individuais e análises adicionais quando quiser investigar com mais detalhe.")))));
         }
+
+        if (view === 'Biblioteca') {
+            return React.createElement(LifeUniversalLibrary, {
+                workouts: v33Workouts,
+                recipes: v33Recipes,
+                studyRecs: v45Recs,
+                hasPro: hasV18Pro,
+                onGuide: setSelectedLifeGuide,
+                onExercise: setSelectedLifeExercise,
+                onWorkout: (w) => openLifeWorkout(w),
+                onRecipe: (r) => openLifeRecipe(r),
+                onGo: v42Go,
+                onAsk: (prompt) => { setAiOriginView('Biblioteca'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); }
+            });
+        }
         if (view === 'Favoritos') {
             const favAreas = (lifeFavorites.areas || []).slice();
             return React.createElement(LifeSimpleShell, { icon: 'star', eyebrow: 'LIFE / FAVORITOS', title: 'Meus favoritos.', description: 'Somente as áreas que você marcou como favoritas. Um atalho pessoal para o que realmente usa.' },
@@ -6315,13 +6403,14 @@ function LifeOSV18() {
                 ['01','Comece pelo Hoje','Use a tela Hoje somente para os planos que realmente precisam acontecer agora. Marque conforme concluir.',['Adicione no máximo o essencial do dia.','Toque em uma tarefa para abrir os detalhes.','Use LIFE AI apenas quando quiser ajuda para organizar a ordem.'],'Hoje'],
                 ['02','Organize tarefas e notas','Tarefas são ações. Notas são ideias, informações e lembretes. Não misture os dois.',['Crie tarefa quando existir algo para fazer.','Use Nota para guardar informação.','Projetos ficam dentro de Planejamento/Organizar.'],'Tarefas'],
                 ['03','Use Estudos como caminho','Entre no Guia de estudos quando quiser aprender um assunto do zero ou organizar um objetivo longo.',['Preencha o formulário.','Siga a árvore cronológica uma etapa por vez.','Use foco, revisão e caderno de erros como apoio.'],'Estudos'],
-                ['04','Use Fitness sem se perder','Escolha entre treino pronto, treino personalizado e biblioteca de exercícios. Seus treinos salvos ficam em Meus treinos.',['Treino pronto: começar rápido.','Personalizado: montar pela sua rotina.','Biblioteca: consultar exercícios e técnica.'],'Fitness'],
-                ['05','Converse com LIFE AI','A LIFE AI funciona como chat e pode usar contexto do LIFE, incluindo clima, tarefas, estudos, fitness e finanças quando isso ajudar.',['Pergunte naturalmente.','Ela pode indicar qual área abrir.','Alterações de dados devem pedir confirmação.'],'IA'],
-                ['06','Acompanhe sua evolução','Evolução usa somente registros reais. Quanto mais você usa tarefas, foco e treino, mais úteis ficam os gráficos.',['Compare 7 e 30 dias.','Observe consistência, não perfeição.','Abra o histórico completo quando precisar de detalhes.'],'Evolução'],
-                ['07','Personalize o sistema','Em Configurações você controla tema, animações, mini legendas, notificações, abertura cinematográfica e dados.',['Desative mini legendas quando já conhecer o LIFE.','Mantenha a abertura ligada se quiser a experiência cinematográfica.','Confira sincronização antes de trocar de dispositivo.'],'Configurações'],
-                ['08','Monte seus favoritos','Favorite as áreas que realmente usa para montar uma barra pessoal e evitar procurar a mesma função todos os dias.',['Abra uma área.','Use “Favoritar área”.','Depois acesse tudo pela aba Favoritos na barra inferior.'],'Favoritos'],
-                ['09','Use o botão Criar','O botão central “+” serve para capturar algo novo sem primeiro decidir em qual tela entrar.',['Use para tarefa, nota e outras capturas rápidas.','Depois organize somente quando fizer sentido.','Isso reduz a quantidade de caminhos para ações simples.'],'Hoje'],
-                ['10','Proteja sua continuidade','Perfil e Configurações reúnem conta, plano e sincronização. Antes de trocar de aparelho, confirme que a nuvem está sincronizada.',['Confira o indicador de nuvem.','Use sincronização manual se necessário.','Exportação continua disponível como camada extra de segurança.'],'Perfil']
+                ['04','Encontre tudo pela Biblioteca','A Biblioteca é a busca central do LIFE. Ela reúne guias, conteúdos de estudo, exercícios, treinos e receitas sem obrigar você a lembrar em qual área cada item estava.',['Pesquise pelo assunto, exercício, treino ou receita.','Use os filtros para reduzir os resultados.','Abra o item e volte para a mesma posição quando terminar.'],'Biblioteca'],
+                ['05','Use Fitness sem se perder','Escolha entre treino pronto, treino personalizado e biblioteca de exercícios. Seus treinos salvos ficam em Meus treinos.',['Treino pronto: começar rápido.','Personalizado: montar pela sua rotina.','Biblioteca: consultar exercícios e técnica.'],'Fitness'],
+                ['06','Converse com LIFE AI','A LIFE AI funciona como chat e pode usar contexto do LIFE, incluindo clima, tarefas, estudos, fitness e finanças quando isso ajudar.',['Pergunte naturalmente.','Ela pode indicar qual área abrir.','Alterações de dados devem pedir confirmação.'],'IA'],
+                ['07','Acompanhe sua evolução','Evolução usa somente registros reais. Quanto mais você usa tarefas, foco e treino, mais úteis ficam os gráficos.',['Compare 7 e 30 dias.','Observe consistência, não perfeição.','Abra o histórico completo quando precisar de detalhes.'],'Evolução'],
+                ['08','Personalize o sistema','Em Configurações você controla tema, animações, mini legendas, notificações, abertura cinematográfica e dados.',['Desative mini legendas quando já conhecer o LIFE.','Mantenha a abertura ligada se quiser a experiência cinematográfica.','Confira sincronização antes de trocar de dispositivo.'],'Configurações'],
+                ['09','Monte seus favoritos','Na seleção de áreas, toque no coração daquilo que você realmente usa. A área entra imediatamente em Favoritos sem abrir por engano.',['Abra “Mais” na barra inferior.','Toque somente no coração da área desejada.','Depois acesse seus atalhos pela aba Favoritos.'],'Favoritos'],
+                ['10','Use o botão Criar','O botão central “+” serve para capturar algo novo sem primeiro decidir em qual tela entrar.',['Use para tarefa, nota e outras capturas rápidas.','Depois organize somente quando fizer sentido.','Isso reduz a quantidade de caminhos para ações simples.'],'Hoje'],
+                ['11','Proteja sua continuidade','Perfil e Configurações reúnem conta, plano e sincronização. Antes de trocar de aparelho, confirme que a nuvem está sincronizada.',['Confira o indicador de nuvem.','Use sincronização manual se necessário.','Exportação continua disponível como camada extra de segurança.'],'Perfil']
             ];
             return React.createElement(LifeSimpleShell, { icon: 'menu_book', eyebrow: 'LIFE / TUTORIAL', title: 'Como usar o LIFE OS.', description: 'Um guia detalhado para entender o papel de cada área sem precisar descobrir tudo sozinho.' },
                 React.createElement("div", { className: "life-tutorial" }, steps.map(x => React.createElement("article", { className: "life-tutorial-step", key: x[0] },
@@ -6466,7 +6555,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("small", null, "LIFE / NAVEGA\u00C7\u00C3O"),
                         React.createElement("b", null, "Principais + ferramentas.")),
                     React.createElement("button", { type: "button", className: "v31-close", onClick: () => setV31Menu(false) }, "\u00D7")),
-                React.createElement("div", { className: "v31-nav", role: "navigation", "aria-label": "Todas as áreas do LIFE" }, [['Hoje', 'Agora'], ['Meu LIFE', 'Favoritos + recentes'], ['IA', 'Assistente inteligente'], ['Tarefas', 'Inbox + tarefas + projetos'], ['Notas', 'Bloco de anotações'], ['Life', 'Planejamento + sono'], ['Estudos', 'ENEM + conhecimento'], ['Fitness', 'Treinos + exercícios + alimentação'], ['Receitas', 'Cozinha + receitas detalhadas'], ['Finanças', 'Fluxo financeiro'], ['Evolução', 'Progresso + esportes'], ['Archive', 'Histórico e arquivo'], ['Perfil', 'Sistema']].map((x, i) => React.createElement("div", { className: "v31-item-wrap " + (view === x[0] ? "on" : ""), key: x[0] },
+                React.createElement("div", { className: "v31-nav", role: "navigation", "aria-label": "Todas as áreas do LIFE" }, [['Hoje', 'Agora'], ['Meu LIFE', 'Favoritos + recentes'], ['IA', 'Assistente inteligente'], ['Biblioteca', 'Tudo que você pode consultar'], ['Tarefas', 'Inbox + tarefas + projetos'], ['Notas', 'Bloco de anotações'], ['Life', 'Planejamento + sono'], ['Estudos', 'ENEM + conhecimento'], ['Fitness', 'Treinos + exercícios + alimentação'], ['Receitas', 'Cozinha + receitas detalhadas'], ['Finanças', 'Fluxo financeiro'], ['Evolução', 'Progresso + esportes'], ['Archive', 'Histórico e arquivo'], ['Tutorial', 'Aprender o LIFE'], ['Configurações', 'Preferências do sistema'], ['Perfil', 'Conta + sistema']].map((x, i) => React.createElement("div", { className: "v31-item-wrap " + (view === x[0] ? "on" : ""), key: x[0] },
                     React.createElement("button", { type: "button", className: "v31-item " + (view === x[0] ? "on" : ""), onPointerDown: (e) => e.stopPropagation(), onClick: (e) => { e.preventDefault(); e.stopPropagation(); v42Go(x[0]); } },
                         React.createElement("span", { className: "v31-num" }, String(i + 1).padStart(2, '0')),
                         React.createElement("b", null, lifePublicAreaName(x[0]), x[0] === 'Notas' && v49Notes.length > 0 && React.createElement("em", { className: "v63-note-badge" }, v49Notes.length > 99 ? '99+' : v49Notes.length)),
@@ -6538,7 +6627,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => setSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 3.2.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 3.3.0"),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => setSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
@@ -6564,7 +6653,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                 React.createElement("b", null, LIFE_UPGRADE_COPY[view][0]),
                 React.createElement("span", null, LIFE_UPGRADE_COPY[view][1])),
             React.createElement("button", { type: "button", onClick: () => openLifePro(view === 'Fitness' ? 'treino_personalizado' : view === 'Estudos' ? 'estudos_mastery' : view === 'Finanças' ? 'financas_analise' : view === 'Archive' ? 'archive' : 'header') }, "VER O QUE O PRO LIBERA →")),
-        view !== 'IA' && view !== 'Hoje' && advancedArea === view && !['Configurações','Tutorial','Guia de Estudos','Favoritos'].includes(view) && React.createElement(LifeSmartHub, { area: view, onGo: v42Go, onAsk: (prompt) => { setAiOriginView(view); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
+        view !== 'IA' && view !== 'Hoje' && advancedArea === view && !['Configurações','Tutorial','Guia de Estudos','Favoritos','Biblioteca'].includes(view) && React.createElement(LifeSmartHub, { area: view, onGo: v42Go, onAsk: (prompt) => { setAiOriginView(view); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
         (settingsOpen || view === 'Configurações') && React.createElement("div", { className: "life-settings-overlay " + (view === 'Configurações' ? 'life-settings-page-mode' : ''), onClick: e => { if (settingsOpen && e.target === e.currentTarget)
                 setSettingsOpen(false); } },
             React.createElement("section", { className: "life-settings-panel", role: view === 'Configurações' ? "main" : "dialog", "aria-modal": view === 'Configurações' ? undefined : "true", "aria-label": "Configura\u00E7\u00F5es do LIFE" },
@@ -8342,7 +8431,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                                 React.createElement("button", { type: "button", onClick: exportLifeData }, "EXPORTAR MEUS DADOS")),
                             React.createElement("p", { className: "v18-why mt-3" }, "A sincroniza\u00E7\u00E3o \u00E9 limitada aos dados da sua conta. Prefer\u00EAncias e registros pessoais permanecem separados das permiss\u00F5es do seu plano.")))),
                 React.createElement(LifeKnowledgeLibrary, { area: "Perfil", onOpen: setSelectedLifeGuide, onAsk: askLifeGuide })),
-            view !== 'IA' && view !== 'Hoje' && advancedArea === view && !['Configurações','Tutorial','Guia de Estudos','Favoritos'].includes(view) && React.createElement(LifeAreaDepthStudio, { area: view, onAsk: (prompt) => { setAiOriginView(view === 'Fitness' && advancedArea === 'Fitness' && fitnessMainTab === 'Alimentação' ? 'Dieta' : view); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
+            view !== 'IA' && view !== 'Hoje' && advancedArea === view && !['Configurações','Tutorial','Guia de Estudos','Favoritos','Biblioteca'].includes(view) && React.createElement(LifeAreaDepthStudio, { area: view, onAsk: (prompt) => { setAiOriginView(view === 'Fitness' && advancedArea === 'Fitness' && fitnessMainTab === 'Alimentação' ? 'Dieta' : view); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
             view !== 'IA' && view !== 'Hoje' && React.createElement("button", { type: "button", className: "life-ai-orb", onClick: () => aiOpen(false), "aria-label": "Abrir LIFE AI" },
                 React.createElement("i", null, "\u2726"),
                 React.createElement("span", null, "LIFE AI")),
@@ -8377,12 +8466,12 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("button", { type: "button", onClick: () => submitLifeAI(), disabled: !aiInput.trim() }, "\u2191")),
                     React.createElement("button", { type: "button", className: "life-ai-quick-full", onClick: () => { setAiQuickOpen(false); aiOpen(true); } }, "ABRIR LIFE AI COMPLETO \u2192"))),
             howItWorksArea && React.createElement(LifeHowItWorksModal, { area: howItWorksArea, onClose: () => setHowItWorksArea(null), onAsk: (prompt) => { const area = howItWorksArea; setHowItWorksArea(null); setAiOriginView(area); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 35); } }),
-            React.createElement("nav", { className: "life-mobile-nav life-design-mobile-nav", "aria-label": "Navegação móvel" },
+            React.createElement("nav", { className: "life-mobile-nav life-design-mobile-nav", "aria-label": "Navegação móvel", "data-life-mobile-nav": "true" },
                 React.createElement("button", { type: "button", className: view === 'Hoje' ? 'on' : '', onClick: () => v18Go('Hoje') }, React.createElement("i", { className: "material-symbols-rounded" }, "home"), React.createElement("span", null, "Hoje")),
                 React.createElement("button", { type: "button", className: view === 'Favoritos' ? 'on' : '', onClick: () => v18Go('Favoritos') }, React.createElement("i", { className: "material-symbols-rounded" }, "star"), React.createElement("span", null, "Favoritos")),
                 React.createElement("button", { type: "button", className: "life-design-nav-add", onClick: () => setSheet('capture'), "aria-label": "Criar ou capturar" }, React.createElement("i", { className: "material-symbols-rounded" }, "add"), React.createElement("span", null, "Criar")),
-                React.createElement("button", { type: "button", className: view === 'IA' ? 'on' : '', onClick: () => v18Go('IA') }, React.createElement("i", { className: "material-symbols-rounded" }, "auto_awesome"), React.createElement("span", null, "LIFE AI")),
-                React.createElement("button", { type: "button", className: !['Hoje', 'Favoritos', 'IA'].includes(view) ? 'on' : '', onClick: () => setMobileMore(true) }, React.createElement("i", { className: "material-symbols-rounded" }, "grid_view"), React.createElement("span", null, "Mais"))),
+                React.createElement("button", { type: "button", className: view === 'IA' ? 'on' : '', onClick: () => v18Go('IA'), "data-nav": "ai" }, React.createElement("i", { className: "material-symbols-rounded" }, "auto_awesome"), React.createElement("span", null, "LIFE AI")),
+                React.createElement("button", { type: "button", className: !['Hoje', 'Favoritos', 'IA'].includes(view) ? 'on' : '', onClick: () => setMobileMore(true), "data-nav": "more" }, React.createElement("i", { className: "material-symbols-rounded" }, "grid_view"), React.createElement("span", null, "Mais"))),
             mobileMore && React.createElement("div", { className: "life-mobile-more", onClick: e => { if (e.target === e.currentTarget)
                     setMobileMore(false); } },
                 React.createElement("div", null,

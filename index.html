@@ -1,2 +1,130 @@
-window.LIFE_SINGLE_FILE=false;
-window.LIFE_BUILD={version:'3.3.0',name:'Mobile First Edition'};
+<!DOCTYPE html>
+<!-- LIFE OS 3.3 Mobile First Edition -->
+
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>LIFE OS — Seu sistema pessoal</title>
+
+  <meta name="description" content="LIFE OS é um sistema pessoal para organizar rotina, tarefas, estudos, fitness, alimentação, finanças e contexto com LIFE AI." />
+  <meta name="theme-color" content="#07080B" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="application-name" content="LIFE OS" />
+  <meta name="life-build" content="3.3.0" />
+  <meta name="apple-mobile-web-app-title" content="LIFE OS" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-TileColor" content="#07080B" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,-25..0" rel="stylesheet">
+  
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js'"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js'"></script>
+
+  <link rel="stylesheet" href="assets/css/utilities.css?v=3.3.0">
+  <link rel="stylesheet" href="assets/css/life.css?v=3.3.0">
+  <link rel="stylesheet" href="assets/css/product.css?v=3.3.0">
+  <link rel="stylesheet" href="assets/css/final.css?v=3.3.0">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+</head>
+<body class="tech-bg min-h-screen flex flex-col text-txt-primary">
+<div id="life-load-fallback" role="status" aria-live="polite"><div><b>LIFE<span>.</span></b><h1>Carregando seu sistema…</h1><p>Se esta tela permanecer por muito tempo, verifique sua conexão e recarregue a página.</p><button type="button" onclick="location.reload()">RECARREGAR</button></div></div>
+<noscript><div style="padding:24px;background:#07080b;color:white;font-family:system-ui">O LIFE precisa de JavaScript ativado para funcionar.</div></noscript>
+<div id="life-v18-root"></div>
+
+<!-- Marketing/public pages moved to landing.html, privacy.html, terms.html and support.html -->
+  <script src="assets/js/config.js?v=3.3.0"></script>
+  <script src="assets/js/life-app.js?v=3.3.0"></script>
+
+  <!-- ====================================================================
+       LIFE OS — BANCO DE DADOS ATUALIZADO (ETAPA 5)
+       Suporte a Rotinas, Horários, Calendário, Atividades e Recorrências
+       ==================================================================== -->
+  <!-- supabase-database-schema moved to database/schema-reference.sql -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<div id="life-auth"><div class="la-shell"><aside class="la-showcase"><div class="la-showcase-brand">LIFE <em>OS</em><span>3.3</span></div><div class="la-showcase-copy"><small>UM SISTEMA PARA O SEU DIA</small><h2>Organize menos.<br>Entenda melhor.</h2><p>Tarefas, estudos, Fitness, finanças e LIFE AI no mesmo contexto.</p></div><div class="la-showcase-grid"><span><b>HOJE</b>Prioridades reais</span><span><b>ORGANIZAR</b>Projetos + tarefas</span><span><b>LIFE AI</b>Contexto do sistema</span></div><button id="la-theme-toggle" class="la-theme-toggle" type="button">ALTERNAR TEMA</button></aside><div class="la-box"><div class="la-logo">LIFE <em>OS</em></div><div id="la-main"><small class="la-eyebrow">CONTA LIFE</small><h1>Entrar.</h1><p>Continue de onde parou ou crie sua conta LIFE.</p><input id="la-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><input id="la-password" class="la-input" type="password" autocomplete="current-password" placeholder="Senha"><button id="la-login" class="la-btn" type="button">ENTRAR →</button><button id="la-signup" class="la-btn la-alt" type="button">CRIAR CONTA</button><button id="la-forgot" class="la-link" type="button">ESQUECI MINHA SENHA</button><a class="la-link life-public-link" href="landing.html">CONHECER O LIFE OS</a></div><div id="la-signup-view" style="display:none"><small class="la-eyebrow">PRIMEIRO ACESSO</small><h1>Criar conta.</h1><p>Cadastre seu e-mail e crie uma senha para salvar e sincronizar seu LIFE.</p><input id="la-signup-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><input id="la-signup-password" class="la-input" type="password" autocomplete="new-password" placeholder="Senha"><input id="la-signup-password2" class="la-input" type="password" autocomplete="new-password" placeholder="Confirmar senha"><button id="la-create-account" class="la-btn" type="button">CRIAR CONTA →</button><button id="la-signup-back" class="la-link la-back" type="button">JÁ TENHO CONTA</button></div><div id="la-recovery" style="display:none"><small class="la-eyebrow">RECUPERAÇÃO</small><h1>Recuperar.</h1><p>Informe seu e-mail. Enviaremos a recuperação para você criar uma nova senha.</p><input id="la-recovery-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><button id="la-send-recovery" class="la-btn" type="button">ENVIAR RECUPERAÇÃO</button><button id="la-back" class="la-link la-back" type="button">VOLTAR PARA ENTRAR</button></div><div id="la-new-password" style="display:none"><small class="la-eyebrow">SEGURANÇA</small><h1>Nova senha.</h1><p>Crie uma nova senha para sua conta LIFE.</p><input id="la-new-pass" class="la-input" type="password" autocomplete="new-password" placeholder="Nova senha"><input id="la-new-pass2" class="la-input" type="password" autocomplete="new-password" placeholder="Confirmar nova senha"><button id="la-save-pass" class="la-btn" type="button">SALVAR NOVA SENHA</button></div><div id="la-msg" class="la-msg"></div><div class="la-trust">Seus dados pertencem à sua conta. Senhas nunca são exibidas dentro do LIFE.</div></div></div></div><div id="life-account-chip" class="life-account-chip"></div>
+<button id="life-owner-open" type="button" aria-label="Abrir LIFE Control">OWNER</button>
+<div id="life-owner-panel" aria-hidden="true">
+ <div class="lov-wrap">
+  <div class="lov-head"><div><small>LIFE CONTROL</small><h1>Owner.</h1><div class="lov-muted">Painel reservado ao proprietário do LIFE OS.</div></div><button class="lov-close" id="life-owner-close" type="button">FECHAR</button></div>
+  <div class="lov-grid">
+   <div class="lov-card lov-stat"><span class="lov-orange">USUÁRIOS</span><b id="lov-total">—</b><span class="lov-muted">contas reais</span></div>
+   <div class="lov-card lov-stat"><span class="lov-orange">FREE</span><b id="lov-free">—</b><span class="lov-muted">contas gratuitas</span></div>
+   <div class="lov-card lov-stat"><span class="lov-orange">PRO</span><b id="lov-pro">—</b><span class="lov-muted">assinaturas ativas</span></div>
+   <div class="lov-card lov-stat"><span class="lov-orange">SEU ACESSO</span><b id="lov-access">—</b><span class="lov-muted">plano da conta</span></div>
+  </div>
+  <div class="lov-tabs">
+   <button class="lov-btn active" data-lovtab="users" type="button">USUÁRIOS</button>
+   <button class="lov-btn" data-lovtab="plans" type="button">PLANOS</button>
+   <button class="lov-btn" data-lovtab="preview" type="button">VISUALIZAR COMO</button>
+  </div>
+  <section id="lov-users" class="lov-card"><div class="lov-orange">CONTAS · SUPABASE</div><div id="lov-real-users"><div class="lov-muted" style="padding:14px 0">Carregando dados reais…</div></div><p class="lov-note">Dados vindos do Supabase. Senhas nunca são exibidas.</p></section>
+  <section id="lov-plans" class="lov-card" style="display:none">
+   <div class="lov-orange">FREE × PRO</div>
+   <div class="lov-feature"><b>Recurso</b><b class="lov-center">FREE</b><b class="lov-center">PRO</b></div>
+   <div class="lov-feature"><span>Hoje, notas e tarefas</span><span class="lov-center">✓</span><span class="lov-center">✓</span></div>
+   <div class="lov-feature"><span>Estudos básicos</span><span class="lov-center">✓</span><span class="lov-center">✓</span></div>
+   <div class="lov-feature"><span>Biblioteca completa de treinos</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
+   <div class="lov-feature"><span>Treino personalizado</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
+   <div class="lov-feature"><span>Biblioteca completa de receitas + busca inteligente</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
+   <div class="lov-feature"><span>Evolução avançada</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
+   <div class="lov-feature"><span>Históricos e organização avançada</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
+   <p class="lov-note">Se um usuário PRO voltar ao FREE, os dados PRO devem permanecer no banco e ficar bloqueados até a assinatura ser reativada.</p>
+  </section>
+  <section id="lov-preview" class="lov-card" style="display:none">
+   <div class="lov-orange">MODO DE VISUALIZAÇÃO</div>
+   <h3 style="margin:8px 0">Teste a experiência dos planos.</h3>
+   <p class="lov-muted">Seu perfil real continua OWNER. A pré-visualização altera a experiência mostrada no LIFE para você testar FREE e PRO, sem mudar o plano salvo no Supabase.</p>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+    <button class="lov-btn" data-preview="FREE" type="button">VER COMO FREE</button>
+    <button class="lov-btn" data-preview="PRO" type="button">VER COMO PRO</button>
+    <button class="lov-btn active" data-preview="OWNER" type="button">VOLTAR AO OWNER</button>
+   </div>
+   <div id="lov-preview-status" class="lov-note">Visualização atual: OWNER</div>
+  </section>
+ </div>
+</div>
+<script src="assets/js/supabase-auth.js?v=3.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+<script src="assets/js/quality-runtime.js?v=3.3.0"></script>
+
+
+
+<script src="assets/js/product-runtime.js?v=3.3.0"></script>
+
+
+<script src="assets/js/design-runtime.js?v=3.3.0"></script>
+
+
+
+
+
+<!-- Product Edition runtime is loaded from assets/js/pwa-runtime.js -->
+
+<!-- life-supabase-quality-sql moved to database/security.sql -->
+<!-- life-supabase-professional-sql moved to database/product-analytics.sql -->
+
+<script src="assets/js/pwa-runtime.js?v=3.3.0"></script>
+</body>
+</html>

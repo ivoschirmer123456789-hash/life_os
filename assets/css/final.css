@@ -318,3 +318,103 @@ html[data-life-theme="day"] #life-auth{background:#f4f6f8!important;color:#171b2
 .life-mobile-area-card>.life-area-heart.on{color:#ff7d55!important;background:rgba(255,125,85,.08)!important}
 .life-theme-day .life-mobile-area-card>.life-area-heart{background:#fff!important;color:#999fa8!important;border-color:#e2e4e7!important}
 .life-theme-day .life-mobile-area-card>.life-area-heart.on{background:#fff3ef!important;color:#f05b3f!important;border-color:#ffd2c7!important}
+
+
+/* =========================================================
+   LIFE OS 3.3 — MOBILE FIRST / iPHONE QUALITY PASS
+   ========================================================= */
+.life-universal-library{max-width:1120px;margin:0 auto;padding:28px 0 120px}.life-library-hero{display:flex;align-items:end;justify-content:space-between;gap:24px;padding:26px 0 24px;border-bottom:1px solid rgba(255,255,255,.07)}.life-library-hero small{font-size:9px;font-weight:900;letter-spacing:.17em;color:#ff8a42}.life-library-hero h1{margin:8px 0 0;font-size:clamp(34px,5vw,62px);line-height:.95;letter-spacing:-.055em}.life-library-hero p{max-width:690px;margin:13px 0 0;color:#89919a;font-size:12px;line-height:1.7}.life-library-total{min-width:118px;text-align:right}.life-library-total b{display:block;font-size:32px;letter-spacing:-.05em}.life-library-total span{display:block;margin-top:3px;color:#747d86;font-size:9px}.life-library-search{position:relative;display:grid;grid-template-columns:28px minmax(0,1fr) 38px;align-items:center;gap:6px;margin-top:20px;border:1px solid rgba(255,255,255,.09);border-radius:17px;background:rgba(255,255,255,.025);padding:7px 8px 7px 13px}.life-library-search>span{font-size:20px;color:#707981}.life-library-search input{width:100%;border:0!important;outline:0!important;background:transparent!important;color:#f1f3f5!important;padding:10px 2px!important;font-size:14px!important}.life-library-search>button{width:36px;height:36px;border:0;border-radius:11px;background:rgba(255,255,255,.04);color:#8c949d;font-size:21px}.life-library-kinds{display:flex;gap:7px;overflow-x:auto;padding:13px 0 4px;scrollbar-width:none}.life-library-kinds::-webkit-scrollbar{display:none}.life-library-kinds button{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.075);border-radius:999px;background:transparent;color:#8b939c;padding:9px 12px}.life-library-kinds button b{font-size:9px}.life-library-kinds button span{font-size:8px;opacity:.7}.life-library-kinds button.on{border-color:rgba(255,138,66,.3);background:rgba(255,138,66,.075);color:#fff}.life-library-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:18px}.life-library-shortcuts button{min-height:90px;text-align:left;display:flex;align-items:center;gap:12px;padding:14px;border:1px solid rgba(255,255,255,.075);border-radius:16px;background:rgba(255,255,255,.02);color:#fff}.life-library-shortcuts>button>span{font-size:25px;color:#ff8a42}.life-library-shortcuts b,.life-library-shortcuts small{display:block}.life-library-shortcuts b{font-size:12px}.life-library-shortcuts small{margin-top:4px;color:#7f8790;font-size:9px}.life-library-result-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-top:28px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)}.life-library-result-head b{font-size:12px}.life-library-result-head span{color:#737c85;font-size:9px}.life-library-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}.life-library-card{width:100%;min-height:112px;display:grid;grid-template-columns:42px minmax(0,1fr) 24px;gap:12px;align-items:start;text-align:left;padding:15px;border:1px solid rgba(255,255,255,.07);border-radius:16px;background:rgba(255,255,255,.018);color:#fff;transition:.18s ease}.life-library-card:hover{transform:translateY(-1px);border-color:rgba(255,138,66,.24);background:rgba(255,138,66,.035)}.life-library-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:rgba(255,138,66,.08);color:#ff9454;font-size:21px}.life-library-card small,.life-library-card b,.life-library-card p{display:block}.life-library-card small{font-size:7px;line-height:1.35;letter-spacing:.08em;color:#ff9a62}.life-library-card b{margin-top:6px;font-size:12px;line-height:1.35}.life-library-card p{margin:6px 0 0;color:#828b94;font-size:9px;line-height:1.5}.life-library-arrow{align-self:center;color:#59616a;font-size:18px}.life-library-more{display:block;margin:16px auto 0;padding:10px 14px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:transparent;color:#9ca3aa;font-size:9px;font-weight:900}.life-library-empty{text-align:center;padding:48px 16px;margin-top:10px;border:1px dashed rgba(255,255,255,.09);border-radius:18px}.life-library-empty>span{font-size:34px;color:#6d757d}.life-library-empty b{display:block;margin-top:8px}.life-library-empty p{max-width:480px;margin:7px auto 14px;color:#7e8790;font-size:10px}.life-library-empty button{padding:10px 13px;border:1px solid rgba(255,138,66,.28);border-radius:11px;background:rgba(255,138,66,.07);color:#ff995d;font-size:9px;font-weight:900}
+.life-theme-day .life-library-hero{border-color:#e3e7ea}.life-theme-day .life-library-hero h1,.life-theme-day .life-library-total b{color:#171b20}.life-theme-day .life-library-hero p,.life-theme-day .life-library-total span,.life-theme-day .life-library-result-head span{color:#6e7780}.life-theme-day .life-library-search{background:#fff;border-color:#dde3e7}.life-theme-day .life-library-search input{color:#171b20!important}.life-theme-day .life-library-kinds button,.life-theme-day .life-library-shortcuts button,.life-theme-day .life-library-card{background:#fff;border-color:#e1e5e8;color:#252a30}.life-theme-day .life-library-kinds button.on{background:#fff4ed;border-color:#f0c7ad;color:#b94e0c}.life-theme-day .life-library-card p,.life-theme-day .life-library-shortcuts small{color:#707982}.life-theme-day .life-library-result-head{border-color:#e5e8eb}.life-theme-day .life-library-empty{border-color:#dfe3e7;color:#252a30}
+
+@media(max-width:820px){
+  html,body{min-height:100%;min-height:100dvh;overscroll-behavior-y:none}
+  body{-webkit-tap-highlight-color:transparent}
+  .v18{padding-top:calc(54px + env(safe-area-inset-top))!important;padding-left:12px!important;padding-right:12px!important;padding-bottom:calc(102px + env(safe-area-inset-bottom))!important}
+  .v18-top{top:0!important;height:calc(54px + env(safe-area-inset-top))!important;padding-top:env(safe-area-inset-top)!important;padding-left:14px!important;padding-right:14px!important;gap:8px!important}
+  .v18-top .v18-code,.v18-top .v18-chip,.v18-top .v18-island,.v18-top .life-pro-status,.v18-top .life-sync-chip,.v18-top .life-theme-toggle,.v18-top .life-settings-trigger,.v18-top .v18-btn.ghost{display:none!important}
+  .v18-top .life-notify-trigger{margin-left:auto!important;width:42px!important;height:42px!important;min-width:42px!important;border-radius:14px!important}
+  .v18-top .v18-logo{min-height:42px!important;font-size:12px!important}
+
+  /* One mobile navigation, one tap target per destination. */
+  .life-design-mobile-nav{z-index:12000!important;left:8px!important;right:8px!important;bottom:max(7px,env(safe-area-inset-bottom))!important;min-height:68px!important;padding:6px 5px!important;border-radius:20px!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;overflow:visible!important}
+  .life-design-mobile-nav button{min-width:0!important;min-height:52px!important;padding:5px 2px!important;gap:4px!important;touch-action:manipulation!important;pointer-events:auto!important;border-radius:14px!important}
+  .life-design-mobile-nav button span{font-size:8px!important;line-height:1!important;letter-spacing:0!important}
+  .life-design-mobile-nav button i{font-size:22px!important;pointer-events:none!important}
+  .life-design-mobile-nav .life-design-nav-add i{width:44px!important;height:44px!important;margin-top:-20px!important;border-radius:15px!important}
+  .life-ai-orb{display:none!important}
+  .v18-fab{display:none!important}
+
+  /* Contextual help stays in normal document flow; it never floats over content. */
+  .life-how-entry{position:static!important;display:flex!important;width:max-content!important;margin:10px 0 2px auto!important;padding:9px 11px!important;z-index:auto!important}
+  .life-how-entry>span:last-child{display:inline!important;font-size:9px!important}
+
+  /* The 'More' sheet behaves like iOS: clear backdrop, safe area, no overlap. */
+  .life-mobile-more{z-index:65000!important;padding:max(56px,calc(env(safe-area-inset-top) + 44px)) 10px calc(92px + env(safe-area-inset-bottom))!important;place-items:end center!important}
+  .life-mobile-more>div{width:100%!important;max-height:72dvh!important;border-radius:24px!important;padding:16px!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important}
+  .life-mobile-more-head{position:sticky;top:-16px;z-index:2;margin:-16px -16px 12px;padding:16px;background:inherit;border-bottom:1px solid rgba(255,255,255,.06)}
+  .life-mobile-more-head button{width:44px!important;height:44px!important;display:grid!important;place-items:center!important}
+  .life-mobile-more-grid{grid-template-columns:1fr!important;gap:8px!important}
+  .life-mobile-area-card{min-height:82px!important;border-radius:16px!important;overflow:hidden!important}
+  .life-mobile-area-open{min-height:82px!important;padding:15px 62px 15px 15px!important;touch-action:manipulation!important}
+  .life-mobile-area-open b{font-size:13px!important}.life-mobile-area-open small{font-size:8px!important;margin-top:5px!important}
+  .life-mobile-area-card>.life-area-heart{width:44px!important;height:44px!important;right:10px!important;top:50%!important;transform:translateY(-50%)!important;z-index:3!important}
+
+  /* Mobile dialogs/sheets live ABOVE navigation and always leave tappable backdrop. */
+  .life-exercise-modal,.life-guide-modal,.life-mini-modal,.life-recipe-modal,.life-org-modal-v4,.v27-modal,.life-ai-quickwrap,.v18-sheetwrap,.v18-overlay,.v20-diet-detail,.life-workout-player{z-index:70000!important;padding:max(12px,env(safe-area-inset-top)) 10px calc(12px + env(safe-area-inset-bottom))!important;align-items:end!important;place-items:end center!important}
+  .life-exercise-sheet,.life-guide-sheet,.life-mini-modal>article,.life-recipe-sheet,.life-ai-quick,.v18-sheet,.v18-modal,.v27-sheet,.v20-diet-panel,.life-org-modal-v4>article,.life-workout-player-card{width:100%!important;max-width:100%!important;max-height:82dvh!important;border-radius:24px!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important}
+  .life-exercise-sheet header,.life-guide-sheet header,.life-recipe-sheet header,.life-mini-modal header,.life-org-modal-v4>article>header{position:sticky!important;top:0!important;z-index:4!important;background:rgba(10,11,14,.97)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
+  .life-theme-day .life-exercise-sheet header,.life-theme-day .life-guide-sheet header,.life-theme-day .life-recipe-sheet header,.life-theme-day .life-mini-modal header,.life-theme-day .life-org-modal-v4>article>header{background:rgba(255,255,255,.97)!important}
+  .life-exercise-close,.life-guide-sheet header>button,.life-recipe-sheet header>button,.life-mini-modal header>button,.life-org-modal-v4 header>button{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;position:relative!important;z-index:5!important}
+  .life-exercise-video{border-radius:14px!important}
+  .life-exercise-body,.life-guide-body,.life-recipe-body{padding:15px!important}
+
+  /* iOS forms: 16px prevents Safari from zooming when the user taps a field. */
+  .v18 input,.v18 textarea,.v18 select,.life-universal-library input{font-size:16px!important}
+
+  /* Universal Library is intentionally calm on a phone. */
+  .life-universal-library{padding:14px 0 18px!important}
+  .life-library-hero{display:block!important;padding:14px 2px 18px!important}
+  .life-library-hero h1{font-size:36px!important;line-height:1!important}
+  .life-library-hero p{font-size:11px!important;margin-top:10px!important}
+  .life-library-total{display:none!important}
+  .life-library-search{position:sticky!important;top:calc(58px + env(safe-area-inset-top))!important;z-index:10!important;margin-top:14px!important;background:rgba(10,11,14,.94)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
+  .life-theme-day .life-library-search{background:rgba(255,255,255,.96)!important}
+  .life-library-kinds{padding-top:11px!important}
+  .life-library-kinds button{min-height:40px!important;padding:9px 11px!important}
+  .life-library-shortcuts{grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:14px!important}
+  .life-library-shortcuts button{min-height:78px!important;padding:12px!important}
+  .life-library-result-head{align-items:flex-start!important;flex-direction:column!important;gap:4px!important;margin-top:22px!important}
+  .life-library-grid{grid-template-columns:1fr!important;gap:8px!important}
+  .life-library-card{min-height:98px!important;grid-template-columns:40px minmax(0,1fr) 22px!important;padding:13px!important;touch-action:manipulation!important}
+  .life-library-card b{font-size:13px!important}.life-library-card p{font-size:10px!important}
+}
+
+@media(max-width:430px){
+  .life-design-mobile-nav{left:6px!important;right:6px!important}
+  .life-design-mobile-nav button span{font-size:7.5px!important}
+  .life-library-shortcuts{grid-template-columns:1fr!important}
+  .life-exercise-sheet,.life-guide-sheet,.life-recipe-sheet,.life-mini-modal>article,.life-org-modal-v4>article{max-height:80dvh!important}
+}
+
+/* 3.3 modal layering follow-up */
+@media(max-width:820px){
+  .life-how-overlay,.v45-recipe-sheet{z-index:70000!important}
+  .v45-recipe-sheet{padding:max(12px,env(safe-area-inset-top)) 10px calc(12px + env(safe-area-inset-bottom))!important;align-items:flex-end!important}
+  .v45-recipe-panel{width:100%!important;max-height:82dvh!important;border-radius:24px!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important}
+  .life-how-overlay{padding:max(12px,env(safe-area-inset-top)) 10px calc(12px + env(safe-area-inset-bottom))!important;place-items:end center!important}
+  .life-how-panel{width:100%!important;max-height:82dvh!important;border-radius:24px!important;overflow:auto!important;-webkit-overflow-scrolling:touch!important}
+  .v45-recipe-top{position:sticky!important;top:-22px!important;z-index:3!important;padding-top:22px!important;background:#080a0d!important}
+  .life-theme-day .v45-recipe-top{background:#fff!important}
+}
+
+/* 3.3 mobile modal focus: the previous screen is visible only as context, never as competition. */
+@media(max-width:820px){
+  .life-exercise-modal,.life-guide-modal,.life-mini-modal,.life-recipe-modal,.life-org-modal-v4,.v27-modal,.life-ai-quickwrap,.v18-sheetwrap,.v18-overlay,.v20-diet-detail,.life-workout-player,.life-how-overlay,.v45-recipe-sheet{
+    background:rgba(4,5,7,.91)!important;
+    backdrop-filter:blur(5px)!important;
+    -webkit-backdrop-filter:blur(5px)!important;
+  }
+  .life-theme-day .life-exercise-modal,.life-theme-day .life-guide-modal,.life-theme-day .life-mini-modal,.life-theme-day .life-recipe-modal,.life-theme-day .life-org-modal-v4,.life-theme-day .v27-modal,.life-theme-day .life-ai-quickwrap,.life-theme-day .v18-sheetwrap,.life-theme-day .v18-overlay,.life-theme-day .v20-diet-detail,.life-theme-day .life-workout-player,.life-theme-day .life-how-overlay,.life-theme-day .v45-recipe-sheet{
+    background:rgba(24,28,32,.64)!important;
+  }
+}
