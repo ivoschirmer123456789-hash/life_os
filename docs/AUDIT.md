@@ -1,4 +1,4 @@
-# LIFE OS 3.0 — Release Audit
+# LIFE OS 3.2 — Release Audit
 
 - JavaScript verificado: 8 arquivos; erros de sintaxe: 0
 - CSS verificado: 4 arquivos; erros de parse: 0

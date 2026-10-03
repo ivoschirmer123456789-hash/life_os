@@ -1,10 +1,10 @@
 (function(){
   'use strict';
-  window.LIFE_BUILD={version:'6.0.0',name:'Signature System'};
+  window.LIFE_BUILD={version:'7.6.1',name:'Ready Build'};
   window.LIFE_SINGLE_FILE=false;
   if(!('serviceWorker' in navigator)) return;
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./service-worker.js',{scope:'./'}).then(reg=>{
+    navigator.serviceWorker.register('./service-worker.js',{scope:'./',updateViaCache:'none'}).then(reg=>{
       reg.update().catch(()=>{});
       window.LIFE_SERVICE_WORKER=reg;
     }).catch(err=>console.warn('LIFE PWA: service worker indisponível',err));

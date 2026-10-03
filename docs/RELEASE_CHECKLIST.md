@@ -1,4 +1,4 @@
-# Checklist de release — LIFE OS 3.0
+# Checklist de release — LIFE OS 3.2
 
 ## Produto
 - [ ] Home mostra apenas o essencial do dia

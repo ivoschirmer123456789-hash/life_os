@@ -1,4 +1,4 @@
-# LIFE OS 3.1 — Final Edition / release audit
+# LIFE OS 3.2 — Final Edition / release audit
 
 ## What changed in the final visual correction
 - Today is intentionally minimal: greeting/status, today's checklist, progress, quick add, and one LIFE AI action.

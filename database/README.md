@@ -1,4 +1,4 @@
-# Banco — LIFE OS 3.0
+# Banco — LIFE OS 3.2
 
 Arquivos preservados da versão anterior:
 

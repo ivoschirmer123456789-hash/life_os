@@ -1,7 +1,7 @@
 (function(){
   'use strict';
   const root=document.documentElement;
-  try{root.dataset.lifeVersion='7.0';root.dataset.lifeDesign='7.0';localStorage.setItem('life_design_version','7.0');}catch(_){ }
+  try{root.dataset.lifeVersion='7.6.1';root.dataset.lifeDesign='7.6';localStorage.setItem('life_design_version','7.6.1');}catch(_){ }
 
   const AREA_BUTTONS=[
     ['Hoje','today'],['Tarefas','checklist'],['Estudos','school'],['Fitness','fitness_center'],['Finanças','payments'],['IA','auto_awesome'],['Biblioteca','local_library'],['Evolução','insights']

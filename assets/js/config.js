@@ -1,2 +1,2 @@
-window.LIFE_SINGLE_FILE=false;
-window.LIFE_BUILD={version:'6.0.0',name:'Signature System'};
+// LIFE OS canonical build metadata
+window.LIFE_BUILD={version:'7.6.1',name:'Ready Build'};
