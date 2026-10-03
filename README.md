@@ -1,23 +1,20 @@
-# LIFE OS 7.2 — Premium Reference Edition
+# LIFE OS 6.0 — Signature System
 
-Atualização visual criada sobre a base 7.0 para aproximar o produto da referência aprovada: fundo preto/carvão, detalhes cobre/laranja, cards premium, navegação mobile de cinco ações e hierarquia visual semelhante a um app nativo.
+Versão focada em identidade visual, valor do FREE e expansão do Study OS.
 
-## O que mudou
-- Home/Hoje totalmente redesenhada.
-- Hero do dia com próxima ação, progresso e fundo de montanhas.
-- Grid rápido: Organização, Estudos, Fitness, Alimentação, Finanças e Sono.
-- LIFE AI destacada no padrão visual da referência.
-- Central de Ajuda nova com pesquisa, tópicos e atalhos.
-- Painel Owner reconstruído com KPIs, gráfico, planos, atividade e ações.
-- Remoção do segundo indicador OWNER do cabeçalho para evitar duplicidade no mobile.
-- Barra inferior mobile alterada para Hoje, Organizar, Criar, LIFE AI e Mais.
-- Nova camada `premium-v72.css` e asset `today-mountains.svg`.
-- Cache PWA atualizado para `life-os-7.2.0-premium`.
+## Principais mudanças
+- Redesign global `Signature System 6.0` para todas as áreas e telas internas.
+- Nova landing page com linguagem visual própria do LIFE.
+- `Study Universe`: catálogo amplo com dezenas de assuntos e filtros.
+- Catálogo de assuntos liberado no FREE; PRO passa a vender profundidade, mastery, mapas, histórico e contexto ampliado.
+- Conteúdos financeiros educativos: bolsa, renda fixa, ETFs, fundos, opções, cripto, macro/microeconomia e outros.
+- `Opções binárias` é tratada exclusivamente como educação sobre risco, probabilidade, regulação e golpes.
+- Card contextual de FREE → PRO sem urgência falsa ou dark patterns.
+- Nova linguagem de cores por mini-app mantendo o laranja como assinatura central.
+- PWA/cache `6.0.0`.
 
 ## Publicação
-Envie o conteúdo desta pasta para o mesmo repositório conectado à Vercel, preservando a estrutura de pastas.
+Envie o projeto inteiro mantendo as pastas. Para atualizar um repositório que já contém a versão anterior, use o pacote `Update_Only` fornecido junto da entrega.
 
-Este pacote é **UPDATE ONLY** e pressupõe que os arquivos-base das versões anteriores já existem no repositório.
-
-## Ainda precisa de teste ao vivo
-Supabase, Mercado Pago, LIFE AI remota, push e sincronização entre dispositivos dependem do ambiente publicado e das funções de backend.
+## Testes externos ainda necessários
+Supabase, Mercado Pago, LIFE AI remota, notificações push e sincronização entre dispositivos precisam ser validados no domínio publicado.

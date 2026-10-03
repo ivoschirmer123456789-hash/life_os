@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  window.LIFE_BUILD={version:'7.0.0',name:'Constellation System'};
+  window.LIFE_BUILD={version:'6.0.0',name:'Signature System'};
   window.LIFE_SINGLE_FILE=false;
   if(!('serviceWorker' in navigator)) return;
   window.addEventListener('load',()=>{
