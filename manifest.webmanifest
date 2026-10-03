@@ -1,14 +1,14 @@
 {
-  "name": "LIFE OS",
+  "name": "LIFE OS 5.0",
   "short_name": "LIFE",
-  "description": "Seu sistema pessoal para organizar o que importa agora.",
+  "description": "Uma suíte pessoal conectada para organizar, estudar, treinar, planejar, acompanhar finanças e usar LIFE AI no mesmo contexto.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#07080b",
-  "theme_color": "#07080b",
+  "background_color": "#05070a",
+  "theme_color": "#05070a",
   "icons": [
     {
       "src": "assets/icons/icon-192.png",

@@ -1,8 +1,8 @@
-const LIFE_CACHE='life-os-4.0.0';
+const LIFE_CACHE='life-os-5.0.0';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
-  './manifest.webmanifest','./assets/css/utilities.css','./assets/css/life.css','./assets/css/product.css','./assets/css/final.css','./assets/css/fitness-v35.css','./assets/css/modules-v36.css','./assets/css/system-v40.css',
-  './assets/js/config.js','./assets/js/life-app.js','./assets/js/supabase-auth.js','./assets/js/quality-runtime.js','./assets/js/product-runtime.js','./assets/js/design-runtime.js','./assets/js/experience-v40.js','./assets/js/pwa-runtime.js',
+  './manifest.webmanifest','./assets/css/utilities.css','./assets/css/marketing.css','./assets/css/life.css','./assets/css/product.css','./assets/css/final.css','./assets/css/fitness-v35.css','./assets/css/modules-v36.css','./assets/css/system-v40.css','./assets/css/system-v50.css',
+  './assets/js/config.js','./assets/js/life-app.js','./assets/js/supabase-auth.js','./assets/js/quality-runtime.js','./assets/js/product-runtime.js','./assets/js/design-runtime.js','./assets/js/experience-v40.js','./assets/js/experience-v50.js','./assets/js/pwa-runtime.js',
   './assets/icons/icon.svg','./assets/icons/icon-192.png','./assets/icons/icon-512.png'
 ];
 self.addEventListener('install',event=>{

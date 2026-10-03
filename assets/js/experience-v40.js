@@ -1,7 +1,7 @@
 (function(){
   'use strict';
   const root=document.documentElement;
-  try{root.dataset.lifeVersion='4.0';root.dataset.lifeDesign='4.0';localStorage.setItem('life_design_version','4.0')}catch(_){}
+  try{root.dataset.lifeVersion='5.0';root.dataset.lifeDesign='5.0';localStorage.setItem('life_design_version','5.0')}catch(_){}
 
   function setViewport(){
     const h=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;

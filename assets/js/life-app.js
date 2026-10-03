@@ -3111,11 +3111,11 @@ function LifeFunctionCard({ icon = 'arrow_forward', title = '', description = ''
 
 function LifeApp36({ area = 'LIFE', icon = 'dashboard', kicker = '', title = '', subtitle = '', metrics = [], primary = null, secondary = null, children = null }) {
     const safeAction = (action, extraClass = '') => action && typeof action.onClick === 'function' ? React.createElement('button', { type: 'button', className: extraClass, onClick: action.onClick }, action.label) : null;
-    return React.createElement('main', { className: 'life-app36 life-app40', 'data-area': area },
+    return React.createElement('main', { className: 'life-app36 life-app40 life-app50', 'data-area': area },
         React.createElement('section', { className: 'life-app36-hero life-app40-hero' },
             React.createElement('div', { className: 'life-app40-hero-top' },
                 React.createElement('div', { className: 'life-app36-kicker' }, React.createElement('i', { className: 'material-symbols-rounded' }, icon), kicker || ('LIFE / ' + area.toUpperCase())),
-                React.createElement('span', { className: 'life-app40-state' }, 'LIFE OS 4')),
+                React.createElement('span', { className: 'life-app40-state life-app50-state' }, 'LIFE OS 5')),
             React.createElement('div', { className: 'life-app40-hero-copy' },
                 React.createElement('h1', { className: 'life-app36-title' }, title),
                 React.createElement('p', { className: 'life-app36-subtitle' }, subtitle)),
@@ -3166,6 +3166,72 @@ function LifeApp36Bars({ items = [] }) {
 }
 function LifeApp36AI({ title = 'Perguntar à LIFE AI', text = '', onClick }) {
     return React.createElement('div', { className: 'life-app36-ai' }, React.createElement('i', { className: 'material-symbols-rounded' }, 'auto_awesome'), React.createElement('div', null, React.createElement('b', null, title), React.createElement('span', null, text)), React.createElement('button', { type: 'button', onClick }, 'ABRIR →'));
+}
+
+
+function LifeV50Section({ eyebrow = '', title = '', text = '', action = null, className = '', children = null }) {
+    const clickable = action && typeof action.onClick === 'function';
+    return React.createElement('section', { className: 'life-v50-section ' + className },
+        React.createElement('header', { className: 'life-v50-section-head' },
+            React.createElement('div', null, eyebrow && React.createElement('small', null, eyebrow), React.createElement('h3', null, title), text && React.createElement('p', null, text)),
+            clickable && React.createElement('button', { type: 'button', onClick: action.onClick }, action.label || 'ABRIR →')),
+        children);
+}
+function LifeV50MetricGrid({ items = [] }) {
+    return React.createElement('div', { className: 'life-v50-metric-grid' }, items.map((x,i) => React.createElement('article', { key: x.label || i, className: 'life-v50-metric-card' },
+        React.createElement('span', { className: 'material-symbols-rounded' }, x.icon || 'data_usage'),
+        React.createElement('small', null, x.label || 'MÉTRICA'),
+        React.createElement('b', null, x.value ?? '—'),
+        x.note && React.createElement('p', null, x.note))));
+}
+function LifeV50Bars({ items = [], suffix = '' }) {
+    const max = Math.max(1, ...items.map(x => Number(x.value || 0)));
+    return React.createElement('div', { className: 'life-v50-bars' },
+        items.map((x,i) => React.createElement('div', { className: 'life-v50-bar', key: x.label || i },
+            React.createElement('div', null,
+                React.createElement('span', null, x.label),
+                React.createElement('b', null, x.display ?? ((x.value || 0) + suffix))),
+            React.createElement('i', null,
+                React.createElement('em', { style: { width: Math.max(x.value ? 4 : 0, Math.round(Number(x.value || 0) / max * 100)) + '%' } }))
+        ))
+    );
+}
+function LifeV50Heatmap({ days = [], title = '' }) {
+    const max = Math.max(1, ...days.map(x => Number(x.value || 0)));
+    return React.createElement('div', { className: 'life-v50-heatmap', 'aria-label': title || 'Mapa de atividade' }, days.map((d,i) => {
+        const level = !d.value ? 0 : Math.max(1, Math.ceil((Number(d.value || 0) / max) * 4));
+        return React.createElement('span', { key: d.key || i, className: 'lv' + level + (d.today ? ' today' : ''), title: (d.label || '') + ': ' + (d.value || 0) });
+    }));
+}
+function LifeV50Timeline({ items = [], empty = 'Sem registros ainda.' }) {
+    return React.createElement('div', { className: 'life-v50-timeline' }, items.length ? items.map((x,i) => {
+        const active = typeof x.onClick === 'function';
+        const content = [
+            React.createElement('i', { key: 'i', className: 'material-symbols-rounded' }, x.icon || 'radio_button_checked'),
+            React.createElement('div', { key: 'c' }, React.createElement('b', null, x.title), x.meta && React.createElement('span', null, x.meta)),
+            active && React.createElement('em', { key: 'a', className: 'material-symbols-rounded' }, 'arrow_forward')
+        ];
+        return active ? React.createElement('button', { type: 'button', key: x.id || i, onClick: x.onClick }, content) : React.createElement('article', { key: x.id || i }, content);
+    }) : React.createElement('div', { className: 'life-v50-empty' }, empty));
+}
+function LifeV50Chips({ items = [] }) {
+    return React.createElement('div', { className: 'life-v50-chips' }, items.map((x,i) => {
+        const active = typeof x.onClick === 'function';
+        return active ? React.createElement('button', { type: 'button', key: x.label || i, onClick: x.onClick, className: x.on ? 'on' : '' }, x.icon && React.createElement('span', { className: 'material-symbols-rounded' }, x.icon), x.label) : React.createElement('span', { key: x.label || i }, x.label);
+    }));
+}
+function LifeV50Ring({ value = 0, label = '', sub = '' }) {
+    const safe = Math.max(0, Math.min(100, Number(value || 0)));
+    return React.createElement('div', { className: 'life-v50-ring', style: { '--life-ring': safe + '%' } }, React.createElement('div', null, React.createElement('b', null, safe + '%'), React.createElement('span', null, label), sub && React.createElement('small', null, sub)));
+}
+function LifeV50Academy({ modules = [], onOpen }) {
+    const [done, setDone] = React.useState(() => lifeLocalGet('life_academy_done_v50', []) || []);
+    const toggle = id => { const next = done.includes(id) ? done.filter(x => x !== id) : [...done, id]; setDone(next); lifeLocalSet('life_academy_done_v50', next); };
+    return React.createElement('div', { className: 'life-v50-academy' },
+        React.createElement('div', { className: 'life-v50-academy-progress' }, React.createElement('div', null, React.createElement('small', null, 'PROGRESSO DO TOUR'), React.createElement('b', null, done.length + '/' + modules.length + ' módulos vistos')), React.createElement('i', null, React.createElement('em', { style: { width: Math.round(done.length / Math.max(1, modules.length) * 100) + '%' } }))),
+        React.createElement('div', { className: 'life-v50-academy-grid' }, modules.map((m,i) => React.createElement('article', { key: m.id || i, className: done.includes(m.id) ? 'done' : '' },
+            React.createElement('button', { type: 'button', className: 'main', onClick: () => { toggle(m.id); onOpen && onOpen(m); } }, React.createElement('small', null, String(i+1).padStart(2,'0') + ' · ' + (m.kicker || 'MÓDULO')), React.createElement('b', null, m.title), React.createElement('span', null, m.text), React.createElement('em', null, 'ABRIR →')),
+            React.createElement('button', { type: 'button', className: 'check', onClick: () => toggle(m.id), 'aria-label': done.includes(m.id) ? 'Marcar módulo como não visto' : 'Marcar módulo como visto' }, React.createElement('span', { className: 'material-symbols-rounded' }, done.includes(m.id) ? 'check_circle' : 'circle'))))));
 }
 
 
@@ -5441,7 +5507,7 @@ function LifeOSV18() {
     const [legalOpen, setLegalOpen] = React.useState(null);
     const [supportOpen, setSupportOpen] = React.useState(false);
     const [dangerOpen, setDangerOpen] = React.useState(false);
-    const lifeBuild = '4.0.0';
+    const lifeBuild = '5.0.0';
     const lifeDiagnostics = () => ({
         build: lifeBuild,
         plan: effectivePlan || realPlan || 'FREE',
@@ -6905,6 +6971,275 @@ function LifeOSV18() {
         return null;
     };
 
+    const renderLifeV50Layer = () => {
+        const nowTs = Date.now();
+        const dayKey = (value) => { const d = value ? new Date(value) : null; if (!d || Number.isNaN(d.getTime())) return ''; return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+        const safeDateLabel = (value, fallback = '') => { const d = value ? new Date(value) : null; return d && !Number.isNaN(d.getTime()) ? d.toLocaleDateString('pt-BR') : fallback; };
+        const lastNDays = (n, matcher = null) => Array.from({ length: n }, (_,i) => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - (n - 1 - i)); const key = dayKey(d); const value = lifeActivity.filter(a => dayKey(a.date) === key && (!matcher || matcher(a))).length; return { key, label: d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}), value, today: i === n - 1 }; });
+        const areaMatch = (area) => (a) => { const t = lifeNormalizeText((a.type || '') + ' ' + (a.title || '') + ' ' + (a.area || '')); if (area === 'Estudos') return /estud|foco|revis|aprend/.test(t); if (area === 'Fitness') return /fitness|treino|exerc|sessao/.test(t); if (area === 'Finanças') return /finan|gasto|receita|movimenta/.test(t); if (area === 'Notas') return /nota|anota/.test(t); if (area === 'Tarefas') return /tarefa|conclu|organiza|planej/.test(t); return true; };
+        const safePct = (a,b) => b ? Math.max(0, Math.min(100, Math.round(a / b * 100))) : 0;
+        const ai = (area, prompt) => { setAiOriginView(area); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); };
+        const recent14 = lastNDays(14, areaMatch(view));
+
+        if (view === 'Tarefas') {
+            const open = tasks.filter(t => !taskIsDone(t));
+            const quick = open.filter(t => Number(t.duration || 30) <= 15 && !t.waiting).sort((a,b)=>lifeTaskScoreV4(b)-lifeTaskScoreV4(a)).slice(0,5);
+            const stuck = open.filter(t => lifeTaskStatusV4(t) === 'Atrasada' || t.waiting).slice(0,6);
+            const queue = [...open].filter(t=>!t.waiting).sort((a,b)=>lifeTaskScoreV4(b)-lifeTaskScoreV4(a)).slice(0,7);
+            const projectRows = projects.slice(0,6).map((p,i)=>{ const stages=p.stages||[]; const linked=tasks.filter(t=>String(t.projectId||'')===String(p.id||p.n)); const doneStages=stages.filter(x=>x.done).length; const doneTasks=linked.filter(taskIsDone).length; const progress=stages.length?safePct(doneStages,stages.length):linked.length?safePct(doneTasks,linked.length):Number(p.p||0); return { id:p.id||i,title:p.n||'Projeto',meta:progress+'% · '+(p.next||'Definir próximo passo'),progress,onClick:()=>{setSelectedProjectId(p.id||p.n);openAdvancedArea('Tarefas',null,'PROJETO')}}; });
+            return React.createElement('div',{className:'life-v50-layer life-v50-tasks'},
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'FOCUS QUEUE',title:'A fila que faz sentido agora.',text:'Ordenada por prazo, prioridade, bloqueios e duração — sem esconder o restante.',action:{label:'PLANEJAR O DIA →',onClick:()=>setDayPlannerOpen(true)}},
+                        React.createElement(LifeV50Timeline,{items:queue.map((t,i)=>({id:t.id,icon:i===0?'bolt':'radio_button_checked',title:t.text||t.title||'Tarefa',meta:[lifeTaskStatusV4(t),t.priority,t.duration?t.duration+' min':null].filter(Boolean).join(' · '),onClick:()=>{setSelectedTaskId(t.id);openAdvancedArea('Tarefas',null,'DETALHES DA TAREFA')}})),empty:'Sem tarefas abertas.'})),
+                    React.createElement(LifeV50Section,{eyebrow:'15 MINUTOS',title:'Vitórias rápidas.',text:'Itens curtos para aproveitar janelas pequenas sem trocar de contexto demais.'},React.createElement(LifeV50Timeline,{items:quick.map(t=>({id:t.id,icon:'timer',title:t.text||t.title,meta:(t.duration||15)+' min · '+(t.priority||'Normal'),onClick:()=>{setSelectedTaskId(t.id);openAdvancedArea('Tarefas',null,'AÇÃO RÁPIDA')}})),empty:'Nenhuma tarefa curta disponível.'}))),
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'PROJETOS',title:'Saúde das frentes abertas.',text:'Progresso vem de etapas e tarefas reais registradas.'}, projectRows.length?React.createElement('div',{className:'life-v50-projects'},projectRows.map(p=>React.createElement('button',{type:'button',key:p.id,onClick:p.onClick},React.createElement('div',null,React.createElement('b',null,p.title),React.createElement('span',null,p.meta)),React.createElement('i',null,React.createElement('em',{style:{width:p.progress+'%'}}))))):React.createElement('div',{className:'life-v50-empty'},'Nenhum projeto criado ainda.')),
+                    React.createElement(LifeV50Section,{eyebrow:'ATRITOS',title:'O que pode travar sua execução.',text:'Atrasos e itens aguardando merecem revisão, não culpa.',action:{label:'REVISAR COM IA →',onClick:()=>ai('Tarefas','Revise minhas tarefas atrasadas e aguardando. Identifique bloqueios e proponha próximos passos pequenos sem alterar nada sem confirmação.')}},React.createElement(LifeV50Timeline,{items:stuck.map(t=>({id:t.id,icon:t.waiting?'hourglass_top':'schedule',title:t.text||t.title,meta:t.waiting?'Aguardando'+(t.waitingFor?' · '+t.waitingFor:''):'Atrasada',onClick:()=>{setSelectedTaskId(t.id);openAdvancedArea('Tarefas',null,'TAREFA BLOQUEADA')}})),empty:'Nenhum bloqueio evidente agora.'}))),
+                React.createElement(LifeV50Section,{eyebrow:'RITMO · 14 DIAS',title:'Execução recente.',text:'Registros do seu próprio LIFE; não é uma pontuação pessoal.'},React.createElement(LifeV50Bars,{items:recent14})));
+        }
+
+        if (view === 'Notas') {
+            const stop = new Set('para com uma que por mais como isso essa esse seu sua seus suas nao não dos das mas foi ser tem ter em de da do e o a os as um uma no na nos nas ou se eu meu minha'.split(' '));
+            const words = {};
+            v49Notes.slice(0,120).forEach(n => lifeNormalizeText(n.text||'').split(/[^a-z0-9áéíóúãõç]+/i).filter(w=>w.length>3&&!stop.has(w)).forEach(w=>words[w]=(words[w]||0)+1));
+            const topWords = Object.entries(words).sort((a,b)=>b[1]-a[1]).slice(0,14);
+            const linkedProjects = v49Notes.filter(n=>n.projectId).length;
+            const sourceTasks = tasks.filter(t=>t.sourceNoteId).length;
+            const recent = v49Notes.slice(0,8).map((n,i)=>({id:n.id||i,icon:'notes',title:String(n.text||'Nota').slice(0,92),meta:n.date||'Nota LIFE',onClick:()=>openAdvancedArea('Notas',null,'NOTA')}));
+            return React.createElement('div',{className:'life-v50-layer life-v50-notes'},
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'MAPA DE IDEIAS',title:'Temas que aparecem nas suas notas.',text:'Palavras recorrentes ajudam a perceber assuntos que estão ocupando sua atenção.'},topWords.length?React.createElement('div',{className:'life-v50-wordcloud'},topWords.map(([w,c],i)=>React.createElement('button',{type:'button',key:w,style:{'--w':Math.min(1.5,1+c/6)},onClick:()=>{setNoteSearch(w);openAdvancedArea('Notas',null,'BUSCA · '+w.toUpperCase())}},w,React.createElement('small',null,c)))):React.createElement('div',{className:'life-v50-empty'},'Escreva algumas notas para o mapa começar a aparecer.')),
+                    React.createElement(LifeV50Section,{eyebrow:'FLUXO',title:'Informação que virou ação.',text:'O LIFE acompanha quando uma captura deixa de ser apenas uma nota.'},React.createElement(LifeV50MetricGrid,{items:[{icon:'folder_open',label:'EM PROJETOS',value:linkedProjects,note:'notas vinculadas a projetos'},{icon:'check_circle',label:'VIRARAM TAREFA',value:sourceTasks,note:'tarefas com origem em nota'},{icon:'history',label:'7 DIAS',value:v49Notes.filter(n=>{const d=new Date(n.createdAt||n.date||0).getTime();return Number.isFinite(d)&&nowTs-d<=7*86400000}).length,note:'novas capturas'},{icon:'search',label:'TEMAS',value:topWords.length,note:'assuntos recorrentes'}]}))),
+                React.createElement(LifeV50Section,{eyebrow:'MEMÓRIA RECENTE',title:'Volte ao que estava pensando.',text:'Uma timeline curta evita que boas ideias desapareçam no volume.'},React.createElement(LifeV50Timeline,{items:recent,empty:'Nenhuma nota salva ainda.'})),
+                React.createElement(LifeV50Section,{eyebrow:'SÍNTESE',title:'Transforme volume em clareza.',text:'A LIFE AI pode agrupar ideias, encontrar relações e separar fatos, dúvidas e próximos passos.',action:{label:'SINTETIZAR COM IA →',onClick:()=>ai('Notas','Analise minhas notas recentes. Agrupe por temas, identifique conexões úteis e separe fatos, dúvidas e possíveis próximos passos sem inventar informação.')}}));
+        }
+
+        if (view === 'IA') {
+            const contexts = [
+                {icon:'checklist',label:'Tarefas',value:tasks.filter(t=>!taskIsDone(t)).length,onClick:()=>v42Go('Tarefas')},
+                {icon:'edit_note',label:'Notas',value:v49Notes.length,onClick:()=>v42Go('Notas')},
+                {icon:'school',label:'Estudos',value:tasks.filter(t=>lifeNormalizeText(t.category||'')==='estudos'&&!taskIsDone(t)).length,onClick:()=>v42Go('Estudos')},
+                {icon:'fitness_center',label:'Fitness',value:lifeActivity.filter(areaMatch('Fitness')).length,onClick:()=>v42Go('Fitness')},
+                {icon:'account_balance_wallet',label:'Finanças',value:financeTransactions.length,onClick:()=>v42Go('Finanças')},
+                {icon:'cloud',label:'Clima',value:lifeWeather?.current?Math.round(lifeWeather.current.temperature_2m)+'°':'—',onClick:()=>setSheet('weather')}
+            ];
+            const agents=[
+                ['today','Hoje','Organiza o dia usando tarefas, agenda e contexto.','Organize meu dia usando somente dados reais do LIFE.'],
+                ['school','Tutor','Explica, pratica e conecta com sua trilha de estudos.','Atue como meu tutor contextual usando meu Guia de Estudos e revisões.'],
+                ['fitness_center','Fitness','Ajuda a escolher sessão e entender técnica sem substituir profissionais.','Use meu contexto de Fitness para me ajudar a escolher uma sessão adequada ao tempo e energia registrados.'],
+                ['account_balance_wallet','Money','Lê seus próprios registros e ajuda a revisar.','Faça uma leitura descritiva das minhas finanças registradas, sem decidir por mim.'],
+                ['route','Planner','Conecta projetos, agenda, hábitos e próximos passos.','Revise meus projetos e agenda e mostre os próximos passos mais claros.'],
+                ['apps','LIFE Guide','Explica qualquer botão, área ou fluxo do LIFE OS.','Quero aprender a usar o LIFE OS. Descubra o que estou tentando fazer e me leve à área certa.']
+            ];
+            return React.createElement('div',{className:'life-v50-layer life-v50-ai'},
+                React.createElement(LifeV50Section,{eyebrow:'CONTEXTO VISÍVEL',title:'O que a LIFE AI consegue enxergar nesta sessão.',text:'Você vê as fontes de contexto antes de pedir qualquer análise.'},React.createElement('div',{className:'life-v50-context-grid'},contexts.map((c,i)=>React.createElement('button',{type:'button',key:i,onClick:c.onClick},React.createElement('span',{className:'material-symbols-rounded'},c.icon),React.createElement('b',null,c.value),React.createElement('small',null,c.label))))),
+                React.createElement(LifeV50Section,{eyebrow:'ESPECIALISTAS',title:'Um copiloto, vários modos de trabalho.',text:'Cada especialista usa o mesmo contexto do LIFE, mas começa com um objetivo diferente.'},React.createElement('div',{className:'life-v50-agent-grid'},agents.map((a,i)=>React.createElement('button',{type:'button',key:i,onClick:()=>submitLifeAI(a[3])},React.createElement('i',{className:'material-symbols-rounded'},a[0]),React.createElement('b',null,a[1]),React.createElement('span',null,a[2]),React.createElement('em',null,'INICIAR →'))))),
+                React.createElement(LifeV50Section,{eyebrow:'CONTROLE',title:'A IA propõe. Você decide.',text:'Ações que alteram dados importantes continuam pedindo confirmação. Memória e contexto ficam separados de conversa livre.',action:{label:'ABRIR WORKSPACE →',onClick:()=>openAdvancedArea('IA',null,'WORKSPACE DA LIFE AI')}}));
+        }
+
+        if (view === 'Estudos') {
+            const studies=tasks.filter(t=>lifeNormalizeText(t.category||'')==='estudos'&&!taskIsDone(t));
+            const plan=lifeLocalGet('life_study_plan_v2',null);
+            const reviews=lifeLocalGet('life_study_reviews_v3',[])||[];
+            const errors=lifeLocalGet('life_study_errors_v3',[])||[];
+            const cards=lifeLocalGet('life_study_cards_v3',[])||[];
+            const focusDays=lastNDays(14,areaMatch('Estudos'));
+            const stageCount=plan?.timeline?.length||0, doneCount=(plan?.completedStages||[]).length, progress=safePct(doneCount,stageCount);
+            const resources=[];
+            (plan?.books||plan?.resources?.books||[]).slice(0,3).forEach((x,i)=>resources.push({id:'b'+i,icon:'menu_book',title:typeof x==='string'?x:(x.title||'Livro'),meta:'Livro / referência'}));
+            (plan?.channels||plan?.resources?.channels||[]).slice(0,3).forEach((x,i)=>resources.push({id:'c'+i,icon:'smart_display',title:typeof x==='string'?x:(x.title||'Canal'),meta:'Canal / professor'}));
+            return React.createElement('div',{className:'life-v50-layer life-v50-study'},
+                React.createElement('div',{className:'life-v50-study-cockpit'},
+                    React.createElement(LifeV50Section,{eyebrow:'TRILHA',title:plan?plan.topic:'Sua trilha ainda não existe.',text:plan?'Você está vendo o mapa completo, não só a próxima tarefa.':'Crie um Guia de Estudos para o LIFE montar uma ordem cronológica.' ,action:{label:plan?'ABRIR GUIA →':'CRIAR GUIA →',onClick:()=>v42Go('Guia de Estudos')}},React.createElement('div',{className:'life-v50-study-progress'},React.createElement(LifeV50Ring,{value:progress,label:'TRILHA',sub:doneCount+'/'+stageCount+' etapas'}),plan?.timeline?.length?React.createElement('div',{className:'life-v50-stage-list'},plan.timeline.slice(0,6).map((x,i)=>React.createElement('div',{key:x.index||i,className:(plan.completedStages||[]).includes(x.index)?'done':''},React.createElement('i',null,(plan.completedStages||[]).includes(x.index)?'✓':String(i+1).padStart(2,'0')),React.createElement('span',null,React.createElement('b',null,x.title),React.createElement('small',null,x.goal||x.description||'Etapa da trilha'))))):null)),
+                    React.createElement(LifeV50Section,{eyebrow:'CICLO DE APRENDIZAGEM',title:'Aprender não termina em assistir aula.',text:'O ciclo fecha quando você pratica, testa e revisa.'},React.createElement('div',{className:'life-v50-cycle'},[['school','APRENDER',studies.length],['quiz','PRATICAR',errors.length],['style','REVISAR',reviews.length],['psychology','RECORDAR',cards.length]].map((x,i)=>React.createElement('button',{type:'button',key:i,onClick:()=>i===0?v42Go('Guia de Estudos'):openAdvancedArea('Estudos',null,i===1?'CADERNO DE ERROS':i===2?'REVISÕES':'FLASHCARDS')},React.createElement('span',{className:'material-symbols-rounded'},x[0]),React.createElement('b',null,x[1]),React.createElement('small',null,x[2]+' item(ns)')))))),
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'RITMO · 14 DIAS',title:'Sessões e registros de estudo.',text:'Mais útil que contar horas isoladas é enxergar continuidade e revisões.'},React.createElement(LifeV50Bars,{items:focusDays})),
+                    React.createElement(LifeV50Section,{eyebrow:'FILA DE REVISÃO',title:reviews.length?reviews.length+' item(ns) esperando revisão.':'Revisões em dia.',text:'A fila existe para trazer o conteúdo de volta antes de você esquecer completamente.',action:{label:'ABRIR REVISÕES →',onClick:()=>openAdvancedArea('Estudos',null,'REVISÕES E FLASHCARDS')}},React.createElement(LifeV50Timeline,{items:reviews.slice(0,6).map((r,i)=>({id:r.id||i,icon:'history_edu',title:r.title||r.text||r.topic||'Revisão',meta:r.due||r.date||'Revisão pendente',onClick:()=>openAdvancedArea('Estudos',null,'REVISÕES')})),empty:'Nada aguardando revisão agora.'}))),
+                resources.length?React.createElement(LifeV50Section,{eyebrow:'RECURSOS DA TRILHA',title:'Materiais ligados ao que você está estudando.',text:'Referências ficam perto da trilha para evitar procurar do zero toda vez.'},React.createElement(LifeV50Timeline,{items:resources})):null);
+        }
+
+        if (view === 'Receitas') {
+            const pantry=lifeLocalGet('life_pantry_v4',lifeLocalGet('life_pantry_v3',[]))||[];
+            const shop=lifeLocalGet('life_food_shopping_v4',lifeLocalGet('life_food_shopping_v3',shoppingList||[]))||[];
+            const fav=lifeFavorites.recipes||[];
+            const index=(new Date().getFullYear()*366 + Math.floor(nowTs/86400000))%Math.max(1,v33Recipes.length);
+            const daily=v33Recipes[index]||v33Recipes[0];
+            const expiring=pantry.filter(x=>{const d=x?.expiry?new Date(x.expiry):null;return d&&!Number.isNaN(d.getTime())&&d.getTime()-nowTs<=4*86400000&&d.getTime()>=nowTs}).slice(0,6);
+            const quick=v33Recipes.filter(r=>parseInt(String(r.time||'').match(/\d+/)?.[0]||99)<=25).slice(0,6);
+            const favRows=fav.slice(0,6).map((x,i)=>({id:x.id||i,icon:'favorite',title:x.title||x.name||'Receita favorita',meta:x.subtitle||'Receita salva',onClick:()=>x.recipe?openLifeRecipe(x.recipe):openAdvancedArea('Receitas',null,'FAVORITAS')}));
+            return React.createElement('div',{className:'life-v50-layer life-v50-kitchen'},
+                React.createElement('div',{className:'life-v50-kitchen-feature'},
+                    React.createElement('div',{className:'copy'},React.createElement('small',null,'RECEITA DO DIA'),React.createElement('h3',null,daily?.name||'Descobrir receita'),React.createElement('p',null,daily?((daily.time||'')+' · '+(daily.serves||'')+' · '+((daily.tags||[daily.cat]).slice(0,2).join(' · '))):'Abra a biblioteca para descobrir algo novo.'),React.createElement('button',{type:'button',onClick:()=>daily&&openLifeRecipe(daily)},'ABRIR RECEITA →')),
+                    React.createElement('div',{className:'number'},React.createElement('b',null,v33Recipes.length),React.createElement('span',null,'receitas organizadas'))),
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'COZINHAR AGORA',title:'Pouco tempo? Comece daqui.',text:'Receitas com preparo curto para reduzir a fricção de decidir.'},React.createElement('div',{className:'life-v50-card-row'},quick.map(r=>React.createElement('button',{type:'button',key:r.id,onClick:()=>openLifeRecipe(r)},React.createElement('small',null,r.time||'RÁPIDA'),React.createElement('b',null,r.name),React.createElement('span',null,(r.tags||[r.cat]).slice(0,2).join(' · ')))))),
+                    React.createElement(LifeV50Section,{eyebrow:'DESPENSA',title:expiring.length?'Use primeiro o que vence antes.':'Sua despensa está tranquila.',text:expiring.length?'Ingredientes com validade próxima ficam visíveis para reduzir desperdício.':'Cadastre validade quando isso for útil.',action:{label:'ABRIR DESPENSA →',onClick:()=>openAdvancedArea('Fitness',()=>setFitnessMainTab('Alimentação'),'MINHA DESPENSA')}},React.createElement(LifeV50Timeline,{items:expiring.map((x,i)=>({id:x.id||i,icon:'kitchen',title:x.name||String(x),meta:x.expiry?'Validade: '+safeDateLabel(x.expiry,'data inválida'):'Validade não informada'})),empty:'Nenhum ingrediente com validade próxima.'}))),
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'LISTA DE COMPRAS',title:(shop.filter?shop.filter(x=>!x.done).length:shop.length)+' item(ns) pendentes.',text:'A lista acompanha a cozinha, não fica isolada.',action:{label:'ABRIR LISTA →',onClick:()=>openAdvancedArea('Fitness',()=>setFitnessMainTab('Alimentação'),'LISTA DE COMPRAS')}},React.createElement(LifeV50Heatmap,{days:Array.from({length:28},(_,i)=>({key:i,value:i<(shop.filter?shop.filter(x=>!x.done).length:shop.length)?1:0,label:'Item '+(i+1)})),title:'Itens de compra'})),
+                    React.createElement(LifeV50Section,{eyebrow:'FAVORITAS',title:'Sua prateleira pessoal.',text:'Receitas que você decidiu guardar devem ser fáceis de encontrar.'},React.createElement(LifeV50Timeline,{items:favRows,empty:'Favorite receitas para montar sua prateleira.'}))));
+        }
+
+        if (view === 'Finanças') {
+            const tx=financeTransactions||[];
+            const monthKey=v=>String(v||'').slice(0,7);
+            const months=Array.from({length:6},(_,i)=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-(5-i));const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');const arr=tx.filter(x=>monthKey(x.date||x.created_at)===key);const inc=arr.filter(x=>x.type==='Entrada').reduce((n,x)=>n+Number(x.value||0),0);const out=arr.filter(x=>x.type==='Saída').reduce((n,x)=>n+Number(x.value||0),0);return{key,label:d.toLocaleDateString('pt-BR',{month:'short'}).replace('.',''),value:Math.max(0,out),display:money(out),inc,out,balance:inc-out}});
+            const cats={}; tx.filter(x=>x.type==='Saída'&&monthKey(x.date||x.created_at)===financeMonth).forEach(x=>cats[x.category||'Geral']=(cats[x.category||'Geral']||0)+Number(x.value||0));
+            const topCats=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,7).map(([label,value])=>({label,value,display:money(value)}));
+            const recurringMap={}; tx.filter(x=>x.type==='Saída').forEach(x=>{const key=lifeNormalizeText(x.desc||x.description||'');if(key)(recurringMap[key]||(recurringMap[key]=[])).push(x)}); const recurring=Object.values(recurringMap).filter(a=>a.length>=2).sort((a,b)=>b.length-a.length).slice(0,5);
+            return React.createElement('div',{className:'life-v50-layer life-v50-money'},
+                React.createElement('div',{className:'life-v50-money-hero'},
+                    React.createElement('div',null,React.createElement('small',null,'FLUXO DO MÊS'),React.createElement('b',null,money(financeMonthBalance)),React.createElement('span',null,'saldo entre entradas e saídas registradas')),
+                    React.createElement('div',{className:'life-v50-money-split'},React.createElement('span',null,'ENTRADAS',React.createElement('b',null,money(financeMonthIn))),React.createElement('span',null,'SAÍDAS',React.createElement('b',null,money(financeMonthOut))))),
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'6 MESES',title:'Seu fluxo ao longo do tempo.',text:'Histórico registrado; meses sem dados aparecem vazios.'},React.createElement(LifeV50Bars,{items:months})),
+                    React.createElement(LifeV50Section,{eyebrow:'CATEGORIAS',title:'Onde as saídas se concentraram.',text:'Uma visão descritiva para você revisar seus próprios hábitos.'},topCats.length?React.createElement(LifeV50Bars,{items:topCats}):React.createElement('div',{className:'life-v50-empty'},'Sem categorias suficientes neste mês.'))),
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'RECORRÊNCIAS',title:recurring.length?'Possíveis cobranças repetidas.':'Nenhuma recorrência clara ainda.',text:'O LIFE só aponta padrões; cancelar ou manter continua sendo sua decisão.'},React.createElement(LifeV50Timeline,{items:recurring.map((a,i)=>({id:i,icon:'repeat',title:a[0].desc||a[0].description||'Movimentação recorrente',meta:a.length+' registros · último '+money(a[0].value||0)})),empty:'Mais histórico ajuda a detectar repetições.'})),
+                    React.createElement(LifeV50Section,{eyebrow:'REVISÃO',title:'Perguntas melhores, não julgamentos.',text:'Use a LIFE AI para entender variações, recorrências e metas com base no que você registrou.',action:{label:'REVISAR COM IA →',onClick:()=>ai('Finanças','Compare meus últimos meses usando somente movimentações registradas. Mostre padrões e faça perguntas úteis. Não tome decisões financeiras por mim.')}})));
+        }
+
+        if (view === 'Life') {
+            const projectRows=projects.slice(0,8).map((p,i)=>{const stages=p.stages||[];const linked=tasks.filter(t=>String(t.projectId||'')===String(p.id||p.n));const progress=stages.length?safePct(stages.filter(x=>x.done).length,stages.length):linked.length?safePct(linked.filter(taskIsDone).length,linked.length):Number(p.p||0);return{id:p.id||i,title:p.n||'Projeto',meta:p.next||'Definir próximo passo',progress,onClick:()=>{setSelectedProjectId(p.id||p.n);openAdvancedArea('Life',null,'PROJECT HUB')}}});
+            const upcoming=(events||[]).slice().sort((a,b)=>String(a.d||a.date||'').localeCompare(String(b.d||b.date||''))).slice(0,8);
+            const activeGoals=lifeGoals.filter(g=>!g.done&&!['concluida','concluído','concluido'].includes(lifeNormalizeText(g.status||'')));
+            const activeHabits=lifeHabits.filter(h=>h.status!=='pausado');
+            return React.createElement('div',{className:'life-v50-layer life-v50-planner'},
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'PORTFÓLIO',title:'Projetos em andamento.',text:'Cada projeto mostra o próximo passo e um progresso baseado no que está realmente marcado.',action:{label:'ABRIR PROJECT HUB →',onClick:()=>openAdvancedArea('Life',null,'PROJECT HUB')}},projectRows.length?React.createElement('div',{className:'life-v50-projects'},projectRows.map(p=>React.createElement('button',{type:'button',key:p.id,onClick:p.onClick},React.createElement('div',null,React.createElement('b',null,p.title),React.createElement('span',null,p.meta)),React.createElement('i',null,React.createElement('em',{style:{width:p.progress+'%'}}))))):React.createElement('div',{className:'life-v50-empty'},'Crie um projeto para acompanhar etapas e próximos passos.')),
+                    React.createElement(LifeV50Section,{eyebrow:'SISTEMA PESSOAL',title:'Metas e hábitos que sustentam seus projetos.',text:'Metas dão direção; hábitos cuidam da repetição.'},React.createElement(LifeV50MetricGrid,{items:[{icon:'flag',label:'METAS ATIVAS',value:activeGoals.length,note:'em acompanhamento'},{icon:'repeat',label:'HÁBITOS',value:activeHabits.length,note:'ativos no sistema'},{icon:'event',label:'AGENDA',value:upcoming.length,note:'próximos eventos visíveis'},{icon:'folder_open',label:'PROJETOS',value:projects.length,note:'frentes registradas'}]}))),
+                React.createElement(LifeV50Section,{eyebrow:'PRÓXIMOS COMPROMISSOS',title:'A semana começa pelo que já tem horário.',text:'O planejador deve respeitar compromissos fixos antes de encaixar tarefas.',action:{label:'PLANEJAR DIA →',onClick:()=>setDayPlannerOpen(true)}},React.createElement(LifeV50Timeline,{items:upcoming.map((e,i)=>({id:e.id||i,icon:'event',title:e.n||e.title||'Compromisso',meta:[e.d||e.date,e.t||e.time,e.m].filter(Boolean).join(' · '),onClick:()=>openAdvancedArea('Life',null,'AGENDA')})),empty:'Nenhum compromisso registrado.'})),
+                React.createElement(LifeV50Section,{eyebrow:'REVISÃO SEMANAL',title:'Um lugar para fechar loops.',text:'Revisar projetos, tarefas e agenda reduz a quantidade de coisas “na cabeça”.',action:{label:'INICIAR REVISÃO →',onClick:()=>setWeeklyReviewOpen(true)}}));
+        }
+
+        if (view === 'Meu LIFE') {
+            const last30=lifeActivity.filter(a=>nowTs-new Date(a.date).getTime()<=30*86400000);
+            const buckets={Hoje:0,Tarefas:0,Estudos:0,Fitness:0,Finanças:0,Notas:0,Life:0};
+            last30.forEach(a=>{const t=lifeNormalizeText((a.type||'')+' '+(a.title||'')+' '+(a.area||''));if(/estud|foco|revis/.test(t))buckets.Estudos++;else if(/fit|treino|exerc/.test(t))buckets.Fitness++;else if(/finan|gasto|receita/.test(t))buckets.Finanças++;else if(/nota|anota/.test(t))buckets.Notas++;else if(/projeto|agenda|habito|meta/.test(t))buckets.Life++;else buckets.Tarefas++});
+            const favTotal=Object.values(lifeFavorites||{}).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0);
+            return React.createElement('div',{className:'life-v50-layer life-v50-me'},
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'SEU PADRÃO · 30 DIAS',title:'Onde você realmente usou o LIFE.',text:'A página pessoal aprende com uso real, não com uma configuração que você esqueceu.'},React.createElement(LifeV50Bars,{items:Object.entries(buckets).map(([label,value])=>({label,value,display:value}))})),
+                    React.createElement(LifeV50Section,{eyebrow:'ATALHOS PESSOAIS',title:'O que você escolheu guardar.',text:'Fixados, favoritos e recentes viram uma camada pessoal acima das áreas.'},React.createElement(LifeV50MetricGrid,{items:[{icon:'push_pin',label:'FIXADOS',value:lifePins.length,note:'presos no painel'},{icon:'favorite',label:'FAVORITOS',value:favTotal,note:'itens salvos'},{icon:'history',label:'RECENTES',value:lifeRecents.length,note:'para retomar'},{icon:'schedule',label:'30 DIAS',value:last30.length,note:'registros de atividade'}]}))),
+                React.createElement(LifeV50Section,{eyebrow:'PRÓXIMO RETORNO',title:'O LIFE deve lembrar onde você parou.',text:'Use “Meu LIFE” como launcher de continuidade, não como outra lista.',action:{label:lastArea&&lastArea!=='Hoje'?'CONTINUAR '+lifePublicAreaName(lastArea).toUpperCase()+' →':'IR PARA HOJE →',onClick:()=>v42Go(lastArea&&lastArea!=='Hoje'?lastArea:'Hoje')}}));
+        }
+
+        if (view === 'Evolução') {
+            const areaDefs=[['Estudos',areaMatch('Estudos')],['Fitness',areaMatch('Fitness')],['Organização',areaMatch('Tarefas')],['Finanças',areaMatch('Finanças')],['Notas',areaMatch('Notas')]];
+            const periods=areaDefs.map(([label,match])=>{const cur=lifeActivity.filter(a=>nowTs-new Date(a.date).getTime()<=7*86400000&&match(a)).length;const prev=lifeActivity.filter(a=>{const age=nowTs-new Date(a.date).getTime();return age>7*86400000&&age<=14*86400000&&match(a)}).length;return{label,value:cur,display:(cur>=prev?'+':'')+(cur-prev)+' vs semana anterior',cur,prev}});
+            const heat=lastNDays(56);
+            const weeks=Array.from({length:8},(_,i)=>{const start=nowTs-(8-i)*7*86400000,end=start+7*86400000;const value=lifeActivity.filter(a=>{const t=new Date(a.date).getTime();return Number.isFinite(t)&&t>=start&&t<end}).length;return{label:'S'+(i+1),value,display:value}});
+            return React.createElement('div',{className:'life-v50-layer life-v50-evolution'},
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'8 SEMANAS',title:'Tendência de atividade do seu próprio sistema.',text:'O objetivo é perceber padrões, não maximizar barras.'},React.createElement(LifeV50Bars,{items:weeks})),
+                    React.createElement(LifeV50Section,{eyebrow:'56 DIAS',title:'Mapa de presença.',text:'Cada quadrado representa um dia com registros no LIFE.'},React.createElement(LifeV50Heatmap,{days:heat,title:'Atividade dos últimos 56 dias'}))),
+                React.createElement(LifeV50Section,{eyebrow:'SEMANA × SEMANA',title:'O que mudou por área.',text:'Comparação descritiva entre os últimos 7 dias e os 7 anteriores.'},React.createElement('div',{className:'life-v50-compare-grid'},periods.map((x,i)=>React.createElement('article',{key:i},React.createElement('small',null,x.label),React.createElement('b',null,x.cur),React.createElement('span',{className:x.cur-x.prev>0?'up':x.cur-x.prev<0?'down':''},x.display))))),
+                React.createElement(LifeV50Section,{eyebrow:'REFLEXÃO',title:'Transforme dados em perguntas úteis.',text:'A LIFE AI pode explicar padrões observáveis sem comparar você com outras pessoas.',action:{label:'INTERPRETAR COM IA →',onClick:()=>ai('Evolução','Compare meus últimos períodos de atividade por área. Descreva padrões observáveis, sem julgamentos e sem comparar meu corpo ou desempenho com outras pessoas.')}}));
+        }
+
+        if (view === 'Biblioteca') {
+            const favTotal=(lifeFavorites.recipes||[]).length+(lifeFavorites.workouts||[]).length+(lifeFavorites.exercises||[]).length+(lifeFavorites.study||[]).length;
+            const shelves=[
+                {icon:'school',title:'Conhecimento & Estudos',text:'Guias, trilhas, conceitos e materiais.',count:Object.values(v45Recs||{}).reduce((n,a)=>n+(a?.length||0),0),onClick:()=>v42Go('Estudos')},
+                {icon:'exercise',title:'Exercícios',text:'Técnica, equipamentos e variações.',count:IRON_EXERCISE_LIBRARY.length,onClick:()=>{setFitnessMainTab('Exercícios');v42Go('Fitness')}},
+                {icon:'fitness_center',title:'Treinos',text:'Programas, modelos e seus treinos.',count:v33Workouts.length,onClick:()=>{setFitnessMainTab('Treinos');v42Go('Fitness')}},
+                {icon:'restaurant',title:'Receitas',text:'600 receitas e filtros inteligentes.',count:v33Recipes.length,onClick:()=>v42Go('Receitas')}
+            ];
+            return React.createElement('div',{className:'life-v50-layer life-v50-library'},
+                React.createElement(LifeV50Section,{eyebrow:'PRATELEIRAS',title:'O LIFE inteiro organizado por intenção.',text:'Você pode entrar por assunto em vez de lembrar onde cada recurso mora.'},
+                    React.createElement('div',{className:'life-v50-shelves'},
+                        shelves.map((x,i)=>React.createElement('button',{type:'button',key:i,onClick:x.onClick},
+                            React.createElement('i',{className:'material-symbols-rounded'},x.icon),
+                            React.createElement('div',null,React.createElement('b',null,x.title),React.createElement('span',null,x.text)),
+                            React.createElement('em',null,x.count)
+                        ))
+                    )
+                ),
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'SALVOS',title:favTotal+' item(ns) favoritado(s).',text:'Favoritos viram sua coleção pessoal acima da biblioteca geral.',action:{label:'ABRIR FAVORITOS →',onClick:()=>v42Go('Favoritos')}}),
+                    React.createElement(LifeV50Section,{eyebrow:'BUSCA ASSISTIDA',title:'Não sabe o nome do que procura?',text:'Descreva o objetivo em linguagem natural e a LIFE AI procura a área ou recurso mais próximo.',action:{label:'PERGUNTAR À LIFE AI →',onClick:()=>ai('Biblioteca','Quero encontrar um recurso no LIFE, mas não sei o nome. Faça uma pergunta curta para entender o que preciso e me direcione para o recurso correto.')}})
+                )
+            );
+        }
+
+        if (view === 'Favoritos') {
+            const buckets=[['Áreas','areas'],['Receitas','recipes'],['Treinos','workouts'],['Exercícios','exercises'],['Estudos','study']];
+            const total=buckets.reduce((n,b)=>n+(lifeFavorites[b[1]]||[]).length,0);
+            return React.createElement('div',{className:'life-v50-layer life-v50-favorites'},
+                React.createElement(LifeV50Section,{eyebrow:'LAUNCHER',title:total?'Seu LIFE pessoal está tomando forma.':'Seu launcher começa vazio.',text:'Quanto menos itens você favorita, mais valioso esse espaço fica.'},React.createElement('div',{className:'life-v50-fav-orbit'},buckets.map(([label,key],i)=>React.createElement('button',{type:'button',key:key,onClick:()=>key==='areas'?setMobileMore(true):key==='recipes'?v42Go('Receitas'):key==='study'?v42Go('Estudos'):(setFitnessMainTab(key==='exercises'?'Exercícios':'Treinos'),v42Go('Fitness'))},React.createElement('b',null,(lifeFavorites[key]||[]).length),React.createElement('span',null,label))))),
+                React.createElement(LifeV50Section,{eyebrow:'REGRA DE OURO',title:'Favorite o que você realmente quer reencontrar.',text:'Favoritos devem reduzir navegação. Se tudo vira favorito, o launcher perde função.'}));
+        }
+
+        if (view === 'Tutorial') {
+            const mods=[
+                {id:'today',kicker:'COMEÇO',title:'Hoje',text:'Planeje só o essencial e marque conforme faz.',go:'Hoje'},
+                {id:'tasks',kicker:'EXECUÇÃO',title:'Organizar',text:'Tarefas, projetos, inbox e revisão semanal.',go:'Tarefas'},
+                {id:'notes',kicker:'MEMÓRIA',title:'Notas',text:'Capture e transforme ideias em ação.',go:'Notas'},
+                {id:'study',kicker:'APRENDER',title:'Study OS',text:'Guia, foco, revisão e recursos.',go:'Estudos'},
+                {id:'fitness',kicker:'TREINAR',title:'Fitness',text:'Sessões, recuperação, técnica e progresso.',go:'Fitness'},
+                {id:'food',kicker:'COZINHAR',title:'Cozinha',text:'Receitas, despensa e compras.',go:'Receitas'},
+                {id:'money',kicker:'ENTENDER',title:'Money',text:'Movimentações, orçamento e metas.',go:'Finanças'},
+                {id:'planner',kicker:'PLANEJAR',title:'Planner',text:'Projetos, metas, hábitos e agenda.',go:'Life'},
+                {id:'ai',kicker:'COPILOTO',title:'LIFE AI',text:'Pergunte, entenda e navegue pelo sistema.',go:'IA'},
+                {id:'evo',kicker:'REVISAR',title:'Evolução',text:'Padrões do seu próprio histórico.',go:'Evolução'},
+                {id:'lib',kicker:'ENCONTRAR',title:'Biblioteca',text:'Busca universal por recursos.',go:'Biblioteca'},
+                {id:'me',kicker:'RETOMAR',title:'Meu LIFE',text:'Fixados, recentes e favoritos.',go:'Meu LIFE'}
+            ];
+            return React.createElement('div',{className:'life-v50-layer life-v50-tutorial'},React.createElement(LifeV50Section,{eyebrow:'LIFE ACADEMY',title:'Aprenda fazendo.',text:'Marque módulos vistos e abra cada área quando quiser. Não precisa decorar o sistema.'},React.createElement(LifeV50Academy,{modules:mods,onOpen:m=>v42Go(m.go)})));
+        }
+
+        if (view === 'Archive') {
+            const byMonth={};lifeActivity.forEach(a=>{const k=String(a.date||'').slice(0,7)||'Sem data';byMonth[k]=(byMonth[k]||0)+1});
+            const monthRows=Object.entries(byMonth).sort((a,b)=>String(b[0]).localeCompare(String(a[0]))).slice(0,12).map(([label,value])=>({label,value,display:value}));
+            return React.createElement('div',{className:'life-v50-layer life-v50-archive'},
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'12 PERÍODOS',title:'Seu histórico por mês.',text:'O Arquivo é uma memória do sistema, não uma tela para viver todo dia.'},React.createElement(LifeV50Bars,{items:monthRows})),
+                    React.createElement(LifeV50Section,{eyebrow:'RETENÇÃO',title:'Dados antigos continuam úteis.',text:'Use o Arquivo para buscar contexto, comparar períodos ou recuperar algo que saiu das telas principais.',action:{label:'EXPLORAR ARQUIVO →',onClick:()=>openAdvancedArea('Archive',null,'ARQUIVO COMPLETO')}})));
+        }
+
+        if (view === 'Perfil') {
+            let localBytes=0;
+            try {
+                for(let i=0;i<localStorage.length;i++){
+                    const k=localStorage.key(i);
+                    localBytes+=(k?.length||0)+(localStorage.getItem(k)?.length||0);
+                }
+            } catch(_) {}
+            const localKb=Math.round(localBytes*2/1024);
+            const favTotal=Object.values(lifeFavorites||{}).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0);
+            const checks=[
+                {icon:cloudStatus==='synced'?'cloud_done':'cloud',title:'Sincronização',meta:cloudStatus==='synced'?'Nuvem sincronizada':'Revise antes de trocar de aparelho'},
+                {icon:online?'wifi':'wifi_off',title:'Conexão',meta:online?'Serviços externos disponíveis':'Modo local ativo'},
+                {icon:aiBackendReady?'auto_awesome':'memory',title:'LIFE AI',meta:aiBackendReady?'Backend remoto respondeu':'Fallback local disponível'},
+                {icon:'database',title:'Dados locais',meta:localKb+' KB aproximados neste navegador'}
+            ];
+            return React.createElement('div',{className:'life-v50-layer life-v50-profile'},
+                React.createElement('div',{className:'life-v50-profile-card'},
+                    React.createElement('div',{className:'avatar'},String(v32Name||accountInfo?.email||'L').slice(0,2).toUpperCase()),
+                    React.createElement('div',null,
+                        React.createElement('small',null,'CONTA LIFE'),
+                        React.createElement('h3',null,v32Name||'Usuário LIFE'),
+                        React.createElement('p',null,accountInfo?.email||'Conta conectada')
+                    ),
+                    React.createElement('span',null,realPlan||'FREE')
+                ),
+                React.createElement('div',{className:'life-v50-wide-grid'},
+                    React.createElement(LifeV50Section,{eyebrow:'SAÚDE DO SISTEMA',title:'O que está funcionando agora.',text:'Uma visão simples para você saber se pode trocar de aparelho, usar IA e confiar na sincronização.'},
+                        React.createElement(LifeV50Timeline,{items:checks})
+                    ),
+                    React.createElement(LifeV50Section,{eyebrow:'SEU LIFE',title:'Preferências e dados pessoais do sistema.',text:'Você controla tema, movimento, notificações, exportação e sincronização.',action:{label:'ABRIR CONFIGURAÇÕES →',onClick:()=>v42Go('Configurações')}},
+                        React.createElement(LifeV50MetricGrid,{items:[
+                            {icon:'favorite',label:'FAVORITOS',value:favTotal,note:'atalhos pessoais'},
+                            {icon:'push_pin',label:'FIXADOS',value:lifePins.length,note:'no Meu LIFE'},
+                            {icon:'history',label:'HISTÓRICO',value:lifeActivity.length,note:'registros locais'},
+                            {icon:'storage',label:'LOCAL',value:localKb+' KB',note:'aproximação no navegador'}
+                        ]})
+                    )
+                )
+            );
+        }
+        return null;
+    };
+
 return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-active' : 'life-free-active') + ' life-theme-' + lifeTheme + ' life-area-' + String(view || 'Hoje').toLowerCase().replace(/[^a-z0-9áéíóúãõç]+/gi,'-') + (lifeSettings.motion === false ? ' life-motion-off' : '') + (lifeSettings.descriptions === false ? ' life-hide-descriptions' : ''), style: { '--ep': Math.max(10, pct) + 'vh', fontSize: density === 'Compact' ? '14px' : density === 'Comfortable' ? '17px' : '16px' } },
         pageTransition && React.createElement("div", { className: 'life-page-transition ' + (pageTransition.phase || 'in'), "aria-hidden": "true" },
             React.createElement("div", { className: "life-page-transition-inner" },
@@ -7099,7 +7434,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => setSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 4.0.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 5.0.0"),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => setSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
@@ -7486,7 +7821,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                             React.createElement("small", null, "LIFE AI"),
                             React.createElement("b", null, lifeTodayOpen.length > 1 ? 'Quer organizar a ordem do seu dia?' : lifeTodayOpen.length === 1 ? 'Quer ajuda com o próximo passo?' : 'Quer preparar o restante do dia?'))),
                     React.createElement("button", { type: "button", onClick: () => { setAiOriginView('Hoje'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(lifeTodayOpen.length ? 'Organize meus planos de hoje por ordem prática, usando somente as tarefas que já estão registradas no LIFE. Não crie tarefas novas.' : 'Meu dia está sem planos registrados. Faça uma pergunta curta para me ajudar a escolher no máximo três prioridades para hoje.'), 30); } }, "ORGANIZAR"))),
-            view !== 'Hoje' && advancedArea !== view && renderLifeSimpleArea(),
+            view !== 'Hoje' && advancedArea !== view && React.createElement(React.Fragment, null, renderLifeSimpleArea(), renderLifeV50Layer()),
             view !== 'Hoje' && advancedArea === view && React.createElement("div", { className: "life-advanced-return" },
                 React.createElement("button", { type: "button", onClick: closeAdvancedArea }, React.createElement("span", { className: "material-symbols-rounded" }, "arrow_back"), "VOLTAR AO RESUMO"),
                 React.createElement("span", null, lifePublicAreaName(view) + ' · ferramentas completas')),
