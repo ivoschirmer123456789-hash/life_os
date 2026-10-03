@@ -1,4 +1,4 @@
-const LIFE_CACHE='life-os-3.2.0';
+const LIFE_CACHE='life-os-3.3.0';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
   './manifest.webmanifest','./assets/css/utilities.css','./assets/css/life.css','./assets/css/product.css','./assets/css/final.css',
@@ -16,11 +16,11 @@ self.addEventListener('fetch',event=>{
   if(req.method!=='GET') return;
   const url=new URL(req.url);
   if(req.mode==='navigate'){
-    event.respondWith(fetch(req).then(res=>{const copy=res.clone();caches.open(LIFE_CACHE).then(c=>c.put(req,copy));return res;}).catch(async()=> (await caches.match(req)) || (await caches.match('./offline.html'))));
+    event.respondWith(fetch(req).then(res=>{const copy=res.clone();caches.open(LIFE_CACHE).then(c=>c.put(req,copy));return res;}).catch(async()=> (await caches.match(req,{ignoreSearch:true})) || (await caches.match('./offline.html',{ignoreSearch:true}))));
     return;
   }
   if(url.origin===self.location.origin){
-    event.respondWith(caches.match(req).then(cached=>cached || fetch(req).then(res=>{if(res && res.status===200){const copy=res.clone();caches.open(LIFE_CACHE).then(c=>c.put(req,copy));}return res;})));
+    event.respondWith(caches.match(req,{ignoreSearch:true}).then(cached=>cached || fetch(req).then(res=>{if(res && res.status===200){const copy=res.clone();caches.open(LIFE_CACHE).then(c=>c.put(req,copy));}return res;})));
   }
 });
 self.addEventListener('push',event=>{
