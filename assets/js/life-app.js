@@ -8001,7 +8001,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("button", { type: "button", className: "life-premium-weather", onClick: () => setSheet('weather') },
                             React.createElement("span", { className: "material-symbols-rounded" }, lifeWeather?.current ? (weatherIcon(lifeWeather.current.weather_code) === '☀' ? 'sunny' : 'cloud') : 'partly_cloudy_day'),
                             React.createElement("b", null, lifeWeather?.current ? Math.round(lifeWeather.current.temperature_2m) + '°' : '--°'),
-                            React.createElement("small", null, String(lifeWeather?.label || 'Clima').split(' · ')[0])),
+                            React.createElement("small", null, String(lifeWeather?.label || 'Clima').split(' · ')[0], React.createElement("span", null, new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'}).replace(/ de /g,' ').replace(/\./g,''))) ),
                         React.createElement("button", { type: "button", className: "life-premium-iconbtn", onClick: () => setHelpOpen(true), "aria-label": "Central de Ajuda" }, React.createElement("span", { className: "material-symbols-rounded" }, "help")),
                         React.createElement("button", { type: "button", className: "life-premium-iconbtn", onClick: () => { setNotificationCenterOpen(true); markNotificationsRead(); }, "aria-label": "Notificações" }, React.createElement("span", { className: "material-symbols-rounded" }, "notifications"), unreadNotifications > 0 && React.createElement("i", null)))),
                 React.createElement("section", { className: "life-premium-focus-card" },
