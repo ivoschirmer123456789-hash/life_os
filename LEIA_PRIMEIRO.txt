@@ -1,5 +1,10 @@
-LIFE OS 3.2 — ATUALIZAÇÃO
+LIFE OS 4.0 — PREMIUM SYSTEM
 
-Envie todos os arquivos e pastas deste pacote para a raiz do mesmo repositório GitHub do LIFE OS.
-Quando o GitHub perguntar sobre arquivos com o mesmo nome, esta versão deve substituir os anteriores.
-A Vercel fará um novo deploy automaticamente.
+Este ZIP contém somente os arquivos que você precisa substituir no GitHub/Vercel.
+
+1. Extraia o ZIP.
+2. Selecione TODO o conteúdo extraído.
+3. No mesmo repositório GitHub do LIFE: Adicionar arquivo > Carregar arquivos.
+4. Envie mantendo as pastas assets/css e assets/js.
+5. Confirme a substituição/commit.
+6. A Vercel fará o deploy automaticamente.

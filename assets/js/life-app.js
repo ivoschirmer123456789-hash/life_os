@@ -3084,7 +3084,7 @@ function LifeHowItWorksModal({ area, onClose, onAsk }) {
 }
 
 function LifeSimpleShell({ icon = 'dashboard', eyebrow = 'LIFE', title = '', description = '', children = null, primaryLabel = '', primaryDesc = '', onPrimary = null, secondaryLabel = '', secondaryDesc = '', onSecondary = null }) {
-    return React.createElement("main", { className: "life-simple-shell" },
+    return React.createElement("main", { className: "life-simple-shell life-simple-shell40" },
         React.createElement("section", { className: "life-simple-hero" },
             React.createElement("div", { className: "life-simple-icon" }, React.createElement("span", { className: "material-symbols-rounded" }, icon)),
             React.createElement("div", { className: "life-simple-copy" },
@@ -3093,15 +3093,223 @@ function LifeSimpleShell({ icon = 'dashboard', eyebrow = 'LIFE', title = '', des
                 React.createElement("p", null, description))),
         React.createElement("section", { className: "life-simple-body" }, children),
         (primaryLabel || secondaryLabel) && React.createElement("div", { className: "life-simple-actions" },
-            primaryLabel && React.createElement("div", { className: "life-simple-action-wrap" }, React.createElement("button", { type: "button", className: "primary", onClick: onPrimary }, primaryLabel), primaryDesc && React.createElement("small", { className: "life-function-desc" }, primaryDesc)),
-            secondaryLabel && React.createElement("div", { className: "life-simple-action-wrap" }, React.createElement("button", { type: "button", onClick: onSecondary }, secondaryLabel), secondaryDesc && React.createElement("small", { className: "life-function-desc" }, secondaryDesc))));
+            primaryLabel && typeof onPrimary === 'function' && React.createElement("div", { className: "life-simple-action-wrap" }, React.createElement("button", { type: "button", className: "primary", onClick: onPrimary }, primaryLabel), primaryDesc && React.createElement("small", { className: "life-function-desc" }, primaryDesc)),
+            secondaryLabel && typeof onSecondary === 'function' && React.createElement("div", { className: "life-simple-action-wrap" }, React.createElement("button", { type: "button", onClick: onSecondary }, secondaryLabel), secondaryDesc && React.createElement("small", { className: "life-function-desc" }, secondaryDesc))));
 }
-function LifeFunctionCard({ icon = 'arrow_forward', title = '', description = '', actionLabel = 'ABRIR →', onClick = null, className = '' }) {
-    return React.createElement("button", { type: "button", className: 'life-function-card ' + className, onClick },
-        React.createElement("span", { className: "material-symbols-rounded" }, icon),
-        React.createElement("b", null, title),
-        description && React.createElement("span", { className: "life-function-desc" }, description),
-        React.createElement("em", null, actionLabel));
+function LifeFunctionCard({ icon = 'arrow_forward', title = '', description = '', actionLabel = 'ABRIR →', onClick = null, className = '', disabled = false }) {
+    const inactive = disabled || typeof onClick !== 'function';
+    const props = { className: 'life-function-card ' + className + (inactive ? ' is-static' : ''), 'aria-disabled': inactive ? 'true' : undefined };
+    const content = [
+        React.createElement("span", { className: "material-symbols-rounded", key: 'i' }, icon),
+        React.createElement("b", { key: 't' }, title),
+        description && React.createElement("span", { className: "life-function-desc", key: 'd' }, description),
+        !inactive && React.createElement("em", { key: 'a' }, actionLabel)
+    ];
+    return inactive ? React.createElement("article", props, content) : React.createElement("button", { ...props, type: "button", onClick }, content);
+}
+
+
+function LifeApp36({ area = 'LIFE', icon = 'dashboard', kicker = '', title = '', subtitle = '', metrics = [], primary = null, secondary = null, children = null }) {
+    const safeAction = (action, extraClass = '') => action && typeof action.onClick === 'function' ? React.createElement('button', { type: 'button', className: extraClass, onClick: action.onClick }, action.label) : null;
+    return React.createElement('main', { className: 'life-app36 life-app40', 'data-area': area },
+        React.createElement('section', { className: 'life-app36-hero life-app40-hero' },
+            React.createElement('div', { className: 'life-app40-hero-top' },
+                React.createElement('div', { className: 'life-app36-kicker' }, React.createElement('i', { className: 'material-symbols-rounded' }, icon), kicker || ('LIFE / ' + area.toUpperCase())),
+                React.createElement('span', { className: 'life-app40-state' }, 'LIFE OS 4')),
+            React.createElement('div', { className: 'life-app40-hero-copy' },
+                React.createElement('h1', { className: 'life-app36-title' }, title),
+                React.createElement('p', { className: 'life-app36-subtitle' }, subtitle)),
+            (primary || secondary) && React.createElement('div', { className: 'life-app36-hero-actions' },
+                safeAction(primary, 'primary'),
+                safeAction(secondary, '')),
+            metrics?.length ? React.createElement('div', { className: 'life-app36-metrics' }, metrics.slice(0,4).map((m,i) => React.createElement('div', { className: 'life-app36-metric', key: m.label || i },
+                React.createElement('small', null, m.label), React.createElement('b', null, m.value ?? '—'), m.note && React.createElement('span', null, m.note)))) : null),
+        children);
+}
+function LifeApp36Panel({ eyebrow = '', title = '', text = '', action = null, children = null, className = '' }) {
+    const activeAction = action && typeof action.onClick === 'function';
+    return React.createElement('section', { className: 'life-app36-panel ' + className },
+        React.createElement('div', { className: 'life-app36-panel-head' },
+            React.createElement('div', null, eyebrow && React.createElement('small', null, eyebrow), React.createElement('h3', null, title), text && React.createElement('p', null, text)),
+            activeAction && React.createElement('button', { type: 'button', onClick: action.onClick }, action.label)),
+        children);
+}
+function LifeApp36Actions({ items = [] }) {
+    return React.createElement('div', { className: 'life-app36-actions-grid' }, items.map((x,i) => {
+        const inactive = x.disabled || typeof x.onClick !== 'function';
+        const props = { className: 'life-app36-action ' + (x.primary ? 'primary ' : '') + (inactive ? 'is-static' : ''), key: x.title || i, 'aria-disabled': inactive ? 'true' : undefined };
+        const content = [
+            React.createElement('i', { className: 'material-symbols-rounded', key: 'i' }, x.icon || 'arrow_forward'),
+            React.createElement('b', { key: 'b' }, x.title),
+            x.text && React.createElement('span', { key: 's' }, x.text),
+            !inactive && React.createElement('em', { key: 'e' }, x.label || 'ABRIR →')
+        ];
+        return inactive ? React.createElement('article', props, content) : React.createElement('button', { ...props, type: 'button', onClick: x.onClick }, content);
+    }));
+}
+function LifeApp36List({ items = [], empty = 'Nada aqui ainda.' }) {
+    return React.createElement('div', { className: 'life-app36-list' }, items.length ? items.map((x,i) => {
+        const interactive = typeof x.onClick === 'function';
+        const props = { className: 'life-app36-row ' + (interactive ? 'is-interactive' : 'is-static'), key: x.id || x.key || i };
+        const content = [
+            React.createElement('span', { className: 'life-app36-row-index', key: 'i' }, x.icon || String(i+1).padStart(2,'0')),
+            React.createElement('span', { className: 'life-app36-row-copy', key: 'c' }, React.createElement('b', null, x.title), x.meta && React.createElement('small', null, x.meta)),
+            interactive && React.createElement('i', { className: 'material-symbols-rounded', key: 'a' }, 'chevron_right')
+        ];
+        return interactive ? React.createElement('button', { ...props, type: 'button', onClick: x.onClick }, content) : React.createElement('div', props, content);
+    }) : React.createElement('div', { className: 'life-app36-empty' }, empty));
+}
+function LifeApp36Bars({ items = [] }) {
+    const max = Math.max(1, ...items.map(x => Number(x.value || 0)));
+    return React.createElement('div', { className: 'life-app36-bars' }, items.map((x,i) => React.createElement('div', { className: 'life-app36-bar', key: x.label || i },
+        React.createElement('span', null, x.label), React.createElement('i', null, React.createElement('em', { style: { width: Math.round(Number(x.value || 0) / max * 100) + '%' } })), React.createElement('b', null, x.display ?? x.value))));
+}
+function LifeApp36AI({ title = 'Perguntar à LIFE AI', text = '', onClick }) {
+    return React.createElement('div', { className: 'life-app36-ai' }, React.createElement('i', { className: 'material-symbols-rounded' }, 'auto_awesome'), React.createElement('div', null, React.createElement('b', null, title), React.createElement('span', null, text)), React.createElement('button', { type: 'button', onClick }, 'ABRIR →'));
+}
+
+
+function LifeFitnessUltraTodayV35({ completedActivity = [], weeklyGoal = 3, setWeeklyGoal, quickTime = 40, setQuickTime, quickEnergy = 'Normal', setQuickEnergy, recommendedTitle = 'Escolher treino', recommendedMeta = '', onStart, onPrograms, onPersonal, onExercises, onMyWorkouts, onProgress, onRecovery, onAsk, savedCount = 0, exerciseCount = 0 }) {
+    const [soreness, setSoreness] = React.useState(() => load('life_fit_soreness_v35', 'Baixa'));
+    const [sleep, setSleep] = React.useState(() => load('life_fit_sleep_v35', 'Boa'));
+    const [plannedDays, setPlannedDays] = React.useState(() => load('life_fit_planned_days_v35', []));
+    const [checkins, setCheckins] = React.useState(() => load('life_fit_checkins_v35', []));
+    const days = ['SEG','TER','QUA','QUI','SEX','SÁB','DOM'];
+    const todayIndex = (new Date().getDay() + 6) % 7;
+    React.useEffect(() => save('life_fit_soreness_v35', soreness), [soreness]);
+    React.useEffect(() => save('life_fit_sleep_v35', sleep), [sleep]);
+    React.useEffect(() => save('life_fit_planned_days_v35', plannedDays), [plannedDays]);
+    React.useEffect(() => save('life_fit_checkins_v35', checkins), [checkins]);
+    const lowReadiness = quickEnergy === 'Baixa' || soreness === 'Alta' || sleep === 'Ruim';
+    const highReadiness = quickEnergy === 'Alta' && soreness === 'Baixa' && sleep === 'Boa';
+    const readiness = lowReadiness ? { label: 'RECUPERAÇÃO PRIMEIRO', title: 'Hoje pode ser um dia mais leve.', text: 'O LIFE detectou sinais de energia ou recuperação mais baixa. Você pode reduzir intensidade, focar técnica/mobilidade ou descansar.' } : highReadiness ? { label: 'PRONTO PARA TREINAR', title: 'Seu check-in está favorável.', text: 'Se estiver se sentindo bem e sem dor, sua sessão planejada pode seguir normalmente.' } : { label: 'RITMO NORMAL', title: 'Hoje pede uma sessão equilibrada.', text: 'Mantenha boa técnica, ajuste volume à sua disposição e preserve margem para recuperação.' };
+    const toggleDay = (idx) => setPlannedDays(prev => prev.includes(idx) ? prev.filter(x => x !== idx) : [...prev, idx].sort());
+    const autoPlan = () => {
+        const order = [0,2,4,6,1,3,5];
+        setPlannedDays(order.slice(0, Math.max(1, Math.min(7, weeklyGoal))).sort());
+    };
+    const saveCheckin = () => {
+        const item = { id: Date.now(), date: new Date().toISOString(), energy: quickEnergy, soreness, sleep, time: quickTime };
+        setCheckins(prev => [item, ...prev].slice(0, 30));
+    };
+    const todayPlanned = plannedDays.includes(todayIndex);
+    const recentCheckins = checkins.slice(0, 7);
+    return React.createElement('div', { className: 'life-fit35-home' },
+        React.createElement('section', { className: 'life-fit35-command' },
+            React.createElement('div', { className: 'life-fit35-command-main' },
+                React.createElement('small', null, 'FITNESS / AGORA'),
+                React.createElement('span', { className: 'life-fit35-status' }, readiness.label),
+                React.createElement('h2', null, readiness.title),
+                React.createElement('p', null, readiness.text),
+                React.createElement('div', { className: 'life-fit35-reco' },
+                    React.createElement('small', null, todayPlanned ? 'TREINO PLANEJADO PARA HOJE' : 'RECOMENDAÇÃO PARA AGORA'),
+                    React.createElement('b', null, recommendedTitle),
+                    React.createElement('span', null, recommendedMeta)),
+                React.createElement('div', { className: 'life-fit35-command-actions' },
+                    React.createElement('button', { type: 'button', className: 'primary', onClick: onStart }, lowReadiness ? 'VER OPÇÃO MAIS LEVE →' : 'COMEÇAR AGORA →'),
+                    React.createElement('button', { type: 'button', onClick: () => onAsk && onAsk('Meu check-in de Fitness agora é: energia ' + quickEnergy + ', recuperação muscular ' + soreness + ', sono ' + sleep + ' e tenho cerca de ' + quickTime + ' minutos. Ajuste minha sessão com foco em técnica, segurança e consistência, sem usar aparência corporal como meta.') }, 'AJUSTAR COM LIFE AI'))),
+            React.createElement('aside', { className: 'life-fit35-checkin' },
+                React.createElement('small', null, 'CHECK-IN RÁPIDO'),
+                React.createElement('h3', null, 'Como você está agora?'),
+                React.createElement('label', null, 'ENERGIA'),
+                React.createElement('div', { className: 'life-fit35-pills' }, ['Baixa','Normal','Alta'].map(x => React.createElement('button', { type: 'button', key: x, className: quickEnergy === x ? 'on' : '', onClick: () => setQuickEnergy(x) }, x))),
+                React.createElement('label', null, 'RECUPERAÇÃO MUSCULAR'),
+                React.createElement('div', { className: 'life-fit35-pills' }, ['Baixa','Moderada','Alta'].map(x => React.createElement('button', { type: 'button', key: x, className: soreness === x ? 'on' : '', onClick: () => setSoreness(x) }, x))),
+                React.createElement('label', null, 'SONO PERCEBIDO'),
+                React.createElement('div', { className: 'life-fit35-pills' }, ['Ruim','Ok','Boa'].map(x => React.createElement('button', { type: 'button', key: x, className: sleep === x ? 'on' : '', onClick: () => setSleep(x) }, x))),
+                React.createElement('label', null, 'TEMPO DISPONÍVEL'),
+                React.createElement('div', { className: 'life-fit35-pills' }, [20,40,60,90].map(x => React.createElement('button', { type: 'button', key: x, className: quickTime === x ? 'on' : '', onClick: () => setQuickTime(x) }, x + ' min'))),
+                React.createElement('button', { type: 'button', className: 'life-fit35-savecheck', onClick: saveCheckin }, 'SALVAR CHECK-IN'))),
+        React.createElement('section', { className: 'life-fit35-week' },
+            React.createElement('div', { className: 'life-fit35-section-head' },
+                React.createElement('div', null, React.createElement('small', null, 'MINHA SEMANA'), React.createElement('h3', null, 'Planeje treino e descanso sem lotar os dias.')),
+                React.createElement('div', { className: 'life-fit35-goal' }, React.createElement('button', { type: 'button', onClick: () => setWeeklyGoal && setWeeklyGoal(Math.max(1, weeklyGoal - 1)) }, '−'), React.createElement('b', null, weeklyGoal + 'x'), React.createElement('button', { type: 'button', onClick: () => setWeeklyGoal && setWeeklyGoal(Math.min(7, weeklyGoal + 1)) }, '+'))),
+            React.createElement('div', { className: 'life-fit35-weekdays' }, days.map((d, i) => React.createElement('button', { type: 'button', key: d, className: (plannedDays.includes(i) ? 'planned ' : '') + (i === todayIndex ? 'today' : ''), onClick: () => toggleDay(i) }, React.createElement('span', null, d), React.createElement('b', null, plannedDays.includes(i) ? 'TREINO' : 'LIVRE'), React.createElement('small', null, i === todayIndex ? 'HOJE' : (plannedDays.includes(i) ? 'planejado' : 'descanso / flexível'))))),
+            React.createElement('div', { className: 'life-fit35-week-actions' },
+                React.createElement('button', { type: 'button', onClick: autoPlan }, 'MONTAR SEMANA AUTOMATICAMENTE'),
+                React.createElement('button', { type: 'button', onClick: () => setPlannedDays([]) }, 'LIMPAR')),
+            React.createElement('p', { className: 'life-fit35-safe' }, 'Dias livres não contam como falha. O planejamento serve para dar clareza, não para pressionar a treinar todos os dias.')),
+        React.createElement('section', { className: 'life-fit35-launchpad' },
+            [
+                ['PROGRAMAS','Semanas prontas por metodologia.', 'calendar_month', onPrograms],
+                ['PERSONALIZADO','Monte uma rotina baseada no seu contexto.', 'tune', onPersonal],
+                ['BIBLIOTECA','Técnica, vídeos, alternativas e busca.', 'menu_book', onExercises],
+                ['MEUS TREINOS', savedCount + ' treino(s) salvo(s).', 'folder_open', onMyWorkouts],
+                ['PROGRESSO','Tendências, calendário e histórico.', 'monitoring', onProgress],
+                ['RECUPERAÇÃO','Check-in, descanso e retorno gradual.', 'self_improvement', onRecovery]
+            ].map(([title, desc, icon, fn]) => React.createElement('button', { type: 'button', key: title, onClick: fn }, React.createElement('span', { className: 'material-symbols-rounded' }, icon), React.createElement('b', null, title), React.createElement('small', null, desc), React.createElement('em', null, 'ABRIR →')))),
+        React.createElement('section', { className: 'life-fit35-coach' },
+            React.createElement('div', { className: 'life-fit35-section-head' }, React.createElement('div', null, React.createElement('small', null, 'LIFE AI / FITNESS COACH'), React.createElement('h3', null, 'Perguntas úteis em um toque.'))),
+            React.createElement('div', null,
+                React.createElement('button', { type: 'button', onClick: () => onAsk && onAsk('Monte uma sessão simples para hoje usando meu tempo disponível e meu check-in atual. Priorize técnica e recuperação.') }, 'MONTAR SESSÃO DE HOJE'),
+                React.createElement('button', { type: 'button', onClick: () => onAsk && onAsk('Revise minha semana de Fitness e sugira onde faz mais sentido treinar, descansar ou reduzir o ritmo.') }, 'REVISAR MINHA SEMANA'),
+                React.createElement('button', { type: 'button', onClick: () => onAsk && onAsk('Quero variar meus exercícios sem mudar o padrão de movimento. Me ajude a escolher alternativas seguras dentro da biblioteca do LIFE.') }, 'VARIAR EXERCÍCIOS'),
+                React.createElement('button', { type: 'button', onClick: () => onAsk && onAsk('Explique como acompanhar progresso no Fitness sem usar aparência corporal como medida principal.') }, 'ENTENDER MEU PROGRESSO'))),
+        React.createElement('section', { className: 'life-fit35-memory' },
+            React.createElement('div', null, React.createElement('small', null, 'FITNESS QUE APRENDE COM VOCÊ'), React.createElement('h3', null, exerciseCount + ' exercícios disponíveis · ' + savedCount + ' treinos salvos'), React.createElement('p', null, recentCheckins.length ? 'Seus últimos check-ins ficam salvos neste dispositivo/conta para ajudar a comparar sensação e rotina ao longo do tempo.' : 'Faça seus primeiros check-ins para o painel começar a refletir sua rotina real.')),
+            React.createElement('div', { className: 'life-fit35-checkin-dots' }, recentCheckins.map(x => React.createElement('i', { key: x.id, title: new Date(x.date).toLocaleDateString('pt-BR') + ' · ' + x.energy, className: x.energy === 'Alta' ? 'high' : x.energy === 'Baixa' ? 'low' : '' })))));
+}
+
+function LifeFitnessRecoveryV35({ onAsk }) {
+    const [energy, setEnergy] = React.useState(() => load('life_fitness_quick_energy_v34', 'Normal'));
+    const [soreness, setSoreness] = React.useState(() => load('life_fit_soreness_v35', 'Baixa'));
+    const [sleep, setSleep] = React.useState(() => load('life_fit_sleep_v35', 'Boa'));
+    const [restLog, setRestLog] = React.useState(() => load('life_fit_restlog_v35', []));
+    React.useEffect(() => save('life_fitness_quick_energy_v34', energy), [energy]);
+    React.useEffect(() => save('life_fit_soreness_v35', soreness), [soreness]);
+    React.useEffect(() => save('life_fit_sleep_v35', sleep), [sleep]);
+    React.useEffect(() => save('life_fit_restlog_v35', restLog), [restLog]);
+    const cautious = energy === 'Baixa' || soreness === 'Alta' || sleep === 'Ruim';
+    const recordRest = () => setRestLog(prev => [{ id: Date.now(), date: new Date().toISOString(), energy, soreness, sleep }, ...prev].slice(0, 60));
+    return React.createElement('section', { className: 'life-fit35-recovery' },
+        React.createElement('div', { className: 'life-fit35-section-head' }, React.createElement('div', null, React.createElement('small', null, 'FITNESS / RECUPERAÇÃO'), React.createElement('h2', null, 'Treinar bem também é saber quando reduzir o ritmo.'), React.createElement('p', null, 'Use sinais simples do dia para escolher entre sessão normal, sessão leve ou descanso. O LIFE não diagnostica lesões.'))),
+        React.createElement('div', { className: 'life-fit35-recovery-grid' },
+            React.createElement('article', { className: cautious ? 'attention' : '' }, React.createElement('small', null, 'LEITURA DO DIA'), React.createElement('h3', null, cautious ? 'Recuperação merece prioridade.' : 'Seu check-in parece estável.'), React.createElement('p', null, cautious ? 'Se estiver cansado, dolorido ou com sono ruim, reduza intensidade ou escolha descanso. Dor persistente precisa de orientação adequada.' : 'Se estiver se sentindo bem e sem dor, mantenha a sessão planejada com boa técnica.'), React.createElement('button', { type: 'button', onClick: () => onAsk && onAsk('Meu check-in de recuperação é: energia ' + energy + ', recuperação muscular ' + soreness + ' e sono ' + sleep + '. Sugira uma decisão simples entre treino normal, treino leve ou descanso, com foco em segurança.') }, 'PEDIR DECISÃO À LIFE AI')),
+            React.createElement('article', null, React.createElement('small', null, 'CHECK-IN'), React.createElement('h3', null, 'Atualize como você está.'), React.createElement('label', null, 'Energia'), React.createElement('div', { className: 'life-fit35-pills' }, ['Baixa','Normal','Alta'].map(x => React.createElement('button', { type: 'button', key: x, className: energy === x ? 'on' : '', onClick: () => setEnergy(x) }, x))), React.createElement('label', null, 'Recuperação muscular'), React.createElement('div', { className: 'life-fit35-pills' }, ['Baixa','Moderada','Alta'].map(x => React.createElement('button', { type: 'button', key: x, className: soreness === x ? 'on' : '', onClick: () => setSoreness(x) }, x))), React.createElement('label', null, 'Sono'), React.createElement('div', { className: 'life-fit35-pills' }, ['Ruim','Ok','Boa'].map(x => React.createElement('button', { type: 'button', key: x, className: sleep === x ? 'on' : '', onClick: () => setSleep(x) }, x))), React.createElement('button', { type: 'button', onClick: recordRest }, 'REGISTRAR CHECK-IN'))),
+        React.createElement('div', { className: 'life-fit35-recovery-options' },
+            React.createElement('article', null, React.createElement('span', { className: 'material-symbols-rounded' }, 'hotel'), React.createElement('b', null, 'Descanso completo'), React.createElement('p', null, 'Útil quando o corpo pede pausa. Descanso não quebra consistência; ele faz parte dela.')),
+            React.createElement('article', null, React.createElement('span', { className: 'material-symbols-rounded' }, 'self_improvement'), React.createElement('b', null, 'Mobilidade leve'), React.createElement('p', null, 'Uma opção curta e confortável para manter movimento sem transformar recuperação em outro treino pesado.')),
+            React.createElement('article', null, React.createElement('span', { className: 'material-symbols-rounded' }, 'slow_motion_video'), React.createElement('b', null, 'Técnica'), React.createElement('p', null, 'Revise execução, amplitude confortável e controle antes de pensar em aumentar dificuldade.'))),
+        React.createElement('div', { className: 'life-fit35-rest-history' }, React.createElement('small', null, 'CHECK-INS DE RECUPERAÇÃO'), React.createElement('div', null, restLog.slice(0, 14).map(x => React.createElement('i', { key: x.id, className: x.energy === 'Baixa' || x.soreness === 'Alta' ? 'low' : x.energy === 'Alta' ? 'high' : '', title: new Date(x.date).toLocaleDateString('pt-BR') + ' · energia ' + x.energy + ' · recuperação ' + x.soreness })))));
+}
+
+function LifeFitnessTrendV35({ activity = [] }) {
+    const now = new Date();
+    const weekStart = d => { const x = new Date(d); x.setHours(0,0,0,0); const dow=(x.getDay()+6)%7; x.setDate(x.getDate()-dow); return x; };
+    const current = weekStart(now);
+    const weeks = Array.from({ length: 8 }, (_, i) => {
+        const start = new Date(current.getTime() - (7 - i) * 7 * 86400000), end = new Date(start.getTime() + 7 * 86400000);
+        const count = activity.filter(a => { const d = new Date(a.date); return d >= start && d < end; }).length;
+        return { label: (start.getDate() + '/' + (start.getMonth()+1)), count };
+    });
+    const mx = Math.max(1, ...weeks.map(x => x.count));
+    const weekday = [0,0,0,0,0,0,0];
+    activity.forEach(a => { const d = new Date(a.date); if (!Number.isNaN(d.getTime())) weekday[(d.getDay()+6)%7]++; });
+    const best = Math.max(...weekday, 0), bestIdx = weekday.indexOf(best);
+    const labels = ['SEG','TER','QUA','QUI','SEX','SÁB','DOM'];
+    const last4 = weeks.slice(-4).reduce((n,x)=>n+x.count,0);
+    const prev4 = weeks.slice(0,4).reduce((n,x)=>n+x.count,0);
+    return React.createElement('section', { className: 'life-fit35-trends' },
+        React.createElement('div', { className: 'life-fit35-section-head' }, React.createElement('div', null, React.createElement('small', null, 'TENDÊNCIA / 8 SEMANAS'), React.createElement('h3', null, 'Veja ritmo, não só um número isolado.'), React.createElement('p', null, 'Os gráficos usam apenas sessões realmente registradas no LIFE.'))),
+        React.createElement('div', { className: 'life-fit35-trend-grid' },
+            React.createElement('article', { className: 'life-fit35-bars-card' }, React.createElement('small', null, 'SESSÕES POR SEMANA'), React.createElement('div', { className: 'life-fit35-bars' }, weeks.map(x => React.createElement('div', { key: x.label }, React.createElement('i', { style: { height: Math.max(8, Math.round(x.count / mx * 100)) + '%' } }), React.createElement('b', null, x.count), React.createElement('span', null, x.label))))),
+            React.createElement('article', null, React.createElement('small', null, 'ÚLTIMAS 4 SEMANAS'), React.createElement('b', { className: 'life-fit35-big' }, last4), React.createElement('p', null, last4 === prev4 ? 'Seu volume de sessões ficou estável em relação às quatro semanas anteriores.' : last4 > prev4 ? 'Você registrou mais sessões recentemente. Preserve espaço para recuperação.' : 'Seu ritmo recente caiu. Se quiser retomar, comece por uma sessão compatível com seu contexto atual.')),
+            React.createElement('article', null, React.createElement('small', null, 'DIA MAIS FREQUENTE'), React.createElement('b', { className: 'life-fit35-big' }, best ? labels[bestIdx] : '—'), React.createElement('p', null, best ? 'Esse é o dia em que você mais costuma registrar atividade. Use isso para planejar com menos atrito.' : 'Registre algumas sessões para o LIFE encontrar seu padrão.'))));
+}
+
+function LifeFitnessJournalV35() {
+    const [note, setNote] = React.useState('');
+    const [effort, setEffort] = React.useState('Médio');
+    const [logs, setLogs] = React.useState(() => load('life_fit_journal_v35', []));
+    React.useEffect(() => save('life_fit_journal_v35', logs), [logs]);
+    const add = () => { const t = note.trim(); if (!t) return; setLogs(prev => [{ id: Date.now(), date: new Date().toISOString(), effort, note: t }, ...prev].slice(0, 60)); setNote(''); };
+    return React.createElement('section', { className: 'life-fit35-journal' },
+        React.createElement('div', { className: 'life-fit35-section-head' }, React.createElement('div', null, React.createElement('small', null, 'DIÁRIO DE TREINO'), React.createElement('h3', null, 'Registre como a sessão realmente foi.'), React.createElement('p', null, 'Uma nota curta ajuda a lembrar técnica, conforto, ajustes e como você se sentiu. Não é um ranking de desempenho.'))),
+        React.createElement('div', { className: 'life-fit35-journal-form' },
+            React.createElement('textarea', { value: note, onChange: e => setNote(e.target.value), placeholder: 'Ex.: execução melhor hoje; reduzir carga no próximo supino; descanso funcionou bem…' }),
+            React.createElement('div', { className: 'life-fit35-pills' }, ['Leve','Tranquilo','Médio','Exigente'].map(x => React.createElement('button', { type: 'button', key: x, className: effort === x ? 'on' : '', onClick: () => setEffort(x) }, x))),
+            React.createElement('button', { type: 'button', className: 'primary', onClick: add }, 'SALVAR NOTA')),
+        React.createElement('div', { className: 'life-fit35-journal-list' }, logs.length ? logs.slice(0, 8).map(x => React.createElement('article', { key: x.id }, React.createElement('small', null, new Date(x.date).toLocaleDateString('pt-BR') + ' · ' + x.effort), React.createElement('p', null, x.note))) : React.createElement('div', { className: 'life-empty' }, 'Seu diário ainda está vazio.')));
 }
 
 function LifeOSV18() {
@@ -3881,19 +4089,32 @@ function LifeOSV18() {
     const [mobileMore, setMobileMore] = React.useState(false);
     const [howItWorksArea, setHowItWorksArea] = React.useState(null);
     const [showFitnessLibrary, setShowFitnessLibrary] = React.useState(false);
-    const [fitnessMainTab, setFitnessMainTab] = React.useState('Treinos');
+    const [fitnessMainTab, setFitnessMainTab] = React.useState('Hoje');
+    const [fitnessWeeklyGoal, setFitnessWeeklyGoal] = React.useState(() => Math.max(1, Math.min(7, Number(load('life_fitness_weekly_goal_v34', 3)) || 3)));
+    const [fitnessQuickTime, setFitnessQuickTime] = React.useState(() => Number(load('life_fitness_quick_time_v34', 40)) || 40);
+    const [fitnessQuickEnergy, setFitnessQuickEnergy] = React.useState(() => load('life_fitness_quick_energy_v34', 'Normal'));
+    const [fitnessSessionReview, setFitnessSessionReview] = React.useState(null);
+    const [fitnessSessionFeel, setFitnessSessionFeel] = React.useState('Boa');
+    const [fitnessSessionNote, setFitnessSessionNote] = React.useState('');
     const [exerciseLibraryGroup, setExerciseLibraryGroup] = React.useState('Todos');
     const [exerciseLibrarySearch, setExerciseLibrarySearch] = React.useState('');
     const [exerciseLibraryLimit, setExerciseLibraryLimit] = React.useState(72);
     const [exerciseSearchFocused, setExerciseSearchFocused] = React.useState(false);
+    const [exerciseLibraryEquipment, setExerciseLibraryEquipment] = React.useState('Todos');
+    const [exerciseLibraryDifficulty, setExerciseLibraryDifficulty] = React.useState('Todas');
+    const [exerciseOnlyFavorites, setExerciseOnlyFavorites] = React.useState(false);
     const [selectedLifeExercise, setSelectedLifeExercise] = React.useState(null);
     const [selectedLifeGuide, setSelectedLifeGuide] = React.useState(null);
+    const exerciseEquipmentOptions = React.useMemo(() => ['Todos', ...Array.from(new Set(IRON_EXERCISE_LIBRARY.map(ex => lifeExerciseMeta(ex).equipment).filter(Boolean))).slice(0, 10)], []);
+    const exerciseDifficultyOptions = React.useMemo(() => ['Todas', ...Array.from(new Set(IRON_EXERCISE_LIBRARY.map(ex => lifeExerciseMeta(ex).difficulty).filter(Boolean))).slice(0, 6)], []);
     const lifeExerciseResults = React.useMemo(() => {
         const q = exerciseLibrarySearch.trim();
-        if (q)
-            return lifeSearchExercises(q, exerciseLibraryGroup, IRON_EXERCISE_LIBRARY.length);
-        return IRON_EXERCISE_LIBRARY.filter(ex => lifeExerciseBelongsToGroup(ex, exerciseLibraryGroup));
-    }, [exerciseLibraryGroup, exerciseLibrarySearch]);
+        let results = q ? lifeSearchExercises(q, exerciseLibraryGroup, IRON_EXERCISE_LIBRARY.length) : IRON_EXERCISE_LIBRARY.filter(ex => lifeExerciseBelongsToGroup(ex, exerciseLibraryGroup));
+        if (exerciseLibraryEquipment !== 'Todos') results = results.filter(ex => lifeExerciseMeta(ex).equipment === exerciseLibraryEquipment);
+        if (exerciseLibraryDifficulty !== 'Todas') results = results.filter(ex => lifeExerciseMeta(ex).difficulty === exerciseLibraryDifficulty);
+        if (exerciseOnlyFavorites) { const fav = new Set((lifeFavorites.exercises || []).map(x => String(x.id))); results = results.filter(ex => fav.has(String(ex.id))); }
+        return results;
+    }, [exerciseLibraryGroup, exerciseLibrarySearch, exerciseLibraryEquipment, exerciseLibraryDifficulty, exerciseOnlyFavorites, lifeFavorites]);
     const lifeExerciseSuggestions = React.useMemo(() => lifeSearchExercises(exerciseLibrarySearch, exerciseLibraryGroup, 8), [exerciseLibrarySearch, exerciseLibraryGroup]);
     const lifeExerciseFeatured = React.useMemo(() => LIFE_EXERCISE_POPULAR.slice(0, 3).map(name => IRON_EXERCISE_LIBRARY.find(ex => lifeNormalizeText(ex.name) === lifeNormalizeText(name))).filter(Boolean), []);
     const openExerciseLibrary = (group = 'Todos', query = '') => { setExerciseLibraryGroup(group); setExerciseLibrarySearch(query); setExerciseLibraryLimit(72); setExerciseSearchFocused(false); setFitnessMainTab('Exercícios'); setTimeout(() => { try {
@@ -4688,6 +4909,9 @@ function LifeOSV18() {
     React.useEffect(() => save('life_recents_v4', lifeRecents), [lifeRecents]);
     React.useEffect(() => save('life_pins_v4', lifePins), [lifePins]);
     React.useEffect(() => save('life_activity_v4', lifeActivity), [lifeActivity]);
+    React.useEffect(() => save('life_fitness_weekly_goal_v34', fitnessWeeklyGoal), [fitnessWeeklyGoal]);
+    React.useEffect(() => save('life_fitness_quick_time_v34', fitnessQuickTime), [fitnessQuickTime]);
+    React.useEffect(() => save('life_fitness_quick_energy_v34', fitnessQuickEnergy), [fitnessQuickEnergy]);
     React.useEffect(() => save('life_capture_archive_v1', captureArchive), [captureArchive]);
     React.useEffect(() => save('life_goals_v1', lifeGoals), [lifeGoals]);
     React.useEffect(() => save('life_habits_v1', lifeHabits), [lifeHabits]);
@@ -4890,6 +5114,11 @@ function LifeOSV18() {
             startWorkoutPlayer(r.workout);
             return;
         }
+        if (r.type === 'Exercício' && r.exercise) {
+            v42Go('Fitness');
+            setTimeout(() => openExerciseDetail(r.exercise), 180);
+            return;
+        }
         v42Go(r.go || r.title || 'Hoje');
     };
     const openLifeRecipe = (r) => {
@@ -4902,7 +5131,7 @@ function LifeOSV18() {
     const startWorkoutPlayer = (w) => {
         if (!w)
             return;
-        const normalized = { ...w, moves: (w.moves || w.items || []).map(x => typeof x === 'string' ? x : (x?.t || x?.d || 'Exercício')) };
+        const normalized = { ...w, startedAt: Date.now(), moves: (w.moves || w.items || []).map(x => typeof x === 'string' ? x : (x?.t || x?.d || 'Exercício')) };
         if (!normalized.moves.length)
             return;
         setActiveWorkout(normalized);
@@ -4951,7 +5180,12 @@ function LifeOSV18() {
             setWorkoutRestRunning(true);
         }
         else {
+            const finishedAt = Date.now();
+            const durationMin = Math.max(1, Math.round((finishedAt - Number(activeWorkout.startedAt || finishedAt)) / 60000));
             logLifeActivity('FITNESS', 'Concluiu ' + activeWorkout.name, 'Fitness', 'Sessão concluída');
+            setFitnessSessionReview({ id: finishedAt, name: activeWorkout.name, date: new Date(finishedAt).toISOString(), durationMin });
+            setFitnessSessionFeel('Boa');
+            setFitnessSessionNote('');
             setActiveWorkout(null);
             setWorkoutRestRunning(false);
             setWorkoutRestSeconds(0);
@@ -4967,6 +5201,23 @@ function LifeOSV18() {
         setWorkoutSetIndex(1);
         setWorkoutRestRunning(false);
         setWorkoutRestSeconds(0);
+    };
+    const swapCurrentWorkoutExercise = () => {
+        if (!activeWorkout || !currentWorkoutExercise)
+            return;
+        const alternatives = lifeExerciseAlternatives(currentWorkoutExercise);
+        if (!alternatives.length) {
+            setToast('NENHUMA ALTERNATIVA PRÓXIMA ENCONTRADA');
+            setTimeout(() => setToast(''), 1400);
+            return;
+        }
+        const alt = alternatives[0];
+        setActiveWorkout(prev => ({ ...prev, moves: (prev.moves || []).map((m, i) => i === workoutExerciseIndex ? alt.name : m) }));
+        setWorkoutSetIndex(1);
+        setWorkoutRestSeconds(0);
+        setWorkoutRestRunning(false);
+        setToast('EXERCÍCIO TROCADO POR ' + alt.name.toUpperCase());
+        setTimeout(() => setToast(''), 1700);
     };
     const favoriteCount = Object.values(lifeFavorites).reduce((n, a) => n + (Array.isArray(a) ? a.length : 0), 0);
     const parseMoney = (v) => { const n = Number(String(v || '').replace(/\./g, '').replace(',', '.').replace(/[^0-9.-]/g, '')); return Number.isFinite(n) ? n : 0; };
@@ -5190,7 +5441,7 @@ function LifeOSV18() {
     const [legalOpen, setLegalOpen] = React.useState(null);
     const [supportOpen, setSupportOpen] = React.useState(false);
     const [dangerOpen, setDangerOpen] = React.useState(false);
-    const lifeBuild = '3.3.0';
+    const lifeBuild = '4.0.0';
     const lifeDiagnostics = () => ({
         build: lifeBuild,
         plan: effectivePlan || realPlan || 'FREE',
@@ -6200,6 +6451,49 @@ function LifeOSV18() {
         requestAnimationFrame(() => setTimeout(() => document.querySelector('.v48-workout-preview')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60));
     };
     const curatedVisiblePrograms = curatedWorkoutTemplates.filter(w => v32Workout === 'Todos' || w.type === v32Workout).filter(w => !w.minimumAge || trainingAge >= w.minimumAge).slice(0, 6);
+    const fitnessCompletedActivity = lifeActivity.filter(a => {
+        const text = String((a.type || '') + ' ' + (a.title || '') + ' ' + (a.area || '')).toLowerCase();
+        return /fitness|treino|atividade/.test(text) && /concluiu|registrou/.test(text);
+    });
+    const fitnessSessionDayKey = (value) => { const d = new Date(value); if (Number.isNaN(d.getTime())) return ''; return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+    const fitnessNow = new Date();
+    const fitnessToday = new Date(fitnessNow.getFullYear(), fitnessNow.getMonth(), fitnessNow.getDate());
+    const fitnessLast7Start = new Date(fitnessToday.getTime() - 6 * 86400000);
+    const fitnessLast30Start = new Date(fitnessToday.getTime() - 29 * 86400000);
+    const fitnessCompleted7 = fitnessCompletedActivity.filter(a => new Date(a.date) >= fitnessLast7Start);
+    const fitnessCompleted30 = fitnessCompletedActivity.filter(a => new Date(a.date) >= fitnessLast30Start);
+    const fitnessActiveDays7 = new Set(fitnessCompleted7.map(a => fitnessSessionDayKey(a.date)).filter(Boolean));
+    const fitnessActiveDays30 = new Set(fitnessCompleted30.map(a => fitnessSessionDayKey(a.date)).filter(Boolean));
+    const fitnessWeekDays = Array.from({ length: 7 }, (_, i) => { const d = new Date(fitnessLast7Start.getTime() + i * 86400000); const key = fitnessSessionDayKey(d); return { key, label: ['D','S','T','Q','Q','S','S'][d.getDay()], date: d.getDate(), done: fitnessActiveDays7.has(key), today: key === fitnessSessionDayKey(fitnessToday) }; });
+    const fitnessGoalProgress = Math.min(100, Math.round((fitnessActiveDays7.size / Math.max(1, fitnessWeeklyGoal)) * 100));
+    const fitnessLastSession = fitnessCompletedActivity[0] || null;
+    const fitnessRecoverySoreness = load('life_fit_soreness_v35', 'Baixa');
+    const fitnessRecoverySleep = load('life_fit_sleep_v35', 'Boa');
+    const fitnessNeedsLighterDay = fitnessQuickEnergy === 'Baixa' || fitnessRecoverySoreness === 'Alta' || fitnessRecoverySleep === 'Ruim';
+    const fitnessRecommendedSaved = fitnessNeedsLighterDay ? null : (savedCustomWorkouts[0] || null);
+    const fitnessPreferredType = fitnessNeedsLighterDay ? 'Mobilidade' : fitnessQuickEnergy === 'Alta' ? 'Força' : (fitnessQuickTime <= 25 ? 'Condicionamento' : 'Hipertrofia');
+    const fitnessRecommendedTemplate = curatedWorkoutTemplates.find(w => w.type === fitnessPreferredType && (!w.minimumAge || trainingAge >= w.minimumAge)) || curatedWorkoutTemplates.find(w => !w.minimumAge || trainingAge >= w.minimumAge) || null;
+    const fitnessRecommendationTitle = fitnessRecommendedSaved ? fitnessRecommendedSaved.name : (fitnessRecommendedTemplate?.name || 'Escolher um treino');
+    const fitnessRecommendationMeta = fitnessRecommendedSaved ? 'SALVO · ' + ((fitnessRecommendedSaved.items?.length || 0) + ' dias') : ((fitnessRecommendedTemplate?.type || 'Fitness') + ' · cerca de ' + fitnessQuickTime + ' min disponíveis');
+    const openFitnessRecommendation = () => {
+        if (fitnessRecommendedSaved) { setSelectedCustomWorkout(fitnessRecommendedSaved); openAdvancedArea('Fitness', () => setFitnessMainTab('Treinos'), 'TREINO DE HOJE'); return; }
+        if (fitnessRecommendedTemplate) { setSelectedCustomWorkout(temporaryWorkoutFromTemplate(fitnessRecommendedTemplate)); openAdvancedArea('Fitness', () => setFitnessMainTab('Treinos'), 'TREINO RECOMENDADO'); return; }
+        openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); setShowFitnessLibrary(true); }, 'TREINOS PRONTOS');
+    };
+    const fitnessBadges = [
+        { target: 1, icon: 'flag', title: 'Primeiro treino', desc: 'Concluir a primeira sessão.' },
+        { target: 3, icon: 'local_fire_department', title: 'Semana ativa', desc: 'Registrar 3 sessões.' },
+        { target: 5, icon: 'route', title: 'Ritmo começando', desc: 'Chegar a 5 sessões registradas.' },
+        { target: 10, icon: 'military_tech', title: 'Ritmo consistente', desc: 'Chegar a 10 sessões.' },
+        { target: 20, icon: 'calendar_month', title: 'Rotina construída', desc: 'Chegar a 20 sessões ao longo do tempo.' },
+        { target: 35, icon: 'workspace_premium', title: 'Base sólida', desc: 'Chegar a 35 sessões sem prazo obrigatório.' },
+        { target: 50, icon: 'verified', title: 'Histórico forte', desc: 'Registrar 50 sessões ao longo da jornada.' },
+        { target: 100, icon: 'stars', title: 'Longo prazo', desc: 'Chegar a 100 sessões acumuladas, sem exigência de sequência.' }
+    ];
+    const fitnessUnlockedBadges = fitnessBadges.filter(b => fitnessCompletedActivity.length >= b.target);
+    const fitnessNextBadge = fitnessBadges.find(b => fitnessCompletedActivity.length < b.target) || fitnessBadges[fitnessBadges.length - 1];
+    const fitnessHeatmap = Array.from({ length: 28 }, (_, i) => { const d = new Date(fitnessToday.getTime() - (27 - i) * 86400000); const key = fitnessSessionDayKey(d); return { key, done: fitnessCompletedActivity.some(a => fitnessSessionDayKey(a.date) === key), title: d.toLocaleDateString('pt-BR') }; });
+    const fitnessFavoriteExercises = (lifeFavorites.exercises || []).map(x => x.exercise).filter(Boolean).slice(0, 12);
     const foodCollections = [
         { title: 'Rápidas', sub: 'Poucos passos para dias corridos.', filter: 'Rápida' },
         { title: 'Proteicas', sub: 'Receitas com fontes de proteína.', filter: 'Rica em proteína' },
@@ -6226,6 +6520,7 @@ function LifeOSV18() {
     ].filter(Boolean).slice(0, 3);
     const days = [];
     const currentWorkoutPrescription = activeWorkout ? (activeWorkout.prescription?.[workoutExerciseIndex] || { sets: 3, reps: '8–12', rest: 90 }) : null;
+    const currentWorkoutExercise = activeWorkout ? IRON_EXERCISE_LIBRARY.find(ex => lifeNormalizeText(ex.name) === lifeNormalizeText(activeWorkout.moves?.[workoutExerciseIndex] || '')) : null;
     if (lifeAccess === 'checking') {
         return React.createElement("div", { style: { minHeight: '100vh', background: '#050505', display: 'grid', placeItems: 'center', color: '#fff', fontFamily: 'Inter, sans-serif' } },
             React.createElement("div", { style: { fontSize: 12, letterSpacing: 3, opacity: .55 } }, "LIFE."));
@@ -6256,63 +6551,103 @@ function LifeOSV18() {
     const renderLifeSimpleArea = () => {
         const openTasks = tasks.filter(t => !taskIsDone(t));
         const list = (items, emptyText = 'Nada aqui ainda.') => React.createElement("div", { className: "life-simple-list" },
-            items && items.length ? items.map((item, i) => React.createElement("button", { type: "button", className: "life-simple-row", key: item.key || item.id || i, onClick: item.onClick || null },
-                React.createElement("span", { className: "life-simple-row-index" }, String(i + 1).padStart(2, '0')),
-                React.createElement("span", { className: "life-simple-row-copy" }, React.createElement("b", null, item.title), item.meta && React.createElement("small", null, item.meta)),
-                item.onClick && React.createElement("span", { className: "material-symbols-rounded" }, "chevron_right"))) : React.createElement("div", { className: "life-simple-empty" }, emptyText));
+            items && items.length ? items.map((item, i) => {
+                const interactive = typeof item.onClick === 'function';
+                const content = [
+                    React.createElement("span", { className: "life-simple-row-index", key: 'i' }, String(i + 1).padStart(2, '0')),
+                    React.createElement("span", { className: "life-simple-row-copy", key: 'c' }, React.createElement("b", null, item.title), item.meta && React.createElement("small", null, item.meta)),
+                    interactive && React.createElement("span", { className: "material-symbols-rounded", key: 'a' }, "chevron_right")
+                ];
+                return interactive ? React.createElement("button", { type: "button", className: "life-simple-row is-interactive", key: item.key || item.id || i, onClick: item.onClick }, content) : React.createElement("div", { className: "life-simple-row is-static", key: item.key || item.id || i }, content);
+            }) : React.createElement("div", { className: "life-simple-empty" }, emptyText));
         if (view === 'Tarefas') {
-            const items = openTasks.slice(0, 5).map(t => ({ id: t.id, title: t.text || t.title || 'Tarefa', meta: [t.priority, lifeTaskStatusV4(t)].filter(Boolean).join(' · '), onClick: () => { setSelectedTaskId(t.id); openAdvancedArea('Tarefas'); } }));
-            return React.createElement(LifeSimpleShell, { icon: 'checklist', eyebrow: 'LIFE / ORGANIZAR', title: 'Tarefas.', description: openTasks.length ? openTasks.length + ' pendência(s). Veja só o que precisa da sua atenção e abra as ferramentas quando quiser organizar mais.' : 'Sua lista está limpa. Adicione algo somente quando realmente precisar.', primaryLabel: 'NOVA TAREFA', primaryDesc: 'Crie uma ação com prazo, prioridade e contexto quando precisar.', onPrimary: () => openAdvancedArea('Tarefas', null, 'NOVA TAREFA'), secondaryLabel: 'VER FERRAMENTAS', secondaryDesc: 'Abra projetos, filtros, agenda e organização avançada.', onSecondary: () => openAdvancedArea('Tarefas', null, 'ORGANIZAR TAREFAS') }, list(items, 'Nenhuma tarefa pendente.'));
+            const todayTasks = openTasks.filter(t => ['Hoje','Atrasada'].includes(lifeTaskStatusV4(t)));
+            const weekTasks = openTasks.filter(t => ['Hoje','7 dias','Atrasada'].includes(lifeTaskStatusV4(t)));
+            const overdue = openTasks.filter(t => lifeTaskStatusV4(t) === 'Atrasada');
+            const completed = tasks.filter(taskIsDone).length;
+            const completion = tasks.length ? Math.round(completed / tasks.length * 100) : 0;
+            const priority = [...todayTasks].sort((a,b) => ({Alta:0,Normal:1,Baixa:2}[a.priority]??1)-({Alta:0,Normal:1,Baixa:2}[b.priority]??1)).slice(0,6);
+            return React.createElement(LifeApp36, { area:'Tarefas', icon:'checklist', kicker:'LIFE / EXECUÇÃO', title:'Organize. Faça. Termine.', subtitle:'Uma central de execução para transformar pendências em próximas ações claras — sem deixar sua lista virar um depósito de coisas.', metrics:[
+                    {label:'HOJE', value:todayTasks.length, note:'itens que pedem atenção agora'},
+                    {label:'7 DIAS', value:weekTasks.length, note:'janela curta de execução'},
+                    {label:'PROJETOS', value:projects.length, note:'frentes em andamento'},
+                    {label:'CONCLUÍDO', value:completion+'%', note:'do histórico registrado'}],
+                    primary:{label:'＋ NOVA TAREFA',onClick:()=>openAdvancedArea('Tarefas',null,'NOVA TAREFA')},
+                    secondary:{label:'PLANEJAR MEU DIA',onClick:()=>setDayPlannerOpen(true)} },
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'AGORA',title:todayTasks.length?'O que merece sair da frente.':'Nada urgente por enquanto.',text:overdue.length?overdue.length+' item(ns) estão atrasados; revise sem transformar atraso em culpa.':'Priorize poucas ações e mantenha espaço para imprevistos.',action:{label:'VER ORGANIZAÇÃO →',onClick:()=>openAdvancedArea('Tarefas',null,'CENTRAL DE TAREFAS')}},
+                        React.createElement(LifeApp36List,{items:priority.map(t=>({id:t.id,title:t.text||t.title||'Tarefa',meta:[t.priority,lifeTaskStatusV4(t),t.duration? t.duration+' min':null].filter(Boolean).join(' · '),onClick:()=>{setSelectedTaskId(t.id);openAdvancedArea('Tarefas',null,'DETALHES DA TAREFA')}})),empty:'Sua lista de hoje está limpa. Use “Nova tarefa” somente quando existir uma ação real.'})),
+                    React.createElement(LifeApp36Panel,{eyebrow:'FERRAMENTAS',title:'Seu sistema de execução.',text:'Abra só a ferramenta necessária para a situação atual.'},
+                        React.createElement(LifeApp36Actions,{items:[
+                            {icon:'inbox',title:'Caixa de entrada',text:(inbox.length||0)+' captura(s) esperando decisão.',label:'PROCESSAR →',onClick:()=>setSheet('inbox')},
+                            {icon:'folder_open',title:'Projetos',text:'Quebre resultados maiores em etapas e próximas ações.',label:'ABRIR →',onClick:()=>openAdvancedArea('Tarefas',null,'PROJETOS')},
+                            {icon:'calendar_month',title:'Planejar o dia',text:'Monte uma sequência realista usando tempo e energia disponíveis.',label:'PLANEJAR →',onClick:()=>setDayPlannerOpen(true)},
+                            {icon:'rate_review',title:'Revisão semanal',text:'Limpe pendências, escolha prioridades e recupere clareza.',label:'REVISAR →',onClick:()=>setWeeklyReviewOpen(true)}]}))),
+                React.createElement('div',{style:{marginTop:10}},React.createElement(LifeApp36AI,{title:'LIFE AI · organizar sem sobrecarregar',text:'Peça para priorizar suas tarefas, quebrar uma pendência grande ou montar um plano realista para hoje.',onClick:()=>{setAiOriginView('Tarefas');setAiQuickOpen(true);setTimeout(()=>submitLifeAI('Analise minhas tarefas abertas e me ajude a escolher as próximas ações mais claras e realistas para hoje. Não altere nada sem confirmação.'),30)}})));
         }
         if (view === 'Notas') {
-            const recent = v49Notes.slice(0, 4).map(n => ({ id: n.id, title: n.text, meta: n.date }));
-            return React.createElement(LifeSimpleShell, { icon: 'edit_note', eyebrow: 'LIFE / NOTAS', title: 'Anotações.', description: 'Capture rápido. Organize depois, só quando for necessário.', primaryLabel: 'SALVAR NOTA', primaryDesc: 'Guarde rapidamente uma ideia ou informação sem sair desta tela.', onPrimary: v49AddNote, secondaryLabel: 'BUSCAR E ORGANIZAR', secondaryDesc: 'Pesquise, revise e organize todas as anotações salvas.', onSecondary: () => openAdvancedArea('Notas', null, 'ORGANIZAR NOTAS') },
-                React.createElement("div", { className: "life-simple-note" }, React.createElement("textarea", { value: v49Note, onChange: e => setV49Note(e.target.value), placeholder: 'Escreva alguma coisa…' }), list(recent, 'Nenhuma anotação ainda.')));
+            const now=Date.now(), week=7*86400000;
+            const recentWeek=v49Notes.filter(n=>{const d=new Date(n.createdAt||n.date||0).getTime();return Number.isFinite(d)&&now-d<=week;});
+            const lastNote=v49Notes[0]||null;
+            return React.createElement(LifeApp36,{area:'Notas',icon:'edit_note',kicker:'LIFE / SEGUNDO CÉREBRO',title:'Capture antes de esquecer.',subtitle:'Notas rápidas para ideias, informações e referências. Você registra primeiro e decide depois se aquilo vira tarefa, projeto ou estudo.',metrics:[
+                    {label:'NOTAS',value:v49Notes.length,note:'itens guardados'},
+                    {label:'7 DIAS',value:recentWeek.length,note:'capturas recentes'},
+                    {label:'BUSCA',value:noteSearch?'ATIVA':'PRONTA',note:'encontre qualquer texto'},
+                    {label:'ÚLTIMA',value:lastNote?'SALVA':'—',note:lastNote?String(lastNote.text||'').slice(0,32):'nenhuma nota ainda'}],
+                    primary:{label:'BUSCAR E ORGANIZAR',onClick:()=>openAdvancedArea('Notas',null,'CENTRAL DE NOTAS')},secondary:{label:'ABRIR BIBLIOTECA',onClick:()=>v42Go('Biblioteca')}},
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'CAPTURA RÁPIDA',title:'Tire da cabeça.',text:'Escreva sem se preocupar em classificar agora.'},
+                        React.createElement('div',{className:'life-app36-compose'},React.createElement('textarea',{value:v49Note,onChange:e=>setV49Note(e.target.value),placeholder:'Uma ideia, referência, lembrete ou pensamento…'}),React.createElement('div',{className:'life-app36-compose-foot'},React.createElement('span',null,'Você pode organizar depois.'),React.createElement('button',{type:'button',className:'life-app36-inline-button primary',onClick:v49AddNote},'SALVAR NOTA')))),
+                    React.createElement(LifeApp36Panel,{eyebrow:'TRANSFORMAR',title:'Uma nota pode virar ação.',text:lastNote?'Use a captura mais recente sem copiar e colar.':'Salve uma nota para liberar essas rotas.'},
+                        React.createElement(LifeApp36Actions,{items:[
+                            {icon:'check_circle',title:'Virar tarefa',text:'Transforme uma ideia em algo executável.',label:'CRIAR →',disabled:!lastNote,onClick:()=>lastNote&&noteToTask(lastNote)},
+                            {icon:'account_tree',title:'Virar projeto',text:'Quando a nota representa um resultado maior.',label:'CRIAR →',disabled:!lastNote,onClick:()=>lastNote&&noteToProject(lastNote)},
+                            {icon:'school',title:'Mandar para Estudos',text:'Crie uma próxima ação de estudo a partir da nota.',label:'ENVIAR →',disabled:!lastNote,onClick:()=>lastNote&&noteToStudy(lastNote)},
+                            {icon:'auto_awesome',title:'Pensar com IA',text:'Use a nota como contexto para decidir o próximo passo.',label:'PERGUNTAR →',disabled:!lastNote,onClick:()=>lastNote&&askAboutNote(lastNote)}]}))),
+                React.createElement('div',{style:{marginTop:10}},React.createElement(LifeApp36Panel,{eyebrow:'RECENTES',title:'Continue de onde sua cabeça parou.',action:{label:'VER TODAS →',onClick:()=>openAdvancedArea('Notas',null,'TODAS AS NOTAS')}},React.createElement(LifeApp36List,{items:v49Notes.slice(0,6).map(n=>({id:n.id,title:String(n.text||'Nota').slice(0,100),meta:n.date||'Nota LIFE',onClick:()=>openAdvancedArea('Notas',null,'NOTAS')})),empty:'Sua primeira nota aparece aqui.'}))));
         }
         if (view === 'IA') {
-            const msgs = aiMessages.slice(-12);
-            return React.createElement("main", { className: "life-ai-simple-page" },
-                React.createElement("header", { className: "life-ai-simple-head" },
-                    React.createElement("small", null, "LIFE / INTELIGÊNCIA ARTIFICIAL"),
-                    React.createElement("h1", null, "LIFE AI."),
-                    React.createElement("p", null, "Converse como em um chat normal. A LIFE AI pode usar, quando relevante, tarefas, estudos, clima, treinos, finanças e outras áreas do LIFE para explicar, organizar e te levar até a função certa.")),
-                React.createElement("div", { className: "life-ai-context-links" },
-                    React.createElement("button", { type: "button", className: lifeWeather?.current ? 'on' : '', onClick: () => setSheet('weather') }, "CLIMA · " + (lifeWeather?.current ? Math.round(lifeWeather.current.temperature_2m) + '°' : 'CONECTAR')),
-                    React.createElement("button", { type: "button", className: openTasks.length ? 'on' : '', onClick: () => v42Go('Tarefas') }, "TAREFAS · " + openTasks.length),
-                    React.createElement("button", { type: "button", onClick: () => v42Go('Estudos') }, "ESTUDOS"),
-                    React.createElement("button", { type: "button", onClick: () => v42Go('Fitness') }, "FITNESS"),
-                    React.createElement("button", { type: "button", onClick: () => v42Go('Finanças') }, "FINANÇAS")),
-                React.createElement("section", { className: "life-ai-simple-thread" },
-                    msgs.length ? msgs.map((m, i) => React.createElement("article", { className: 'life-ai-simple-message ' + (m.role === 'user' ? 'user' : 'assistant'), key: m.id || i },
-                        React.createElement("div", { className: "life-ai-simple-avatar" }, m.role === 'user' ? 'V' : '✦'),
-                        React.createElement("div", { className: "life-ai-simple-bubble" },
-                            React.createElement("small", null, m.role === 'user' ? 'VOCÊ' : 'LIFE AI'),
-                            React.createElement("p", null, m.text || m.content || ''),
-                            m.cards?.length > 0 && React.createElement("div", { className: "life-ai-simple-cards" }, m.cards.slice(0, 3).map(c => React.createElement("button", { type: "button", key: c.type + ':' + c.id, onClick: () => { if (c.type === 'workout') { v42Go('Fitness'); setTimeout(() => openLifeWorkout(c.data), 240); } else if (c.type === 'guide') { v42Go(c.data?.area || 'Estudos'); setTimeout(() => setSelectedLifeGuide(c.data), 240); } else { v42Go('Receitas'); setTimeout(() => openLifeRecipe(c.data), 240); } } }, React.createElement("b", null, c.title), React.createElement("span", null, c.meta || (c.type === 'guide' ? 'Abrir guia' : 'Abrir no LIFE')))))))) : React.createElement("div", { className: "life-ai-simple-empty" },
-                        React.createElement("span", { className: "material-symbols-rounded" }, "auto_awesome"),
-                        React.createElement("h2", null, "Como posso ajudar agora?"),
-                        React.createElement("p", null, "Você pode perguntar sobre seu dia, pedir ajuda para estudar, organizar um treino, entender seus gastos, conferir o clima ou simplesmente perguntar onde fica uma função do LIFE."),
-                        React.createElement("div", { className: "life-ai-simple-suggestions" }, ['Organize meu dia', 'O que devo estudar agora?', 'Onde vejo meus treinos?', 'Como está o clima?'].map(x => React.createElement("button", { type: "button", key: x, onClick: () => submitLifeAI(x) }, x)))),
-                    aiBusy && React.createElement("div", { className: "life-ai-thinking compact" }, React.createElement("i", null), React.createElement("i", null), React.createElement("i", null))),
-                React.createElement("div", { className: "life-ai-simple-compose-wrap" },
-                    React.createElement("div", { className: "life-ai-simple-compose" },
-                        React.createElement("textarea", { value: aiInput, onChange: e => setAiInput(e.target.value), onKeyDown: e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitLifeAI(aiInput); } }, placeholder: "Mensagem para LIFE AI…" }),
-                        React.createElement("button", { type: "button", onClick: () => submitLifeAI(aiInput), disabled: !aiInput.trim() || aiBusy, "aria-label": "Enviar mensagem" }, React.createElement("span", { className: "material-symbols-rounded" }, "arrow_upward"))),
-                    React.createElement("div", { className: "life-ai-simple-foot" },
-                        React.createElement("span", { className: "life-function-desc" }, "A IA só usa o contexto permitido e pede confirmação antes de alterar seus dados."),
-                        React.createElement("button", { type: "button", onClick: () => openAdvancedArea('IA') }, "PLANEJADOR, MEMÓRIA E AÇÕES →"))));
+            const msgs=aiMessages.slice(-18);
+            const contexts=[['Clima',lifeWeather?.current?Math.round(lifeWeather.current.temperature_2m)+'°':'Conectar',()=>setSheet('weather'),!!lifeWeather?.current],['Tarefas',openTasks.length,()=>v42Go('Tarefas'),openTasks.length>0],['Estudos','Contexto',()=>v42Go('Estudos'),true],['Fitness','Contexto',()=>v42Go('Fitness'),true],['Finanças','Contexto',()=>v42Go('Finanças'),financeTransactions.length>0]];
+            const starters=[
+                ['HOJE','Organize meu dia','Use tarefas, compromissos e clima para sugerir uma ordem realista.'],
+                ['ESTUDOS','Tutor contextual','Explique um assunto e diga qual ferramenta do LIFE pode me ajudar.'],
+                ['FITNESS','Coach de sessão','Ajude a escolher o treino usando tempo, energia e histórico.'],
+                ['FINANÇAS','Revisão do mês','Explique meus registros financeiros sem tomar decisões por mim.'],
+                ['LIFE OS','Como funciona?','Explique qualquer área do sistema e me leve até ela.']];
+            return React.createElement('main',{className:'life-ai36-shell'},
+                React.createElement('div',{className:'life-ai36-top'},React.createElement('div',null,React.createElement('small',null,'LIFE / COPILOTO'),React.createElement('h1',null,'LIFE AI.'),React.createElement('p',null,'Um chat conectado ao seu sistema. Ele pode explicar o LIFE, cruzar contexto permitido, organizar informações e encaminhar você para a área certa — sem alterar dados importantes sem confirmação.')),React.createElement('div',{className:'life-ai36-context'},contexts.map((c,i)=>React.createElement('button',{type:'button',className:c[3]?'on':'',key:i,onClick:c[2]},c[0]+' · '+c[1])))),
+                React.createElement('div',{className:'life-ai36-layout'},
+                    React.createElement('section',{className:'life-ai36-chat'},
+                        React.createElement('div',{className:'life-ai36-thread life-ai-simple-thread'},msgs.length?msgs.map((m,i)=>React.createElement('article',{className:'life-ai-simple-message '+(m.role==='user'?'user':'assistant'),key:m.id||i},React.createElement('div',{className:'life-ai-simple-avatar'},m.role==='user'?'V':'✦'),React.createElement('div',{className:'life-ai-simple-bubble'},React.createElement('small',null,m.role==='user'?'VOCÊ':'LIFE AI'),React.createElement('p',null,m.text||m.content||''),m.cards?.length?React.createElement('div',{className:'life-ai-simple-cards'},m.cards.slice(0,3).map(c=>React.createElement('button',{type:'button',key:c.type+':'+c.id,onClick:()=>{if(c.type==='workout'){v42Go('Fitness');setTimeout(()=>openLifeWorkout(c.data),240)}else if(c.type==='guide'){v42Go(c.data?.area||'Estudos');setTimeout(()=>setSelectedLifeGuide(c.data),240)}else{v42Go('Receitas');setTimeout(()=>openLifeRecipe(c.data),240)}}},React.createElement('b',null,c.title),React.createElement('span',null,c.meta||'Abrir no LIFE')))):null))):React.createElement('div',{className:'life-ai-simple-empty'},React.createElement('span',{className:'material-symbols-rounded'},'auto_awesome'),React.createElement('h2',null,'O que você quer resolver?'),React.createElement('p',null,'Fale naturalmente. Se existir uma função melhor em outra área, a LIFE AI pode te direcionar para ela.')),
+                            aiBusy&&React.createElement('div',{className:'life-ai-thinking compact'},React.createElement('i'),React.createElement('i'),React.createElement('i'))),
+                        React.createElement('div',{className:'life-ai-simple-compose-wrap'},React.createElement('div',{className:'life-ai-simple-compose'},React.createElement('textarea',{value:aiInput,onChange:e=>setAiInput(e.target.value),onKeyDown:e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitLifeAI(aiInput)}},placeholder:'Pergunte qualquer coisa sobre seu LIFE…'}),React.createElement('button',{type:'button',onClick:()=>submitLifeAI(aiInput),disabled:!aiInput.trim()||aiBusy,'aria-label':'Enviar'},React.createElement('span',{className:'material-symbols-rounded'},'arrow_upward'))))),
+                    React.createElement('aside',{className:'life-ai36-side'},starters.map((s,i)=>React.createElement('button',{type:'button',key:i,onClick:()=>submitLifeAI(s[1]+'. '+s[2])},React.createElement('small',null,s[0]),React.createElement('b',null,s[1]),React.createElement('span',null,s[2]))),React.createElement('button',{type:'button',onClick:()=>openAdvancedArea('IA',null,'PLANEJADOR, MEMÓRIA E AÇÕES')},React.createElement('small',null,'FERRAMENTAS'),React.createElement('b',null,'Workspace avançado'),React.createElement('span',null,'Planejador, memória permitida, histórico de ações e contexto da IA.')))));
         }
         if (view === 'Estudos') {
-            const studies = openTasks.filter(t => t.category === 'Estudos');
-            const next = studies[0];
-            return React.createElement(LifeSimpleShell, { icon: 'school', eyebrow: 'LIFE / ESTUDOS', title: 'Estudos.', description: 'Comece pelo que precisa fazer. Ferramentas específicas ficam separadas para você não se perder.' },
-                React.createElement("div", { className: "life-function-grid life-study-home-grid" },
-                    React.createElement(LifeFunctionCard, { className: 'life-study-guide-card', icon: 'account_tree', title: 'Guia de estudos', description: 'Responda um formulário e receba uma árvore cronológica detalhada do assunto, com etapas, critérios de avanço, livros, professores/canais e buscas de vídeos no YouTube.', actionLabel: 'CRIAR OU ABRIR GUIA →', onClick: () => v42Go('Guia de Estudos') }),
-                    React.createElement(LifeFunctionCard, { icon: 'timer', title: next ? 'Continuar estudo' : 'Sessão de foco', description: next ? 'Abra o próximo conteúdo pendente e concentre a sessão em uma única tarefa.' : 'Abra um cronômetro de foco e escolha exatamente o conteúdo que vai estudar.', actionLabel: next ? 'INICIAR AGORA →' : 'ABRIR FOCO →', onClick: () => { setV60FocusLabel(next?.text || next?.title || 'Sessão de estudo'); setV60Focus(true); } }),
-                    React.createElement(LifeFunctionCard, { icon: 'fact_check', title: 'Ferramentas de estudo', description: 'Caderno de erros, revisão, redação, questões e mapa de conhecimento ficam organizados aqui.', actionLabel: 'VER FERRAMENTAS →', onClick: () => openAdvancedArea('Estudos', null, 'FERRAMENTAS DE ESTUDO') })),
-                React.createElement("div", { className: "life-folder" },
-                    React.createElement("div", { className: "life-folder-head" }, React.createElement("div", null, React.createElement("small", null, "PRÓXIMOS ESTUDOS"), React.createElement("h3", null, studies.length ? studies.length + ' pendente(s)' : 'Nenhum pendente')), React.createElement("span", { className: "life-function-desc" }, "Tarefas marcadas como Estudos aparecem aqui.")),
-                    list(studies.slice(0, 4).map(t => ({ id: t.id, title: t.text || t.title, meta: lifeTaskStatusV4(t), onClick: () => { setSelectedTaskId(t.id); openAdvancedArea('Estudos'); } })), 'Quando você criar uma tarefa de estudo, ela aparecerá aqui.')));
+            const studies=openTasks.filter(t=>t.category==='Estudos');
+            const plan=lifeLocalGet('life_study_plan_v2',null);
+            const reviews=lifeLocalGet('life_study_reviews_v3',[]);
+            const errors=lifeLocalGet('life_study_errors_v3',[]);
+            const cards=lifeLocalGet('life_study_cards_v3',[]);
+            const progress=plan?.timeline?.length?Math.round(((plan.completedStages||[]).length/plan.timeline.length)*100):0;
+            const focus30=lifeActivity.filter(a=>Date.now()-new Date(a.date).getTime()<=30*86400000&&/estud|foco|revis/i.test((a.type||'')+' '+(a.title||''))).length;
+            const nextStage=plan?.timeline?.find(x=>!(plan.completedStages||[]).includes(x.index));
+            return React.createElement(LifeApp36,{area:'Estudos',icon:'school',kicker:'LIFE / STUDY OS',title:'Aprender com direção.',subtitle:'Um sistema de estudos completo: trilha, foco, revisão, erros, prática e recursos. Você sempre deve conseguir responder “o que estudo agora?” sem se perder.',metrics:[
+                    {label:'TRILHA',value:plan?progress+'%':'NOVA',note:plan?plan.topic:'crie um guia personalizado'},
+                    {label:'PENDENTES',value:studies.length,note:'tarefas marcadas como Estudos'},
+                    {label:'REVISÕES',value:reviews.length,note:'itens na memória de revisão'},
+                    {label:'FOCO · 30D',value:focus30,note:'registros de estudo/foco'}],
+                    primary:{label:nextStage?'▶ CONTINUAR '+String(nextStage.title).toUpperCase():'CRIAR GUIA DE ESTUDOS',onClick:()=>nextStage?(setV60FocusLabel((plan?.topic||'Estudo')+' · '+nextStage.title),setV60Focus(true)):v42Go('Guia de Estudos')},
+                    secondary:{label:'ABRIR STUDY ENGINE',onClick:()=>openAdvancedArea('Estudos',null,'STUDY ENGINE')}},
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'PRÓXIMO PASSO',title:nextStage?nextStage.title:(studies[0]?.text||'Escolha o que quer aprender.'),text:plan?('Trilha: '+plan.topic+' · '+progress+'% concluída'):'O Guia de Estudos monta a ordem cronológica e os critérios para avançar.'},React.createElement(LifeApp36List,{items:studies.slice(0,5).map(t=>({id:t.id,title:t.text||t.title,meta:[lifeTaskStatusV4(t),t.duration?t.duration+' min':null].filter(Boolean).join(' · '),onClick:()=>{setSelectedTaskId(t.id);openAdvancedArea('Estudos',null,'ESTUDO')}})),empty:'Nenhuma tarefa de estudo pendente.'})),
+                    React.createElement(LifeApp36Panel,{eyebrow:'MOTOR DE APRENDIZAGEM',title:'Ferramentas que fecham o ciclo.',text:'Planejar → estudar → testar → revisar → consolidar.'},React.createElement(LifeApp36Actions,{items:[
+                        {icon:'account_tree',title:'Guia de estudos',text:'Árvore cronológica com etapas, materiais e critérios de avanço.',label:'ABRIR →',onClick:()=>v42Go('Guia de Estudos')},
+                        {icon:'timer',title:'Foco',text:'Abra uma sessão dedicada para o conteúdo atual.',label:'INICIAR →',onClick:()=>{setV60FocusLabel(nextStage?.title||studies[0]?.text||'Sessão de estudo');setV60Focus(true)}},
+                        {icon:'fact_check',title:'Caderno de erros',text:errors.length+' erro(s) registrados para transformar em revisão.',label:'REVISAR →',onClick:()=>openAdvancedArea('Estudos',null,'CADERNO DE ERROS')},
+                        {icon:'style',title:'Flashcards & revisão',text:cards.length+' cartão(ões) · '+reviews.length+' revisão(ões).',label:'ABRIR →',onClick:()=>openAdvancedArea('Estudos',null,'REVISÕES E FLASHCARDS')}]}))),
+                React.createElement('div',{style:{marginTop:10}},React.createElement(LifeApp36AI,{title:'LIFE AI · tutor contextual',text:'Peça uma explicação, uma sequência de exercícios ou ajuda para decidir se você já pode avançar na trilha.',onClick:()=>{setAiOriginView('Estudos');setAiQuickOpen(true);setTimeout(()=>submitLifeAI(nextStage?'Me ajude a estudar a próxima etapa da minha trilha: '+nextStage.title+'. Explique, dê exemplos e proponha uma prática curta.':'Me ajude a escolher o que estudar e criar uma ordem realista.'),30)}})));
         }
         if (view === 'Guia de Estudos') {
             return React.createElement("main", { className: "life-guide-page" },
@@ -6324,111 +6659,248 @@ function LifeOSV18() {
                 React.createElement(LifeStudyArchitect, { autoStart: true, hasPro: hasV18Pro, onUpgrade: openLifePro, onAsk: (prompt) => { setAiOriginView('Estudos'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); }, onStartFocus: (label) => { setV60FocusLabel(label); setV60Focus(true); } }));
         }
         if (view === 'Fitness') {
-            const mine = savedCustomWorkouts.slice(0, 8);
-            return React.createElement(LifeSimpleShell, { icon: 'fitness_center', eyebrow: 'LIFE / FITNESS', title: 'Fitness.', description: 'Escolha exatamente o que quer fazer. Nada de biblioteca, personalização e histórico misturados na mesma tela.' },
-                React.createElement("div", { className: "life-function-grid" },
-                    React.createElement(LifeFunctionCard, { icon: 'view_list', title: 'Escolher treino pronto', description: 'Abra a coleção de treinos prontos e escolha por objetivo, experiência e disponibilidade.', actionLabel: 'VER TREINOS PRONTOS →', onClick: () => openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); setShowFitnessLibrary(true); }, 'TREINOS PRONTOS') }),
-                    React.createElement(LifeFunctionCard, { icon: 'tune', title: 'Fazer meu treino personalizado', description: 'Responda às perguntas sobre rotina, dias e experiência para o LIFE estruturar um treino para você.', actionLabel: hasV18Pro ? 'CRIAR MEU TREINO →' : 'RECURSO PRO →', onClick: () => { if (!hasV18Pro) { openLifePro('treino_personalizado'); return; } openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); setPersonalFlow('training'); setPfStep(0); setPfAnswers({}); setPfPlan(null); setPfPlanName(''); }, 'TREINO PERSONALIZADO'); } }),
-                    React.createElement(LifeFunctionCard, { icon: 'exercise', title: 'Biblioteca de exercícios', description: 'Pesquise exercícios por grupo muscular e abra técnica, tutorial, erros comuns e vídeo quando disponível.', actionLabel: 'ABRIR BIBLIOTECA →', onClick: () => openAdvancedArea('Fitness', () => { setFitnessMainTab('Exercícios'); openExerciseLibrary('Todos'); }, 'BIBLIOTECA DE EXERCÍCIOS') })),
-                React.createElement("section", { className: "life-folder" },
+            const mine = savedCustomWorkouts.slice(0, 6);
+            const fitnessRecentRows = fitnessCompletedActivity.slice(0, 3).map(a => ({ id: a.id, title: a.title || 'Sessão registrada', meta: new Date(a.date).toLocaleDateString('pt-BR') }));
+            return React.createElement(LifeSimpleShell, { icon: 'fitness_center', eyebrow: 'LIFE / FITNESS', title: 'Seu Fitness.', description: 'Um painel pessoal para treinar, aprender técnica e acompanhar consistência sem transformar descanso em falha.' },
+                React.createElement("section", { className: "life-fit34-hero" },
+                    React.createElement("div", { className: "life-fit34-hero-main" },
+                        React.createElement("small", null, "TREINO RECOMENDADO AGORA"),
+                        React.createElement("h2", null, fitnessRecommendationTitle),
+                        React.createElement("p", null, fitnessRecommendationMeta),
+                        React.createElement("div", { className: "life-fit34-hero-actions" },
+                            React.createElement("button", { type: "button", className: "primary", onClick: openFitnessRecommendation }, "ABRIR TREINO →"),
+                            React.createElement("button", { type: "button", onClick: () => openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); setShowFitnessLibrary(true); }, 'PROGRAMAS DE TREINO') }, "TROCAR TREINO"))),
+                    React.createElement("div", { className: "life-fit34-ring", style: { '--fit-progress': fitnessGoalProgress + '%' } },
+                        React.createElement("div", null,
+                            React.createElement("b", null, fitnessActiveDays7.size),
+                            React.createElement("span", null, "/", fitnessWeeklyGoal)),
+                        React.createElement("small", null, "SESSÕES / 7 DIAS"))),
+                React.createElement("section", { className: "life-fit34-week" },
+                    React.createElement("div", { className: "life-fit34-section-head" },
+                        React.createElement("div", null, React.createElement("small", null, "RITMO DA SEMANA"), React.createElement("h3", null, fitnessGoalProgress >= 100 ? 'Meta semanal concluída.' : 'Construa ritmo, não perfeição.')),
+                        React.createElement("div", { className: "life-fit34-goal-control" },
+                            React.createElement("button", { type: "button", onClick: () => setFitnessWeeklyGoal(x => Math.max(1, x - 1)), "aria-label": "Diminuir meta semanal" }, "−"),
+                            React.createElement("span", null, fitnessWeeklyGoal, "x/sem"),
+                            React.createElement("button", { type: "button", onClick: () => setFitnessWeeklyGoal(x => Math.min(7, x + 1)), "aria-label": "Aumentar meta semanal" }, "+"))),
+                    React.createElement("div", { className: "life-fit34-days" }, fitnessWeekDays.map(d => React.createElement("div", { key: d.key, className: (d.done ? 'done ' : '') + (d.today ? 'today' : '') },
+                        React.createElement("small", null, d.label),
+                        React.createElement("b", null, d.done ? '✓' : d.date)))),
+                    React.createElement("p", { className: "life-fit34-week-note" }, fitnessLastSession ? 'Última sessão: ' + fitnessLastSession.title + ' · ' + new Date(fitnessLastSession.date).toLocaleDateString('pt-BR') : 'Seu primeiro treino concluído já começa a preencher este histórico.')),
+                React.createElement("section", { className: "life-fit34-checkin" },
+                    React.createElement("div", { className: "life-fit34-section-head" },
+                        React.createElement("div", null, React.createElement("small", null, "CHECK-IN RÁPIDO"), React.createElement("h3", null, "Quanto tempo e energia você tem agora?")),
+                        React.createElement("span", { className: "life-function-desc" }, "O LIFE ajusta a sugestão; não é uma avaliação médica.")),
+                    React.createElement("div", { className: "life-fit34-checkin-row" },
+                        React.createElement("div", null,
+                            React.createElement("span", null, "TEMPO"),
+                            React.createElement("div", { className: "life-fit34-pills" }, [20, 40, 60].map(v => React.createElement("button", { type: "button", className: fitnessQuickTime === v ? 'on' : '', key: v, onClick: () => setFitnessQuickTime(v) }, v + ' min')))),
+                        React.createElement("div", null,
+                            React.createElement("span", null, "ENERGIA"),
+                            React.createElement("div", { className: "life-fit34-pills" }, ['Baixa','Normal','Alta'].map(v => React.createElement("button", { type: "button", className: fitnessQuickEnergy === v ? 'on' : '', key: v, onClick: () => setFitnessQuickEnergy(v) }, v))))),
+                    React.createElement("button", { type: "button", className: "life-fit34-recommend", onClick: openFitnessRecommendation },
+                        React.createElement("span", { className: "material-symbols-rounded" }, "auto_awesome"),
+                        React.createElement("span", null, React.createElement("b", null, "Sugestão atualizada"), React.createElement("small", null, fitnessRecommendationTitle)),
+                        React.createElement("em", null, "ABRIR →"))),
+                React.createElement("section", { className: "life-fit34-actions" },
+                    React.createElement(LifeFunctionCard, { icon: 'view_list', title: 'Programas de treino', description: 'Explore programas por força, hipertrofia, híbrido, condicionamento e mobilidade.', actionLabel: 'EXPLORAR PROGRAMAS →', onClick: () => openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); setShowFitnessLibrary(true); }, 'PROGRAMAS DE TREINO') }),
+                    React.createElement(LifeFunctionCard, { icon: 'tune', title: 'Treino personalizado', description: 'Monte uma semana a partir da sua rotina, dias disponíveis, experiência e ambiente.', actionLabel: hasV18Pro ? 'MONTAR MEU TREINO →' : 'RECURSO PRO →', onClick: () => { if (!hasV18Pro) { openLifePro('treino_personalizado'); return; } openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); setPersonalFlow('training'); setPfStep(0); setPfAnswers({}); setPfPlan(null); setPfPlanName(''); }, 'TREINO PERSONALIZADO'); } }),
+                    React.createElement(LifeFunctionCard, { icon: 'exercise', title: 'Biblioteca de exercícios', description: 'Técnica, execução, erros comuns, grupos musculares e vídeo quando disponível.', actionLabel: 'ABRIR BIBLIOTECA →', onClick: () => openAdvancedArea('Fitness', () => { setFitnessMainTab('Exercícios'); openExerciseLibrary('Todos'); }, 'BIBLIOTECA DE EXERCÍCIOS') })),
+                React.createElement("section", { className: "life-fit34-progress" },
+                    React.createElement("div", { className: "life-fit34-section-head" },
+                        React.createElement("div", null, React.createElement("small", null, "MEU PROGRESSO"), React.createElement("h3", null, "Consistência que dá para enxergar.")),
+                        React.createElement("button", { type: "button", onClick: () => v42Go('Evolução') }, "VER EVOLUÇÃO →")),
+                    React.createElement("div", { className: "life-fit34-stats" },
+                        React.createElement("article", null, React.createElement("b", null, fitnessCompleted30.length), React.createElement("span", null, "sessões / 30 dias")),
+                        React.createElement("article", null, React.createElement("b", null, fitnessActiveDays30.size), React.createElement("span", null, "dias ativos / 30 dias")),
+                        React.createElement("article", null, React.createElement("b", null, savedCustomWorkouts.length), React.createElement("span", null, "treinos salvos"))),
+                    React.createElement("div", { className: "life-fit34-heatmap", "aria-label": "Atividade dos últimos 28 dias" }, fitnessHeatmap.map((d, i) => React.createElement("i", { key: d.key, className: d.done ? 'on' : '', title: d.title }))),
+                    React.createElement("div", { className: "life-fit34-badge-row" },
+                        fitnessUnlockedBadges.slice(-3).map(b => React.createElement("span", { key: b.title, className: "unlocked" }, React.createElement("span", { className: "material-symbols-rounded" }, b.icon), React.createElement("b", null, b.title))),
+                        fitnessCompletedActivity.length < fitnessNextBadge.target && React.createElement("span", { className: "next" }, React.createElement("span", { className: "material-symbols-rounded" }, "lock"), React.createElement("b", null, (fitnessNextBadge.target - fitnessCompletedActivity.length) + ' sessão(ões) para ' + fitnessNextBadge.title)))),
+                React.createElement("section", { className: "life-fit34-paths" },
+                    React.createElement("div", { className: "life-fit34-section-head" }, React.createElement("div", null, React.createElement("small", null, "ESCOLHA UM CAMINHO"), React.createElement("h3", null, "Treine com uma direção clara."))),
+                    React.createElement("div", { className: "life-fit34-path-grid" }, trainingCollections.filter(c => !c.adult || trainingAge >= 18).slice(0, 5).map(c => React.createElement("button", { type: "button", key: c.key, onClick: () => openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); setTimeout(() => openTrainingCollection(c), 40); }, c.title.toUpperCase()) },
+                        React.createElement("small", null, c.type.toUpperCase()),
+                        React.createElement("b", null, c.title),
+                        React.createElement("span", null, c.sub),
+                        React.createElement("em", null, "EXPLORAR →"))))),
+                React.createElement("section", { className: "life-folder life-fit34-mine" },
                     React.createElement("div", { className: "life-folder-head" },
-                        React.createElement("div", null, React.createElement("small", null, "PASTA"), React.createElement("h3", null, "Meus treinos")),
-                        React.createElement("span", { className: "life-function-desc" }, "Treinos que você criou ou salvou ficam guardados aqui.")),
-                    mine.length ? React.createElement("div", { className: "life-folder-list" }, mine.map((w, i) => React.createElement("button", { type: "button", className: "life-folder-row", key: w.id || i, onClick: () => openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); openLifeWorkout(w); }, 'MEUS TREINOS · ' + (w.name || 'TREINO')) },
+                        React.createElement("div", null, React.createElement("small", null, "MINHA PASTA"), React.createElement("h3", null, "Meus treinos")),
+                        React.createElement("span", { className: "life-function-desc" }, mine.length ? mine.length + ' salvo(s)' : 'Salve um programa para ele aparecer aqui.')),
+                    mine.length ? React.createElement("div", { className: "life-folder-list" }, mine.map((w, i) => React.createElement("button", { type: "button", className: "life-folder-row", key: w.id || i, onClick: () => openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); setSelectedCustomWorkout(w); }, 'MEUS TREINOS · ' + (w.name || 'TREINO')) },
                         React.createElement("i", null, React.createElement("span", { className: "material-symbols-rounded" }, "fitness_center")),
                         React.createElement("span", null, React.createElement("b", null, w.name || 'Treino salvo'), React.createElement("small", { className: "life-function-desc" }, (w.items?.length || w.days?.length || 0) + ' bloco(s) · toque para abrir')),
-                        React.createElement("em", null, "ABRIR →")))) : React.createElement("div", { className: "life-folder-empty" }, "Você ainda não salvou nenhum treino. Crie um personalizado ou escolha um pronto para começar.")));
+                        React.createElement("em", null, "ABRIR →")))) : React.createElement("div", { className: "life-folder-empty" }, "Você ainda não salvou nenhum treino.")),
+                fitnessRecentRows.length ? React.createElement("section", { className: "life-fit34-recent" }, React.createElement("div", { className: "life-fit34-section-head" }, React.createElement("div", null, React.createElement("small", null, "ÚLTIMAS SESSÕES"), React.createElement("h3", null, "Seu histórico recente."))), list(fitnessRecentRows, '')) : null);
         }
         if (view === 'Receitas') {
-            const recipeHomeCats = ['Doce', 'Salgada', 'Fitness', 'Café da manhã', 'Lanche', 'Rápida'];
-            const featured = v33Recipes.slice(0, 6);
-            const fav = (lifeFavorites.recipes || []).slice(0, 4).map((r, i) => ({ key: i, title: r.title || r.name || 'Receita favorita', meta: 'Favorita', onClick: r.recipe ? () => openLifeRecipe(r.recipe) : null }));
-            return React.createElement(LifeSimpleShell, { icon: 'restaurant', eyebrow: 'LIFE / RECEITAS', title: 'Receitas.', description: 'Uma biblioteca com 600 receitas entre doces, salgados, opções fitness, lanches, café da manhã e preparos rápidos.', primaryLabel: 'EXPLORAR 600 RECEITAS', primaryDesc: 'Pesquise pelo que quer preparar, ingrediente, ocasião ou tipo.', onPrimary: () => openAdvancedArea('Receitas', null, 'BIBLIOTECA · 600 RECEITAS'), secondaryLabel: 'FAVORITAS E FILTROS', secondaryDesc: 'Abra filtros, coleções e receitas que você já salvou.', onSecondary: () => openAdvancedArea('Receitas', null, 'BIBLIOTECA DE RECEITAS') },
-                React.createElement('section', { className: 'life-recipe-home' },
-                    React.createElement('div', { className: 'life-recipe-home-head' }, React.createElement('div', null, React.createElement('small', null, 'ESCOLHA UMA CATEGORIA'), React.createElement('h3', null, 'O que você quer preparar?')), React.createElement('span', null, v33Recipes.length + ' receitas')),
-                    React.createElement('div', { className: 'life-recipe-home-cats' }, recipeHomeCats.map(cat => React.createElement('button', { type: 'button', key: cat, onClick: () => openAdvancedArea('Receitas', () => { setV35RecipeFilter(cat); setV35RecipeSearch(''); }, 'RECEITAS · ' + cat.toUpperCase()) }, React.createElement('b', null, cat), React.createElement('small', null, v33Recipes.filter(r => (r.tags || [r.cat]).includes(cat)).length + ' opções')))),
-                    React.createElement('div', { className: 'life-recipe-home-featured' }, featured.map(r => React.createElement('button', { type: 'button', key: r.id, onClick: () => openLifeRecipe(r) }, React.createElement('small', null, (r.tags?.[0] || r.cat).toUpperCase()), React.createElement('b', null, r.name), React.createElement('span', null, r.time + ' · ' + r.serves))))),
-                fav.length ? list(fav, '') : null);
+            const pantry=lifeLocalGet('life_pantry_v4',lifeLocalGet('life_pantry_v3',[]))||[];
+            const shop=lifeLocalGet('life_food_shopping_v4',lifeLocalGet('life_food_shopping_v3',shoppingList||[]))||[];
+            const favRecipes=lifeFavorites.recipes||[];
+            const cats=['Doce','Salgada','Fitness','Café da manhã','Lanche','Almoço / jantar','Rápida','Rica em proteína'];
+            const featured=v33Recipes.slice(0,8);
+            return React.createElement(LifeApp36,{area:'Receitas',icon:'restaurant',kicker:'LIFE / COZINHA',title:'Cozinhe sem ficar procurando por horas.',subtitle:'Uma biblioteca grande, mas organizada: 600 receitas, favoritos, despensa, lista de compras, filtros e ajuda da LIFE AI para usar melhor o que você já tem.',metrics:[
+                    {label:'BIBLIOTECA',value:v33Recipes.length,note:'receitas disponíveis'},
+                    {label:'FAVORITAS',value:favRecipes.length,note:'receitas salvas'},
+                    {label:'DESPENSA',value:pantry.length,note:'ingredientes registrados'},
+                    {label:'COMPRAS',value:shop.filter?shop.filter(x=>!x.done).length:shop.length,note:'itens pendentes'}],
+                    primary:{label:'EXPLORAR RECEITAS',onClick:()=>openAdvancedArea('Receitas',null,'BIBLIOTECA DE RECEITAS')},secondary:{label:'MINHA COZINHA',onClick:()=>openAdvancedArea('Fitness',()=>setFitnessMainTab('Alimentação'),'DESPENSA E PLANEJAMENTO')}},
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'DESCOBRIR',title:'O que combina com agora?',text:'Escolha uma categoria e vá direto para receitas compatíveis.'},React.createElement('div',{className:'life-app36-chips'},cats.map(cat=>React.createElement('button',{type:'button',className:'life-app36-chip',key:cat,onClick:()=>openAdvancedArea('Receitas',()=>{setV35RecipeFilter(cat);setV35RecipeSearch('')},'RECEITAS · '+cat.toUpperCase())},cat+' · '+v33Recipes.filter(r=>(r.tags||[r.cat]).includes(cat)).length))),React.createElement('div',{className:'life-app36-card-strip',style:{marginTop:14}},featured.map(r=>React.createElement('button',{type:'button',className:'life-app36-card',key:r.id,onClick:()=>openLifeRecipe(r)},React.createElement('small',null,(r.tags?.[0]||r.cat||'RECEITA').toUpperCase()),React.createElement('b',null,r.name),React.createElement('span',null,(r.time||'')+' · '+(r.serves||'')),React.createElement('em',null,'ABRIR RECEITA →'))))),
+                    React.createElement(LifeApp36Panel,{eyebrow:'COZINHA INTELIGENTE',title:'Use o que você já tem.',text:'Despensa, lista de compras e planejamento trabalham juntos.'},React.createElement(LifeApp36Actions,{items:[
+                        {icon:'kitchen',title:'Minha despensa',text:pantry.length+' ingrediente(s) registrados.',label:'ABRIR →',onClick:()=>openAdvancedArea('Fitness',()=>setFitnessMainTab('Alimentação'),'MINHA DESPENSA')},
+                        {icon:'shopping_cart',title:'Lista de compras',text:(shop.filter?shop.filter(x=>!x.done).length:shop.length)+' item(ns) pendentes.',label:'ABRIR →',onClick:()=>openAdvancedArea('Fitness',()=>setFitnessMainTab('Alimentação'),'LISTA DE COMPRAS')},
+                        {icon:'favorite',title:'Favoritas',text:favRecipes.length+' receita(s) prontas para voltar.',label:'VER →',onClick:()=>openAdvancedArea('Receitas',()=>{setV35RecipeFilter('Todas');setV35RecipeSearch('')},'RECEITAS FAVORITAS')},
+                        {icon:'auto_awesome',title:'O que posso cozinhar?',text:'Cruze sua despensa com a biblioteca sem dieta restritiva.',label:'PERGUNTAR →',onClick:()=>{setAiOriginView('Dieta');setAiQuickOpen(true);setTimeout(()=>submitLifeAI('Use minha despensa e minhas preferências registradas para sugerir algumas receitas práticas. Priorize variedade e não proponha restrições extremas.'),30)}}]}))));
         }
         if (view === 'Finanças') {
-            const recent = financeMonthTransactions.slice(0, 4).map(x => ({ id: x.id, title: x.desc || 'Movimentação', meta: (x.type || '') + ' · ' + money(x.value || 0) }));
-            return React.createElement(LifeSimpleShell, { icon: 'account_balance_wallet', eyebrow: 'LIFE / FINANÇAS', title: 'Finanças.', description: 'O essencial do mês primeiro. Registros e análises completas ficam um nível abaixo.', primaryLabel: 'REGISTRAR MOVIMENTAÇÃO', primaryDesc: 'Adicione uma entrada ou saída ao seu histórico financeiro.', onPrimary: () => openAdvancedArea('Finanças', null, 'REGISTRAR MOVIMENTAÇÃO'), secondaryLabel: 'VER DETALHES', secondaryDesc: 'Abra orçamento, categorias, histórico e análises do período.', onSecondary: () => openAdvancedArea('Finanças', null, 'DETALHES FINANCEIROS') },
-                React.createElement("div", { className: "life-simple-finance" }, React.createElement("div", { className: "life-simple-number" }, React.createElement("small", null, 'SALDO DO MÊS'), React.createElement("b", null, money(financeMonthBalance))), list(recent, 'Nenhuma movimentação neste mês.')));
+            const budget=parseMoney(financeBudget||0);
+            const usedPct=budget>0?Math.min(999,Math.round(financeMonthOut/budget*100)):0;
+            const cats={}; financeMonthTransactions.filter(x=>x.type==='Saída').forEach(x=>{const k=x.category||'Geral';cats[k]=(cats[k]||0)+Number(x.value||0)});
+            const catBars=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([label,value])=>({label,value,display:money(value)}));
+            const goals=financeGoals||[];
+            return React.createElement(LifeApp36,{area:'Finanças',icon:'account_balance_wallet',kicker:'LIFE / MONEY',title:'Entenda para onde seu dinheiro está indo.',subtitle:'Registro, orçamento e metas em uma tela que prioriza clareza. O LIFE organiza seus próprios números; decisões financeiras continuam sendo suas.',metrics:[
+                    {label:'SALDO DO MÊS',value:money(financeMonthBalance),note:'entradas menos saídas registradas'},
+                    {label:'ENTRADAS',value:money(financeMonthIn),note:'no mês selecionado'},
+                    {label:'SAÍDAS',value:money(financeMonthOut),note:'no mês selecionado'},
+                    {label:'ORÇAMENTO',value:budget?usedPct+'%':'—',note:budget?'do limite mensal usado':'defina se quiser acompanhar'}],
+                    primary:{label:'＋ REGISTRAR MOVIMENTAÇÃO',onClick:()=>openAdvancedArea('Finanças',null,'NOVA MOVIMENTAÇÃO')},secondary:{label:'ABRIR MONEY HUB',onClick:()=>openAdvancedArea('Finanças',null,'FINANÇAS COMPLETAS')}},
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'MÊS ATUAL',title:'Leitura rápida do fluxo.',text:financeMonthTransactions.length?'Use categorias para perceber concentração de gastos, sem transformar um mês isolado em regra.':'Registre algumas movimentações para o gráfico ganhar sentido.'},catBars.length?React.createElement(LifeApp36Bars,{items:catBars}):React.createElement('div',{className:'life-app36-empty'},'Ainda não há saídas suficientes para mostrar categorias.')),
+                    React.createElement(LifeApp36Panel,{eyebrow:'CONTROLE',title:'Dinheiro com contexto.',text:'Ferramentas separadas para registrar, planejar e revisar.'},React.createElement(LifeApp36Actions,{items:[
+                        {icon:'receipt_long',title:'Movimentações',text:financeMonthTransactions.length+' registro(s) neste mês.',label:'HISTÓRICO →',onClick:()=>openAdvancedArea('Finanças',null,'MOVIMENTAÇÕES')},
+                        {icon:'speed',title:'Orçamento',text:budget?money(budget)+' definido para o mês.':'Ainda sem limite mensal.',label:'AJUSTAR →',onClick:()=>openAdvancedArea('Finanças',null,'ORÇAMENTO')},
+                        {icon:'flag',title:'Metas financeiras',text:goals.length+' meta(s) salva(s).',label:'ABRIR →',onClick:()=>openAdvancedArea('Finanças',null,'METAS FINANCEIRAS')},
+                        {icon:'auto_awesome',title:'Revisão com IA',text:'Peça uma leitura descritiva dos seus próprios registros.',label:'ANALISAR →',onClick:()=>{setAiOriginView('Finanças');setAiQuickOpen(true);setTimeout(()=>submitLifeAI('Resuma meus registros financeiros deste mês, destaque categorias relevantes e faça perguntas que me ajudem a revisar. Não tome decisões financeiras por mim.'),30)}}]}))),
+                React.createElement('div',{style:{marginTop:10}},React.createElement(LifeApp36Panel,{eyebrow:'RECENTES',title:'Últimas movimentações.'},React.createElement(LifeApp36List,{items:financeMonthTransactions.slice(0,6).map(x=>({id:x.id,title:x.desc||'Movimentação',meta:(x.type||'')+' · '+money(x.value||0)+' · '+(x.category||'Geral'),onClick:()=>openAdvancedArea('Finanças',null,'MOVIMENTAÇÕES')})),empty:'Nenhuma movimentação registrada neste mês.'}))));
         }
         if (view === 'Life') {
-            const rows = projects.slice(0, 4).map(p => ({ id: p.id || p.n, title: p.n || 'Projeto', meta: p.next || 'Definir próximo passo', onClick: () => { setSelectedProjectId(p.id || p.n); openAdvancedArea('Life'); } }));
-            return React.createElement(LifeSimpleShell, { icon: 'route', eyebrow: 'LIFE / PLANEJAR', title: 'Planejamento.', description: 'Projetos e próximos passos. Sem painel enorme antes de você decidir o que quer planejar.', primaryLabel: 'PLANEJAR', primaryDesc: 'Transforme objetivos e ideias em próximos passos claros.', onPrimary: () => openAdvancedArea('Life', null, 'PLANEJAR'), secondaryLabel: 'VER PROJETOS', secondaryDesc: 'Abra projetos ativos, etapas, rotina e planejamento completo.', onSecondary: () => openAdvancedArea('Life', null, 'PROJETOS') }, list(rows, 'Nenhum projeto ativo.'));
+            const activeProjects=projects.slice(0,8);
+            const activeGoals=lifeGoals.filter(g=>g.status!=='concluida'&&g.status!=='concluído');
+            const activeHabits=lifeHabits.filter(h=>h.status!=='pausado');
+            const upcoming=events.slice().sort((a,b)=>String(a.d||a.date||'').localeCompare(String(b.d||b.date||''))).slice(0,5);
+            return React.createElement(LifeApp36,{area:'Life',icon:'route',kicker:'LIFE / PLANEJADOR',title:'Do objetivo ao próximo passo.',subtitle:'Projetos, metas, rotina e agenda conectados. Planejamento aqui não é fazer uma lista bonita; é deixar claro o que vem depois.',metrics:[
+                    {label:'PROJETOS',value:projects.length,note:'frentes registradas'},
+                    {label:'METAS',value:activeGoals.length,note:'objetivos em andamento'},
+                    {label:'HÁBITOS',value:activeHabits.length,note:'rotinas acompanhadas'},
+                    {label:'AGENDA',value:events.length,note:'eventos registrados'}],
+                    primary:{label:'PLANEJAR MEU DIA',onClick:()=>setDayPlannerOpen(true)},secondary:{label:'ABRIR PLANEJADOR',onClick:()=>openAdvancedArea('Life',null,'PLANEJAMENTO COMPLETO')}},
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'PROJETOS',title:activeProjects.length?'O que você está construindo.':'Crie sua primeira frente de trabalho.',text:'Cada projeto deve ter um resultado e uma próxima ação visível.',action:{label:'VER TODOS →',onClick:()=>openAdvancedArea('Life',null,'PROJETOS')}},React.createElement(LifeApp36List,{items:activeProjects.slice(0,6).map(p=>({id:p.id||p.n,title:p.n||'Projeto',meta:(p.next||'Definir próximo passo')+(p.p!=null?' · '+p.p+'%':''),onClick:()=>{setSelectedProjectId(p.id||p.n);openAdvancedArea('Life',null,'PROJECT HUB')}})),empty:'Nenhum projeto ainda. Você pode transformar uma nota em projeto ou começar pelo planejador.'})),
+                    React.createElement(LifeApp36Panel,{eyebrow:'SISTEMA',title:'Planejamento em quatro camadas.',text:'Use a camada que combina com o tamanho do problema.'},React.createElement(LifeApp36Actions,{items:[
+                        {icon:'today',title:'Dia',text:'Escolha as poucas coisas que cabem hoje.',label:'PLANEJAR →',onClick:()=>setDayPlannerOpen(true)},
+                        {icon:'view_week',title:'Semana',text:'Faça uma revisão e recupere prioridades.',label:'REVISAR →',onClick:()=>setWeeklyReviewOpen(true)},
+                        {icon:'flag',title:'Metas',text:activeGoals.length+' meta(s) em andamento.',label:'ABRIR →',onClick:()=>openAdvancedArea('Life',null,'METAS')},
+                        {icon:'repeat',title:'Rotina',text:activeHabits.length+' hábito(s) acompanhado(s).',label:'ABRIR →',onClick:()=>openAdvancedArea('Life',null,'ROTINA E AGENDA')}]}))),
+                upcoming.length?React.createElement('div',{style:{marginTop:10}},React.createElement(LifeApp36Panel,{eyebrow:'AGENDA',title:'Próximos compromissos.'},React.createElement(LifeApp36List,{items:upcoming.map((e,i)=>({id:e.id||i,title:e.n||e.title||'Compromisso',meta:[e.d||e.date,e.t||e.time].filter(Boolean).join(' · '),onClick:()=>openAdvancedArea('Life',null,'AGENDA')}))}))):null);
         }
         if (view === 'Meu LIFE') {
-            const rows = lifePins.slice(0, 2).concat(lifeRecents.slice(0, 3)).map((r, i) => ({ key: r.key || r.id || i, title: r.title || 'Item salvo', meta: r.type || r.subtitle || 'LIFE', onClick: r.go ? () => openLifeRecent(r) : null }));
-            return React.createElement(LifeSimpleShell, { icon: 'bookmark', eyebrow: 'LIFE / MEU LIFE', title: 'Meu LIFE.', description: 'Só o que você escolheu guardar, fixar ou retomar.', primaryLabel: 'VER TUDO', primaryDesc: 'Abra seus fixados, recentes e itens salvos em um só lugar.', onPrimary: () => openAdvancedArea('Meu LIFE', null, 'MEU LIFE') }, list(rows, 'Fixe ou favorite algo para aparecer aqui.'));
+            const totalFav=Object.values(lifeFavorites||{}).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0);
+            const continueItems=[...lifePins.slice(0,4),...lifeRecents.slice(0,5)].filter((x,i,a)=>a.findIndex(y=>(y.key||y.id||y.title)===(x.key||x.id||x.title))===i).slice(0,7);
+            return React.createElement(LifeApp36,{area:'Meu LIFE',icon:'space_dashboard',kicker:'LIFE / PERSONAL',title:'Seu LIFE, do seu jeito.',subtitle:'Uma página pessoal com o que você fixou, favoritou e usou recentemente. Quanto mais você usa o sistema, mais essa área passa a refletir seu fluxo real.',metrics:[
+                    {label:'FIXADOS',value:lifePins.length,note:'itens presos ao seu painel'},
+                    {label:'FAVORITOS',value:totalFav,note:'atalhos salvos'},
+                    {label:'RECENTES',value:lifeRecents.length,note:'itens para retomar'},
+                    {label:'ÚLTIMA ÁREA',value:lastArea&&lastArea!=='Hoje'?lifePublicAreaName(lastArea):'Hoje',note:'onde você estava'}],
+                    primary:{label:lastArea&&lastArea!=='Hoje'?'CONTINUAR '+lifePublicAreaName(lastArea).toUpperCase():'IR PARA HOJE',onClick:()=>v42Go(lastArea&&lastArea!=='Hoje'?lastArea:'Hoje')},secondary:{label:'MEUS FAVORITOS',onClick:()=>v42Go('Favoritos')}},
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'CONTINUAR',title:'Retome sem procurar.',text:'Fixados e recentes aparecem juntos para reduzir navegação repetida.'},React.createElement(LifeApp36List,{items:continueItems.map((r,i)=>({id:r.id||r.key||i,title:r.title||'Item LIFE',meta:r.subtitle||r.type||'LIFE',onClick:r.go?()=>openLifeRecent(r):null})),empty:'Fixe áreas e conteúdos para montar seu painel pessoal.'})),
+                    React.createElement(LifeApp36Panel,{eyebrow:'ATALHOS',title:'Sua central pessoal.',text:'As áreas mais usadas ficam a um toque de distância.'},React.createElement(LifeApp36Actions,{items:[
+                        {icon:'favorite',title:'Favoritos',text:totalFav+' item(ns) favoritado(s).',label:'ABRIR →',onClick:()=>v42Go('Favoritos')},
+                        {icon:'library_books',title:'Biblioteca',text:'Pesquise conteúdo de todo o LIFE em um lugar.',label:'PESQUISAR →',onClick:()=>v42Go('Biblioteca')},
+                        {icon:'history',title:'Arquivo',text:'Reveja registros antigos e histórico.',label:'ABRIR →',onClick:()=>v42Go('Archive')},
+                        {icon:'settings',title:'Configurações',text:'Aparência, notificações, dados e sincronização.',label:'AJUSTAR →',onClick:()=>v42Go('Configurações')}]}))));
         }
         if (view === 'Evolução') {
-            const nowTs = Date.now(), d30 = 30 * 86400000;
-            const recentActs = lifeActivity.filter(a => nowTs - new Date(a.date).getTime() <= d30);
-            const groupCount = { Estudos: 0, Fitness: 0, Organização: 0, Finanças: 0 };
-            recentActs.forEach(a => { const t = String((a.type || '') + ' ' + (a.title || '')).toLowerCase(); if (/estud|foco|revis/.test(t)) groupCount.Estudos++; else if (/treino|fitness|exerc/.test(t)) groupCount.Fitness++; else if (/finan|gasto|receita/.test(t)) groupCount.Finanças++; else groupCount.Organização++; });
-            const mx = Math.max(1, ...Object.values(groupCount));
-            return React.createElement(LifeSimpleShell, { icon: 'monitoring', eyebrow: 'LIFE / EVOLUÇÃO', title: 'Evolução.', description: 'Acompanhe o que mudou com dados reais do seu LIFE. Gráficos só usam registros que realmente existem.' },
-                React.createElement("div", { className: "life-evolution-dashboard" },
-                    React.createElement(LifeEvolutionQuality, { activity: lifeActivity, tasks, notes: v49Notes, workouts: savedCustomWorkouts, finance: financeTransactions }),
-                    React.createElement("section", { className: "life-evolution-panel" },
-                        React.createElement("h3", null, "Distribuição dos últimos 30 dias"),
-                        React.createElement("p", null, "Mostra em quais áreas suas ações registradas estão concentradas."),
-                        React.createElement("div", { className: "life-evolution-area-bars" }, Object.entries(groupCount).map(([k,v]) => React.createElement("div", { key: k }, React.createElement("span", null, k), React.createElement("i", null, React.createElement("em", { style: { width: Math.round(v / mx * 100) + '%' } })), React.createElement("b", null, v))))),
-                    React.createElement("div", { className: "life-simple-actions" }, React.createElement("div", { className: "life-simple-action-wrap" }, React.createElement("button", { type: "button", className: "primary", onClick: () => openAdvancedArea('Evolução') }, "ABRIR HISTÓRICO COMPLETO"), React.createElement("small", { className: "life-function-desc" }, "Veja registros individuais e análises adicionais quando quiser investigar com mais detalhe.")))));
+            const nowTs=Date.now();
+            const acts7=lifeActivity.filter(a=>nowTs-new Date(a.date).getTime()<=7*86400000);
+            const acts30=lifeActivity.filter(a=>nowTs-new Date(a.date).getTime()<=30*86400000);
+            const acts90=lifeActivity.filter(a=>nowTs-new Date(a.date).getTime()<=90*86400000);
+            const groups={Estudos:0,Fitness:0,Organização:0,Finanças:0,Notas:0};
+            acts30.forEach(a=>{const t=String((a.type||'')+' '+(a.title||'')).toLowerCase();if(/estud|foco|revis/.test(t))groups.Estudos++;else if(/treino|fitness|exerc/.test(t))groups.Fitness++;else if(/finan|gasto|receita/.test(t))groups.Finanças++;else if(/nota|anota/.test(t))groups.Notas++;else groups.Organização++});
+            const dayRows=Array.from({length:14},(_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(13-i));const key=d.toISOString().slice(0,10);const value=lifeActivity.filter(a=>String(a.date||'').slice(0,10)===key).length;return{label:['D','S','T','Q','Q','S','S'][d.getDay()],value,display:value}});
+            const activeDays30=new Set(acts30.map(a=>String(a.date||'').slice(0,10)).filter(Boolean)).size;
+            return React.createElement(LifeApp36,{area:'Evolução',icon:'monitoring',kicker:'LIFE / ANALYTICS',title:'Veja sua vida em movimento.',subtitle:'Evolução cruza apenas registros que existem no seu LIFE. A comparação é com seu próprio histórico, não com outras pessoas.',metrics:[
+                    {label:'7 DIAS',value:acts7.length,note:'ações registradas'},
+                    {label:'30 DIAS',value:acts30.length,note:'ações registradas'},
+                    {label:'DIAS ATIVOS',value:activeDays30,note:'nos últimos 30 dias'},
+                    {label:'90 DIAS',value:acts90.length,note:'base histórica recente'}],
+                    primary:{label:'ABRIR HISTÓRICO COMPLETO',onClick:()=>openAdvancedArea('Evolução',null,'ANALYTICS COMPLETO')},secondary:{label:'PERGUNTAR À LIFE AI',onClick:()=>{setAiOriginView('Evolução');setAiQuickOpen(true);setTimeout(()=>submitLifeAI('Leia meus registros de evolução e descreva padrões observáveis sem comparar meu corpo ou meu desempenho com outras pessoas. Sugira perguntas úteis para eu revisar meu sistema.'),30)}}},
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'14 DIAS',title:'Seu ritmo recente.',text:'Quantidade de registros por dia — não é uma pontuação de valor pessoal.'},React.createElement(LifeApp36Bars,{items:dayRows})),
+                    React.createElement(LifeApp36Panel,{eyebrow:'30 DIAS',title:'Onde sua atenção apareceu.',text:'Distribuição dos registros entre as áreas do LIFE.'},React.createElement(LifeApp36Bars,{items:Object.entries(groups).map(([label,value])=>({label,value,display:value}))}))),
+                React.createElement('div',{style:{marginTop:10}},React.createElement(LifeEvolutionQuality,{activity:lifeActivity,tasks,notes:v49Notes,workouts:savedCustomWorkouts,finance:financeTransactions})));
         }
-
         if (view === 'Biblioteca') {
-            return React.createElement(LifeUniversalLibrary, {
-                workouts: v33Workouts,
-                recipes: v33Recipes,
-                studyRecs: v45Recs,
-                hasPro: hasV18Pro,
-                onGuide: setSelectedLifeGuide,
-                onExercise: setSelectedLifeExercise,
-                onWorkout: (w) => openLifeWorkout(w),
-                onRecipe: (r) => openLifeRecipe(r),
-                onGo: v42Go,
-                onAsk: (prompt) => { setAiOriginView('Biblioteca'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); }
-            });
+            const favTotal=(lifeFavorites.recipes||[]).length+(lifeFavorites.workouts||[]).length+(lifeFavorites.exercises||[]).length+(lifeFavorites.study||[]).length;
+            return React.createElement(React.Fragment,null,
+                React.createElement(LifeApp36,{area:'Biblioteca',icon:'library_books',kicker:'LIFE / UNIVERSAL LIBRARY',title:'Tudo que o LIFE sabe encontrar.',subtitle:'Uma busca única para guias, estudos, exercícios, treinos e receitas. A ideia é você pesquisar o assunto, não lembrar em qual aba ele estava.',metrics:[
+                    {label:'EXERCÍCIOS',value:IRON_EXERCISE_LIBRARY.length,note:'com técnica e filtros'},
+                    {label:'TREINOS',value:v33Workouts.length,note:'programas e modelos'},
+                    {label:'RECEITAS',value:v33Recipes.length,note:'biblioteca culinária'},
+                    {label:'SALVOS',value:favTotal,note:'favoritos de conteúdo'}],
+                    primary:{label:'PERGUNTAR À LIFE AI',onClick:()=>{setAiOriginView('Biblioteca');setAiQuickOpen(true);setTimeout(()=>submitLifeAI('Quero encontrar um recurso no LIFE. Faça uma pergunta curta para entender o que procuro e me direcione para a biblioteca ou área certa.'),30)}},secondary:{label:'MEUS FAVORITOS',onClick:()=>v42Go('Favoritos')}}),
+                React.createElement(LifeUniversalLibrary,{workouts:v33Workouts,recipes:v33Recipes,studyRecs:v45Recs,hasPro:hasV18Pro,onGuide:setSelectedLifeGuide,onExercise:setSelectedLifeExercise,onWorkout:w=>openLifeWorkout(w),onRecipe:r=>openLifeRecipe(r),onGo:v42Go,onAsk:prompt=>{setAiOriginView('Biblioteca');setAiQuickOpen(true);setTimeout(()=>submitLifeAI(prompt),30)}}));
         }
         if (view === 'Favoritos') {
-            const favAreas = (lifeFavorites.areas || []).slice();
-            return React.createElement(LifeSimpleShell, { icon: 'star', eyebrow: 'LIFE / FAVORITOS', title: 'Meus favoritos.', description: 'Somente as áreas que você marcou como favoritas. Um atalho pessoal para o que realmente usa.' },
-                favAreas.length ? React.createElement("div", { className: "life-function-grid" }, favAreas.map((a,i) => React.createElement(LifeFunctionCard, { key: a.id || i, icon: 'star', title: a.title || lifePublicAreaName(a.go || a.id), description: a.subtitle || 'Área favorita do seu LIFE.', actionLabel: 'ABRIR →', onClick: () => v42Go(a.go || a.id) }))) : React.createElement("div", { className: "life-simple-empty" }, "Você ainda não favoritou nenhuma área. Abra uma área e toque em “Favoritar área” nas ferramentas para ela aparecer aqui."));
+            const buckets=[['Áreas','areas','apps'],['Receitas','recipes','restaurant'],['Treinos','workouts','fitness_center'],['Exercícios','exercises','exercise'],['Estudos','study','school']];
+            const total=buckets.reduce((n,b)=>n+(lifeFavorites[b[1]]||[]).length,0);
+            const all=buckets.flatMap(b=>(lifeFavorites[b[1]]||[]).map(x=>({...x,_bucket:b[1],_kind:b[0]}))).slice(0,30);
+            const openFav=x=>{ if(x.recipe) return openLifeRecipe(x.recipe); if(x.workout){ v42Go('Fitness'); return setTimeout(()=>openLifeWorkout(x.workout),220); } if(x.exercise){ v42Go('Fitness'); setFitnessMainTab('Exercícios'); return setSelectedLifeExercise(x.exercise); } if(x.go) return v42Go(x.go); };
+            const favRows=all.slice(0,10).map((x,i)=>({id:x.id||i,icon:'♥',title:x.title||x.name||lifePublicAreaName(x.go||x.id),meta:x._kind+(x.subtitle?' · '+x.subtitle:''),onClick:()=>openFav(x)}));
+            const collectionActions=buckets.map(b=>({
+                icon:b[2],
+                title:b[0],
+                text:(lifeFavorites[b[1]]||[]).length+' item(ns) salvos.',
+                label:'VER →',
+                onClick:()=>{
+                    if(b[1]==='areas') return setMobileMore(true);
+                    if(b[1]==='recipes') return v42Go('Receitas');
+                    if(b[1]==='workouts'){ setFitnessMainTab('Treinos'); return v42Go('Fitness'); }
+                    if(b[1]==='exercises'){ setFitnessMainTab('Exercícios'); return v42Go('Fitness'); }
+                    if(b[1]==='study') return v42Go('Estudos');
+                    return v42Go('Biblioteca');
+                }
+            }));
+            return React.createElement(LifeApp36,{area:'Favoritos',icon:'favorite',kicker:'LIFE / LAUNCHER',title:'Seu atalho pessoal.',subtitle:'Favoritos não são outra biblioteca. São o lugar para voltar rapidamente ao que você realmente usa.',metrics:buckets.map(b=>({label:b[0].toUpperCase(),value:(lifeFavorites[b[1]]||[]).length,note:'salvos'})),primary:{label:'ABRIR SELEÇÃO DE ÁREAS',onClick:()=>setMobileMore(true)},secondary:{label:'BIBLIOTECA COMPLETA',onClick:()=>v42Go('Biblioteca')}},
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'SALVOS',title:total?total+' favorito(s) no seu LIFE.':'Comece marcando o que vale voltar.',text:'Receitas, treinos, exercícios e áreas podem conviver no mesmo launcher.'},React.createElement(LifeApp36List,{items:favRows,empty:'Abra “Mais” e toque no coração de uma área, ou favorite conteúdos dentro das bibliotecas.'})),
+                    React.createElement(LifeApp36Panel,{eyebrow:'COLEÇÕES',title:'Favoritos por tipo.',text:'Entre direto no tipo de conteúdo que quer retomar.'},React.createElement(LifeApp36Actions,{items:collectionActions}))));
         }
         if (view === 'Tutorial') {
-            const steps = [
-                ['01','Comece pelo Hoje','Use a tela Hoje somente para os planos que realmente precisam acontecer agora. Marque conforme concluir.',['Adicione no máximo o essencial do dia.','Toque em uma tarefa para abrir os detalhes.','Use LIFE AI apenas quando quiser ajuda para organizar a ordem.'],'Hoje'],
-                ['02','Organize tarefas e notas','Tarefas são ações. Notas são ideias, informações e lembretes. Não misture os dois.',['Crie tarefa quando existir algo para fazer.','Use Nota para guardar informação.','Projetos ficam dentro de Planejamento/Organizar.'],'Tarefas'],
-                ['03','Use Estudos como caminho','Entre no Guia de estudos quando quiser aprender um assunto do zero ou organizar um objetivo longo.',['Preencha o formulário.','Siga a árvore cronológica uma etapa por vez.','Use foco, revisão e caderno de erros como apoio.'],'Estudos'],
-                ['04','Encontre tudo pela Biblioteca','A Biblioteca é a busca central do LIFE. Ela reúne guias, conteúdos de estudo, exercícios, treinos e receitas sem obrigar você a lembrar em qual área cada item estava.',['Pesquise pelo assunto, exercício, treino ou receita.','Use os filtros para reduzir os resultados.','Abra o item e volte para a mesma posição quando terminar.'],'Biblioteca'],
-                ['05','Use Fitness sem se perder','Escolha entre treino pronto, treino personalizado e biblioteca de exercícios. Seus treinos salvos ficam em Meus treinos.',['Treino pronto: começar rápido.','Personalizado: montar pela sua rotina.','Biblioteca: consultar exercícios e técnica.'],'Fitness'],
-                ['06','Converse com LIFE AI','A LIFE AI funciona como chat e pode usar contexto do LIFE, incluindo clima, tarefas, estudos, fitness e finanças quando isso ajudar.',['Pergunte naturalmente.','Ela pode indicar qual área abrir.','Alterações de dados devem pedir confirmação.'],'IA'],
-                ['07','Acompanhe sua evolução','Evolução usa somente registros reais. Quanto mais você usa tarefas, foco e treino, mais úteis ficam os gráficos.',['Compare 7 e 30 dias.','Observe consistência, não perfeição.','Abra o histórico completo quando precisar de detalhes.'],'Evolução'],
-                ['08','Personalize o sistema','Em Configurações você controla tema, animações, mini legendas, notificações, abertura cinematográfica e dados.',['Desative mini legendas quando já conhecer o LIFE.','Mantenha a abertura ligada se quiser a experiência cinematográfica.','Confira sincronização antes de trocar de dispositivo.'],'Configurações'],
-                ['09','Monte seus favoritos','Na seleção de áreas, toque no coração daquilo que você realmente usa. A área entra imediatamente em Favoritos sem abrir por engano.',['Abra “Mais” na barra inferior.','Toque somente no coração da área desejada.','Depois acesse seus atalhos pela aba Favoritos.'],'Favoritos'],
-                ['10','Use o botão Criar','O botão central “+” serve para capturar algo novo sem primeiro decidir em qual tela entrar.',['Use para tarefa, nota e outras capturas rápidas.','Depois organize somente quando fizer sentido.','Isso reduz a quantidade de caminhos para ações simples.'],'Hoje'],
-                ['11','Proteja sua continuidade','Perfil e Configurações reúnem conta, plano e sincronização. Antes de trocar de aparelho, confirme que a nuvem está sincronizada.',['Confira o indicador de nuvem.','Use sincronização manual se necessário.','Exportação continua disponível como camada extra de segurança.'],'Perfil']
-            ];
-            return React.createElement(LifeSimpleShell, { icon: 'menu_book', eyebrow: 'LIFE / TUTORIAL', title: 'Como usar o LIFE OS.', description: 'Um guia detalhado para entender o papel de cada área sem precisar descobrir tudo sozinho.' },
-                React.createElement("div", { className: "life-tutorial" }, steps.map(x => React.createElement("article", { className: "life-tutorial-step", key: x[0] },
-                    React.createElement("i", null, x[0]),
-                    React.createElement("div", null, React.createElement("b", null, x[1]), React.createElement("p", null, x[2]), React.createElement("ul", null, x[3].map((y,j)=>React.createElement("li",{key:j},y)))),
-                    React.createElement("button", { type: "button", onClick: () => v42Go(x[4]) }, "ABRIR " + x[4].toUpperCase())))));
+            const steps=[['01','Hoje','Sua mesa principal: poucas prioridades e progresso do dia.','Hoje'],['02','Organizar','Tarefas, projetos, inbox e revisão semanal.','Tarefas'],['03','Segundo cérebro','Notas para capturar antes de decidir o destino.','Notas'],['04','Study OS','Guia, foco, revisão, erros e conhecimento.','Estudos'],['05','Fitness Ultra','Treino, recuperação, biblioteca e progresso.','Fitness'],['06','Cozinha','600 receitas, despensa, compras e favoritos.','Receitas'],['07','Money','Registros, orçamento e metas financeiras.','Finanças'],['08','Planejador','Projetos, metas, hábitos e agenda.','Life'],['09','LIFE AI','Copiloto que entende o sistema e explica cada área.','IA'],['10','Analytics','Evolução com dados reais do seu próprio histórico.','Evolução'],['11','Biblioteca','Busca universal do conteúdo do LIFE.','Biblioteca'],['12','Meu LIFE','Fixados, recentes e favoritos em um painel pessoal.','Meu LIFE']];
+            const cards=steps.map(x=>React.createElement('button',{type:'button',className:'life-app36-card',key:x[0],onClick:()=>v42Go(x[3])},React.createElement('small',null,x[0]+' · '+x[1].toUpperCase()),React.createElement('b',null,x[1]),React.createElement('span',null,x[2]),React.createElement('em',null,'ABRIR '+x[3].toUpperCase()+' →')));
+            return React.createElement(LifeApp36,{area:'Tutorial',icon:'menu_book',kicker:'LIFE / ACADEMY',title:'Aprenda o LIFE usando o LIFE.',subtitle:'Um tour por módulos. Abra uma área, faça uma ação simples e volte quando quiser. Você não precisa decorar o sistema inteiro.',metrics:[{label:'MÓDULOS',value:steps.length,note:'partes principais do sistema'},{label:'COMEÇO',value:'HOJE',note:'a melhor porta de entrada'},{label:'ATALHO',value:'/',note:'abre a busca global'},{label:'AJUDA',value:'?',note:'“Como funciona?” em cada área'}],primary:{label:'COMEÇAR PELO HOJE',onClick:()=>v42Go('Hoje')},secondary:{label:'PERGUNTAR À LIFE AI',onClick:()=>{setAiOriginView('Tutorial');setAiQuickOpen(true);setTimeout(()=>submitLifeAI('Me ensine a usar o LIFE OS. Faça uma pergunta por vez para descobrir o que eu quero organizar primeiro e me direcione para a área certa.'),30)}}},React.createElement('div',{className:'life-app36-card-strip',style:{marginTop:10}},cards));
         }
         if (view === 'Configurações') return null;
         if (view === 'Archive') {
-            const rows = lifeActivity.slice(0, 5).map(a => ({ id: a.id, title: a.title || a.type || 'Registro', meta: new Date(a.date).toLocaleDateString('pt-BR') + ' · ' + (a.type || 'LIFE') }));
-            return React.createElement(LifeSimpleShell, { icon: 'archive', eyebrow: 'LIFE / ARQUIVO', title: 'Arquivo.', description: 'Seus registros antigos, sem transformar histórico em outra dashboard.', primaryLabel: 'EXPLORAR ARQUIVO', primaryDesc: 'Pesquise registros antigos e reveja seu histórico completo.', onPrimary: () => openAdvancedArea('Archive', null, 'ARQUIVO COMPLETO') }, list(rows, 'Nenhum registro arquivado ainda.'));
+            const typeCounts={};lifeActivity.forEach(a=>{const k=a.type||'LIFE';typeCounts[k]=(typeCounts[k]||0)+1});
+            const safeArchiveDate=value=>{const d=value?new Date(value):null;return d&&!Number.isNaN(d.getTime())?d.toLocaleString('pt-BR'):'Data não registrada';};
+            const rows=lifeActivity.slice(0,10).map(a=>({id:a.id,title:a.title||a.type||'Registro',meta:safeArchiveDate(a.date)+' · '+(a.type||'LIFE'),onClick:()=>openAdvancedArea('Archive',null,'ARQUIVO COMPLETO')}));
+            return React.createElement(LifeApp36,{area:'Archive',icon:'archive',kicker:'LIFE / HISTÓRICO',title:'Tudo que ficou para trás, sem desaparecer.',subtitle:'O Arquivo preserva registros antigos para consulta. Ele existe para você poder olhar para trás quando precisar, sem poluir as telas do dia a dia.',metrics:[{label:'REGISTROS',value:lifeActivity.length,note:'eventos no histórico'},{label:'TIPOS',value:Object.keys(typeCounts).length,note:'categorias registradas'},{label:'MAIS RECENTE',value:lifeActivity[0]?(()=>{const d=new Date(lifeActivity[0].date);return Number.isNaN(d.getTime())?'—':d.toLocaleDateString('pt-BR')})():'—',note:'último registro'},{label:'EXPORTAR',value:'JSON',note:'backup disponível no Perfil'}],primary:{label:'EXPLORAR ARQUIVO',onClick:()=>openAdvancedArea('Archive',null,'ARQUIVO COMPLETO')},secondary:{label:'VER EVOLUÇÃO',onClick:()=>v42Go('Evolução')}},
+                React.createElement('div',{className:'life-app36-grid'},React.createElement(LifeApp36Panel,{eyebrow:'TIMELINE',title:'Registros recentes.'},React.createElement(LifeApp36List,{items:rows,empty:'Ainda não existe histórico suficiente.'})),React.createElement(LifeApp36Panel,{eyebrow:'DISTRIBUIÇÃO',title:'O que existe no arquivo.'},React.createElement(LifeApp36Bars,{items:Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([label,value])=>({label,value,display:value}))}))));
         }
         if (view === 'Perfil') {
-            return React.createElement(LifeSimpleShell, { icon: 'person', eyebrow: 'LIFE / PERFIL', title: v32Name ? v32Name + '.' : 'Seu perfil.', description: 'Conta, plano e sincronização. Configurações avançadas ficam escondidas até você pedir.', primaryLabel: 'CONFIGURAÇÕES', primaryDesc: 'Abre uma tela separada só para aparência, legendas, notificações, abertura e dados.', onPrimary: () => v42Go('Configurações'), secondaryLabel: 'SINCRONIZAR', secondaryDesc: 'Envia as alterações locais para a nuvem quando sua conta estiver conectada.', onSecondary: () => pushLifeCloud(true) },
-                React.createElement("div", { className: "life-simple-profile" },
-                    React.createElement("div", null, React.createElement("small", null, 'PLANO'), React.createElement("b", null, realPlan || 'FREE')),
-                    React.createElement("div", null, React.createElement("small", null, 'NUVEM'), React.createElement("b", null, cloudStatus === 'synced' ? 'Sincronizado' : 'Local')),
-                    React.createElement("div", null, React.createElement("small", null, 'CONTA'), React.createElement("b", null, lifeAccess?.user?.email || 'Conta LIFE'))));
+            const accountEmail=accountInfo?.email||'Conta LIFE';
+            const favTotal=Object.values(lifeFavorites||{}).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0);
+            return React.createElement(LifeApp36,{area:'Perfil',icon:'person',kicker:'LIFE / ACCOUNT CENTER',title:v32Name?(v32Name+'.'):'Sua conta LIFE.',subtitle:'Conta, plano, sincronização, privacidade e preferências em um centro único. O objetivo é você saber rapidamente se seus dados estão seguros e onde ajustar o sistema.',metrics:[
+                    {label:'PLANO',value:realPlan||'FREE',note:hasV18Pro?'recursos avançados ativos':'versão essencial'},
+                    {label:'NUVEM',value:cloudStatus==='synced'?'OK':String(cloudStatus||'LOCAL').toUpperCase(),note:cloudLastSync?'último sync '+new Date(cloudLastSync).toLocaleDateString('pt-BR'):'sem sincronização registrada'},
+                    {label:'FAVORITOS',value:favTotal,note:'atalhos pessoais'},
+                    {label:'REDE',value:online?'ONLINE':'OFFLINE',note:'estado atual do navegador'}],
+                    primary:{label:'CONFIGURAÇÕES',onClick:()=>v42Go('Configurações')},secondary:{label:'SINCRONIZAR AGORA',onClick:()=>pushLifeCloud(true)}},
+                React.createElement('div',{className:'life-app36-grid'},
+                    React.createElement(LifeApp36Panel,{eyebrow:'IDENTIDADE',title:v32Name||'Conta LIFE',text:accountEmail},React.createElement(LifeApp36Actions,{items:[
+                        {icon:'settings',title:'Preferências',text:'Tema, movimento, legendas, abertura e densidade.',label:'AJUSTAR →',onClick:()=>v42Go('Configurações')},
+                        {icon:'notifications',title:'Notificações',text:'Permissões, lembretes e central de avisos.',label:'ABRIR →',onClick:()=>setNotificationCenterOpen(true)},
+                        {icon:'cloud_sync',title:'Sincronização',text:cloudStatus==='synced'?'Seus dados estão sincronizados.':'Revise o estado antes de trocar de dispositivo.',label:'SINCRONIZAR →',onClick:()=>pushLifeCloud(true)},
+                        {icon:'download',title:'Exportar dados',text:'Crie uma cópia dos dados deste LIFE quando quiser.',label:'EXPORTAR →',onClick:exportLifeData}]})),
+                    React.createElement(LifeApp36Panel,{eyebrow:'CONFIANÇA',title:'Status do sistema.',text:'Uma leitura rápida antes de você mexer em conta ou dispositivo.'},React.createElement(LifeApp36List,{items:[
+                        {id:'plan',icon:'01',title:'Plano '+(realPlan||'FREE'),meta:hasV18Pro?'Acesso avançado ativo.':'Você está na versão essencial.'},
+                        {id:'cloud',icon:'02',title:cloudStatus==='synced'?'Nuvem sincronizada':'Dados precisam de atenção',meta:cloudLastSync?'Última sincronização: '+new Date(cloudLastSync).toLocaleString('pt-BR'):'Nenhuma sincronização registrada.'},
+                        {id:'ai',icon:'03',title:aiBackendReady?'LIFE AI conectada':'LIFE AI em modo local',meta:aiBackendReady?'Backend remoto respondeu nesta sessão.':'Fallback local continua disponível.'},
+                        {id:'network',icon:'04',title:online?'Conexão ativa':'Sem internet',meta:online?'Serviços externos podem responder.':'O LIFE continua com dados locais.'}]}))));
         }
         return null;
     };
@@ -6627,7 +7099,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => setSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 3.3.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 4.0.0"),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => setSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
@@ -6752,7 +7224,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                             React.createElement("i", null),
                             React.createElement("span", null,
                                 React.createElement("b", null, "Notifica\u00E7\u00F5es"),
-                                React.createElement("small", null, pushStatus === 'ready' ? 'Ativas enquanto o LIFE está aberto' : pushStatus === 'blocked' ? 'Bloqueadas pelo navegador' : 'Lembretes locais ativos'))),
+                                React.createElement("small", null, pushStatus === 'ready' ? 'Permissão ativa · envio depende do backend' : pushStatus === 'blocked' ? 'Bloqueadas pelo navegador' : 'Lembretes locais ativos'))),
                         React.createElement("div", { className: hasV18Pro ? 'ok' : 'local' },
                             React.createElement("i", null),
                             React.createElement("span", null,
@@ -7672,15 +8144,38 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             view === 'Fitness' && advancedArea === 'Fitness' && React.createElement("div", { className: "v43-page-head" },
                 React.createElement("small", null, "LIFE / FITNESS"),
                 React.createElement("h1", null, "Fitness."),
-                React.createElement("p", null, "Treinos, biblioteca de exerc\u00EDcios, alimenta\u00E7\u00E3o e recupera\u00E7\u00E3o no mesmo sistema.")),
+                React.createElement("p", null, "Treino, técnica, recuperação e progresso em um sistema que aprende com sua rotina.")),
+            view === 'Fitness' && advancedArea === 'Fitness' && React.createElement("nav", { className: "life-fit35-topnav", "aria-label": "Navegação do Fitness" },
+                [
+                    ['Hoje','home','HOJE'],
+                    ['Treinos','fitness_center','TREINOS'],
+                    ['Exercícios','menu_book','EXERCÍCIOS'],
+                    ['Recuperação','self_improvement','RECUPERAÇÃO'],
+                    ['Progresso','monitoring','PROGRESSO'],
+                    ['Alimentação','restaurant','ALIMENTAÇÃO']
+                ].map(([tab, icon, label]) => React.createElement("button", { type: "button", key: tab, className: fitnessMainTab === tab ? 'on' : '', onClick: () => tab === 'Exercícios' ? openExerciseLibrary(exerciseLibraryGroup, exerciseLibrarySearch) : setFitnessMainTab(tab) }, React.createElement("span", { className: "material-symbols-rounded" }, icon), React.createElement("b", null, label)))),
             view === 'Fitness' && advancedArea === 'Fitness' && React.createElement(React.Fragment, null,
-                React.createElement("section", { className: "pt-8" },
+                fitnessMainTab === 'Hoje' && React.createElement(LifeFitnessUltraTodayV35, { completedActivity: fitnessCompletedActivity, weeklyGoal: fitnessWeeklyGoal, setWeeklyGoal: setFitnessWeeklyGoal, quickTime: fitnessQuickTime, setQuickTime: setFitnessQuickTime, quickEnergy: fitnessQuickEnergy, setQuickEnergy: setFitnessQuickEnergy, recommendedTitle: fitnessRecommendationTitle, recommendedMeta: fitnessRecommendationMeta, onStart: openFitnessRecommendation, onPrograms: () => setFitnessMainTab('Treinos'), onPersonal: () => { if (!hasV18Pro) { openLifePro('treino_personalizado'); return; } setFitnessMainTab('Treinos'); setPersonalFlow('training'); setPfStep(0); setPfAnswers({}); setPfPlan(null); setPfPlanName(''); }, onExercises: () => openExerciseLibrary('Todos'), onMyWorkouts: () => setFitnessMainTab('Treinos'), onProgress: () => setFitnessMainTab('Progresso'), onRecovery: () => setFitnessMainTab('Recuperação'), onAsk: (prompt) => { setAiOriginView('Fitness'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); }, savedCount: savedCustomWorkouts.length, exerciseCount: IRON_EXERCISE_LIBRARY.length }),
+                fitnessMainTab === 'Hoje' && React.createElement("section", { className: "pt-8" },
                     React.createElement("div", { className: "v18-micro" }, "FITNESS / SISTEMA DE TREINO"),
                     React.createElement("div", { className: "v18-hero mt-5" },
                         "Seu treino.",
                         React.createElement("br", null),
                         "Sua metodologia.")),
-                React.createElement("section", { className: "life-exercise-entry" },
+                fitnessMainTab === 'Hoje' && React.createElement("section", { className: "life-fit34-cockpit" },
+                    React.createElement("div", { className: "life-fit34-cockpit-main" },
+                        React.createElement("small", null, "PAINEL DE CONSISTÊNCIA"),
+                        React.createElement("h2", null, fitnessGoalProgress >= 100 ? 'Semana concluída. Continue no seu ritmo.' : 'Sua semana está ' + fitnessGoalProgress + '% completa.'),
+                        React.createElement("p", null, fitnessActiveDays7.size + ' de ' + fitnessWeeklyGoal + ' sessões planejadas nos últimos 7 dias. Descanso também faz parte do processo.'),
+                        React.createElement("div", { className: "life-fit34-cockpit-actions" },
+                            React.createElement("button", { type: "button", className: "primary", onClick: openFitnessRecommendation }, "CONTINUAR TREINO →"),
+                            React.createElement("button", { type: "button", onClick: () => v42Go('Evolução') }, "VER EVOLUÇÃO"))),
+                    React.createElement("div", { className: "life-fit34-cockpit-stats" },
+                        React.createElement("span", null, React.createElement("b", null, fitnessCompleted30.length), React.createElement("em", null, "sessões / 30d")),
+                        React.createElement("span", null, React.createElement("b", null, fitnessActiveDays30.size), React.createElement("em", null, "dias ativos")),
+                        React.createElement("span", null, React.createElement("b", null, savedCustomWorkouts.length), React.createElement("em", null, "treinos salvos"))),
+                    React.createElement("div", { className: "life-fit34-cockpit-heat" }, fitnessHeatmap.map(d => React.createElement("i", { key: 'cock-' + d.key, className: d.done ? 'on' : '', title: d.title })))),
+                fitnessMainTab === 'Hoje' && React.createElement("section", { className: "life-exercise-entry" },
                     React.createElement("div", { className: "life-exercise-entry-grid" },
                         React.createElement("div", null,
                             React.createElement("small", null, "BIBLIOTECA DE EXERC\u00CDCIOS \u00B7 T\u00C9CNICA"),
@@ -7724,7 +8219,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("div", { className: "life-exercise-featured" }, lifeExerciseFeatured.map(ex => React.createElement("button", { type: "button", key: 'feature-' + ex.id, onClick: () => openExerciseDetail(ex) },
                             React.createElement("img", { loading: "lazy", src: lifeExerciseCover(ex), onError: e => { e.currentTarget.onerror = null; e.currentTarget.src = lifeExerciseArt(ex); }, alt: 'Referência visual de ' + ex.name }),
                             React.createElement("b", null, ex.name)))))),
-                React.createElement("section", { className: "life-fitness-personal-launch" },
+                fitnessMainTab === 'Hoje' && React.createElement("section", { className: "life-fitness-personal-launch" },
                     React.createElement("button", { type: "button", className: "training", onClick: () => { if (!hasV18Pro) { openLifePro('treino_personalizado'); return; } setFitnessMainTab('Treinos'); setPersonalFlow('training'); setPfStep(0); setPfAnswers({}); setPfPlan(null); setPfPlanName(''); } },
                         React.createElement("small", null, "TREINO PERSONALIZADO · ", hasV18Pro ? 'PRO ATIVO' : 'PRO'),
                         React.createElement("b", null, "Criar meu treino pela minha rotina"),
@@ -7735,12 +8230,14 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("b", null, "Organizar minha alimentação"),
                         React.createElement("span", null, "Rotina, preferências, horários, preparo e contexto de treino no mesmo fluxo."),
                         React.createElement("em", null, hasV18Pro ? 'ABRIR ALIMENTAÇÃO →' : 'DESBLOQUEAR NO PRO →'))),
-                React.createElement("div", { className: "life-fit-tabs" },
+                React.createElement("div", { className: "life-fit-tabs life-fit35-oldtabs" },
+                    React.createElement("button", { type: "button", className: fitnessMainTab === 'Hoje' ? 'on' : '', onClick: () => setFitnessMainTab('Hoje') }, "HOJE"),
                     React.createElement("button", { type: "button", className: fitnessMainTab === 'Treinos' ? 'on' : '', onClick: () => setFitnessMainTab('Treinos') }, "\uD83C\uDFCB\uFE0F TREINOS"),
                     React.createElement("button", { type: "button", className: fitnessMainTab === 'Exercícios' ? 'on' : '', onClick: () => openExerciseLibrary(exerciseLibraryGroup, exerciseLibrarySearch) },
                         "\u25CE EXERC\u00CDCIOS \u00B7 ",
                         IRON_EXERCISE_LIBRARY.length),
-                    React.createElement("button", { type: "button", className: fitnessMainTab === 'Alimentação' ? 'on' : '', onClick: () => setFitnessMainTab('Alimentação') }, "\u25C9 ALIMENTA\u00C7\u00C3O / DIETA")),
+                    React.createElement("button", { type: "button", className: fitnessMainTab === 'Alimentação' ? 'on' : '', onClick: () => setFitnessMainTab('Alimentação') }, "\u25C9 ALIMENTA\u00C7\u00C3O / DIETA"),
+                    React.createElement("button", { type: "button", className: fitnessMainTab === 'Progresso' ? 'on' : '', onClick: () => setFitnessMainTab('Progresso') }, "↗ PROGRESSO")),
                 fitnessMainTab === 'Treinos' && React.createElement(React.Fragment, null,
                     React.createElement("section", { className: "life-training-collections" },
                         React.createElement("div", { className: "life-section-head" },
@@ -7869,12 +8366,36 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                             React.createElement("p", { className: "v18-muted text-[9px] mt-3" }, "Toque em um treino abaixo ou use a busca inteligente no PRO. Nada aparece como \u201Cem andamento\u201D antes de voc\u00EA iniciar.")))),
                 fitnessMainTab === 'Alimentação' && React.createElement(LifeNutritionStudio, { hasPro: hasV18Pro, onUpgrade: openLifePro, defaultAge: trainingAge, savedPlans: savedMealPlans, onSavePlan: (plan) => { setSavedMealPlans(prev => [{ ...plan, name: plan.name || ('Plano alimentar ' + (prev.length + 1)) }, ...prev].slice(0, 30)); logLifeActivity('ALIMENTAÇÃO', 'Criou plano alimentar personalizado', 'Fitness'); setToast('PLANO ALIMENTAR SALVO'); setTimeout(() => setToast(''), 1800); }, onAsk: (prompt) => { setAiOriginView('Dieta'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); }, onGoRecipes: () => v42Go('Receitas') }),
                 fitnessMainTab === 'Alimentação' && React.createElement(LifeFoodSystemV4, { recipes: LIFE_EDITORIAL_RECIPES_V81, savedPlans: savedMealPlans, onAsk: (prompt) => { setAiOriginView('Dieta'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
+                fitnessMainTab === 'Progresso' && React.createElement("section", { className: "life-fit34-progress-tab" },
+                    React.createElement("div", { className: "life-fit34-section-head" },
+                        React.createElement("div", null, React.createElement("small", null, "FITNESS / PROGRESSO"), React.createElement("h3", null, "Seu ritmo em dados reais.")),
+                        React.createElement("span", { className: "life-function-desc" }, "Sem comparação com outras pessoas e sem foco em aparência.")),
+                    React.createElement("div", { className: "life-fit34-progress-hero" },
+                        React.createElement("article", null, React.createElement("small", null, "ÚLTIMOS 7 DIAS"), React.createElement("b", null, fitnessActiveDays7.size + '/' + fitnessWeeklyGoal), React.createElement("span", null, fitnessGoalProgress + '% da meta semanal')),
+                        React.createElement("article", null, React.createElement("small", null, "ÚLTIMOS 30 DIAS"), React.createElement("b", null, fitnessCompleted30.length), React.createElement("span", null, "sessões registradas")),
+                        React.createElement("article", null, React.createElement("small", null, "DIAS ATIVOS"), React.createElement("b", null, fitnessActiveDays30.size), React.createElement("span", null, "dias com atividade registrada"))),
+                    React.createElement("div", { className: "life-fit34-calendar" },
+                        React.createElement("div", { className: "life-fit34-heatmap big" }, fitnessHeatmap.map(d => React.createElement("i", { key: 'progress-' + d.key, className: d.done ? 'on' : '', title: d.title }))),
+                        React.createElement("p", null, "Cada bloco representa um dia. Dias de descanso não são tratados como falha; o objetivo é enxergar padrão e consistência.")),
+                    React.createElement("div", { className: "life-fit34-badges-full" }, fitnessBadges.map(b => React.createElement("article", { key: b.title, className: fitnessCompletedActivity.length >= b.target ? 'on' : '' },
+                        React.createElement("span", { className: "material-symbols-rounded" }, fitnessCompletedActivity.length >= b.target ? b.icon : 'lock'),
+                        React.createElement("div", null, React.createElement("b", null, b.title), React.createElement("p", null, b.desc)),
+                        React.createElement("em", null, fitnessCompletedActivity.length >= b.target ? 'CONCLUÍDO' : Math.max(0, b.target - fitnessCompletedActivity.length) + ' restante(s)')))),
+                    React.createElement("div", { className: "life-fit34-history" },
+                        React.createElement("div", { className: "life-fit34-section-head" }, React.createElement("div", null, React.createElement("small", null, "HISTÓRICO"), React.createElement("h3", null, "Sessões recentes."))),
+                        fitnessCompletedActivity.length ? fitnessCompletedActivity.slice(0, 12).map(a => React.createElement("div", { key: a.id || a.date }, React.createElement("span", { className: "material-symbols-rounded" }, "check_circle"), React.createElement("span", null, React.createElement("b", null, a.title || 'Sessão'), React.createElement("small", null, new Date(a.date).toLocaleString('pt-BR'))))) : React.createElement("div", { className: "life-empty" }, "Conclua uma sessão para começar seu histórico."))),
+                fitnessMainTab === 'Recuperação' && React.createElement(LifeFitnessRecoveryV35, { onAsk: (prompt) => { setAiOriginView('Fitness'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
+                fitnessMainTab === 'Progresso' && React.createElement(LifeFitnessTrendV35, { activity: fitnessCompletedActivity }),
+                fitnessMainTab === 'Progresso' && React.createElement(LifeFitnessJournalV35, null),
                 fitnessMainTab === 'Exercícios' && React.createElement("section", { className: "life-exercise-library", id: "life-exercise-library" },
                     React.createElement("div", { className: "life-exercise-head" },
                         React.createElement("div", null,
                             React.createElement("div", { className: "v18-micro" }, "\u00CDNDICE DE EXERC\u00CDCIOS / T\u00C9CNICA"),
                             React.createElement("h2", null, "Biblioteca de exerc\u00EDcios.")),
-                        React.createElement("p", null, "Pesquise pelo nome inteiro ou abreviado. Ex.: \u201Cros mar\u201D encontra Rosca Martelo e \u201Csup inc\u201D encontra Supino Inclinado. Toque no exerc\u00EDcio para abrir foto/thumbnail, v\u00EDdeo incorporado dentro do LIFE, tutorial, erros e corre\u00E7\u00F5es. O contador abaixo usa o cat\u00E1logo realmente carregado, n\u00E3o um n\u00FAmero fixo.")),
+                        React.createElement("p", null, "Pesquise pelo nome inteiro ou abreviado. Favorite os exercícios que mais usa e mantenha técnica, alternativas e vídeo a um toque.")),
+                    fitnessFavoriteExercises.length > 0 && React.createElement("div", { className: "life-fit35-exercise-favs" },
+                        React.createElement("div", { className: "life-fit35-section-head" }, React.createElement("div", null, React.createElement("small", null, "MEUS EXERCÍCIOS"), React.createElement("h3", null, "Favoritos para abrir rápido."))),
+                        React.createElement("div", null, fitnessFavoriteExercises.map(ex => React.createElement("button", { type: "button", key: ex.id, onClick: () => openExerciseDetail(ex) }, React.createElement("span", { className: "material-symbols-rounded" }, "favorite"), React.createElement("b", null, ex.name), React.createElement("small", null, lifeExerciseGroup(ex)))))),
                     React.createElement("div", { className: "life-exercise-searchbox" },
                         React.createElement("div", { className: "life-exercise-searchbox-row" },
                             React.createElement("input", { value: exerciseLibrarySearch, onFocus: () => setExerciseSearchFocused(true), onBlur: () => setTimeout(() => setExerciseSearchFocused(false), 140), onChange: e => handleExerciseSearchChange(e.target.value), onKeyDown: handleExerciseSearchKey, placeholder: "Buscar: rosca martelo, sup inc, rem cav, pux alta...", autoComplete: "off" }),
@@ -7912,6 +8433,11 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                             IRON_EXERCISE_LIBRARY.length,
                             " EXERC\u00CDCIOS REAIS")),
                     React.createElement("div", { className: "life-exercise-groups" }, LIFE_EXERCISE_GROUPS.map(group => React.createElement("button", { type: "button", key: group, className: exerciseLibraryGroup === group ? 'on' : '', onClick: () => { setExerciseLibraryGroup(group); setExerciseLibrarySearch(''); setExerciseLibraryLimit(72); } }, group))),
+                    React.createElement("div", { className: "life-fit35-library-filters" },
+                        React.createElement("div", null, React.createElement("small", null, "EQUIPAMENTO"), React.createElement("select", { value: exerciseLibraryEquipment, onChange: e => { setExerciseLibraryEquipment(e.target.value); setExerciseLibraryLimit(72); } }, exerciseEquipmentOptions.map(x => React.createElement("option", { key: x, value: x }, x)))),
+                        React.createElement("div", null, React.createElement("small", null, "DIFICULDADE"), React.createElement("select", { value: exerciseLibraryDifficulty, onChange: e => { setExerciseLibraryDifficulty(e.target.value); setExerciseLibraryLimit(72); } }, exerciseDifficultyOptions.map(x => React.createElement("option", { key: x, value: x }, x)))),
+                        React.createElement("button", { type: "button", className: exerciseOnlyFavorites ? 'on' : '', onClick: () => { setExerciseOnlyFavorites(x => !x); setExerciseLibraryLimit(72); } }, React.createElement("span", { className: "material-symbols-rounded" }, exerciseOnlyFavorites ? 'favorite' : 'favorite_border'), exerciseOnlyFavorites ? 'SÓ FAVORITOS' : 'FILTRAR FAVORITOS'),
+                        React.createElement("button", { type: "button", onClick: () => { setExerciseLibraryEquipment('Todos'); setExerciseLibraryDifficulty('Todas'); setExerciseOnlyFavorites(false); setExerciseLibraryGroup('Todos'); setExerciseLibrarySearch(''); setExerciseLibraryLimit(72); } }, "LIMPAR FILTROS")),
                     React.createElement("div", { className: "life-exercise-grid" }, lifeExerciseResults.length ? lifeExerciseResults.slice(0, exerciseLibraryLimit).map(ex => React.createElement("button", { type: "button", className: "life-exercise-card", key: ex.id, onClick: () => openExerciseDetail(ex) },
                         React.createElement("div", { className: "life-exercise-art" },
                             React.createElement("img", { loading: "lazy", src: lifeExerciseCover(ex), onError: e => { e.currentTarget.onerror = null; e.currentTarget.src = lifeExerciseArt(ex); }, alt: 'Referência visual de ' + ex.name }),
@@ -8835,6 +9361,10 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                     React.createElement("div", { className: "life-workout-current" },
                         React.createElement("small", null, "EXERC\u00CDCIO ATUAL"),
                         React.createElement("h3", null, activeWorkout.moves?.[workoutExerciseIndex]),
+                        currentWorkoutExercise && React.createElement("div", { className: "life-fit35-session-tools" },
+                            React.createElement("button", { type: "button", className: "life-fit34-technique", onClick: () => openExerciseDetail(currentWorkoutExercise) }, React.createElement("span", { className: "material-symbols-rounded" }, "play_circle"), "TÉCNICA + VÍDEO"),
+                            React.createElement("button", { type: "button", onClick: swapCurrentWorkoutExercise }, React.createElement("span", { className: "material-symbols-rounded" }, "swap_horiz"), "TROCAR"),
+                            React.createElement("button", { type: "button", className: isLifeFavorite('exercises', currentWorkoutExercise.id) ? 'on' : '', onClick: () => toggleLifeFavorite('exercises', { id: currentWorkoutExercise.id, title: currentWorkoutExercise.name, go: 'Fitness', type: 'Exercício', subtitle: lifeExerciseGroup(currentWorkoutExercise) + ' · ' + lifeExerciseMeta(currentWorkoutExercise).equipment, exercise: currentWorkoutExercise }) }, React.createElement("span", { className: "material-symbols-rounded" }, isLifeFavorite('exercises', currentWorkoutExercise.id) ? 'favorite' : 'favorite_border'), "FAVORITO")),
                         React.createElement("div", { className: "life-workout-set" },
                             React.createElement("b", null,
                                 "S\u00C9RIE ",
@@ -8859,6 +9389,17 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("span", null, i < workoutExerciseIndex ? '✓' : String(i + 1).padStart(2, '0')),
                         React.createElement("b", null, m)))),
                     React.createElement("p", { className: "life-workout-safe" }, "Use cargas e varia\u00E7\u00F5es que permitam boa t\u00E9cnica. Se algo causar dor, interrompa a sess\u00E3o e procure orienta\u00E7\u00E3o adequada."))),
+            fitnessSessionReview && React.createElement("div", { className: "life-fit35-review-modal", onClick: e => { if (e.target === e.currentTarget) setFitnessSessionReview(null); } },
+                React.createElement("article", { className: "life-fit35-review-card" },
+                    React.createElement("small", null, "FITNESS / SESSÃO CONCLUÍDA"),
+                    React.createElement("h2", null, "Treino registrado."),
+                    React.createElement("p", null, fitnessSessionReview.name + ' · cerca de ' + fitnessSessionReview.durationMin + ' min nesta sessão.'),
+                    React.createElement("label", null, "COMO A SESSÃO PARECEU?"),
+                    React.createElement("div", { className: "life-fit35-pills" }, ['Leve','Boa','Exigente'].map(x => React.createElement("button", { type: "button", key: x, className: fitnessSessionFeel === x ? 'on' : '', onClick: () => setFitnessSessionFeel(x) }, x))),
+                    React.createElement("textarea", { value: fitnessSessionNote, onChange: e => setFitnessSessionNote(e.target.value), placeholder: "Nota opcional: técnica, conforto, ajuste para a próxima sessão…" }),
+                    React.createElement("div", { className: "life-fit35-review-actions" },
+                        React.createElement("button", { type: "button", onClick: () => setFitnessSessionReview(null) }, "PULAR"),
+                        React.createElement("button", { type: "button", className: "primary", onClick: () => { const old = load('life_fit_journal_v35', []); save('life_fit_journal_v35', [{ id: fitnessSessionReview.id, date: fitnessSessionReview.date, effort: fitnessSessionFeel, note: fitnessSessionNote.trim() || ('Sessão ' + fitnessSessionFeel.toLowerCase() + ' · ' + fitnessSessionReview.name), workout: fitnessSessionReview.name, durationMin: fitnessSessionReview.durationMin }, ...old].slice(0, 60)); setFitnessSessionReview(null); setToast('CHECK-OUT SALVO NO DIÁRIO'); setTimeout(() => setToast(''), 1600); } }, "SALVAR NO DIÁRIO →")))),
             recipeFinderOpen && React.createElement("div", { className: "v27-modal", onClick: e => { if (e.target === e.currentTarget)
                     setRecipeFinderOpen(false); } },
                 React.createElement("div", { className: "v27-sheet life-recipe-finder" },
@@ -8977,7 +9518,9 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                                 "LIFE / EXERC\u00CDCIOS / ",
                                 lifeExerciseGroup(selectedLifeExercise).toUpperCase()),
                             React.createElement("h2", null, selectedLifeExercise.name)),
-                        React.createElement("button", { type: "button", className: "life-exercise-close", onClick: () => setSelectedLifeExercise(null) }, "\u00D7")),
+                        React.createElement("div", { className: "life-fit35-exercise-head-actions" },
+                            React.createElement("button", { type: "button", className: 'life-fit35-fav ' + (isLifeFavorite('exercises', selectedLifeExercise.id) ? 'on' : ''), onClick: () => toggleLifeFavorite('exercises', { id: selectedLifeExercise.id, title: selectedLifeExercise.name, go: 'Fitness', type: 'Exercício', subtitle: lifeExerciseGroup(selectedLifeExercise) + ' · ' + lifeExerciseMeta(selectedLifeExercise).equipment, exercise: selectedLifeExercise }) }, React.createElement("span", { className: "material-symbols-rounded" }, isLifeFavorite('exercises', selectedLifeExercise.id) ? 'favorite' : 'favorite_border')),
+                            React.createElement("button", { type: "button", className: "life-exercise-close", onClick: () => setSelectedLifeExercise(null) }, "\u00D7"))),
                     React.createElement("div", { className: "life-exercise-body" },
                         (() => { const vi = lifeExerciseVideoInfo(selectedLifeExercise); return vi.id ? React.createElement(React.Fragment, null,
                             React.createElement("div", { className: "life-exercise-video" },
