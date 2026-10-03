@@ -1,19 +1,22 @@
-# LIFE OS 7.0 — Constellation Audit
+# LIFE OS 3.2 — Final Edition / release audit
 
-- JavaScript: **12 arquivos**, erros de sintaxe: **0**.
-- CSS: **13 arquivos**, erros de parse: **0**.
-- HTML: **6 páginas**, páginas com IDs duplicados: **0**.
-- Referências locais ausentes: **0**.
-- Âncoras internas quebradas: **0**.
-- Manifest válido: **sim**.
-- Arquivos do shell PWA ausentes: **0**.
-- Versão principal/cache: **7.0.0**.
-- Study Universe: **161 assuntos únicos** no catálogo-fonte antes da política FREE.
-- Botões React detectados: **591**; `onClick` explicitamente `null/undefined`: **0**.
-- Padrões de segredo privado de alta confiança detectados no frontend: **0**.
+## What changed in the final visual correction
+- Today is intentionally minimal: greeting/status, today's checklist, progress, quick add, and one LIFE AI action.
+- FREE upgrade messaging no longer competes with Today. Plan messaging is scoped to Profile or relevant locked/advanced areas.
+- Global smart search / advanced hub no longer appears on Today.
+- Floating LIFE AI and floating create button no longer overlap Today; IA remains a dedicated destination.
+- Header is quieter: FREE and normal sync state are no longer repeated as persistent badges.
+- Light mode was rebuilt around neutral white/graphite surfaces with orange used as an accent only; the old beige/brown canvas and dark vignette are overridden.
+- Dark mode was tightened for stronger hierarchy and less visual noise.
+- Page changes use a compact destination transition instead of a loading-screen-like takeover.
+- The cinematic intro is shown once after this release and then follows the user's opening setting / per-session behavior.
 
-## Limite da auditoria
-Esta validação é estrutural e estática. Supabase, Mercado Pago, LIFE AI remota, clima, push e sincronização entre aparelhos dependem de serviços externos e precisam ser testados no domínio publicado.
+## Static verification
+- All executable JavaScript files pass `node --check`.
+- All CSS files parse without syntax errors.
+- HTML pages have no duplicate static IDs.
+- No referenced local assets are missing.
+- Service worker shell references resolve to existing project files.
 
-## Segurança de conteúdo
-Assuntos financeiros de alto risco são apresentados como educação sobre mecanismo, probabilidade, risco, regulação, conflitos de incentivo e prevenção a golpes; não como sinais ou instruções para operações reais.
+## Production checks still required after upload
+The following depend on the live backend/account and must be verified on the published domain: Supabase sign-in/session, cloud sync with two devices, Mercado Pago checkout/callback, remote LIFE AI Edge Function, and background push configuration.

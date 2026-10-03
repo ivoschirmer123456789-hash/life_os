@@ -1,39 +1,42 @@
-# LIFE OS 3.3 — Mobile First Audit
+# LIFE OS 4.0 — Premium System · Auditoria final
 
-## Escopo
-Revisão focada em iPhone/mobile, navegação, sobreposição de botões, modais, Biblioteca global e consistência do PWA.
+## Resultado
 
-## Alterações principais
-- Barra inferior mobile reorganizada em 5 alvos independentes: Hoje, Favoritos, Criar, LIFE AI e Mais.
-- Botão flutuante redundante da LIFE AI escondido no mobile para não competir com a barra inferior.
-- Cabeçalho mobile reduzido ao essencial para diminuir aglomeração.
-- Menu Mais em uma coluna, com botão de abrir e coração de favorito como alvos separados.
-- Modais, vídeos, receitas, guias e painéis elevados acima da navegação inferior.
-- Painéis mobile limitados a ~80–82dvh, deixando backdrop livre; tocar fora fecha quando o componente oferece esse comportamento.
-- Backdrop mais escuro/blur para impedir que botões atrás pareçam clicáveis.
-- Inputs em 16px no mobile para evitar zoom automático do Safari.
-- Biblioteca global criada: Guias, Estudos, Exercícios, Treinos e Receitas em uma única busca.
-- Biblioteca com busca, filtros, atalhos e resultados em uma coluna no iPhone.
-- Tutorial atualizado para explicar Biblioteca e coração de Favoritos.
-- PWA atualizado para cache 3.3.0 e busca offline ignorando query string de versão.
+A revisão estrutural da versão 4.0 terminou sem erro de sintaxe JavaScript, erro de parse CSS, ID HTML duplicado, referência local ausente ou arquivo ausente no shell do Service Worker.
 
-## Validação estática
-- JavaScript do app e runtimes: node --check sem erros.
-- service-worker.js: node --check sem erros.
-- CSS: 0 erros de parse em todos os arquivos.
-- HTML: 0 IDs estáticos duplicados nas páginas públicas e app.
-- Referências locais: 0 arquivos ausentes.
-- manifest.webmanifest: JSON válido.
-- Versão do runtime: 3.3.0.
-- Cache do service worker: life-os-3.3.0.
+## Correções de funcionamento e lógica aplicadas
 
-## Validação visual mobile
-Mock em viewport de iPhone (390px):
-- Biblioteca sem overflow horizontal.
-- Bottom navigation separada e legível.
-- Modal de exercício acima da bottom navigation.
-- Área externa do modal visível/tocável.
-- X não fica sob a barra inferior; não é necessário depender dele quando o backdrop fecha o modal.
+- Perfil simples passou a ler o e-mail da conta real (`accountInfo`) em vez do estado textual de acesso.
+- Linhas, cards e ações sem callback deixaram de ser renderizados como botões falsos.
+- Favoritos agora abrem o destino correto: Receitas, Estudos, Treinos e Exercícios não são enviados genericamente para a Biblioteca.
+- Arquivo simples trata datas antigas/corrompidas sem exibir `Invalid Date`.
+- Modais e overlays bloqueiam o scroll da página de fundo enquanto estão abertos.
+- O viewport no iPhone não bloqueia zoom do usuário.
+- Versão do app, diagnóstico e cache do PWA foram unificados em `4.0.0`.
+- O carregamento do Supabase possui CDN alternativo de fallback.
+- O sistema de ações simples só exibe ações primárias/secundárias quando existe uma função válida.
+- Notas não mostram como ativas ações de transformação quando nenhuma nota existe.
 
-## Limitação do ambiente de teste
-A navegação de um servidor localhost pelo Chromium deste ambiente é bloqueada por política administrativa. Por isso, não foi possível certificar E2E real de todos os cliques com backend. A validação foi feita com sintaxe, estrutura, referências, CSS, inspeção dos handlers e mocks de viewport mobile. Login, Supabase, Mercado Pago, LIFE AI remota e push continuam dependendo do ambiente publicado.
+## Revisão de design
+
+- Foi criada uma camada de design unificada (`assets/css/system-v40.css`) carregada por último.
+- Mini-apps, ferramentas avançadas, autenticação, Configurações, modais e mobile usam o mesmo sistema de superfície, borda, raio, espaçamento, tipografia e profundidade.
+- Cada área mantém uma cor contextual discreta sem perder a identidade preto/branco/laranja do LIFE.
+- O modo claro foi padronizado para branco/grafite, sem herdar vinhetas ou fundos de gerações antigas.
+- Elementos interativos no mobile priorizam áreas de toque maiores e safe areas.
+- A Home continua propositalmente simples; a profundidade fica dentro dos mini-apps.
+
+## Verificações automáticas
+
+- JavaScript local + Service Worker: 0 erros de sintaxe.
+- CSS: 0 erros de parse.
+- HTML: 0 IDs duplicados.
+- Referências locais: 0 ausentes.
+- Service Worker: 0 entradas de cache apontando para arquivo inexistente.
+- Botões React: 563 declarações; 0 handlers explicitamente `null` ou `undefined`.
+- Botões HTML estáticos sem ligação detectável: 0.
+- Arquivos do projeto: 44.
+
+## Limite do teste local
+
+O ambiente de auditoria bloqueia a navegação de Chromium para servidor local/domínio de teste, então não foi possível afirmar um E2E real de produção. Supabase, LIFE AI remota, Mercado Pago, push e sincronização multi-dispositivo ainda precisam ser confirmados no domínio publicado. A estrutura local, sintaxe, referências e fluxos internos verificáveis foram auditados.

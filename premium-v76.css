@@ -1,0 +1,162 @@
+/* ==========================================================
+   LIFE OS 7.3 — stricter mobile-reference pass + desktop emulator
+   Goal: feel much closer to the approved mockup on phone and on desktop emulator.
+   ========================================================== */
+:root{
+  --life73-bg:#06090c;
+  --life73-bg2:#0b1015;
+  --life73-panel:#131920;
+  --life73-panel2:#171e25;
+  --life73-line:rgba(255,255,255,.09);
+  --life73-line-strong:rgba(255,255,255,.13);
+  --life73-text:#f8f8f6;
+  --life73-muted:#9aa3ab;
+  --life73-orange:#ff944d;
+  --life73-orange2:#ff7a2f;
+  --life73-green:#47df8b;
+}
+
+body{background:#05070a!important;color:var(--life73-text)!important}
+body:before{background:
+  radial-gradient(900px 640px at 92% 7%,rgba(255,126,47,.14),transparent 63%),
+  radial-gradient(720px 560px at 6% 92%,rgba(255,126,47,.08),transparent 68%),
+  linear-gradient(180deg,#05070a,#0a0f13 62%,#06090c)!important;opacity:1!important}
+body:after{opacity:.06!important}
+
+/* --- Universal polish --- */
+.v18-top,.v18-tabs,.life-how-entry{display:none!important}
+#life-owner-open{display:none!important}
+.v18-shell{padding-top:max(10px,env(safe-area-inset-top))!important}
+.life-premium-home{width:calc(100% - 18px)!important;max-width:430px!important;margin:0 auto 110px!important}
+.life-premium-welcome{gap:12px!important;margin:2px 0 14px!important}
+.life-premium-welcome h1{font-size:30px!important;line-height:1.03!important;letter-spacing:-.055em!important}
+.life-premium-welcome p{font-size:10px!important;color:#9ca4aa!important;margin-top:6px!important}
+.life-premium-tools{gap:6px!important}
+.life-premium-weather{min-width:92px!important;width:92px!important;height:58px!important;padding:8px 9px!important;border-radius:15px!important;border-color:var(--life73-line)!important;background:linear-gradient(145deg,#171d23,#0f1419)!important;box-shadow:inset 0 1px rgba(255,255,255,.03)!important}
+.life-premium-weather>span{font-size:19px!important;color:var(--life73-orange)!important}.life-premium-weather>b{font-size:16px!important}.life-premium-weather>small{font-size:7px!important;max-width:60px!important}
+.life-premium-iconbtn{width:40px!important;height:58px!important;border-radius:15px!important;border-color:var(--life73-line)!important;background:linear-gradient(145deg,#171d23,#0f1419)!important}
+
+.life-premium-focus-card{
+  min-height:244px!important;border-radius:22px!important;padding:17px!important;border:1px solid var(--life73-line-strong)!important;
+  background:
+    linear-gradient(90deg,rgba(6,9,12,.97) 0%,rgba(7,10,13,.74) 46%,rgba(7,10,13,.18) 82%),
+    linear-gradient(0deg,rgba(5,7,10,.97) 0%,transparent 60%),
+    url('../media/today-mountains.svg') center/cover no-repeat,#12171b!important;
+  box-shadow:0 22px 58px rgba(0,0,0,.38), inset 0 1px rgba(255,255,255,.045)!important;
+}
+.life-premium-focus-top small{font-size:9px!important;letter-spacing:.18em!important;color:#ffc28e!important}
+.life-premium-focus-top span{font-size:9px!important;color:#dbdee1!important}
+.life-premium-focus-main{padding-top:24px!important;max-width:78%!important}
+.life-premium-focus-main h2{font-size:31px!important;line-height:1.06!important;letter-spacing:-.05em!important;max-width:9ch!important}
+.life-premium-focus-main p{font-size:10px!important;margin-top:11px!important;color:#d0d5d9!important}
+.life-premium-focus-main button{width:48px!important;height:48px!important;right:-88px!important;top:51%!important;background:linear-gradient(145deg,#ffa65f,#ff7d31)!important;box-shadow:0 12px 30px rgba(255,122,47,.3)!important}
+.life-premium-focus-main button span{font-size:22px!important;color:#15181b!important}
+.life-premium-quote{margin-top:18px!important;padding-top:11px!important;border-top:1px solid rgba(255,255,255,.1)!important}
+.life-premium-quote>span{font-size:28px!important;color:#c98557!important}
+.life-premium-quote p{font-size:9px!important;color:#c0c6ca!important}
+
+.life-premium-module-grid{gap:8px!important;margin-top:10px!important}
+.life-premium-module-grid button{min-height:126px!important;padding:13px 12px!important;border-radius:18px!important;border-color:var(--life73-line)!important;background:linear-gradient(145deg,#171d23,#0f1419)!important;box-shadow:inset 0 1px rgba(255,255,255,.03)!important}
+.life-premium-module-grid i{font-size:24px!important;color:var(--life73-orange)!important;font-variation-settings:'FILL' 1,'wght' 520!important}
+.life-premium-module-grid b{font-size:13px!important;letter-spacing:-.015em!important}
+.life-premium-module-grid small{font-size:8px!important;line-height:1.44!important;color:#9aa3aa!important}
+.life-premium-module-grid em{font-size:16px!important;color:#c8763f!important}
+
+.life-premium-ai-card{min-height:76px!important;margin-top:10px!important;padding:14px 15px!important;border-radius:19px!important;border-color:rgba(255,147,76,.52)!important;grid-template-columns:36px 1fr 28px!important;background:linear-gradient(98deg,rgba(110,51,20,.7),rgba(24,19,17,.98) 38%,#11171c 80%)!important}
+.life-premium-ai-card>i{font-size:27px!important}.life-premium-ai-card b{font-size:15px!important}.life-premium-ai-card small{font-size:8px!important;color:#a8afb5!important}
+
+.life-premium-today-list{margin-top:10px!important;padding:17px!important;border-radius:19px!important;border-color:var(--life73-line)!important;background:linear-gradient(160deg,#12181e,#0d1217)!important}
+.life-premium-today-list h3{font-size:18px!important}.life-premium-today-list header small{font-size:8px!important}.life-premium-today-list>button{padding:11px 0!important}.life-premium-today-list>button span b{font-size:11px!important}.life-premium-today-list>button span small{font-size:8px!important}
+
+/* --- Help Center closer to reference --- */
+.life-help-overlay{background:rgba(2,4,6,.88)!important;padding:0!important}
+.life-help-center{width:min(430px,100%)!important;height:100dvh!important;max-height:none!important;border:0!important;border-radius:0!important;padding:calc(14px + env(safe-area-inset-top)) 14px calc(96px + env(safe-area-inset-bottom))!important;background:linear-gradient(180deg,#0a0f13,#070b0e)!important;box-shadow:none!important}
+.life-help-head{grid-template-columns:38px 1fr 38px!important;align-items:start!important;margin-bottom:16px!important}
+.life-help-head h2{font-size:25px!important}.life-help-head p{font-size:8px!important;color:#a1a9af!important}
+.life-help-back,.life-help-bell{width:38px!important;height:38px!important;border-radius:12px!important;background:linear-gradient(145deg,#171d23,#0f1419)!important;border:1px solid var(--life73-line)!important}
+.life-help-search{height:46px!important;border-radius:14px!important;border-color:var(--life73-line)!important;background:linear-gradient(145deg,#171d23,#10161b)!important;margin-bottom:16px!important}
+.life-help-search input{font-size:10px!important}.life-help-label{font-size:12px!important;margin-bottom:9px!important}
+.life-help-topics{gap:6px!important}.life-help-topics>button{min-height:56px!important;padding:8px 10px!important;border-radius:14px!important;border-color:var(--life73-line)!important;background:linear-gradient(145deg,#171d23,#10161b)!important}
+.life-help-topics>button>i{width:34px!important;height:34px!important;border-radius:10px!important}.life-help-topics b{font-size:10px!important}.life-help-topics small{font-size:8px!important}
+.life-help-support{min-height:66px!important;margin-top:14px!important;border-radius:15px!important;border-color:rgba(255,147,76,.52)!important;background:linear-gradient(120deg,rgba(112,50,20,.56),rgba(21,17,15,.98) 40%,#10161b)!important}
+.life-help-shortcuts button{min-height:58px!important;border-radius:14px!important}
+
+/* --- Owner panel closer to reference --- */
+#life-owner-panel{padding:calc(14px + env(safe-area-inset-top)) 12px calc(34px + env(safe-area-inset-bottom))!important;background:#070a0d!important}
+#life-owner-panel .lov-wrap{width:100%!important;max-width:430px!important;margin:0 auto!important;padding-bottom:36px!important}
+#life-owner-panel .lov-head{display:grid!important;grid-template-columns:38px 1fr 38px!important;align-items:start!important;margin:0 0 14px!important;text-align:center!important}
+#life-owner-panel .lov-head>.lov-close{grid-column:1!important;grid-row:1!important;width:38px!important;height:38px!important;border-radius:12px!important;background:linear-gradient(145deg,#171d23,#0f1419)!important;border:1px solid var(--life73-line)!important}
+#life-owner-panel .lov-head>.lov-close span{font-size:0!important}#life-owner-panel .lov-head>.lov-close span:after{content:'arrow_back';font-family:'Material Symbols Rounded';font-size:20px!important;color:#fff}
+#life-owner-panel .lov-head>div{grid-column:2!important;grid-row:1!important}#life-owner-panel .lov-head>div>small{display:none!important}
+#life-owner-panel .lov-head h1{font-size:24px!important;margin:2px 0 5px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important}
+#life-owner-panel .lov-head h1:before{content:'crown';font-family:'Material Symbols Rounded';font-variation-settings:'FILL' 1,'wght' 600;color:var(--life73-orange);font-size:23px}
+#life-owner-panel .lov-head .lov-muted{font-size:8px!important;color:#a0a8ae!important}
+#life-owner-panel .lov-kpis{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important}
+#life-owner-panel .lov-stat{min-height:116px!important;padding:11px!important;border-radius:14px!important;border-color:var(--life73-line)!important;background:linear-gradient(145deg,#171d23,#0f1419)!important}
+#life-owner-panel .lov-stat>span{font-size:20px!important}#life-owner-panel .lov-stat>b{font-size:19px!important}#life-owner-panel .lov-stat>small{font-size:7px!important}#life-owner-panel .lov-stat>em{font-size:7px!important;color:var(--life73-green)!important}
+#life-owner-panel .lov-growth{padding:14px!important;border-radius:15px!important;margin-top:8px!important;border-color:var(--life73-line)!important;background:linear-gradient(160deg,#12181e,#0d1217)!important}
+#life-owner-panel .lov-section-head small{font-size:8px!important}.lov-section-head b{font-size:20px!important}.lov-section-head>span{font-size:6px!important;padding:6px 8px!important;border-radius:11px!important}
+.lov-chart{height:150px!important;margin-top:10px!important}
+.lov-dashboard-grid{grid-template-columns:.86fr 1.14fr!important;gap:8px!important;margin-top:8px!important}
+.lov-plan-ring,.lov-activity{padding:13px!important;border-color:var(--life73-line)!important;background:linear-gradient(160deg,#12181e,#0d1217)!important}.lov-donut{width:104px!important;height:104px!important}.lov-donut:after{width:64px!important;height:64px!important}
+.lov-activity>div:not(.lov-section-head){padding:8px 0!important}.lov-activity b{font-size:8px!important}.lov-activity small{font-size:6px!important}
+#life-owner-panel .lov-tabs{grid-template-columns:1fr 1fr!important;gap:7px!important}#life-owner-panel .lov-tabs .lov-btn:nth-child(3){grid-column:1 / -1!important}
+#life-owner-panel .lov-btn{border-radius:13px!important}
+#life-owner-panel .lov-tabpanel{border-radius:16px!important}
+
+/* --- Mobile More / navigation --- */
+.life-design-mobile-nav{left:8px!important;right:8px!important;bottom:7px!important;max-width:none!important;min-height:70px!important;border-radius:20px!important;background:rgba(10,13,16,.98)!important;border:1px solid rgba(255,255,255,.11)!important;box-shadow:0 -10px 40px rgba(0,0,0,.45),inset 0 1px rgba(255,255,255,.025)!important}
+.life-design-mobile-nav button{color:#b9c0c6!important}.life-design-mobile-nav button.on{color:var(--life73-orange)!important}
+.life-design-mobile-nav button i{font-size:22px!important;font-variation-settings:'FILL' 0,'wght' 430!important}.life-design-mobile-nav button.on i{font-variation-settings:'FILL' 1,'wght' 600!important}
+.life-design-mobile-nav button span{font-size:8px!important}
+.life-design-mobile-nav .life-design-nav-add i{width:45px!important;height:45px!important;border-radius:50%!important;border:1px solid rgba(255,255,255,.17)!important;background:#06090c!important;color:#fff!important;font-size:25px!important;margin-top:-19px!important}
+.life-mobile-more>div{max-width:430px!important;border-radius:22px!important;border-color:var(--life73-line)!important;background:linear-gradient(160deg,#12181e,#0d1217)!important}
+.life-mobile-area-card{border-radius:16px!important;border-color:var(--life73-line)!important;background:linear-gradient(145deg,#171d23,#10161b)!important}
+.life-owner-more-card{border-color:rgba(255,147,76,.45)!important;background:linear-gradient(145deg,rgba(92,43,20,.66),#11171c)!important}.life-owner-more-crown{color:var(--life73-orange)!important}
+
+/* --- Desktop emulator adaptation --- */
+@media (min-width:821px){
+  body{overflow-x:hidden!important}
+  .v18-shell{
+    position:relative!important;
+    width:min(430px,calc(100vw - 48px))!important;
+    max-width:430px!important;
+    margin:28px auto 26px!important;
+    min-height:880px!important;
+    padding:58px 0 108px!important;
+    border-radius:56px!important;
+    background:linear-gradient(180deg,#080c10,#06090c 62%,#080c10)!important;
+    border:4px solid rgba(172,145,123,.55)!important;
+    box-shadow:0 34px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06) inset!important;
+    overflow:hidden!important;
+  }
+  .v18-shell:before{
+    content:'';position:absolute;top:16px;left:50%;transform:translateX(-50%);width:110px;height:28px;border-radius:22px;background:#000;z-index:20;
+  }
+  .v18-shell:after{
+    content:'';position:absolute;inset:10px;border-radius:48px;pointer-events:none;border:1px solid rgba(255,255,255,.07);z-index:1;
+  }
+  .life-premium-home{position:relative!important;z-index:2!important;width:calc(100% - 22px)!important;max-width:none!important;margin:0 auto 108px!important}
+  .life-help-overlay{display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(2,4,6,.84)!important;padding:18px!important}
+  .life-help-center{width:430px!important;height:880px!important;max-height:calc(100vh - 40px)!important;border-radius:38px!important;border:1px solid rgba(255,255,255,.1)!important;padding:22px 16px 104px!important;box-shadow:0 38px 110px rgba(0,0,0,.52)!important}
+  #life-owner-panel{display:flex!important;align-items:center!important;justify-content:center!important;padding:20px!important;background:rgba(2,4,6,.84)!important}
+  #life-owner-panel .lov-wrap{max-height:calc(100vh - 40px)!important;overflow:auto!important;border-radius:38px!important;padding:20px 16px 30px!important;border:1px solid rgba(255,255,255,.1)!important;background:linear-gradient(180deg,#0b1014,#080c0f 78%)!important;box-shadow:0 38px 110px rgba(0,0,0,.52)!important}
+  .life-design-mobile-nav{left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:402px!important;bottom:20px!important;z-index:30!important}
+  .v18-fab{right:calc(50% - 188px)!important;left:auto!important;bottom:110px!important}
+}
+
+@media (max-width:820px){
+  .v18-shell{padding-top:max(8px,env(safe-area-inset-top))!important}
+}
+@media (max-width:390px){
+  .life-premium-welcome h1{font-size:27px!important}
+  .life-premium-weather{width:80px!important;min-width:80px!important}
+  .life-premium-iconbtn{width:36px!important}
+  .life-premium-focus-main h2{font-size:28px!important}
+  .life-premium-focus-main button{right:-80px!important}
+  .life-premium-module-grid button{min-height:118px!important;padding:11px 10px!important}
+  .life-premium-module-grid b{font-size:12px!important}
+  .life-premium-module-grid small{font-size:7px!important}
+  #life-owner-panel .lov-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .lov-dashboard-grid{grid-template-columns:1fr!important}
+}

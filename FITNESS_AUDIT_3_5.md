@@ -1,29 +1,21 @@
-# Checklist de release — LIFE OS 3.2
+# LIFE OS 3.2 — Release Audit
 
-## Produto
-- [ ] Home mostra apenas o essencial do dia
-- [ ] Fitness abre em Treino pronto / Personalizado / Biblioteca / Meus treinos
-- [ ] Estudos abre Guia de estudos e demais ferramentas sem poluir a entrada
-- [ ] Favoritos funciona no mobile
-- [ ] LIFE AI encaminha para áreas corretas
-- [ ] Evolução usa dados reais, sem inventar métricas
-- [ ] Configurações são uma tela própria
-- [ ] Abertura cinematográfica aparece após autenticação
+- JavaScript verificado: 8 arquivos; erros de sintaxe: 0
+- CSS verificado: 4 arquivos; erros de parse: 0
+- HTML verificado: 6 páginas; IDs duplicados: 0; referências locais ausentes: 0
+- Manifesto PWA: válido (LIFE OS, start_url=./)
+- Service worker: cache local + fallback offline + handler de push presentes
+- Hoje minimalista: OK
+- Fitness — treino pronto: OK
+- Fitness — personalizado: OK
+- Fitness — biblioteca: OK
+- Fitness — meus treinos: OK
+- Guia de estudos: OK
+- Favoritos: OK
+- LIFE AI chat: OK
+- Evolução: OK
+- Configurações: OK
+- Abertura cinematográfica: OK
 
-## Técnico
-- [ ] Login e recuperação por e-mail
-- [ ] RLS no Supabase
-- [ ] OWNER não pode ser forjado no navegador
-- [ ] Checkout e retorno PRO
-- [ ] Sincronização em dois dispositivos
-- [ ] PWA instala
-- [ ] Offline abre fallback
-- [ ] Push registrado quando backend estiver configurado
-- [ ] Teste em Android, iPhone e desktop
-
-## Comercial
-- [ ] E-mail/contato oficial de suporte
-- [ ] Política de privacidade revisada
-- [ ] Termos revisados
-- [ ] Regras de cancelamento/reembolso claras
-- [ ] Domínio próprio
+## Limites da auditoria local
+A estrutura, sintaxe e referências locais foram validadas. Login real, Mercado Pago, Edge Functions, sincronização entre dois dispositivos, clima e push dependem do backend/HTTPS publicado e precisam de teste de produção.

@@ -1,21 +1,20 @@
-LIFE OS 7.2 — PREMIUM REFERENCE EDITION — atualização para o projeto já publicado
+LIFE OS 7.6 — PHOTO FIDELITY UPDATE ONLY
 
-1. Extraia este ZIP.
-2. Selecione tudo que estiver dentro da pasta extraída.
-3. No GitHub do LIFE: Adicionar arquivo > Carregar arquivos.
-4. Envie mantendo as pastas assets/css, assets/js, assets/media e docs.
-5. Confirme a substituição dos arquivos antigos.
-6. Aguarde a Vercel finalizar o deploy.
-7. No celular, feche/reabra o PWA ou atualize a página para carregar o cache 7.2.
+Objetivo desta versão:
+- Reproduzir o visual da referência enviada com prioridade total para MOBILE.
+- No desktop/emulador, preservar exatamente a composição mobile dentro de um aparelho centralizado, sem esticar o app.
 
-IMPORTANTE: este é um pacote UPDATE ONLY. Ele pressupõe que a versão anterior completa do LIFE já está no repositório.
+Ajustes principais:
+- Header mobile com saudação, clima e botões de ajuda/notificação nas mesmas proporções da referência.
+- Card HOJE redesenhado com hierarquia, espaçamento, fundo de montanhas e botão circular mais próximos da foto.
+- 6 cards (Organização, Estudos, Fitness, Alimentação, Finanças e Sono) ajustados em grade 3x2.
+- Card LIFE AI e barra inferior reconstruídos com proporções e acabamento do mockup.
+- Central de Ajuda reconstruída em tela cheia no celular.
+- Painel Owner reconstruído em tela cheia no celular, com KPIs 4 colunas, gráfico, planos e atividade recente.
+- Emulador/desktop com moldura premium e o mesmo layout mobile, além da marca LIFE OS ao fundo.
+- Fonte Inter adicionada para se aproximar da tipografia da referência.
+- Clima agora exibe cidade + data.
+- Cache PWA atualizado para 7.6.
 
-Principais mudanças 7.2:
-- Tela Hoje redesenhada no padrão premium preto + cobre aprovado.
-- Cards de Organização, Estudos, Fitness, Alimentação, Finanças e Sono.
-- Hero do dia com imagem de montanhas, próxima ação e progresso.
-- Central de Ajuda completa com busca e tópicos.
-- Painel Owner redesenhado, mantendo os IDs de integração já existentes.
-- Removido o segundo indicador OWNER do cabeçalho para evitar duplicação no mobile.
-- Barra mobile: Hoje, Organizar, Criar, LIFE AI e Mais.
-- Cache PWA atualizado para 7.2.
+IMPORTANTE:
+Este é um pacote UPDATE ONLY. Faça upload dos arquivos mantendo as pastas e SUBSTITUA somente os arquivos de mesmo nome. Não apague os demais arquivos existentes no repositório.

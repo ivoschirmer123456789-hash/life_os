@@ -1,22 +1,45 @@
-# LIFE OS 3.2 — Final Edition / release audit
+# LIFE OS 3.5 — Fitness Ultra / Auditoria
 
-## What changed in the final visual correction
-- Today is intentionally minimal: greeting/status, today's checklist, progress, quick add, and one LIFE AI action.
-- FREE upgrade messaging no longer competes with Today. Plan messaging is scoped to Profile or relevant locked/advanced areas.
-- Global smart search / advanced hub no longer appears on Today.
-- Floating LIFE AI and floating create button no longer overlap Today; IA remains a dedicated destination.
-- Header is quieter: FREE and normal sync state are no longer repeated as persistent badges.
-- Light mode was rebuilt around neutral white/graphite surfaces with orange used as an accent only; the old beige/brown canvas and dark vignette are overridden.
-- Dark mode was tightened for stronger hierarchy and less visual noise.
-- Page changes use a compact destination transition instead of a loading-screen-like takeover.
-- The cinematic intro is shown once after this release and then follows the user's opening setting / per-session behavior.
+- JS assets/js/quality-runtime.js: OK
+- JS assets/js/design-runtime.js: OK
+- JS assets/js/pwa-runtime.js: OK
+- JS assets/js/life-app.js: OK
+- JS assets/js/product-runtime.js: OK
+- JS assets/js/supabase-auth.js: OK
+- JS assets/js/config.js: OK
+- JS service-worker.js: OK
+- CSS assets/css/utilities.css: OK
+- CSS assets/css/marketing.css: OK
+- CSS assets/css/fitness-v35.css: OK
+- CSS assets/css/life.css: OK
+- CSS assets/css/final.css: OK
+- CSS assets/css/product.css: OK
+- HTML index.html: IDs duplicados=0
+- HTML landing.html: IDs duplicados=0
+- HTML offline.html: IDs duplicados=0
+- HTML terms.html: IDs duplicados=0
+- HTML support.html: IDs duplicados=0
+- HTML privacy.html: IDs duplicados=0
+- Referências locais ausentes: 0
+- Service Worker refs ausentes: 0
+- Marker Fitness Ultra Today: OK
+- Marker Recovery: OK
+- Marker Trend 8 weeks: OK
+- Marker Journal: OK
+- Marker Top nav: OK
+- Marker Equipment filter: OK
+- Marker Difficulty filter: OK
+- Marker Favorites filter: OK
+- Marker Session swap: OK
+- Marker Post session review: OK
+- Marker Exercise favorites: OK
+- Marker AI Coach: OK
+- Botões React detectados: 562
+- Handlers explicitamente nulos/undefined: 0
+- Build 3.5.0 no index: OK
+- Cache 3.5.0: OK
+- CSS Fitness 3.5 referenciado: OK
 
-## Static verification
-- All executable JavaScript files pass `node --check`.
-- All CSS files parse without syntax errors.
-- HTML pages have no duplicate static IDs.
-- No referenced local assets are missing.
-- Service worker shell references resolve to existing project files.
+## Resultado
 
-## Production checks still required after upload
-The following depend on the live backend/account and must be verified on the published domain: Supabase sign-in/session, cloud sync with two devices, Mercado Pago checkout/callback, remote LIFE AI Edge Function, and background push configuration.
+Nenhuma falha estrutural encontrada nesta auditoria estática. Integrações externas continuam dependendo do ambiente publicado.

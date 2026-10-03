@@ -1,1 +1,25 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#05070a"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/marketing-v70.css?v=7.0.0"><link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml"><title>Privacidade — LIFE OS</title></head><body><main class="legal"><a href="landing.html">← Voltar</a><small>LIFE OS / PRIVACIDADE</small><h1>Privacidade.</h1><div class="notice">Texto de produto inicial. Antes de operação comercial ampla, revise esta política com orientação jurídica adequada à sua empresa, público e integrações.</div><h2>Dados da conta</h2><p>O LIFE OS pode usar e-mail, identificador da conta e informações de plano para autenticação, sincronização e controle de acesso.</p><h2>Dados criados no LIFE</h2><p>Tarefas, notas, estudos, Fitness, alimentação, finanças, preferências e histórico podem ser armazenados localmente e, quando a sincronização estiver ativa, vinculados à conta.</p><h2>LIFE AI</h2><p>Quando recursos de IA online estiverem ativos, o contexto necessário para responder à solicitação pode ser enviado ao backend da LIFE AI. Senhas e credenciais não devem fazer parte desse contexto.</p><h2>Pagamentos</h2><p>O checkout de assinatura é realizado pelo provedor configurado. Dados sensíveis de cartão não devem ser armazenados no frontend do LIFE.</p><h2>Controle do usuário</h2><p>O produto oferece exportação de dados e controles de sincronização. Exclusão de conta e dados deve ser validada antes da operação comercial em produção.</p><h2>Segurança</h2><p>FREE, PRO e OWNER devem ser controlados no backend com políticas de acesso adequadas. O navegador não deve conseguir promover a própria conta.</p></main></body></html>
+# LIFE OS 7.6.1 — READY BUILD
+
+Versão completa consolidada a partir do LIFE OS 7.0 Constellation com as melhorias cumulativas 7.1, 7.2, 7.4 e 7.6 incorporadas ao pacote principal.
+
+## O que já está dentro deste pacote
+- Aplicação principal completa (`index.html` + todos os módulos antigos da Constellation).
+- Visual premium/mobile da linha 7.x, incluindo Home/Hoje, Central de Ajuda e Painel Owner.
+- Assets de mídia e CSS das atualizações 7.1–7.6 incluídos localmente.
+- PWA/service worker atualizado para 7.6.1.
+- Cache offline com todas as dependências locais usadas pelo `index.html`.
+- Correção de inconsistências de versão entre UI, diagnóstico, PWA e cache.
+- Melhor tratamento de modais/overlays e fechamento por ESC no desktop.
+- Compatibilidade de montagem ReactDOM com `createRoot` e fallback para `render` quando disponível.
+- Configuração Vercel endurecida para evitar HTML/manifest antigos em cache.
+
+## Publicação
+Este ZIP é um pacote **completo**, não é “Update Only”.
+
+1. Extraia a pasta.
+2. Envie todo o conteúdo para o repositório conectado à Vercel, substituindo os arquivos antigos.
+3. Faça o commit/deploy.
+4. Depois do deploy, abra o site e recarregue uma vez para o novo service worker assumir o cache 7.6.1.
+
+## Dependências online
+Login/sincronização usam Supabase. Clima, LIFE AI remota, pagamento, push e sincronização entre aparelhos dependem dos serviços externos configurados no ambiente publicado.

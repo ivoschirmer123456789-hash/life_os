@@ -1,86 +1,14 @@
-/* LIFE OS 3.2 — Product Edition base polish layer */
-:root{
-  --life-orange:#ff7a32;
-  --life-orange-soft:rgba(255,122,50,.10);
-  --life-bg:#050608;
-  --life-surface:#0b0d11;
-  --life-surface-2:#101319;
-  --life-line:rgba(255,255,255,.075);
-  --life-text:#f4f6f8;
-  --life-muted:#7f8994;
-  --life-radius:20px;
-  --life-radius-sm:14px;
-  --life-shadow:0 24px 70px rgba(0,0,0,.24);
-  --life-ease:cubic-bezier(.2,.8,.2,1);
-}
-html{scroll-behavior:smooth;background:var(--life-bg)}
-body{background:var(--life-bg);text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
-button,a,input,textarea,select{touch-action:manipulation}
-button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid rgba(255,122,50,.72)!important;outline-offset:3px!important}
-::selection{background:rgba(255,122,50,.28);color:#fff}
-
-/* One coherent surface language */
-.life-simple-shell,.life-today-minimal,.life-ai-simple-page,.life-guide-page{width:min(1080px,100%);margin-inline:auto}
-.life-simple-hero,.life-today-plan-card,.life-folder,.life-evolution-panel,.life-evolution-topline>div,.life-function-card,.life-ai-simple-compose,.life-ai-simple-bubble{
-  backdrop-filter:saturate(120%) blur(12px);
-}
-.life-function-card,.life-folder,.life-evolution-panel,.life-evolution-topline>div,.life-today-plan-card{
-  box-shadow:0 1px 0 rgba(255,255,255,.02),0 18px 50px rgba(0,0,0,.14);
-}
-.life-function-card{min-height:184px!important;border-radius:24px!important;padding:22px!important}
-.life-function-card:hover{transform:translateY(-3px)!important;box-shadow:0 22px 60px rgba(0,0,0,.22)}
-.life-function-card b{font-size:16px!important;line-height:1.25}
-.life-function-card .life-function-desc{font-size:10px!important;line-height:1.62!important;color:#86909b!important}
-.life-function-card em{font-size:8px!important}
-.life-simple-copy h1,.life-today-minimal-greeting h1,.life-ai-simple-head h1,.life-guide-intro h1{font-weight:850!important;letter-spacing:-.058em!important}
-.life-simple-copy p,.life-today-minimal-greeting p,.life-ai-simple-head p,.life-guide-intro p{font-size:11px!important;line-height:1.72!important}
-
-/* Today = calm command center */
-.life-today-minimal{padding-top:clamp(42px,7vh,82px)!important}
-.life-today-plan-card{border-radius:26px!important;background:linear-gradient(155deg,rgba(255,255,255,.035),rgba(255,255,255,.012))!important}
-.life-today-item{transition:background .18s ease,opacity .18s ease,transform .18s ease}
-.life-today-item:hover{background:rgba(255,255,255,.018)}
-.life-today-item.done{opacity:.5}
-.life-today-check{transition:transform .16s var(--life-ease),background .16s ease,border-color .16s ease}
-.life-today-check:active{transform:scale(.88)}
-
-/* AI feels like a serious assistant */
-.life-ai-simple-thread{gap:22px!important}
-.life-ai-simple-message{max-width:820px!important}
-.life-ai-simple-bubble{padding:14px 16px!important;border-radius:18px!important}
-.life-ai-simple-bubble p{font-size:11px!important;line-height:1.78!important}
-.life-ai-simple-compose{border-radius:22px!important;padding:9px!important;box-shadow:0 28px 80px rgba(0,0,0,.34)!important}
-.life-ai-simple-compose textarea{font-size:12px!important;line-height:1.55!important}
-.life-ai-simple-compose button{border-radius:15px!important;transition:transform .16s var(--life-ease)}
-.life-ai-simple-compose button:active{transform:scale(.92)}
-
-/* Evolution should read as data, not decoration */
-.life-evolution-topline{gap:10px!important}.life-evolution-topline>div{padding:20px!important;border-radius:18px!important}
-.life-evolution-topline b{font-size:30px!important}.life-evolution-panel{padding:22px!important;border-radius:22px!important}
-.life-evolution-area-bars i{height:8px!important}.life-evolution-area-bars i em{box-shadow:0 0 18px rgba(255,122,50,.18)}
-
-/* Header/navigation clarity */
-.v18-top,.life-mobile-nav{backdrop-filter:blur(22px) saturate(125%)!important}
-.life-mobile-nav{padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
-.life-mobile-nav button{transition:transform .16s var(--life-ease),background .16s ease,color .16s ease!important}
-.life-mobile-nav button:active{transform:scale(.94)}
-.v31-panel,.life-settings-panel{box-shadow:0 40px 120px rgba(0,0,0,.48)!important}
-
-/* Better loading / offline states */
-#life-load-fallback{background:radial-gradient(circle at 50% 30%,rgba(255,122,50,.08),transparent 32%),#050608!important}
-
-/* Day theme consistency */
-.life-theme-day{--life-bg:#f4eee7;--life-surface:#fffaf4;--life-text:#27211c;--life-muted:#766b61}
-.life-theme-day .life-function-card,.life-theme-day .life-folder,.life-theme-day .life-evolution-panel,.life-theme-day .life-evolution-topline>div,.life-theme-day .life-today-plan-card{box-shadow:0 18px 55px rgba(72,50,32,.06)!important}
-
-@media(max-width:820px){
-  .v18{padding-left:14px!important;padding-right:14px!important}
-  .life-simple-shell,.life-today-minimal,.life-ai-simple-page,.life-guide-page{width:100%}
-  .life-function-card{min-height:138px!important;padding:18px!important;border-radius:20px!important}
-  .life-function-card .life-function-desc{font-size:9px!important;max-width:42ch!important}
-  .life-today-plan-card{border-radius:22px!important}
-  .life-ai-simple-compose-wrap{padding-inline:2px}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-}
+(function(){
+  const errorKey='life_runtime_errors_v1';
+  const storeError=(kind,value)=>{try{const list=JSON.parse(localStorage.getItem(errorKey)||'[]');list.unshift({kind,message:String(value?.message||value||'Erro desconhecido').slice(0,300),at:new Date().toISOString(),path:location.pathname});localStorage.setItem(errorKey,JSON.stringify(list.slice(0,25)))}catch(e){}};
+  window.addEventListener('error',e=>storeError('error',e.error||e.message));
+  window.addEventListener('unhandledrejection',e=>storeError('promise',e.reason));
+  let installPrompt=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;window.dispatchEvent(new CustomEvent('life:pwa-ready'));});
+  window.addEventListener('appinstalled',()=>{installPrompt=null;try{localStorage.setItem('life_pwa_installed','1')}catch(e){}});
+  window.lifeInstallPWA=async function(){
+    if(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)return true;
+    if(!installPrompt)return false;
+    try{installPrompt.prompt();const choice=await installPrompt.userChoice;installPrompt=null;return choice?.outcome==='accepted'}catch(e){storeError('pwa-install',e);return false}
+  };
+})();
