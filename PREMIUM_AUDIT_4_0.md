@@ -1,96 +1,19 @@
-{
-  "html": [
-    {
-      "file": "index.html",
-      "ids": 38,
-      "duplicate_ids": []
-    },
-    {
-      "file": "landing.html",
-      "ids": 5,
-      "duplicate_ids": []
-    },
-    {
-      "file": "offline.html",
-      "ids": 0,
-      "duplicate_ids": []
-    },
-    {
-      "file": "terms.html",
-      "ids": 0,
-      "duplicate_ids": []
-    },
-    {
-      "file": "support.html",
-      "ids": 0,
-      "duplicate_ids": []
-    },
-    {
-      "file": "privacy.html",
-      "ids": 0,
-      "duplicate_ids": []
-    }
-  ],
-  "css": [
-    {
-      "file": "system-v50.css",
-      "errors": [],
-      "bytes": 38464
-    },
-    {
-      "file": "utilities.css",
-      "errors": [],
-      "bytes": 1165
-    },
-    {
-      "file": "modules-v36.css",
-      "errors": [],
-      "bytes": 13076
-    },
-    {
-      "file": "system-v40.css",
-      "errors": [],
-      "bytes": 34374
-    },
-    {
-      "file": "marketing.css",
-      "errors": [],
-      "bytes": 9061
-    },
-    {
-      "file": "fitness-v35.css",
-      "errors": [],
-      "bytes": 33084
-    },
-    {
-      "file": "life.css",
-      "errors": [],
-      "bytes": 475865
-    },
-    {
-      "file": "final.css",
-      "errors": [],
-      "bytes": 50994
-    },
-    {
-      "file": "product.css",
-      "errors": [],
-      "bytes": 5495
-    }
-  ],
-  "missing_refs": [],
-  "manifest_icons_missing": [],
-  "old_version_files": [
-    "docs/PREMIUM_AUDIT_4_0.md",
-    "assets/css/system-v40.css",
-    "assets/css/marketing.css"
-  ],
-  "react_button_count": 578,
-  "explicit_broken_handlers": 0,
-  "v50_markers": {
-    "life-v50-layer": true,
-    "LIFE OS 5": true,
-    "LifeV50Academy": true,
-    "renderLifeV50Layer": true
-  }
-}
+# LIFE OS 7.0 — Constellation Audit
+
+- JavaScript: **12 arquivos**, erros de sintaxe: **0**.
+- CSS: **13 arquivos**, erros de parse: **0**.
+- HTML: **6 páginas**, páginas com IDs duplicados: **0**.
+- Referências locais ausentes: **0**.
+- Âncoras internas quebradas: **0**.
+- Manifest válido: **sim**.
+- Arquivos do shell PWA ausentes: **0**.
+- Versão principal/cache: **7.0.0**.
+- Study Universe: **161 assuntos únicos** no catálogo-fonte antes da política FREE.
+- Botões React detectados: **591**; `onClick` explicitamente `null/undefined`: **0**.
+- Padrões de segredo privado de alta confiança detectados no frontend: **0**.
+
+## Limite da auditoria
+Esta validação é estrutural e estática. Supabase, Mercado Pago, LIFE AI remota, clima, push e sincronização entre aparelhos dependem de serviços externos e precisam ser testados no domínio publicado.
+
+## Segurança de conteúdo
+Assuntos financeiros de alto risco são apresentados como educação sobre mecanismo, probabilidade, risco, regulação, conflitos de incentivo e prevenção a golpes; não como sinais ou instruções para operações reais.

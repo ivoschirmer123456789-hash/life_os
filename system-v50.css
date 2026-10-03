@@ -1,15 +1,4 @@
 (function(){
-  'use strict';
-  window.LIFE_BUILD={version:'7.0.0',name:'Constellation'};
-  window.LIFE_SINGLE_FILE=false;
-  if(!('serviceWorker' in navigator)) return;
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./service-worker.js',{scope:'./'}).then(reg=>{
-      reg.update().catch(()=>{});
-      window.LIFE_SERVICE_WORKER=reg;
-    }).catch(err=>console.warn('LIFE PWA: service worker indisponível',err));
-  });
-  window.addEventListener('online',()=>document.documentElement.dataset.network='online');
-  window.addEventListener('offline',()=>document.documentElement.dataset.network='offline');
-  document.documentElement.dataset.network=navigator.onLine?'online':'offline';
+  document.addEventListener('click',function(e){const b=e.target&&e.target.closest&&e.target.closest('button');if(!b||!navigator.vibrate||matchMedia('(pointer:fine)').matches)return;try{navigator.vibrate(b.classList.contains('life-design-nav-add')?9:4)}catch(_){}},{passive:true});
+  try{document.documentElement.dataset.lifeDesign='2.1';localStorage.setItem('life_design_version','2.1')}catch(e){}
 })();

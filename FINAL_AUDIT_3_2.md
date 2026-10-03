@@ -1,45 +1,95 @@
-# LIFE OS 3.5 — Fitness Ultra / Auditoria
-
-- JS assets/js/quality-runtime.js: OK
-- JS assets/js/design-runtime.js: OK
-- JS assets/js/pwa-runtime.js: OK
-- JS assets/js/life-app.js: OK
-- JS assets/js/product-runtime.js: OK
-- JS assets/js/supabase-auth.js: OK
-- JS assets/js/config.js: OK
-- JS service-worker.js: OK
-- CSS assets/css/utilities.css: OK
-- CSS assets/css/marketing.css: OK
-- CSS assets/css/fitness-v35.css: OK
-- CSS assets/css/life.css: OK
-- CSS assets/css/final.css: OK
-- CSS assets/css/product.css: OK
-- HTML index.html: IDs duplicados=0
-- HTML landing.html: IDs duplicados=0
-- HTML offline.html: IDs duplicados=0
-- HTML terms.html: IDs duplicados=0
-- HTML support.html: IDs duplicados=0
-- HTML privacy.html: IDs duplicados=0
-- Referências locais ausentes: 0
-- Service Worker refs ausentes: 0
-- Marker Fitness Ultra Today: OK
-- Marker Recovery: OK
-- Marker Trend 8 weeks: OK
-- Marker Journal: OK
-- Marker Top nav: OK
-- Marker Equipment filter: OK
-- Marker Difficulty filter: OK
-- Marker Favorites filter: OK
-- Marker Session swap: OK
-- Marker Post session review: OK
-- Marker Exercise favorites: OK
-- Marker AI Coach: OK
-- Botões React detectados: 562
-- Handlers explicitamente nulos/undefined: 0
-- Build 3.5.0 no index: OK
-- Cache 3.5.0: OK
-- CSS Fitness 3.5 referenciado: OK
-
-## Resultado
-
-Nenhuma falha estrutural encontrada nesta auditoria estática. Integrações externas continuam dependendo do ambiente publicado.
+{
+  "js_errors": [],
+  "css_errors": [],
+  "duplicate_ids": {},
+  "missing_local_refs": [],
+  "missing_sw_refs": [],
+  "stale_versions": {
+    "README.md": [
+      "3.5",
+      "3.6"
+    ],
+    "database/README.md": [
+      "3.2"
+    ],
+    "docs/APP_SUITE_AUDIT_3_6.md": [
+      "3.4",
+      "3.5",
+      "3.6",
+      "3.6.0"
+    ],
+    "docs/MOBILE_AUDIT_3_3.md": [
+      "3.3",
+      "3.3.0"
+    ],
+    "docs/AUDIT.md": [
+      "3.2"
+    ],
+    "docs/FITNESS_AUDIT_3_5.md": [
+      "3.5",
+      "3.5.0"
+    ],
+    "docs/FITNESS_AUDIT_3_4.md": [
+      "3.4",
+      "3.4.0"
+    ],
+    "docs/FINAL_AUDIT_3_2.md": [
+      "3.2",
+      "3.2.0"
+    ],
+    "docs/FINAL_AUDIT.md": [
+      "3.2"
+    ],
+    "docs/RELEASE_CHECKLIST.md": [
+      "3.2"
+    ],
+    "assets/css/modules-v36.css": [
+      "3.6"
+    ],
+    "assets/css/life.css": [
+      "2.0",
+      "2.2",
+      "2.3",
+      "2.5",
+      "2.8",
+      "3.5"
+    ],
+    "assets/css/final.css": [
+      "3.2",
+      "3.3"
+    ],
+    "assets/css/product.css": [
+      "3.2"
+    ],
+    "assets/js/design-runtime.js": [
+      "2.1"
+    ],
+    "assets/js/life-app.js": [
+      "2.4",
+      "2.5",
+      "3.5"
+    ]
+  },
+  "static_html_buttons_unhandled": [],
+  "counts": {
+    "js_files": 9,
+    "css_files": 8,
+    "html_pages": 6,
+    "react_buttons": 563,
+    "react_explicit_null_handlers": 0,
+    "local_project_files": 44
+  },
+  "logic_checks": {
+    "profile_email_uses_accountInfo": true,
+    "dead_list_noop_removed": true,
+    "favorites_routes_recipes": true,
+    "favorites_routes_study": true,
+    "favorites_routes_fitness": true,
+    "archive_safe_date": true,
+    "modal_scroll_lock": true,
+    "viewport_allows_zoom": true,
+    "version_build_4": true,
+    "pwa_cache_4": true,
+    "supabase_fallback": true
+  }
+}

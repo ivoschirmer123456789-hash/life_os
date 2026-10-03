@@ -1,19 +1,18 @@
-# LIFE OS 7.0 — Constellation Audit
+# LIFE OS 3.2 — auditoria da correção final
 
-- JavaScript: **12 arquivos**, erros de sintaxe: **0**.
-- CSS: **13 arquivos**, erros de parse: **0**.
-- HTML: **6 páginas**, páginas com IDs duplicados: **0**.
-- Referências locais ausentes: **0**.
-- Âncoras internas quebradas: **0**.
-- Manifest válido: **sim**.
-- Arquivos do shell PWA ausentes: **0**.
-- Versão principal/cache: **7.0.0**.
-- Study Universe: **161 assuntos únicos** no catálogo-fonte antes da política FREE.
-- Botões React detectados: **591**; `onClick` explicitamente `null/undefined`: **0**.
-- Padrões de segredo privado de alta confiança detectados no frontend: **0**.
+## Correções solicitadas
+- Fitness: coleções de metodologia agora abrem e levam à biblioteca correspondente; treinos prontos podem ser abertos sem o clique virar um bloqueio silencioso.
+- Receitas: biblioteca ampliada para 600 entradas, com categorias/tags como Doce, Salgada, Fitness, Café da manhã, Lanche, Almoço / jantar, Rápida, Assada, Cozida e outras. A tela inicial de Receitas não fica vazia: mostra categorias e destaques.
+- LIFE AI: recebeu catálogo interno das áreas do LIFE e respostas locais para perguntas como “como funciona?”, “para que serve?”, “onde fica?” e “como usar?”.
+- Ajuda contextual: botão “Como funciona?” disponível em todas as áreas, com finalidade, passos, exemplos e impacto prático, além de atalho para perguntar à LIFE AI.
+- Favoritos: coração direto no seletor de áreas no desktop e no menu móvel; o estado usa o mesmo sistema de favoritos já salvo pelo LIFE.
 
-## Limite da auditoria
-Esta validação é estrutural e estática. Supabase, Mercado Pago, LIFE AI remota, clima, push e sincronização entre aparelhos dependem de serviços externos e precisam ser testados no domínio publicado.
+## Validações estáticas
+- JavaScript: todos os arquivos em assets/js + service-worker passam em `node --check`.
+- CSS: todos os arquivos CSS passam no parser tinycss2 sem erros.
+- HTML: páginas principais sem IDs duplicados.
+- Arquivos locais: nenhuma referência local ausente nas páginas ou no shell do service worker.
+- Cache PWA: atualizado para 3.2.0.
 
-## Segurança de conteúdo
-Assuntos financeiros de alto risco são apresentados como educação sobre mecanismo, probabilidade, risco, regulação, conflitos de incentivo e prevenção a golpes; não como sinais ou instruções para operações reais.
+## Limites do teste local
+Integrações externas ainda dependem do ambiente publicado: Supabase, LIFE AI remota, Mercado Pago, clima e push. Essas integrações não foram alteradas nesta correção.

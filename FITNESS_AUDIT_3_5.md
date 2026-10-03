@@ -1,9 +1,29 @@
-# Banco — LIFE OS 3.2
+# Checklist de release — LIFE OS 3.2
 
-Arquivos preservados da versão anterior:
+## Produto
+- [ ] Home mostra apenas o essencial do dia
+- [ ] Fitness abre em Treino pronto / Personalizado / Biblioteca / Meus treinos
+- [ ] Estudos abre Guia de estudos e demais ferramentas sem poluir a entrada
+- [ ] Favoritos funciona no mobile
+- [ ] LIFE AI encaminha para áreas corretas
+- [ ] Evolução usa dados reais, sem inventar métricas
+- [ ] Configurações são uma tela própria
+- [ ] Abertura cinematográfica aparece após autenticação
 
-1. `schema-reference.sql` — referência do schema usado pelo LIFE.
-2. `security.sql` — RLS, OWNER e proteção dos perfis.
-3. `product-analytics.sql` — eventos de produto/analytics.
+## Técnico
+- [ ] Login e recuperação por e-mail
+- [ ] RLS no Supabase
+- [ ] OWNER não pode ser forjado no navegador
+- [ ] Checkout e retorno PRO
+- [ ] Sincronização em dois dispositivos
+- [ ] PWA instala
+- [ ] Offline abre fallback
+- [ ] Push registrado quando backend estiver configurado
+- [ ] Teste em Android, iPhone e desktop
 
-Antes de executar qualquer SQL em um banco que já possui usuários, faça backup e revise o estado atual do Supabase. Não execute cegamente scripts antigos sobre um schema que tenha mudado manualmente.
+## Comercial
+- [ ] E-mail/contato oficial de suporte
+- [ ] Política de privacidade revisada
+- [ ] Termos revisados
+- [ ] Regras de cancelamento/reembolso claras
+- [ ] Domínio próprio

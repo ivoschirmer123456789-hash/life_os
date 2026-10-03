@@ -1,95 +1,39 @@
-{
-  "js_errors": [],
-  "css_errors": [],
-  "duplicate_ids": {},
-  "missing_local_refs": [],
-  "missing_sw_refs": [],
-  "stale_versions": {
-    "README.md": [
-      "3.5",
-      "3.6"
-    ],
-    "database/README.md": [
-      "3.2"
-    ],
-    "docs/APP_SUITE_AUDIT_3_6.md": [
-      "3.4",
-      "3.5",
-      "3.6",
-      "3.6.0"
-    ],
-    "docs/MOBILE_AUDIT_3_3.md": [
-      "3.3",
-      "3.3.0"
-    ],
-    "docs/AUDIT.md": [
-      "3.2"
-    ],
-    "docs/FITNESS_AUDIT_3_5.md": [
-      "3.5",
-      "3.5.0"
-    ],
-    "docs/FITNESS_AUDIT_3_4.md": [
-      "3.4",
-      "3.4.0"
-    ],
-    "docs/FINAL_AUDIT_3_2.md": [
-      "3.2",
-      "3.2.0"
-    ],
-    "docs/FINAL_AUDIT.md": [
-      "3.2"
-    ],
-    "docs/RELEASE_CHECKLIST.md": [
-      "3.2"
-    ],
-    "assets/css/modules-v36.css": [
-      "3.6"
-    ],
-    "assets/css/life.css": [
-      "2.0",
-      "2.2",
-      "2.3",
-      "2.5",
-      "2.8",
-      "3.5"
-    ],
-    "assets/css/final.css": [
-      "3.2",
-      "3.3"
-    ],
-    "assets/css/product.css": [
-      "3.2"
-    ],
-    "assets/js/design-runtime.js": [
-      "2.1"
-    ],
-    "assets/js/life-app.js": [
-      "2.4",
-      "2.5",
-      "3.5"
-    ]
-  },
-  "static_html_buttons_unhandled": [],
-  "counts": {
-    "js_files": 9,
-    "css_files": 8,
-    "html_pages": 6,
-    "react_buttons": 563,
-    "react_explicit_null_handlers": 0,
-    "local_project_files": 44
-  },
-  "logic_checks": {
-    "profile_email_uses_accountInfo": true,
-    "dead_list_noop_removed": true,
-    "favorites_routes_recipes": true,
-    "favorites_routes_study": true,
-    "favorites_routes_fitness": true,
-    "archive_safe_date": true,
-    "modal_scroll_lock": true,
-    "viewport_allows_zoom": true,
-    "version_build_4": true,
-    "pwa_cache_4": true,
-    "supabase_fallback": true
-  }
-}
+# LIFE OS 3.3 — Mobile First Audit
+
+## Escopo
+Revisão focada em iPhone/mobile, navegação, sobreposição de botões, modais, Biblioteca global e consistência do PWA.
+
+## Alterações principais
+- Barra inferior mobile reorganizada em 5 alvos independentes: Hoje, Favoritos, Criar, LIFE AI e Mais.
+- Botão flutuante redundante da LIFE AI escondido no mobile para não competir com a barra inferior.
+- Cabeçalho mobile reduzido ao essencial para diminuir aglomeração.
+- Menu Mais em uma coluna, com botão de abrir e coração de favorito como alvos separados.
+- Modais, vídeos, receitas, guias e painéis elevados acima da navegação inferior.
+- Painéis mobile limitados a ~80–82dvh, deixando backdrop livre; tocar fora fecha quando o componente oferece esse comportamento.
+- Backdrop mais escuro/blur para impedir que botões atrás pareçam clicáveis.
+- Inputs em 16px no mobile para evitar zoom automático do Safari.
+- Biblioteca global criada: Guias, Estudos, Exercícios, Treinos e Receitas em uma única busca.
+- Biblioteca com busca, filtros, atalhos e resultados em uma coluna no iPhone.
+- Tutorial atualizado para explicar Biblioteca e coração de Favoritos.
+- PWA atualizado para cache 3.3.0 e busca offline ignorando query string de versão.
+
+## Validação estática
+- JavaScript do app e runtimes: node --check sem erros.
+- service-worker.js: node --check sem erros.
+- CSS: 0 erros de parse em todos os arquivos.
+- HTML: 0 IDs estáticos duplicados nas páginas públicas e app.
+- Referências locais: 0 arquivos ausentes.
+- manifest.webmanifest: JSON válido.
+- Versão do runtime: 3.3.0.
+- Cache do service worker: life-os-3.3.0.
+
+## Validação visual mobile
+Mock em viewport de iPhone (390px):
+- Biblioteca sem overflow horizontal.
+- Bottom navigation separada e legível.
+- Modal de exercício acima da bottom navigation.
+- Área externa do modal visível/tocável.
+- X não fica sob a barra inferior; não é necessário depender dele quando o backdrop fecha o modal.
+
+## Limitação do ambiente de teste
+A navegação de um servidor localhost pelo Chromium deste ambiente é bloqueada por política administrativa. Por isso, não foi possível certificar E2E real de todos os cliques com backend. A validação foi feita com sintaxe, estrutura, referências, CSS, inspeção dos handlers e mocks de viewport mobile. Login, Supabase, Mercado Pago, LIFE AI remota e push continuam dependendo do ambiente publicado.

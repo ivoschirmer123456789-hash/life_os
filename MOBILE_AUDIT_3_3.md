@@ -1,21 +1,23 @@
-# LIFE OS 3.2 — Release Audit
+# LIFE OS 6.0 — Signature System · Auditoria Final
 
-- JavaScript verificado: 8 arquivos; erros de sintaxe: 0
-- CSS verificado: 4 arquivos; erros de parse: 0
-- HTML verificado: 6 páginas; IDs duplicados: 0; referências locais ausentes: 0
-- Manifesto PWA: válido (LIFE OS, start_url=./)
-- Service worker: cache local + fallback offline + handler de push presentes
-- Hoje minimalista: OK
-- Fitness — treino pronto: OK
-- Fitness — personalizado: OK
-- Fitness — biblioteca: OK
-- Fitness — meus treinos: OK
-- Guia de estudos: OK
-- Favoritos: OK
-- LIFE AI chat: OK
-- Evolução: OK
-- Configurações: OK
-- Abertura cinematográfica: OK
+- Assuntos no Study Universe: **89**
+- JavaScript: **0 erros de sintaxe**
+- CSS: **0 erros de parse**
+- HTML: **0 IDs duplicados**
+- Referências locais: **0 arquivos faltando**
+- PWA/cache: **6.0.0**
 
-## Limites da auditoria local
-A estrutura, sintaxe e referências locais foram validadas. Login real, Mercado Pago, Edge Functions, sincronização entre dois dispositivos, clima e push dependem do backend/HTTPS publicado e precisam de teste de produção.
+## Produto
+- Redesign global Signature System com identidade por mini-app e laranja como assinatura central.
+- Landing page reconstruída.
+- Persuasão FREE contextual: valor, continuidade e comparação clara, sem urgência/escassez falsas.
+- Study Universe liberado no FREE; PRO diferencia por profundidade, mastery, mapas, histórico e contexto ampliado.
+- Tópicos especulativos de finanças são apresentados como educação de risco, sem instruções de operação real.
+
+## Testes ainda necessários no domínio publicado
+- Login/recuperação Supabase.
+- LIFE AI remota.
+- Mercado Pago/Pix quando integrado.
+- Sincronização entre dois dispositivos.
+- Push com o app fechado.
+- Teste manual em iPhone/Android para layout e gestos.
