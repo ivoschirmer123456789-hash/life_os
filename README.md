@@ -1,20 +1,19 @@
-# LIFE OS 6.0 — Signature System
+# LIFE OS 7.0 — Constellation System
 
-Versão focada em identidade visual, valor do FREE e expansão do Study OS.
+Versão de produto com foco em continuidade, profundidade por área e uma linguagem visual única.
 
-## Principais mudanças
-- Redesign global `Signature System 6.0` para todas as áreas e telas internas.
-- Nova landing page com linguagem visual própria do LIFE.
-- `Study Universe`: catálogo amplo com dezenas de assuntos e filtros.
-- Catálogo de assuntos liberado no FREE; PRO passa a vender profundidade, mastery, mapas, histórico e contexto ampliado.
-- Conteúdos financeiros educativos: bolsa, renda fixa, ETFs, fundos, opções, cripto, macro/microeconomia e outros.
-- `Opções binárias` é tratada exclusivamente como educação sobre risco, probabilidade, regulação e golpes.
-- Card contextual de FREE → PRO sem urgência falsa ou dark patterns.
-- Nova linguagem de cores por mini-app mantendo o laranja como assinatura central.
-- PWA/cache `6.0.0`.
+## O que mudou
+- Constellation System 7.0: nova camada visual global, heroes, navegação e identidade por mini-app.
+- Study Universe expandido para mais de 340 assuntos no FREE, com busca, filtros e trilhas curadas.
+- Assuntos financeiros de alto risco permanecem estritamente educacionais, com avisos de risco e golpes.
+- Trilhas curadas de Mercado & Economia, Tecnologia, Dados & IA, Criatividade, Carreira, Ciências, Idiomas, Pensamento, ENEM, Engenharia, Saúde e Negócios.
+- Persuasão do FREE baseada em valor e continuidade, sem urgência falsa, perda artificial de dados ou pressão.
+- Nova landing editorial 7.0.
+- Desktop ganha atalhos Constellation; mobile permanece mais limpo.
+- PWA, diagnóstico e cache unificados em 7.0.0.
 
 ## Publicação
-Envie o projeto inteiro mantendo as pastas. Para atualizar um repositório que já contém a versão anterior, use o pacote `Update_Only` fornecido junto da entrega.
+Envie o conteúdo desta pasta para o mesmo repositório conectado à Vercel, preservando a estrutura de pastas.
 
-## Testes externos ainda necessários
-Supabase, Mercado Pago, LIFE AI remota, notificações push e sincronização entre dispositivos precisam ser validados no domínio publicado.
+## Ainda precisa de teste ao vivo
+Supabase, Mercado Pago, LIFE AI remota, push e sincronização entre dispositivos dependem do ambiente publicado e das funções de backend.
