@@ -1,7 +1,7 @@
-const LIFE_CACHE='life-os-7.1.0-premium';
+const LIFE_CACHE='life-os-7.2.0-premium';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
-  './manifest.webmanifest','./assets/css/utilities.css','./assets/css/marketing.css','./assets/css/marketing-v60.css','./assets/css/life.css','./assets/css/product.css','./assets/css/final.css','./assets/css/fitness-v35.css','./assets/css/modules-v36.css','./assets/css/system-v40.css','./assets/css/system-v50.css','./assets/css/system-v60.css','./assets/css/system-v70.css','./assets/css/premium-v71.css','./assets/css/marketing-v70.css','./assets/media/today-mountains.svg',
+  './manifest.webmanifest','./assets/css/utilities.css','./assets/css/marketing.css','./assets/css/marketing-v60.css','./assets/css/life.css','./assets/css/product.css','./assets/css/final.css','./assets/css/fitness-v35.css','./assets/css/modules-v36.css','./assets/css/system-v40.css','./assets/css/system-v50.css','./assets/css/system-v60.css','./assets/css/system-v70.css','./assets/css/premium-v72.css','./assets/css/marketing-v70.css','./assets/media/today-mountains.svg',
   './assets/js/config.js','./assets/js/life-app.js','./assets/js/supabase-auth.js','./assets/js/quality-runtime.js','./assets/js/product-runtime.js','./assets/js/design-runtime.js','./assets/js/experience-v40.js','./assets/js/experience-v50.js','./assets/js/experience-v60.js','./assets/js/experience-v70.js','./assets/js/pwa-runtime.js',
   './assets/icons/icon.svg','./assets/icons/icon-192.png','./assets/icons/icon-512.png'
 ];
