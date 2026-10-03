@@ -1247,7 +1247,7 @@ const LIFE_ROUTE_INDEX = [
     { area: 'Tarefas', title: 'Criar e organizar tarefas', keywords: 'tarefas afazeres pendencias checklist meta habito revisão semanal', prompt: 'Organize minhas tarefas e transforme itens vagos em próximas ações claras.' },
     { area: 'Notas', title: 'Pesquisar e organizar anotações', keywords: 'notas anotacoes ideias lembretes pensamentos', prompt: 'Me ajude a organizar minhas anotações e transformar o que for acionável em próximos passos.' },
     { area: 'Life', title: 'Planejamento, rotina e sono', keywords: 'planejamento rotina agenda sono projetos semana', prompt: 'Me ajude a organizar minha rotina e os próximos passos dos meus projetos.' },
-    { area: 'Estudos', title: 'Criar uma ordem cronológica de estudos', keywords: 'estudos estudar prova enem aprender cronograma trilha neurociencia medicina matematica', prompt: 'Quero criar uma ordem cronológica de estudos baseada no que quero aprender, meu nível, tempo e limitações.' },
+    { area: 'Estudos', title: 'Criar uma ordem cronológica de estudos', keywords: 'estudos estudar prova enem aprender cronograma trilha neurociencia medicina matematica bolsa investimentos programação idiomas economia marketing', prompt: 'Quero criar uma ordem cronológica de estudos baseada no que quero aprender, meu nível, tempo e limitações.' },
     { area: 'Fitness', title: 'Biblioteca de exercícios e treinos', keywords: 'fitness treino exercicios academia costas biceps pernas panturrilha antebraco', prompt: 'Quero encontrar um exercício ou montar um treino usando a biblioteca do LIFE.' },
     { area: 'Dieta', title: 'Fitness → Alimentação / dieta', keywords: 'dieta alimentacao refeicoes compras rotina alimentar intolerancia suplemento plano alimentar', prompt: 'Abra Fitness → Alimentação e me ajude a montar ou revisar meu plano alimentar usando meu perfil e minha rotina.' },
     { area: 'Receitas', title: 'Encontrar uma receita', keywords: 'receita cozinhar lanche almoço jantar ingrediente preparo', prompt: 'Encontre uma receita da biblioteca conforme o tempo e o tipo de preparo que eu quero.' },
@@ -1366,11 +1366,44 @@ const LIFE_STUDY_PRO_EXPANSION = [
     { title: 'Estratégia de Preço', domain: 'Negócios / Marketing', aliases: ['preco','pricing','precificacao'], stages: ['Valor percebido','Custos e margem','Concorrência','Segmentação','Pacotes e planos','Teste e revisão'], channels: ['Sebrae','Strategyzer'], books: ['Precificação — fundamentos de valor e margem'] }
 ];
 LIFE_STUDY_TOPICS.push(...LIFE_STUDY_PRO_EXPANSION);
-const LIFE_FREE_STUDY_TITLES = new Set(['Matemática','Português','Redação ENEM','ENEM completo']);
-const lifeStudyIsProTopic = (topicOrTitle) => {
-    const title = typeof topicOrTitle === 'string' ? topicOrTitle : (topicOrTitle?.title || '');
-    return !LIFE_FREE_STUDY_TITLES.has(title);
-};
+
+LIFE_STUDY_TOPICS.push(...[
+    { title:'Bolsa de Valores', domain:'Finanças / Educação', aliases:['bolsa','acoes','mercado de acoes','b3'], stages:['O que é uma bolsa e por que empresas listam ações','Ação como participação societária','Preço, liquidez e formação de mercado','Risco, diversificação e horizonte','Indicadores e demonstrações: leitura conceitual','Custos, impostos, fraudes e simulação sem dinheiro real'], channels:['CVM Educacional','B3 Educação'], books:['Materiais educativos da CVM e B3'], riskNote:'Conteúdo educacional. Não recomenda ativos nem operações reais.' },
+    { title:'Renda Fixa', domain:'Finanças / Educação', aliases:['renda fixa','cdb','lci','lca','credito'], stages:['Quem empresta para quem','Taxa prefixada, pós-fixada e inflação','Prazo, liquidez e marcação a mercado','Risco de crédito e garantias','Custos e impostos: conceitos','Como comparar produtos de forma educacional'], channels:['Banco Central — cidadania financeira','CVM Educacional'], books:['Materiais oficiais de educação financeira'], riskNote:'Educação financeira geral; não é recomendação de investimento.' },
+    { title:'Tesouro Direto', domain:'Finanças / Educação', aliases:['tesouro direto','titulos publicos','selic','ipca'], stages:['O que é dívida pública','Tipos de títulos em nível conceitual','Preço, taxa e vencimento','Liquidez e oscilação antes do vencimento','Custos, impostos e objetivos','Leitura de informações oficiais'], channels:['Tesouro Direto — conteúdo educativo','CVM Educacional'], books:['Materiais oficiais do Tesouro Direto'], riskNote:'Estudo conceitual. Decisões financeiras reais devem ser feitas com responsável e fontes oficiais.' },
+    { title:'ETFs', domain:'Finanças / Educação', aliases:['etf','fundos de indice','indice'], stages:['O que é um índice','Como um ETF busca acompanhar um índice','Diversificação e concentração','Liquidez, custos e tracking error','Riscos de mercado','Comparação conceitual com outros veículos'], channels:['CVM Educacional','B3 Educação'], books:['Materiais oficiais sobre fundos e ETFs'], riskNote:'Educação geral, sem indicação de compra ou venda.' },
+    { title:'Fundos de Investimento', domain:'Finanças / Educação', aliases:['fundos','fundo investimento','cotas'], stages:['Cotas e patrimônio','Gestão e mandato','Taxas e custos','Liquidez e resgate','Riscos e documentos','Como ler informações sem depender de promessa de rentabilidade'], channels:['CVM Educacional','ANBIMA Edu'], books:['Materiais educativos oficiais'], riskNote:'Educação geral; rentabilidade passada não garante resultados futuros.' },
+    { title:'Opções — fundamentos e riscos', domain:'Finanças / Alto risco', aliases:['opcoes','call','put','derivativos'], stages:['O que é um derivativo','Call e put como contratos','Prêmio, vencimento e preço de exercício','Noção de payoff sem operar','Tempo, volatilidade e alavancagem','Riscos, perdas e simulação educacional'], channels:['CVM Educacional','B3 Educação'], books:['Materiais oficiais sobre derivativos'], riskNote:'ALTO RISCO · EDUCAÇÃO. Estude conceitos e simulações; não use este módulo como orientação para operar dinheiro real.' },
+    { title:'Opções binárias — riscos e golpes', domain:'Finanças / Alto risco', aliases:['opcoes binarias','binary options','binarias'], stages:['Como funciona o resultado tudo-ou-nada','Probabilidade, payout e valor esperado','Conflitos de incentivo em plataformas','Regulação e diferenças entre jurisdições','Sinais de golpe e promessas enganosas','Por que simulação e educação vêm antes de qualquer decisão financeira'], channels:['CVM — alertas ao investidor','fontes regulatórias oficiais'], books:['Alertas e materiais de órgãos reguladores'], riskNote:'ALTO RISCO · EDUCAÇÃO. Não é um guia de operação. Menores não devem participar de produtos financeiros especulativos.' },
+    { title:'Criptomoedas — fundamentos e riscos', domain:'Finanças / Tecnologia', aliases:['cripto','bitcoin','blockchain','criptomoedas'], stages:['Dinheiro digital e registros distribuídos','Blockchain em nível conceitual','Carteiras e chaves: segurança conceitual','Volatilidade e liquidez','Golpes, custódia e riscos','Regulação, impostos e leitura crítica'], channels:['CVM — criptoativos','Banco Central — materiais públicos'], books:['Materiais institucionais e documentação técnica introdutória'], riskNote:'Educação e segurança. Não é recomendação para comprar criptoativos.' },
+    { title:'Contabilidade', domain:'Negócios / Finanças', aliases:['contabilidade','balanco','dre'], stages:['Patrimônio e equação contábil','Receitas, despesas e regime de competência','Balanço patrimonial','DRE','Fluxo de caixa','Leitura integrada de demonstrações'], channels:['Sebrae','aulas abertas de contabilidade introdutória'], books:['Contabilidade introdutória — material didático'] },
+    { title:'Análise de Balanços', domain:'Negócios / Finanças', aliases:['balanco','dre','indicadores financeiros'], stages:['Estrutura das demonstrações','Liquidez','Margens','Endividamento','Geração de caixa','Limites dos indicadores e contexto'], channels:['CVM Educacional','aulas universitárias abertas'], books:['Análise de demonstrações — introdução'] },
+    { title:'Macroeconomia', domain:'Economia', aliases:['macroeconomia','pib','inflacao','juros','cambio'], stages:['PIB e atividade','Inflação','Juros','Emprego','Política fiscal e monetária','Câmbio, choques e leitura de indicadores'], channels:['Khan Academy','Banco Central'], books:['Macroeconomia introdutória'] },
+    { title:'Microeconomia', domain:'Economia', aliases:['microeconomia','oferta demanda','elasticidade'], stages:['Escassez e escolha','Oferta e demanda','Elasticidade','Custos e produção','Estruturas de mercado','Externalidades e políticas'], channels:['Khan Academy','Crash Course Economics'], books:['Microeconomia introdutória'] },
+    { title:'Educação Financeira para Jovens', domain:'Finanças / Fundamentos', aliases:['dinheiro jovem','educacao financeira','orcamento'], stages:['Dinheiro, renda e gastos','Orçamento simples','Juros e crédito','Reserva e imprevistos','Golpes e segurança','Objetivos financeiros e conversa com responsável'], channels:['Banco Central — cidadania financeira','CVM Educacional'], books:['Materiais gratuitos de educação financeira'] },
+    { title:'Excel', domain:'Dados / Trabalho', aliases:['excel','planilha','spreadsheet'], stages:['Células e referências','Fórmulas essenciais','Tabelas e filtros','PROCV/XLOOKUP e alternativas','Tabelas dinâmicas','Dashboard e projeto prático'], channels:['Microsoft Learn','Hashtag Treinamentos'], books:['Documentação Microsoft + exercícios'] },
+    { title:'Power BI', domain:'Dados / Trabalho', aliases:['power bi','bi','dashboard'], stages:['Importação de dados','Modelagem','Limpeza no Power Query','Medidas e DAX introdutório','Visualização e narrativa','Dashboard final'], channels:['Microsoft Learn','Guy in a Cube'], books:['Documentação Power BI'] },
+    { title:'SQL', domain:'Dados / Tecnologia', aliases:['sql','banco de dados','queries'], stages:['Tabelas e chaves','SELECT e filtros','JOINs','Agregações','Subqueries e CTEs','Projeto com banco relacional'], channels:['freeCodeCamp','Khan Academy / SQL introdutório'], books:['Documentação SQL do banco escolhido'] },
+    { title:'Python para Dados', domain:'Dados / Tecnologia', aliases:['python dados','pandas','numpy'], stages:['Python básico','NumPy','Pandas','Limpeza de dados','Visualização','Projeto de análise'], channels:['freeCodeCamp','Kaggle Learn'], books:['Documentação Python/Pandas'] },
+    { title:'Data Science', domain:'Dados / Tecnologia', aliases:['data science','ciencia de dados','analise dados'], stages:['Pergunta e hipótese','Coleta e qualidade','Exploração','Visualização','Modelos introdutórios','Comunicação e projeto'], channels:['Kaggle Learn','StatQuest'], books:['Introdução à ciência de dados'] },
+    { title:'Machine Learning', domain:'Tecnologia / IA', aliases:['machine learning','ml','aprendizado maquina'], stages:['Problemas supervisionados e não supervisionados','Treino, validação e teste','Regressão','Classificação','Overfitting e métricas','Projeto com avaliação responsável'], channels:['Google Machine Learning Crash Course','StatQuest'], books:['Introdução a ML com prática'] },
+    { title:'Cibersegurança', domain:'Tecnologia / Segurança', aliases:['ciberseguranca','seguranca digital','cybersecurity'], stages:['Ameaças e modelo de risco','Senhas e autenticação','Redes e web','Vulnerabilidades em ambiente controlado','Defesa, logs e resposta','Ética, legislação e laboratório seguro'], channels:['Cisco Skills for All','OWASP'], books:['OWASP + materiais introdutórios'], riskNote:'Estude defesa e laboratórios autorizados. Nunca teste sistemas sem permissão.' },
+    { title:'Redes de Computadores', domain:'Tecnologia', aliases:['redes','tcp ip','internet'], stages:['Camadas e protocolos','IP e sub-redes','TCP/UDP','DNS e HTTP','Roteamento e Wi‑Fi','Diagnóstico e segurança básica'], channels:['Cisco Skills for All','Professor Guanabara'], books:['Redes de computadores — introdução'] },
+    { title:'Direito básico', domain:'Sociedade / Direito', aliases:['direito','leis','juridico'], stages:['Fontes do direito','Constituição e hierarquia','Direitos e deveres','Contratos: noções','Responsabilidade civil: noções','Como pesquisar legislação e fontes confiáveis'], channels:['STF / materiais educativos','Senado — materiais de cidadania'], books:['Introdução ao Direito — material didático'] },
+    { title:'Direito Constitucional', domain:'Sociedade / Direito', aliases:['constitucional','constituicao','direitos fundamentais'], stages:['Constituição e Estado','Direitos fundamentais','Organização dos poderes','Federação','Controle de constitucionalidade: noções','Leitura de casos e texto constitucional'], channels:['Senado Federal','STF'], books:['Constituição Federal + material introdutório'] },
+    { title:'Geopolítica', domain:'Humanas / Atualidades', aliases:['geopolitica','relacoes internacionais','conflitos'], stages:['Estado, poder e território','Recursos e comércio','Alianças e organizações','Conflitos e segurança','Economia política internacional','Leitura comparada de fontes'], channels:['Nexo Jornal — explicadores','aulas abertas de relações internacionais'], books:['Atlas + introdução a relações internacionais'] },
+    { title:'Relações Internacionais', domain:'Humanas / Atualidades', aliases:['relacoes internacionais','diplomacia','onu'], stages:['Sistema internacional','Realismo, liberalismo e outras abordagens','Organizações internacionais','Política externa','Economia internacional','Estudos de caso e fontes'], channels:['ONU — materiais educativos','aulas universitárias abertas'], books:['Introdução às Relações Internacionais'] },
+    { title:'Inglês para Trabalho', domain:'Idiomas / Carreira', aliases:['business english','ingles trabalho','ingles profissional'], stages:['Apresentação profissional','E-mails','Reuniões','Vocabulário da área','Apresentações','Entrevistas e prática'], channels:['BBC Learning English','Business English Pod'], books:['Graded readers + materiais de inglês profissional'] },
+    { title:'Espanhol', domain:'Idiomas', aliases:['espanhol','spanish'], stages:['Vocabulário essencial','Gramática básica','Leitura','Escuta','Escrita','Conversação e revisão'], channels:['Dreaming Spanish','Butterfly Spanish'], books:['Leituras graduadas em espanhol'] },
+    { title:'Alemão', domain:'Idiomas', aliases:['alemao','deutsch','german'], stages:['Pronúncia e frases essenciais','Casos e artigos em nível básico','Verbos e ordem da frase','Leitura curta','Escuta','Conversação e revisão'], channels:['DW Learn German','Easy German'], books:['Leituras graduadas A1–B1'] },
+    { title:'Violão', domain:'Música', aliases:['violao','guitarra acustica','acordes'], stages:['Postura e afinação','Acordes abertos','Trocas e ritmo','Dedilhado','Pestanas e campo harmônico básico','Repertório e gravação'], channels:['Cifra Club','JustinGuitar'], books:['Método introdutório de violão'] },
+    { title:'Teoria Musical', domain:'Música', aliases:['teoria musical','harmonia','escalas'], stages:['Notas e intervalos','Escalas','Acordes','Campo harmônico','Ritmo','Análise e aplicação em música'], channels:['musictheory.net','Cifra Club'], books:['Teoria musical introdutória'] },
+    { title:'Fotografia', domain:'Criatividade', aliases:['fotografia','camera','foto'], stages:['Exposição','Composição','Luz','Foco e movimento','Edição','Projeto fotográfico'], channels:['Adobe Learn','canais educativos de fotografia'], books:['Fundamentos de fotografia'] },
+    { title:'Psicologia básica', domain:'Psicologia', aliases:['psicologia','comportamento','mente'], stages:['Método científico em psicologia','Aprendizagem','Memória','Emoção','Desenvolvimento','Psicologia social e leitura crítica'], channels:['Crash Course Psychology','OpenStax'], books:['Psicologia introdutória — OpenStax'] }
+]);
+
+const LIFE_FREE_STUDY_TITLES = new Set(LIFE_STUDY_TOPICS.map(x => x.title));
+const lifeStudyIsProTopic = () => false;
 const lifeStudyNorm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 const lifeStudySearch = q => {
     const n = lifeStudyNorm(q).trim();
@@ -1440,6 +1473,7 @@ const lifeBuildStudyPlan = (answers) => {
         return { index: i + 1, title, when, detail, ...method, sessionMinutes, cadence: `${daysPerWeek} dias/sem · ${sessionMinutes} min por sessão`, review: 'Revisão curta em 1, 3 e 7 dias após concluir a etapa.' };
     });
     const blocker = LIFE_STUDY_BLOCKER_DATA[answers.blocker] || LIFE_STUDY_BLOCKER_DATA['Não sei por onde começar'];
+    const riskNote = topic.riskNote || '';
     const bookList = (topic.books || []).slice(0, 3);
     const reading = (bookList.length ? bookList : ['Material introdutório confiável']).map((book, index) => ({
         kind: index === 0 && answers.reading === 'Não leio hoje' ? 'LEITURA / COMEÇO LEVE' : 'LIVRO / REFERÊNCIA',
@@ -1458,7 +1492,7 @@ const lifeBuildStudyPlan = (answers) => {
         text: answers.goal === 'ENEM / vestibular' ? 'Chegar ao final conseguindo resolver questões misturadas, corrigir os próprios erros e identificar rapidamente o conteúdo exigido.' : answers.goal === 'Escola / prova' ? 'Chegar à avaliação sabendo explicar os tópicos, resolver exercícios do nível esperado e revisar a partir dos próprios erros.' : answers.goal === 'Projeto pessoal' ? 'Concluir uma aplicação prática que use os principais conceitos da trilha e conseguir explicar as escolhas feitas.' : 'Conseguir explicar, aplicar e revisar o conteúdo sem depender de releitura constante.',
         proof: 'A trilha termina quando você consegue fazer um teste final ou aplicação sem consulta, corrigir o que errou e explicar por que a resposta correta faz sentido.'
     };
-    return { id: 'study_' + Date.now(), topic: topic.title, domain: topic.domain, answers, createdAt: new Date().toISOString(), timeline, completedStages: [], resources: [...reading, ...channels, ...videoDiscovery, ...blockerLinks], blocker, finalObjective, sessionMinutes, daysPerWeek };
+    return { id: 'study_' + Date.now(), topic: topic.title, domain: topic.domain, answers, createdAt: new Date().toISOString(), timeline, completedStages: [], resources: [...reading, ...channels, ...videoDiscovery, ...blockerLinks], blocker, finalObjective, sessionMinutes, daysPerWeek, riskNote };
 };
 function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, autoStart = false }) {
     const load = (k, d) => { try {
@@ -1467,9 +1501,10 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
     catch {
         return d;
     } };
-    const [open, setOpen] = React.useState(false), [step, setStep] = React.useState(0), [answers, setAnswers] = React.useState({}), [topicQ, setTopicQ] = React.useState(''), [topicFocus, setTopicFocus] = React.useState(false), [plan, setPlan] = React.useState(() => load('life_study_plan_v2', null));
+    const initialPrefill = (()=>{ try { return localStorage.getItem('life_study_prefill_v6') || ''; } catch { return ''; } })();
+    const [open, setOpen] = React.useState(false), [step, setStep] = React.useState(0), [answers, setAnswers] = React.useState(()=>initialPrefill?{topic:initialPrefill}:{}), [topicQ, setTopicQ] = React.useState(initialPrefill), [topicFocus, setTopicFocus] = React.useState(false), [plan, setPlan] = React.useState(() => load('life_study_plan_v2', null));
     const topicSuggestions = React.useMemo(() => lifeStudySearch(topicQ), [topicQ]);
-    React.useEffect(() => { if (autoStart && !plan) { setAnswers({}); setTopicQ(''); setStep(0); setOpen(true); } }, [autoStart]);
+    React.useEffect(() => { if (autoStart && (initialPrefill || !plan)) { const p=initialPrefill; setAnswers(p?{topic:p}:{}); setTopicQ(p); setStep(p?1:0); setOpen(true); } }, [autoStart]);
     const qs = [
         { key: 'topic', q: 'O que você quer estudar?', desc: 'Pesquise desde contas matemáticas até neurociência, programação ou conteúdos básicos de medicina.' },
         { key: 'goal', q: 'Qual é o seu objetivo principal?', desc: 'Isso muda a ordem, profundidade e tipo de prática.', options: ['Escola / prova', 'ENEM / vestibular', 'Aprender do zero', 'Aprofundar muito', 'Projeto pessoal', 'Base para faculdade'] },
@@ -1480,13 +1515,13 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
         { key: 'frequency', q: 'Quantos dias por semana você consegue estudar?', desc: 'Comece com uma frequência sustentável.', options: ['2 dias', '3 dias', '4 dias', '5 dias', '6 dias', 'Todos os dias, com sessões curtas'] },
         { key: 'deadline', q: 'Existe um prazo para chegar no objetivo?', desc: 'O LIFE distribui as etapas sem fingir que todo conteúdo cabe em poucos dias.', options: ['2 semanas', '1 mês', '3 meses', '6 meses', 'Sem prazo definido'] }
     ];
-    const reset = () => { setAnswers({}); setTopicQ(''); setStep(0); setOpen(true); };
+    const reset = () => { try{localStorage.removeItem('life_study_prefill_v6')}catch(e){}; setAnswers({}); setTopicQ(''); setStep(0); setOpen(true); };
     const chooseTopic = t => { if (!t)
         return; const title = typeof t === 'string' ? t : t.title; if (!hasPro && lifeStudyIsProTopic(title)) { setTopicQ(title); setTopicFocus(false); onUpgrade && onUpgrade('estudos_catalogo'); return; } setTopicQ(title); setAnswers(a => ({ ...a, topic: title })); setTopicFocus(false); };
     const current = qs[step];
     const topicReady = !!answers.topic || topicQ.trim().length >= 2;
     const canNext = current.key === 'topic' ? topicReady : !!answers[current.key];
-    const persistPlan = p => { localStorage.setItem('life_study_plan_v2', JSON.stringify(p)); setPlan(p); try {
+    const persistPlan = p => { localStorage.setItem('life_study_plan_v2', JSON.stringify(p)); try{localStorage.removeItem('life_study_prefill_v6')}catch(e){}; setPlan(p); try {
         window.dispatchEvent(new CustomEvent('life:study-plan', { detail: p }));
     }
     catch (e) { } };
@@ -1501,7 +1536,7 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
     const planLocked = !!(plan && !hasPro && lifeStudyIsProTopic(plan.topic));
     const nextStage = plan?.timeline?.find(s => !(plan.completedStages || []).includes(s.index)) || null;
     const progress = plan?.timeline?.length ? Math.round(((plan.completedStages || []).length / plan.timeline.length) * 100) : 0;
-    const quickTopics = ['Matemática', 'Português', 'ENEM completo', 'Marketing Digital', 'Persuasão e Influência', 'Copywriting', 'Filosofia Avançada', 'Vendas', 'Branding', 'Empreendedorismo'];
+    const quickTopics = ['Matemática','ENEM completo','Programação','Inglês','Bolsa de Valores','Economia básica','Inteligência Artificial Generativa','Marketing Digital','Psicologia básica','Violão'];
     return React.createElement("section", { className: "life-study-architect" },
         React.createElement("div", { className: "life-study-architect-head" },
             React.createElement("div", null,
@@ -1545,6 +1580,7 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
                         plan.answers.session,
                         " \u00B7 ",
                         plan.answers.frequency),
+                    plan.riskNote && React.createElement("div", { className: "life-study-risk-note" }, plan.riskNote),
                     React.createElement("div", { className: "life-study-plan-progress" },
                         React.createElement("span", null,
                             React.createElement("b", null,
@@ -1555,7 +1591,7 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
                             React.createElement("em", { style: { width: progress + '%' } })),
                         React.createElement("small", null, nextStage ? 'PRÓXIMA ETAPA · ' + nextStage.title : 'TRILHA CONCLUÍDA'))),
                 React.createElement("div", { className: "life-study-plan-actions" },
-                    React.createElement("button", { type: "button", className: "primary", onClick: () => onAsk && onAsk(nextStage ? 'Use minha trilha salva e me ajude especificamente com a próxima etapa: ' + nextStage.title + '.' : 'Revise minha trilha de ' + plan.topic + ' e sugira como consolidar o que aprendi.') }, "\u2726 PERGUNTAR \u00C0 IA"),
+                    React.createElement("button", { type: "button", className: "primary", onClick: () => onAsk && onAsk((plan.riskNote ? plan.riskNote + ' Mantenha a orientação estritamente educacional e conceitual, sem instruir operações reais. ' : '') + (nextStage ? 'Use minha trilha salva e me ajude especificamente com a próxima etapa: ' + nextStage.title + '.' : 'Revise minha trilha de ' + plan.topic + ' e sugira como consolidar o que aprendi.')) }, "\u2726 PERGUNTAR \u00C0 IA"),
                     React.createElement("button", { type: "button", onClick: () => onStartFocus && onStartFocus(nextStage ? ('Estudar ' + nextStage.title) : ('Revisar ' + plan.topic)) }, "INICIAR FOCO"),
                     React.createElement("button", { type: "button", onClick: reset }, "REFAZER"))),
             React.createElement("div", { className: "life-study-roadmap" }, plan.timeline.map(s => { const done = (plan.completedStages || []).includes(s.index); return React.createElement("article", { className: 'life-study-stage ' + (done ? 'done' : ''), key: s.index },
@@ -3115,7 +3151,7 @@ function LifeApp36({ area = 'LIFE', icon = 'dashboard', kicker = '', title = '',
         React.createElement('section', { className: 'life-app36-hero life-app40-hero' },
             React.createElement('div', { className: 'life-app40-hero-top' },
                 React.createElement('div', { className: 'life-app36-kicker' }, React.createElement('i', { className: 'material-symbols-rounded' }, icon), kicker || ('LIFE / ' + area.toUpperCase())),
-                React.createElement('span', { className: 'life-app40-state life-app50-state' }, 'LIFE OS 5')),
+                React.createElement('span', { className: 'life-app40-state life-app50-state' }, 'LIFE OS 6')),
             React.createElement('div', { className: 'life-app40-hero-copy' },
                 React.createElement('h1', { className: 'life-app36-title' }, title),
                 React.createElement('p', { className: 'life-app36-subtitle' }, subtitle)),
@@ -3168,6 +3204,63 @@ function LifeApp36AI({ title = 'Perguntar à LIFE AI', text = '', onClick }) {
     return React.createElement('div', { className: 'life-app36-ai' }, React.createElement('i', { className: 'material-symbols-rounded' }, 'auto_awesome'), React.createElement('div', null, React.createElement('b', null, title), React.createElement('span', null, text)), React.createElement('button', { type: 'button', onClick }, 'ABRIR →'));
 }
 
+
+
+function LifeStudyUniverseV6({ onGuide, onAsk }) {
+    const [query,setQuery]=React.useState('');
+    const [domain,setDomain]=React.useState('TODOS');
+    const [limit,setLimit]=React.useState(18);
+    const [selected,setSelected]=React.useState(null);
+    const groups=['TODOS','ESCOLA','TECNOLOGIA','FINANÇAS','NEGÓCIOS','IDIOMAS','HUMANAS','CRIATIVIDADE','SAÚDE'];
+    const bucket=t=>{ const d=lifeStudyNorm((t.domain||'')+' '+(t.title||'')); if(/enem|exatas|linguagens|ciencias da vida|ciências|metodo/.test(d))return 'ESCOLA'; if(/tecnologia|dados|programacao|sql|cyber|ciber/.test(d))return 'TECNOLOGIA'; if(/finan|econom|invest|bolsa|renda fixa|opcoes|cripto|contab/.test(d))return 'FINANÇAS'; if(/negocio|marketing|vendas|empreend|gestao|lider|produto/.test(d))return 'NEGÓCIOS'; if(/idioma|ingles|espanhol|alemao|linguagens/.test(d))return 'IDIOMAS'; if(/humanas|filosofia|sociologia|direito|geopolit|relacoes/.test(d))return 'HUMANAS'; if(/design|criativ|musica|fotografia|story/.test(d))return 'CRIATIVIDADE'; if(/saude|medicina|anatom|fisiologia|bio|neuro|psicologia/.test(d))return 'SAÚDE'; return 'ESCOLA'; };
+    const q=lifeStudyNorm(query.trim());
+    const rows=LIFE_STUDY_TOPICS.filter(t=>(domain==='TODOS'||bucket(t)===domain)&&(!q||lifeStudyNorm(t.title+' '+t.domain+' '+(t.aliases||[]).join(' ')).includes(q)));
+    const visible=rows.slice(0,limit);
+    const startTopic=t=>{ try{localStorage.setItem('life_study_prefill_v6',t.title);}catch(_){ } onGuide&&onGuide(t); };
+    return React.createElement('section',{className:'life-study-universe-v6'},
+        React.createElement('header',{className:'life-study-universe-head'},
+            React.createElement('div',null,React.createElement('small',null,'STUDY UNIVERSE · FREE'),React.createElement('h2',null,'Aprenda praticamente qualquer assunto.'),React.createElement('p',null,LIFE_STUDY_TOPICS.length+' trilhas organizadas por área. O catálogo é aberto no FREE; o PRO adiciona mastery, mapas avançados, revisões e contexto ampliado.')),
+            React.createElement('span',{className:'life-study-universe-count'},LIFE_STUDY_TOPICS.length,' assuntos')),
+        React.createElement('div',{className:'life-study-universe-controls'},
+            React.createElement('div',{className:'life-study-universe-search'},React.createElement('span',{className:'material-symbols-rounded'},'search'),React.createElement('input',{value:query,onChange:e=>{setQuery(e.target.value);setLimit(18)},placeholder:'Buscar bolsa, programação, idiomas, física, marketing…'})),
+            React.createElement('div',{className:'life-study-universe-filters'},groups.map(g=>React.createElement('button',{type:'button',key:g,className:domain===g?'on':'',onClick:()=>{setDomain(g);setLimit(18)}},g)))),
+        React.createElement('div',{className:'life-study-universe-grid'},visible.map((t,i)=>React.createElement('button',{type:'button',key:t.title,className:'life-study-topic-v6 '+(t.riskNote?'risk':''),onClick:()=>setSelected(t)},
+            React.createElement('span',{className:'life-study-topic-index'},String(i+1).padStart(2,'0')),
+            React.createElement('small',null,bucket(t)+' · '+t.domain),
+            React.createElement('b',null,t.title),
+            React.createElement('p',null,(t.stages||[]).slice(0,3).join(' → ')),
+            t.riskNote&&React.createElement('em',null,'ALTO RISCO · EDUCAÇÃO'),
+            React.createElement('i',{className:'material-symbols-rounded'},'north_east')))),
+        rows.length>limit&&React.createElement('button',{type:'button',className:'life-study-universe-more',onClick:()=>setLimit(x=>x+18)},'VER MAIS '+Math.min(18,rows.length-limit)+' ASSUNTOS ↓'),
+        !rows.length&&React.createElement('div',{className:'life-v50-empty'},'Nenhum assunto com esse filtro. Tente outra palavra.'),
+        selected&&React.createElement('div',{className:'life-study-topic-modal',onClick:e=>{if(e.target===e.currentTarget)setSelected(null)}},React.createElement('article',null,
+            React.createElement('button',{type:'button',className:'life-study-topic-close',onClick:()=>setSelected(null),'aria-label':'Fechar'},React.createElement('span',{className:'material-symbols-rounded'},'close')),
+            React.createElement('small',null,bucket(selected)+' · '+selected.domain),React.createElement('h2',null,selected.title),
+            selected.riskNote&&React.createElement('div',{className:'life-study-risk-note'},selected.riskNote),
+            React.createElement('p',null,'Uma trilha sugerida para sair do zero e chegar a uma visão organizada do assunto.'),
+            React.createElement('div',{className:'life-study-topic-roadmap'},(selected.stages||[]).map((x,i)=>React.createElement('div',{key:i},React.createElement('i',null,String(i+1).padStart(2,'0')),React.createElement('span',null,x)))),
+            React.createElement('div',{className:'life-study-topic-actions'},
+                React.createElement('button',{type:'button',className:'primary',onClick:()=>{setSelected(null);startTopic(selected)}},'CRIAR GUIA DESSE ASSUNTO →'),
+                React.createElement('button',{type:'button',onClick:()=>{setSelected(null);onAsk&&onAsk((selected.riskNote?selected.riskNote+' Mantenha a resposta educacional e não oriente operações reais. ':'')+'Quero começar a estudar '+selected.title+'. Explique o mapa do assunto e qual deveria ser minha primeira etapa.')}},'✦ EXPLICAR COM LIFE AI')))));
+}
+function LifeFreeMomentumV6({ area='LIFE', usage=0, onUpgrade }) {
+    const map={
+        Estudos:['Catálogo aberto no FREE','No PRO, o mesmo conteúdo ganha mastery, mapa de conhecimento, revisões avançadas e IA com contexto ampliado.'],
+        Fitness:['Use o essencial antes de decidir','O PRO adiciona personalização profunda, histórico ampliado e automações — sem apagar o que você construiu no FREE.'],
+        Finanças:['Registre e entenda primeiro','O PRO aprofunda análises e histórico; o FREE continua útil para criar clareza.'],
+        Receitas:['Descubra valor antes do upgrade','Explore receitas e organização; o PRO aprofunda personalização e automações.'],
+        Tarefas:['Seu sistema cresce com uso real','O PRO acrescenta profundidade e automação ao que você já organizou.'],
+        Notas:['Capture sem pagar por espaço mental','Quando seu sistema crescer, o PRO adiciona mais inteligência e conexões.'],
+        Evolução:['Veja o básico com seus próprios dados','O PRO libera leituras e históricos mais profundos sem inventar pontuações.'],
+        IA:['Experimente o copiloto primeiro','O PRO amplia contexto e profundidade; você continua no controle das ações.'],
+        Life:['Planeje no seu ritmo','O PRO conecta mais histórico, projetos e inteligência ao planejamento.']
+    };
+    const copy=map[area]||['O FREE é um produto, não uma demonstração','O PRO existe para quem quer mais profundidade, contexto e automação.'];
+    return React.createElement('aside',{className:'life-free-momentum-v6'},
+        React.createElement('div',{className:'life-free-momentum-mark'},React.createElement('span',null,'FREE'),React.createElement('b',null,Math.max(0,usage))),
+        React.createElement('div',{className:'life-free-momentum-copy'},React.createElement('small',null,'LIFE FREE · VALOR ANTES DO UPGRADE'),React.createElement('h3',null,copy[0]),React.createElement('p',null,copy[1]),React.createElement('div',{className:'life-free-momentum-points'},React.createElement('span',null,'✓ Continue no FREE'),React.createElement('span',null,'✓ Seus registros continuam seus'),React.createElement('span',null,'✓ Upgrade só quando fizer sentido'))),
+        React.createElement('button',{type:'button',onClick:onUpgrade},'VER O QUE O PRO ADICIONA →'));
+}
 
 function LifeV50Section({ eyebrow = '', title = '', text = '', action = null, className = '', children = null }) {
     const clickable = action && typeof action.onClick === 'function';
@@ -3625,7 +3718,7 @@ function LifeOSV18() {
         evolution: 'PRO', aiWorkspace: 'PRO', aiMemory: 'PRO', aiActions: 'PRO',
         workoutFinder: 'PRO', customWorkout: 'PRO', workoutLibrary: 'PRO',
         nutritionPersonalized: 'PRO', recipeFinder: 'PRO', recipeCollections: 'PRO',
-        studyMastery: 'PRO', studyKnowledgeMap: 'PRO', studyAdvancedCoach: 'PRO', studyCatalog: 'PRO',
+        studyMastery: 'PRO', studyKnowledgeMap: 'PRO', studyAdvancedCoach: 'PRO', studyCatalog: 'FREE',
         advancedFinance: 'PRO', extendedArchive: 'PRO', lifePlanning: 'PRO', myLife: 'PRO', financeArea: 'PRO'
     };
     const canLifeFeature = (feature) => LIFE_PLAN_FEATURES[feature] !== 'PRO' || hasV18Pro;
@@ -3637,7 +3730,7 @@ function LifeOSV18() {
         fitness_planos: 'A prévia é gratuita; abrir semanas completas e a biblioteca avançada de planos faz parte do PRO.',
         nutrition_personalized: 'O plano alimentar personalizado usa suas respostas e sua rotina. Esse fluxo completo faz parte do PRO.',
         estudos_mastery: 'Sua trilha básica continua no FREE. Domínio por etapas, caderno de erros, revisões e mapa de conhecimento fazem parte do PRO.',
-        estudos_catalogo: 'O FREE inclui apenas trilhas essenciais. O catálogo PRO libera dezenas de trilhas em marketing, vendas, filosofia, persuasão, tecnologia, negócios e muito mais.',
+        estudos_catalogo: 'O catálogo amplo de assuntos já faz parte do FREE. O PRO adiciona mastery, mapa de conhecimento, revisões avançadas e contexto ampliado da LIFE AI.',
         area_Life: 'Planejamento sistêmico, projetos e rotinas conectadas fazem parte do PRO.',
         area_Meu_LIFE: 'Meu LIFE reúne histórico, favoritos e visão conectada do seu sistema. Essa central é PRO.',
         area_Finanças: 'O PRO libera a área financeira completa, histórico, análises e planejamento.',
@@ -5507,7 +5600,7 @@ function LifeOSV18() {
     const [legalOpen, setLegalOpen] = React.useState(null);
     const [supportOpen, setSupportOpen] = React.useState(false);
     const [dangerOpen, setDangerOpen] = React.useState(false);
-    const lifeBuild = '5.0.0';
+    const lifeBuild = '6.0.0';
     const lifeDiagnostics = () => ({
         build: lifeBuild,
         plan: effectivePlan || realPlan || 'FREE',
@@ -6444,6 +6537,7 @@ function LifeOSV18() {
             push({ type: 'EXERCÍCIO', text: ex.name, go: 'Fitness', id: ex.id, exercise: ex }); });
         Object.entries(v45Recs || {}).forEach(([group, list]) => (list || []).forEach((x, i) => { if (lifeNormalizeText((x.join(' ') + ' ' + group)).includes(term))
             push({ type: 'ESTUDO', text: x[1], go: 'Estudos', id: group + i }); }));
+        LIFE_STUDY_TOPICS.forEach((t,i)=>{ if(lifeNormalizeText(t.title+' '+t.domain+' '+(t.aliases||[]).join(' ')).includes(term)) push({type:'ASSUNTO',text:t.title,go:'Estudos',id:'topic'+i,studyTopic:t}); });
         lifePins.forEach(x => { if (lifeNormalizeText((x.title || '') + ' ' + (x.subtitle || '')).includes(term))
             push({ type: 'FIXADO', text: x.title, go: x.go || 'Meu LIFE', id: 'pin' + x.id, pin: x }); });
         return r.slice(0, 24);
@@ -6452,6 +6546,11 @@ function LifeOSV18() {
         setV60Search('');
         setQ('');
         setSpot(false);
+        if (r.studyTopic) {
+            try { localStorage.setItem('life_study_prefill_v6', r.studyTopic.title); } catch (e) {}
+            v42Go('Estudos');
+            return;
+        }
         if (r.recipe) {
             openLifeRecipe(r.recipe);
             return;
@@ -6713,7 +6812,8 @@ function LifeOSV18() {
                         {icon:'timer',title:'Foco',text:'Abra uma sessão dedicada para o conteúdo atual.',label:'INICIAR →',onClick:()=>{setV60FocusLabel(nextStage?.title||studies[0]?.text||'Sessão de estudo');setV60Focus(true)}},
                         {icon:'fact_check',title:'Caderno de erros',text:errors.length+' erro(s) registrados para transformar em revisão.',label:'REVISAR →',onClick:()=>openAdvancedArea('Estudos',null,'CADERNO DE ERROS')},
                         {icon:'style',title:'Flashcards & revisão',text:cards.length+' cartão(ões) · '+reviews.length+' revisão(ões).',label:'ABRIR →',onClick:()=>openAdvancedArea('Estudos',null,'REVISÕES E FLASHCARDS')}]}))),
-                React.createElement('div',{style:{marginTop:10}},React.createElement(LifeApp36AI,{title:'LIFE AI · tutor contextual',text:'Peça uma explicação, uma sequência de exercícios ou ajuda para decidir se você já pode avançar na trilha.',onClick:()=>{setAiOriginView('Estudos');setAiQuickOpen(true);setTimeout(()=>submitLifeAI(nextStage?'Me ajude a estudar a próxima etapa da minha trilha: '+nextStage.title+'. Explique, dê exemplos e proponha uma prática curta.':'Me ajude a escolher o que estudar e criar uma ordem realista.'),30)}})));
+                React.createElement('div',{style:{marginTop:10}},React.createElement(LifeApp36AI,{title:'LIFE AI · tutor contextual',text:'Peça uma explicação, uma sequência de exercícios ou ajuda para decidir se você já pode avançar na trilha.',onClick:()=>{setAiOriginView('Estudos');setAiQuickOpen(true);setTimeout(()=>submitLifeAI(nextStage?'Me ajude a estudar a próxima etapa da minha trilha: '+nextStage.title+'. Explique, dê exemplos e proponha uma prática curta.':'Me ajude a escolher o que estudar e criar uma ordem realista.'),30)}})),
+                React.createElement(LifeStudyUniverseV6,{onGuide:(topic)=>{try{localStorage.setItem('life_study_prefill_v6',topic.title)}catch(e){};setAiOriginView('Estudos');v42Go('Guia de Estudos')},onAsk:(prompt)=>{setAiOriginView('Estudos');setAiQuickOpen(true);setTimeout(()=>submitLifeAI(prompt),30)}}));
         }
         if (view === 'Guia de Estudos') {
             return React.createElement("main", { className: "life-guide-page" },
@@ -7139,7 +7239,7 @@ function LifeOSV18() {
         if (view === 'Biblioteca') {
             const favTotal=(lifeFavorites.recipes||[]).length+(lifeFavorites.workouts||[]).length+(lifeFavorites.exercises||[]).length+(lifeFavorites.study||[]).length;
             const shelves=[
-                {icon:'school',title:'Conhecimento & Estudos',text:'Guias, trilhas, conceitos e materiais.',count:Object.values(v45Recs||{}).reduce((n,a)=>n+(a?.length||0),0),onClick:()=>v42Go('Estudos')},
+                {icon:'school',title:'Conhecimento & Estudos',text:'Mais de '+LIFE_STUDY_TOPICS.length+' assuntos, guias, trilhas e materiais.',count:LIFE_STUDY_TOPICS.length,onClick:()=>v42Go('Estudos')},
                 {icon:'exercise',title:'Exercícios',text:'Técnica, equipamentos e variações.',count:IRON_EXERCISE_LIBRARY.length,onClick:()=>{setFitnessMainTab('Exercícios');v42Go('Fitness')}},
                 {icon:'fitness_center',title:'Treinos',text:'Programas, modelos e seus treinos.',count:v33Workouts.length,onClick:()=>{setFitnessMainTab('Treinos');v42Go('Fitness')}},
                 {icon:'restaurant',title:'Receitas',text:'600 receitas e filtros inteligentes.',count:v33Recipes.length,onClick:()=>v42Go('Receitas')}
@@ -7434,7 +7534,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => setSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 5.0.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 6.0.0"),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => setSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
@@ -7822,6 +7922,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                             React.createElement("b", null, lifeTodayOpen.length > 1 ? 'Quer organizar a ordem do seu dia?' : lifeTodayOpen.length === 1 ? 'Quer ajuda com o próximo passo?' : 'Quer preparar o restante do dia?'))),
                     React.createElement("button", { type: "button", onClick: () => { setAiOriginView('Hoje'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(lifeTodayOpen.length ? 'Organize meus planos de hoje por ordem prática, usando somente as tarefas que já estão registradas no LIFE. Não crie tarefas novas.' : 'Meu dia está sem planos registrados. Faça uma pergunta curta para me ajudar a escolher no máximo três prioridades para hoje.'), 30); } }, "ORGANIZAR"))),
             view !== 'Hoje' && advancedArea !== view && React.createElement(React.Fragment, null, renderLifeSimpleArea(), renderLifeV50Layer()),
+            !hasV18Pro && view !== 'Hoje' && advancedArea !== view && !['Configurações','Tutorial','Perfil'].includes(view) && React.createElement(LifeFreeMomentumV6,{area:view,usage:(tasks?.length||0)+(v49Notes?.length||0)+(lifeActivity?.length||0)+(projects?.length||0)+(financeTransactions?.length||0),onUpgrade:()=>openLifePro('free_momentum_v6_'+view)}),
             view !== 'Hoje' && advancedArea === view && React.createElement("div", { className: "life-advanced-return" },
                 React.createElement("button", { type: "button", onClick: closeAdvancedArea }, React.createElement("span", { className: "material-symbols-rounded" }, "arrow_back"), "VOLTAR AO RESUMO"),
                 React.createElement("span", null, lifePublicAreaName(view) + ' · ferramentas completas')),

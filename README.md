@@ -1,56 +1,20 @@
-# LIFE OS 3.3 — Mobile First Edition
+# LIFE OS 6.0 — Signature System
 
+Versão focada em identidade visual, valor do FREE e expansão do Study OS.
 
-## O que subir
-Suba **a pasta inteira** deste projeto para um repositório GitHub. A Vercel usa `index.html` como entrada automaticamente.
+## Principais mudanças
+- Redesign global `Signature System 6.0` para todas as áreas e telas internas.
+- Nova landing page com linguagem visual própria do LIFE.
+- `Study Universe`: catálogo amplo com dezenas de assuntos e filtros.
+- Catálogo de assuntos liberado no FREE; PRO passa a vender profundidade, mastery, mapas, histórico e contexto ampliado.
+- Conteúdos financeiros educativos: bolsa, renda fixa, ETFs, fundos, opções, cripto, macro/microeconomia e outros.
+- `Opções binárias` é tratada exclusivamente como educação sobre risco, probabilidade, regulação e golpes.
+- Card contextual de FREE → PRO sem urgência falsa ou dark patterns.
+- Nova linguagem de cores por mini-app mantendo o laranja como assinatura central.
+- PWA/cache `6.0.0`.
 
-Estrutura principal:
-- `index.html` — aplicativo e login
-- `landing.html` — página pública de apresentação
-- `privacy.html`, `terms.html`, `support.html` — páginas públicas
-- `assets/css/` — design do aplicativo e landing
-- `assets/js/` — lógica do LIFE, autenticação e runtimes
-- `assets/icons/` — ícones PWA
-- `manifest.webmanifest` + `service-worker.js` — instalação/offline/push
-- `database/` — SQL de referência/segurança/analytics
-- `vercel.json` — headers de produção
+## Publicação
+Envie o projeto inteiro mantendo as pastas. Para atualizar um repositório que já contém a versão anterior, use o pacote `Update_Only` fornecido junto da entrega.
 
-## Publicação simples (GitHub + Vercel)
-1. Crie um repositório vazio no GitHub.
-2. Faça upload de **todos os arquivos e pastas deste diretório**, mantendo a estrutura.
-3. Na Vercel, `Add New → Project` e importe o repositório.
-4. Framework Preset: `Other`.
-5. Não defina Build Command.
-6. Deploy.
-
-## Antes de vender
-- Testar login, recuperação de senha e sincronização em dois dispositivos.
-- Testar Mercado Pago em conta real/sandbox conforme sua configuração.
-- Executar/revisar os SQLs em `database/` no Supabase.
-- Validar Edge Functions `life-ai`, `mercadopago-create-subscription`, `life-notification-sync`, `life-push-config`, `life-push-register`.
-- Revisar juridicamente `privacy.html` e `terms.html` e adicionar contato oficial da operação.
-
-## Sobre chaves
-A chave pública/anon do Supabase pode existir no frontend desde que RLS/policies estejam corretas. **Nunca coloque `service_role`, segredos de Mercado Pago ou outras chaves privadas nesses arquivos.**
-
-
-## Final visual correction
-The 3.1 Mobile First Edition includes a rebuilt light theme, a deliberately minimal Today screen, quieter global navigation, and release-level visual overrides in `assets/css/final.css`. See `docs/FINAL_AUDIT.md`.
-
-
-## 3.3 Mobile First
-- Navegação móvel reorganizada para iPhone e Android.
-- LIFE AI flutuante removida no celular para não cobrir a barra inferior.
-- Modais e vídeos ficam acima da navegação e deixam uma área externa tocável para voltar.
-- Safe areas do iPhone respeitadas com viewport-fit=cover.
-- Nova Biblioteca LIFE global: guias, estudos, exercícios, treinos e receitas em uma busca única.
-- Menu “Mais” agora também expõe Biblioteca, Tutorial e Configurações como destinos independentes.
-
-
-## Mobile First 3.3
-- iPhone/mobile navigation decluttered.
-- LIFE AI floating control no longer overlaps the bottom navigation.
-- Dialogs and exercise videos sit above navigation and support backdrop dismissal where applicable.
-- Universal Biblioteca combines guides, studies, exercises, workouts and recipes.
-- Favorites hearts are independent touch targets in area selection.
-- PWA cache bumped to 3.3.0.
+## Testes externos ainda necessários
+Supabase, Mercado Pago, LIFE AI remota, notificações push e sincronização entre dispositivos precisam ser validados no domínio publicado.

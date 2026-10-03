@@ -1,21 +1,6 @@
-LIFE OS 3.3 — COMEÇE AQUI
+LIFE OS 6.0 — Signature System
 
-Você NÃO precisa mexer arquivo por arquivo.
-
-Para publicar:
-1. Extraia o ZIP.
-2. Abra a pasta LIFE_OS_3_Product_Edition.
-3. Envie TODOS os arquivos e pastas dessa pasta para o mesmo repositório do GitHub.
-4. Na Vercel, importe esse repositório.
-5. Framework: Other.
-6. Build Command: deixe vazio.
-7. Clique em Deploy.
-
-IMPORTANTE:
-- Não renomeie as pastas assets, database ou docs.
-- Não mova os arquivos de lugar.
-- index.html é o aplicativo principal.
-- landing.html é a página pública de apresentação.
-- service-worker.js + manifest.webmanifest fazem a instalação/PWA funcionar.
-
-Depois do primeiro deploy, teste login, Supabase, Mercado Pago e LIFE AI no link publicado.
+1. Mantenha todos os arquivos e pastas juntos no mesmo projeto.
+2. Para atualizar o GitHub/Vercel, use o ZIP Update_Only desta versão.
+3. A Vercel publica automaticamente depois do commit, se o repositório já estiver conectado.
+4. Teste login, LIFE AI, pagamento, sincronização e push no domínio publicado.
