@@ -1,19 +1,23 @@
-# LIFE OS 7.0 — Constellation System
+# LIFE OS 7.1 — Premium Reference Edition
 
-Versão de produto com foco em continuidade, profundidade por área e uma linguagem visual única.
+Atualização visual criada sobre a base 7.0 para aproximar o produto da referência aprovada: fundo preto/carvão, detalhes cobre/laranja, cards premium, navegação mobile de cinco ações e hierarquia visual semelhante a um app nativo.
 
 ## O que mudou
-- Constellation System 7.0: nova camada visual global, heroes, navegação e identidade por mini-app.
-- Study Universe expandido para mais de 340 assuntos no FREE, com busca, filtros e trilhas curadas.
-- Assuntos financeiros de alto risco permanecem estritamente educacionais, com avisos de risco e golpes.
-- Trilhas curadas de Mercado & Economia, Tecnologia, Dados & IA, Criatividade, Carreira, Ciências, Idiomas, Pensamento, ENEM, Engenharia, Saúde e Negócios.
-- Persuasão do FREE baseada em valor e continuidade, sem urgência falsa, perda artificial de dados ou pressão.
-- Nova landing editorial 7.0.
-- Desktop ganha atalhos Constellation; mobile permanece mais limpo.
-- PWA, diagnóstico e cache unificados em 7.0.0.
+- Home/Hoje totalmente redesenhada.
+- Hero do dia com próxima ação, progresso e fundo de montanhas.
+- Grid rápido: Organização, Estudos, Fitness, Alimentação, Finanças e Sono.
+- LIFE AI destacada no padrão visual da referência.
+- Central de Ajuda nova com pesquisa, tópicos e atalhos.
+- Painel Owner reconstruído com KPIs, gráfico, planos, atividade e ações.
+- Remoção do segundo indicador OWNER do cabeçalho para evitar duplicidade no mobile.
+- Barra inferior mobile alterada para Hoje, Organizar, Criar, LIFE AI e Mais.
+- Nova camada `premium-v71.css` e asset `today-mountains.svg`.
+- Cache PWA atualizado para `life-os-7.1.0-premium`.
 
 ## Publicação
 Envie o conteúdo desta pasta para o mesmo repositório conectado à Vercel, preservando a estrutura de pastas.
+
+Este pacote é **UPDATE ONLY** e pressupõe que os arquivos-base das versões anteriores já existem no repositório.
 
 ## Ainda precisa de teste ao vivo
 Supabase, Mercado Pago, LIFE AI remota, push e sincronização entre dispositivos dependem do ambiente publicado e das funções de backend.
