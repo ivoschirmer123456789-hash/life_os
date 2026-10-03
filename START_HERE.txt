@@ -1,6 +1,11 @@
-LIFE OS 6.0 — Signature System
+LIFE OS 7.0 — CONSTELLATION
 
-1. Mantenha todos os arquivos e pastas juntos no mesmo projeto.
-2. Para atualizar o GitHub/Vercel, use o ZIP Update_Only desta versão.
-3. A Vercel publica automaticamente depois do commit, se o repositório já estiver conectado.
-4. Teste login, LIFE AI, pagamento, sincronização e push no domínio publicado.
+PARA ATUALIZAR O SITE QUE JÁ ESTÁ NO GITHUB/VERCEL:
+1. Use o arquivo LIFE_OS_7_0_Update_Only.zip.
+2. Extraia o ZIP.
+3. Selecione tudo que estiver dentro da pasta extraída.
+4. No GitHub: Adicionar arquivo -> Carregar arquivos.
+5. Envie mantendo as pastas e confirme a substituição dos arquivos antigos.
+6. Faça o commit. A Vercel atualiza automaticamente.
+
+Depois de publicar, teste no celular: login, Hoje, Estudos, Fitness, LIFE AI, Finanças, modais, sincronização e pagamento.

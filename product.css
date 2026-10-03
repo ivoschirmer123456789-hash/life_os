@@ -1,0 +1,7 @@
+/* Minimal utilities used by the legacy compiled LIFE UI. Replaces Tailwind CDN in production. */
+.flex{display:flex}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}
+.items-center{align-items:center}.items-end{align-items:flex-end}.justify-between{justify-content:space-between}.justify-center{justify-content:center}
+.gap-2{gap:.5rem}.w-full{width:100%}.w-2{width:.5rem}.w-4{width:1rem}.h-4{height:1rem}.min-h-screen{min-height:100vh}
+.max-w-xl{max-width:36rem}.max-w-2xl{max-width:42rem}
+.font-black{font-weight:900}.text-center{text-align:center}.text-xs{font-size:.75rem;line-height:1rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[9px\]{font-size:9px}.text-\[10px\]{font-size:10px}.text-txt-primary{color:#EDEDF2}.leading-6{line-height:1.5rem}
+.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-7{margin-top:1.75rem}.mt-8{margin-top:2rem}.mt-10{margin-top:2.5rem}.mt-12{margin-top:3rem}.my-10{margin-top:2.5rem;margin-bottom:2.5rem}.pt-8{padding-top:2rem}.py-12{padding-top:3rem;padding-bottom:3rem}
