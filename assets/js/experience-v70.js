@@ -1,47 +1,15 @@
 (function(){
   'use strict';
   const root=document.documentElement;
-  try{root.dataset.lifeVersion='7.6.1';root.dataset.lifeDesign='7.6';localStorage.setItem('life_design_version','7.6.1');}catch(_){ }
-
-  const AREA_BUTTONS=[
-    ['Hoje','today'],['Tarefas','checklist'],['Estudos','school'],['Fitness','fitness_center'],['Finanças','payments'],['IA','auto_awesome'],['Biblioteca','local_library'],['Evolução','insights']
-  ];
-  function navTo(label){
-    const nodes=[...document.querySelectorAll('.v18-tabs button,.life-mobile-more-sheet button,.life-design-mobile-nav button')];
-    const exact=nodes.find(b=>(b.textContent||'').trim().toLowerCase()===label.toLowerCase());
-    const loose=nodes.find(b=>(b.textContent||'').toLowerCase().includes(label.toLowerCase()));
-    (exact||loose)?.click();
-  }
-  function currentArea(){
-    const app=document.querySelector('.life-app50[data-area]');
-    if(app)return app.getAttribute('data-area')||'';
-    const v=document.querySelector('.v18[class*="life-area-"]');
-    if(v){const c=[...v.classList].find(x=>x.startsWith('life-area-'));return c?c.replace('life-area-',''):''}
-    return '';
-  }
-  function ensureOrbit(){
-    if(document.querySelector('.life-v70-orbit'))return;
-    const nav=document.createElement('nav');nav.className='life-v70-orbit';nav.setAttribute('aria-label','Atalhos principais LIFE');
-    AREA_BUTTONS.forEach(([label,icon])=>{const b=document.createElement('button');b.type='button';b.dataset.area=label;b.innerHTML='<span class="material-symbols-rounded">'+icon+'</span><em>'+label+'</em>';b.addEventListener('click',()=>navTo(label));nav.appendChild(b)});
-    document.body.appendChild(nav);
-  }
-  function ensureProgress(){if(document.querySelector('.life-v70-progress'))return;const el=document.createElement('div');el.className='life-v70-progress';document.body.appendChild(el)}
-  function updateUI(){
-    ensureOrbit();ensureProgress();
-    const area=(currentArea()||'').toLowerCase();
-    document.querySelectorAll('.life-v70-orbit button').forEach(b=>{const x=(b.dataset.area||'').toLowerCase();b.classList.toggle('on',area.includes(x)||x.includes(area))});
-    const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);const pct=Math.max(0,Math.min(1,scrollY/max));const p=document.querySelector('.life-v70-progress');if(p)p.style.height=(pct*100)+'%';
-  }
-  let raf=0;const schedule=()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;updateUI()})};
-  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule,{passive:true});
-  new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-area']});
-  updateUI();
-
-  // Modal ergonomics: Escape closes the visible close action; backdrop remains primary on touch.
-  addEventListener('keydown',e=>{
-    if(e.key!=='Escape')return;
-    const overlays=[...document.querySelectorAll('.life-study-topic-modal,.life-how-overlay,.v18-sheetwrap,.v18-overlay')].filter(x=>getComputedStyle(x).display!=='none');
-    const top=overlays.at(-1);if(!top)return;
-    const close=top.querySelector('[aria-label="Fechar"],.life-study-topic-close,.v18-close,.lov-close');close?.click();
-  });
+  try{root.dataset.lifeVersion='7.0';root.dataset.lifeDesign='7.0';localStorage.setItem('life_design_version','7.0');}catch(_){ }
+  // Context-aware title for installed/PWA and browser tabs.
+  const updateTitle=()=>{const active=document.querySelector('.life-app50[data-area]');const area=active?.getAttribute('data-area');document.title=area&&area!=='LIFE'?'LIFE OS · '+area:'LIFE OS — Seu sistema pessoal';};
+  const mo=new MutationObserver(()=>requestAnimationFrame(updateTitle));
+  const rootEl=document.getElementById('life-v18-root'); if(rootEl)mo.observe(rootEl,{subtree:true,childList:true,attributes:true,attributeFilter:['data-area']});
+  updateTitle();
+  // Keep modal exits predictable and body scroll stable on mobile.
+  const syncModalState=()=>{const modal=document.querySelector('.v45-recipe-sheet,.life-recipe-modal,.life-study-topic-modal,.life-ai-quickwrap,.life-mobile-more,.v18-sheetwrap,.life-settings-overlay');document.documentElement.classList.toggle('life-modal-open',!!modal);};
+  const modalObserver=new MutationObserver(syncModalState); if(document.body)modalObserver.observe(document.body,{subtree:true,childList:true}); syncModalState();
+  // Keyboard: Esc closes the topmost dismissible layer using its visible close control when available.
+  addEventListener('keydown',e=>{if(e.key!=='Escape')return;const candidates=[...document.querySelectorAll('.life-study-topic-modal,.v45-recipe-sheet,.life-ai-quickwrap,.life-mobile-more,.v18-sheetwrap,.life-settings-overlay')].filter(x=>getComputedStyle(x).display!=='none');const top=candidates.at(-1);if(!top)return;const close=top.querySelector('button[aria-label*="Fechar"],button[aria-label*="fechar"],header button:last-child,.life-mobile-more-head button,.life-ai-quick-head button');if(close){e.preventDefault();close.click();}});
 })();

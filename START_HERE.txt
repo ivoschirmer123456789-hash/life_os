@@ -1,13 +1,11 @@
-LIFE OS 7.6.1 — READY BUILD
+LIFE OS 7.0 — CONSTELLATION
 
-ESTE É O PACOTE COMPLETO.
+PARA ATUALIZAR O SITE QUE JÁ ESTÁ NO GITHUB/VERCEL:
+1. Use o arquivo LIFE_OS_7_0_Update_Only.zip.
+2. Extraia o ZIP.
+3. Selecione tudo que estiver dentro da pasta extraída.
+4. No GitHub: Adicionar arquivo -> Carregar arquivos.
+5. Envie mantendo as pastas e confirme a substituição dos arquivos antigos.
+6. Faça o commit. A Vercel atualiza automaticamente.
 
-PARA PUBLICAR NO GITHUB/VERCEL:
-1. Extraia este ZIP.
-2. Abra a pasta LIFE_OS_7_6_1_READY.
-3. Envie TODO o conteúdo para o repositório do site, mantendo as pastas.
-4. Substitua os arquivos antigos e faça o commit.
-5. A Vercel fará o deploy automaticamente.
-6. Abra o site publicado e recarregue uma vez para ativar o cache PWA 7.6.1.
-
-Teste no domínio publicado: login, recuperação de senha, Hoje, Organizar, Estudos, Fitness, LIFE AI, Finanças, Central de Ajuda, Owner (conta OWNER), PRO/checkout, clima e sincronização.
+Depois de publicar, teste no celular: login, Hoje, Estudos, Fitness, LIFE AI, Finanças, modais, sincronização e pagamento.

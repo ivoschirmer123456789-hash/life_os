@@ -1,7 +1,7 @@
 {
-  "name": "LIFE OS 7.6.1",
+  "name": "LIFE OS 7.0",
   "short_name": "LIFE",
-  "description": "LIFE OS — sistema pessoal para organizar rotina, estudos, fitness, alimentação, finanças e LIFE AI.",
+  "description": "Um sistema pessoal conectado para organizar o dia, estudar, treinar, planejar, acompanhar finanças e usar LIFE AI com contexto.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

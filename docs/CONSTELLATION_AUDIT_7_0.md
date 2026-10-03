@@ -1,24 +1,19 @@
-# LIFE OS 7.0 — Constellation System · Auditoria
+# LIFE OS 7.0 — Constellation Audit
 
-## Resultado estrutural
-- Study Universe em runtime: **346 assuntos únicos**.
-- JavaScript: validado com `node --check` em todos os arquivos executáveis.
-- HTML: **0 IDs duplicados** nas páginas públicas/app.
-- Referências locais faltando: **0**.
-- Arquivos faltando no shell do Service Worker: **0**.
-- Manifest: JSON válido.
-- Botões React no motor principal: **589**.
-- `onClick: null/undefined` explícitos: **0**.
-- Padrões básicos de segredo privado encontrados: **0**.
+- JavaScript: **12 arquivos**, erros de sintaxe: **0**.
+- CSS: **13 arquivos**, erros de parse: **0**.
+- HTML: **6 páginas**, páginas com IDs duplicados: **0**.
+- Referências locais ausentes: **0**.
+- Âncoras internas quebradas: **0**.
+- Manifest válido: **sim**.
+- Arquivos do shell PWA ausentes: **0**.
+- Versão principal/cache: **7.0.0**.
+- Study Universe: **161 assuntos únicos** no catálogo-fonte antes da política FREE.
+- Botões React detectados: **591**; `onClick` explicitamente `null/undefined`: **0**.
+- Padrões de segredo privado de alta confiança detectados no frontend: **0**.
 
-## Mudanças 7.0
-- Constellation visual system em todas as áreas, com identidade VERBO / RITUAL / ENTREGA.
-- Navegação orbital no desktop e progress rail discreto.
-- Study Universe ampliado para 346 assuntos e novas trilhas curadas.
-- Catálogo de estudos permanece acessível no FREE; PRO vende profundidade, contexto e histórico.
-- Conteúdos financeiros de alto risco são apresentados em modo educacional, com risco/regulação/golpes, não como instrução para operar.
-- Landing 7.0 reescrita com narrativa de continuidade, sistema conectado e posicionamento FREE/PRO transparente.
-- PWA/cache/diagnóstico atualizados para 7.0.0.
+## Limite da auditoria
+Esta validação é estrutural e estática. Supabase, Mercado Pago, LIFE AI remota, clima, push e sincronização entre aparelhos dependem de serviços externos e precisam ser testados no domínio publicado.
 
-## Limites do teste
-Não foi possível executar E2E real dos serviços externos neste ambiente. Login/Supabase, Mercado Pago, LIFE AI remota, push e sincronização entre dispositivos devem ser validados no domínio publicado. O Playwright instalado não possuía binário Chromium disponível para a inspeção visual automatizada desta release.
+## Segurança de conteúdo
+Assuntos financeiros de alto risco são apresentados como educação sobre mecanismo, probabilidade, risco, regulação, conflitos de incentivo e prevenção a golpes; não como sinais ou instruções para operações reais.
