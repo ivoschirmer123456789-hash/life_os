@@ -1,0 +1,155 @@
+/* ==========================================================
+   LIFE OS 6.1 — SAFE POLISH LAYER
+   Additive overrides only. Keeps 6.0 components and logic intact.
+   ========================================================== */
+:root{
+  --life61-surface:#121820;
+  --life61-surface-2:#171f28;
+  --life61-surface-3:#1c2631;
+  --life61-line:rgba(255,255,255,.105);
+  --life61-line-soft:rgba(255,255,255,.065);
+  --life61-text:#f4f7f9;
+  --life61-muted:#9ba7b3;
+  --life61-orange:#ff7a1a;
+  --life61-shadow:0 28px 90px rgba(0,0,0,.38);
+  --life61-radius:22px;
+  --life61-ease:cubic-bezier(.2,.8,.2,1);
+}
+
+/* ---------- interaction + accessibility ---------- */
+.v18 button,
+.v18 [role="button"],
+#life-owner-panel button,
+#life-auth button{transition:transform .14s var(--life61-ease),border-color .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease,opacity .18s ease}
+.v18 button:not(:disabled):active,
+.v18 [role="button"]:not([aria-disabled="true"]):active,
+#life-owner-panel button:not(:disabled):active,
+#life-auth button:not(:disabled):active{transform:scale(.975)}
+.v18 button:focus-visible,
+.v18 a:focus-visible,
+.v18 input:focus-visible,
+.v18 textarea:focus-visible,
+.v18 select:focus-visible,
+#life-owner-panel button:focus-visible,
+#life-auth button:focus-visible,
+#life-auth input:focus-visible{outline:2px solid rgba(255,122,26,.72)!important;outline-offset:2px!important}
+.v18 button:disabled,.v18 [aria-disabled="true"]{opacity:.48!important;cursor:not-allowed!important}
+
+/* Better readable helper text in the areas users interact with most. */
+.life-settings-copy small,.life-settings-head small,.life-profile-main small,.life-profile-badges span,.life-profile-identity-actions button,.life-mobile-nav button,.life-design-mobile-nav button{font-size:max(8px,.54rem)!important}
+.life-settings-copy span,.life-settings-head p,.life-settings-note,.life-profile-main p,.life-empty,.life-app36-empty,.life-v50-empty{font-size:max(10px,.64rem)!important;line-height:1.6!important}
+
+/* ---------- SETTINGS: lighter, clearer, safer ---------- */
+.life-settings-overlay:not(.life-settings-page-mode){background:rgba(2,5,8,.58)!important;backdrop-filter:blur(14px) saturate(.9)!important;-webkit-backdrop-filter:blur(14px) saturate(.9)!important}
+.life-settings-panel{
+  background:
+    radial-gradient(560px 240px at 90% -5%,rgba(255,122,26,.105),transparent 62%),
+    linear-gradient(155deg,#18212a,#111820 56%,#151b22)!important;
+  border-color:rgba(255,255,255,.13)!important;
+  color:var(--life61-text)!important;
+  box-shadow:0 30px 95px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.035)!important;
+}
+.life-settings-page-mode .life-settings-panel{box-shadow:0 22px 70px rgba(0,0,0,.20)!important}
+.life-settings-head{background:linear-gradient(135deg,rgba(255,122,26,.065),rgba(255,255,255,.018))!important;border-color:rgba(255,255,255,.10)!important}
+.life-settings-head h2{color:#fff!important}
+.life-settings-head p{color:#a4b0bb!important}
+.life-settings-head>button,.life-settings-page-mode .life-settings-head>button.life-settings-back{
+  background:rgba(255,255,255,.055)!important;border-color:rgba(255,255,255,.12)!important;color:#ecf0f3!important;
+}
+.life-settings-head>button:hover{background:rgba(255,122,26,.10)!important;border-color:rgba(255,122,26,.32)!important;color:#ff9a5f!important}
+.life-settings-group,.life-settings-block,.life-settings-market{border-color:rgba(255,255,255,.085)!important;background:rgba(255,255,255,.012)!important}
+.life-settings-group:hover,.life-settings-block:hover,.life-settings-market:hover{background:rgba(255,255,255,.022)!important}
+.life-settings-copy b{color:#f2f5f7!important;font-size:13px!important}
+.life-settings-copy span{color:#9aa6b1!important}
+.life-settings-options button,.life-notification-settings-grid button,.life-settings-links button,.life-settings-actions button,.life-brief-reminders button{
+  background:#161e27!important;border-color:rgba(255,255,255,.10)!important;color:#c4ccd3!important;
+}
+.life-settings-options button:hover,.life-notification-settings-grid button:hover,.life-settings-links button:hover,.life-settings-actions button:hover,.life-brief-reminders button:hover{background:#1c2631!important;border-color:rgba(255,255,255,.16)!important}
+.life-settings-options button.on,.life-notification-settings-grid button.on,.life-brief-reminders button.on{background:rgba(255,122,26,.12)!important;border-color:rgba(255,122,26,.35)!important;color:#ff9b61!important}
+.life-switch{background:#29323c!important;border-color:rgba(255,255,255,.12)!important;box-shadow:inset 0 0 0 1px rgba(0,0,0,.16)!important}
+.life-switch.on{background:linear-gradient(135deg,#ff8b36,#f46b0c)!important}
+.life-market-grid>div,.life-support-grid>div{background:#151d25!important;border-color:rgba(255,255,255,.095)!important}
+.life-settings-note{color:#8c99a5!important}
+.life-settings-actions{background:linear-gradient(180deg,transparent,rgba(255,255,255,.012))!important}
+.life-settings-actions button.primary{background:linear-gradient(135deg,#ff8b36,#f36a0d)!important;color:#11161c!important;box-shadow:0 10px 28px rgba(255,122,26,.16)!important}
+
+/* Day mode keeps its light identity, now with stronger separation. */
+.life-theme-day .life-settings-panel{background:linear-gradient(155deg,#fff,#f8f4ef 62%,#fffaf5)!important;border-color:#d9cec4!important;box-shadow:0 24px 70px rgba(69,50,34,.12)!important}
+.life-theme-day .life-settings-head{background:linear-gradient(135deg,#fff5e9,#fff)!important;border-color:#e4d9cf!important}
+.life-theme-day .life-settings-group,.life-theme-day .life-settings-block,.life-theme-day .life-settings-market{background:rgba(255,255,255,.54)!important;border-color:#e5dbd2!important}
+.life-theme-day .life-settings-options button,.life-theme-day .life-notification-settings-grid button,.life-theme-day .life-settings-links button,.life-theme-day .life-settings-actions button,.life-theme-day .life-market-grid>div{background:#fff!important;border-color:#ded4cb!important;color:#51473f!important}
+.life-theme-day .life-settings-copy span,.life-theme-day .life-settings-head p{color:#746a62!important}
+
+/* ---------- PROFILE: cleaner information hierarchy ---------- */
+.life-profile-identity{background:radial-gradient(360px 180px at 100% 0%,rgba(255,122,26,.09),transparent 65%),linear-gradient(145deg,#10161d,#0b1016)!important;border-color:rgba(255,255,255,.09)!important;box-shadow:0 18px 60px rgba(0,0,0,.18)!important}
+.life-profile-main h2{font-size:24px!important;line-height:1.05!important}
+.life-profile-main p{color:#909ca7!important}
+.life-profile-badges span{padding:6px 8px!important;background:rgba(255,255,255,.025)!important}
+.life-profile-identity-actions button{min-height:40px!important;background:rgba(255,255,255,.035)!important;border-color:rgba(255,255,255,.095)!important;color:#eef2f5!important}
+.life-profile-identity-actions button:hover{border-color:rgba(255,122,26,.28)!important;background:rgba(255,122,26,.07)!important}
+.life-profile-identity-actions .life-owner-control-entry{border-color:rgba(255,122,26,.28)!important;color:#ff9c63!important;background:rgba(255,122,26,.07)!important}
+.life-plan-summary-card{background:radial-gradient(420px 180px at 100% 0%,rgba(255,122,26,.08),transparent 68%),#0e141b!important;border-color:rgba(255,255,255,.09)!important;box-shadow:0 16px 50px rgba(0,0,0,.16)!important}
+.life-theme-day .life-profile-identity,.life-theme-day .life-plan-summary-card{background:#fff!important;border-color:#e4d9cf!important;box-shadow:0 15px 45px rgba(58,43,31,.07)!important}
+
+/* ---------- OWNER: remove floating duplicate, retain panel via Profile ---------- */
+#life-owner-open{display:none!important}
+#life-owner-panel{background:rgba(3,6,9,.70)!important;backdrop-filter:blur(18px) saturate(.85)!important;-webkit-backdrop-filter:blur(18px) saturate(.85)!important}
+#life-owner-panel .lov-wrap{max-width:900px!important}
+#life-owner-panel .lov-card{background:linear-gradient(145deg,#141b23,#0f151b)!important;border-color:rgba(255,255,255,.09)!important;box-shadow:0 14px 48px rgba(0,0,0,.16)!important}
+#life-owner-panel .lov-close,#life-owner-panel .lov-btn{min-height:42px!important;background:#151d25!important;border-color:rgba(255,255,255,.11)!important}
+#life-owner-panel .lov-muted{color:#9aa6b1!important;font-size:10px!important}
+#life-owner-panel .lov-note{font-size:10px!important;color:#9ca8b3!important}
+
+/* ---------- MODALS / SHEETS: one predictable visual language ---------- */
+.v18-sheetwrap,.v18-overlay,.life-how-overlay,.life-ai-quickwrap,.life-ai-confirm,.life-notification-overlay,.life-pro-paywall,.life-fit35-review-modal,.life-recipe-modal,.life-org-modal-v4,.life-legal-overlay,.life-study-topic-modal{
+  background:rgba(2,5,8,.62)!important;backdrop-filter:blur(14px) saturate(.9)!important;-webkit-backdrop-filter:blur(14px) saturate(.9)!important;
+}
+.v18-sheet,.life-ai-quick,.life-notification-panel,.life-legal-panel,.life-pro-paywall>div,.life-org-modal-v4>div,.life-recipe-modal>div,.life-study-topic-modal>article{
+  border-color:rgba(255,255,255,.10)!important;box-shadow:var(--life61-shadow)!important;
+}
+body.life-modal-open{overflow:hidden!important;overscroll-behavior:none!important}
+
+/* ---------- empty/loading states ---------- */
+.life-empty,.life-app36-empty,.life-v50-empty,.life-simple-empty,.life-library-empty,.life-knowledge-empty,.life-ai-empty,.life-ai-simple-empty,.life-today-empty{
+  border-color:rgba(255,255,255,.10)!important;background:linear-gradient(145deg,rgba(255,255,255,.023),rgba(255,255,255,.009))!important;color:#8d9aa6!important;
+}
+#life-load-fallback>div{border:1px solid rgba(255,255,255,.08)!important;border-radius:24px!important;background:linear-gradient(145deg,#111820,#090d12)!important;box-shadow:0 30px 100px rgba(0,0,0,.38)!important}
+
+/* ---------- mobile navigation / safe touch targets ---------- */
+@media(max-width:820px){
+  .life-mobile-nav,.life-design-mobile-nav{left:8px!important;right:8px!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;border-radius:22px!important;min-height:66px!important;padding:7px!important;background:rgba(8,12,17,.94)!important;border:1px solid rgba(255,255,255,.09)!important;box-shadow:0 18px 58px rgba(0,0,0,.42)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important}
+  .life-mobile-nav button,.life-design-mobile-nav button{min-height:50px!important;min-width:44px!important;border-radius:15px!important}
+  .life-mobile-nav button:active,.life-design-mobile-nav button:active{background:rgba(255,122,26,.09)!important}
+  .life-settings-overlay.life-settings-page-mode{padding:8px 8px calc(94px + env(safe-area-inset-bottom))!important}
+  .life-settings-page-mode .life-settings-panel{border:1px solid rgba(255,255,255,.10)!important;border-radius:22px!important;overflow:hidden!important}
+  .life-settings-head{position:sticky!important;top:0!important;z-index:3!important;padding:18px 15px!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
+  .life-settings-group,.life-settings-block,.life-settings-market{padding:17px 15px!important}
+  .life-settings-actions{padding:16px 15px!important}
+  .life-settings-options button,.life-notification-settings-grid button,.life-settings-links button,.life-settings-actions button{min-height:46px!important}
+  .life-profile-identity{border-radius:20px!important;padding:15px!important}
+  .life-profile-identity-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .life-profile-identity-actions .life-owner-control-entry{grid-column:1/-1!important}
+  #life-owner-panel{padding:18px 10px calc(100px + env(safe-area-inset-bottom))!important}
+  #life-owner-panel .lov-head{position:sticky!important;top:0!important;z-index:2!important;padding:12px 4px!important;background:linear-gradient(180deg,rgba(5,8,12,.98),rgba(5,8,12,.90),transparent)!important}
+}
+
+@media(max-width:520px){
+  .life-settings-head h2{font-size:27px!important}
+  .life-settings-head{gap:10px!important}
+  .life-settings-page-mode .life-settings-head>button.life-settings-back{min-width:82px!important}
+  .life-notification-settings-grid{grid-template-columns:1fr 1fr!important}
+  #life-owner-panel .lov-grid{grid-template-columns:1fr 1fr!important}
+  #life-owner-panel .lov-feature{grid-template-columns:minmax(0,1fr) 48px 48px!important}
+}
+
+/* ---------- restrained motion ---------- */
+@media(prefers-reduced-motion:no-preference){
+  .life-settings-panel,.life-profile-identity,.life-plan-summary-card,.life-empty,.life-app36-empty,.life-v50-empty{animation:life61In .28s var(--life61-ease) both}
+  @keyframes life61In{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+
+/* ---------- day-mode mobile nav ---------- */
+.life-theme-day .life-mobile-nav,.life-theme-day .life-design-mobile-nav{background:rgba(255,252,248,.95)!important;border-color:#e2d7cd!important;box-shadow:0 18px 50px rgba(72,54,38,.13)!important}

@@ -77,6 +77,13 @@ const MONTH_NAMES = [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
 ];
+
+// LIFE OS 6.3 — local calendar helper. Avoid UTC day shifts in dates shown/stored as YYYY-MM-DD.
+const lifeLocalDateKeyValue = (input = new Date()) => {
+    const d = input instanceof Date ? new Date(input.getTime()) : new Date(input);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+};
 const MASTER_QUESTIONS = [
     { id: 'q_foco', specialty: 'Objetivos & Direção', title: 'Qual é o seu objetivo número 1 agora?', desc: 'A grande meta que mudará o seu jogo nos próximos meses.', placeholder: 'Ex: Aprender inglês, lançar projeto...', type: 'text' },
     { id: 'q_gargalo', specialty: 'Rotina & Produtividade', title: 'O que mais costuma sabotar o seu dia?', desc: 'O gargalo ou distração que mais te afasta de manter o foco.', placeholder: 'Ex: Celular, cansaço à noite...', type: 'text' },
@@ -3478,9 +3485,18 @@ function LifeOSV18() {
     catch {
         return d;
     } }, save = (k, v) => {
-        localStorage.setItem(k, JSON.stringify(v));
-        if (k !== 'life_cloud_synced_at' && k !== 'life_local_dirty_at')
-            localStorage.setItem('life_local_dirty_at', new Date().toISOString());
+        try {
+            localStorage.setItem(k, JSON.stringify(v));
+            if (k !== 'life_cloud_synced_at' && k !== 'life_local_dirty_at')
+                localStorage.setItem('life_local_dirty_at', new Date().toISOString());
+            document.documentElement.dataset.storage = 'ok';
+            return true;
+        }
+        catch (e) {
+            document.documentElement.dataset.storage = 'error';
+            window.lifeLastStorageError = String(e?.message || e || 'storage_error').slice(0, 240);
+            return false;
+        }
     };
     const [clockNow, setClockNow] = React.useState(() => new Date());
     React.useEffect(() => { const id = setInterval(() => setClockNow(new Date()), 30000); return () => clearInterval(id); }, []);
@@ -3926,7 +3942,7 @@ function LifeOSV18() {
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob), a = document.createElement('a');
             a.href = url;
-            a.download = 'life-os-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+            a.download = 'life-os-backup-' + lifeLocalDateKeyValue() + '.json';
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -4354,7 +4370,7 @@ function LifeOSV18() {
     const [financeDesc, setFinanceDesc] = React.useState('');
     const [financeValue, setFinanceValue] = React.useState('');
     const [financeCategory, setFinanceCategory] = React.useState('Geral');
-    const [financeDate, setFinanceDate] = React.useState(() => new Date().toISOString().slice(0, 10));
+    const [financeDate, setFinanceDate] = React.useState(() => lifeLocalDateKeyValue());
     const [financeMonthlyReminder, setFinanceMonthlyReminder] = React.useState(false);
     const [financeMonth, setFinanceMonth] = React.useState(() => new Date().toISOString().slice(0, 7));
     const [financeBudget, setFinanceBudget] = React.useState(() => load('life_finance_budget_v1', ''));
@@ -4454,7 +4470,7 @@ function LifeOSV18() {
         const title = String(draft.title || '').trim();
         if (!title)
             return null;
-        const date = draft.date || new Date().toISOString().slice(0, 10), time = draft.time || '09:00', when = new Date(date + 'T' + time + ':00');
+        const date = draft.date || lifeLocalDateKeyValue(), time = draft.time || '09:00', when = new Date(date + 'T' + time + ':00');
         if (Number.isNaN(when.getTime()))
             return null;
         const item = { id: 'rem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), title, category: draft.category || 'Rotina', when: when.toISOString(), repeat: draft.repeat || 'Nunca', enabled: true, lastFiredAt: null, createdAt: new Date().toISOString() };
@@ -5163,7 +5179,7 @@ function LifeOSV18() {
             return;
         if (extra.dueAt && taskNotify) {
             const when = new Date(extra.dueAt);
-            addLifeReminder({ title: t.text, category: 'Tarefas', date: when.toISOString().slice(0, 10), time: when.toTimeString().slice(0, 5), repeat: 'Nunca' });
+            addLifeReminder({ title: t.text, category: 'Tarefas', date: lifeLocalDateKeyValue(when), time: when.toTimeString().slice(0, 5), repeat: 'Nunca' });
         }
         setTaskDraft('');
         setTaskDueDate('');
@@ -5600,7 +5616,7 @@ function LifeOSV18() {
     const [legalOpen, setLegalOpen] = React.useState(null);
     const [supportOpen, setSupportOpen] = React.useState(false);
     const [dangerOpen, setDangerOpen] = React.useState(false);
-    const lifeBuild = '6.0.0';
+    const lifeBuild = '6.3.0';
     const lifeDiagnostics = () => ({
         build: lifeBuild,
         plan: effectivePlan || realPlan || 'FREE',
@@ -5611,6 +5627,7 @@ function LifeOSV18() {
         density,
         platform: navigator.userAgentData?.platform || navigator.platform || 'unknown',
         browser: navigator.userAgent,
+        storage: document.documentElement.dataset.storage || 'unknown',
         timestamp: new Date().toISOString()
     });
     const copyLifeDiagnostics = async () => {
@@ -6985,8 +7002,8 @@ function LifeOSV18() {
             const acts90=lifeActivity.filter(a=>nowTs-new Date(a.date).getTime()<=90*86400000);
             const groups={Estudos:0,Fitness:0,Organização:0,Finanças:0,Notas:0};
             acts30.forEach(a=>{const t=String((a.type||'')+' '+(a.title||'')).toLowerCase();if(/estud|foco|revis/.test(t))groups.Estudos++;else if(/treino|fitness|exerc/.test(t))groups.Fitness++;else if(/finan|gasto|receita/.test(t))groups.Finanças++;else if(/nota|anota/.test(t))groups.Notas++;else groups.Organização++});
-            const dayRows=Array.from({length:14},(_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(13-i));const key=d.toISOString().slice(0,10);const value=lifeActivity.filter(a=>String(a.date||'').slice(0,10)===key).length;return{label:['D','S','T','Q','Q','S','S'][d.getDay()],value,display:value}});
-            const activeDays30=new Set(acts30.map(a=>String(a.date||'').slice(0,10)).filter(Boolean)).size;
+            const dayRows=Array.from({length:14},(_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(13-i));const key=lifeLocalDateKeyValue(d);const value=lifeActivity.filter(a=>lifeLocalDateKeyValue(a.date)===key).length;return{label:['D','S','T','Q','Q','S','S'][d.getDay()],value,display:value}});
+            const activeDays30=new Set(acts30.map(a=>lifeLocalDateKeyValue(a.date)).filter(Boolean)).size;
             return React.createElement(LifeApp36,{area:'Evolução',icon:'monitoring',kicker:'LIFE / ANALYTICS',title:'Veja sua vida em movimento.',subtitle:'Evolução cruza apenas registros que existem no seu LIFE. A comparação é com seu próprio histórico, não com outras pessoas.',metrics:[
                     {label:'7 DIAS',value:acts7.length,note:'ações registradas'},
                     {label:'30 DIAS',value:acts30.length,note:'ações registradas'},
@@ -7534,7 +7551,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => setSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 6.0.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 6.3.0"),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => setSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
@@ -7561,8 +7578,10 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                 React.createElement("span", null, LIFE_UPGRADE_COPY[view][1])),
             React.createElement("button", { type: "button", onClick: () => openLifePro(view === 'Fitness' ? 'treino_personalizado' : view === 'Estudos' ? 'estudos_mastery' : view === 'Finanças' ? 'financas_analise' : view === 'Archive' ? 'archive' : 'header') }, "VER O QUE O PRO LIBERA →")),
         view !== 'IA' && view !== 'Hoje' && advancedArea === view && !['Configurações','Tutorial','Guia de Estudos','Favoritos','Biblioteca'].includes(view) && React.createElement(LifeSmartHub, { area: view, onGo: v42Go, onAsk: (prompt) => { setAiOriginView(view); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); } }),
-        (settingsOpen || view === 'Configurações') && React.createElement("div", { className: "life-settings-overlay " + (view === 'Configurações' ? 'life-settings-page-mode' : ''), onClick: e => { if (settingsOpen && e.target === e.currentTarget)
-                setSettingsOpen(false); } },
+        (settingsOpen || view === 'Configurações') && React.createElement("div", { className: "life-settings-overlay " + (view === 'Configurações' ? 'life-settings-page-mode' : ''), onClick: e => { if (e.target === e.currentTarget) {
+                if (view === 'Configurações') v42Go('Perfil');
+                else if (settingsOpen) setSettingsOpen(false);
+            } } },
             React.createElement("section", { className: "life-settings-panel", role: view === 'Configurações' ? "main" : "dialog", "aria-modal": view === 'Configurações' ? undefined : "true", "aria-label": "Configura\u00E7\u00F5es do LIFE" },
                 React.createElement("header", { className: "life-settings-head" },
                     React.createElement("div", null,
@@ -9263,8 +9282,9 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                         React.createElement("span", null, online ? 'ONLINE' : 'OFFLINE'))),
                 React.createElement("div", { className: "life-profile-identity-actions" },
                     React.createElement("button", { type: "button", onClick: () => setSettingsOpen(true) }, "AJUSTES"),
-                    React.createElement("button", { type: "button", onClick: () => cloudStatus === 'conflict' ? setSettingsOpen(true) : pushLifeCloud(true) }, cloudStatus === 'conflict' ? 'REVISAR SINCRONIZAÇÃO' : 'SINCRONIZAR'))),
-            view === 'Perfil' && advancedArea === 'Perfil' && React.createElement("section", { style: { margin: '14px 0 18px', padding: 18, border: hasV18Pro ? '1px solid rgba(212,175,55,.45)' : '1px solid #29292e', borderRadius: 18, background: hasV18Pro ? 'linear-gradient(135deg,rgba(212,175,55,.12),rgba(10,9,6,.9))' : '#101012' } },
+                    React.createElement("button", { type: "button", onClick: () => cloudStatus === 'conflict' ? setSettingsOpen(true) : pushLifeCloud(true) }, cloudStatus === 'conflict' ? 'REVISAR SINCRONIZAÇÃO' : 'SINCRONIZAR'),
+                    realPlan === 'OWNER' && React.createElement("button", { type: "button", className: "life-owner-control-entry", onClick: () => window.lifeOpenOwnerControl && window.lifeOpenOwnerControl() }, "LIFE CONTROL"))),
+            view === 'Perfil' && advancedArea === 'Perfil' && React.createElement("section", { className: "life-plan-summary-card", style: { margin: '14px 0 18px', padding: 18, border: hasV18Pro ? '1px solid rgba(212,175,55,.45)' : '1px solid #29292e', borderRadius: 18, background: hasV18Pro ? 'linear-gradient(135deg,rgba(212,175,55,.12),rgba(10,9,6,.9))' : '#101012' } },
                 React.createElement("small", { style: { fontWeight: 900, letterSpacing: 1.7, color: hasV18Pro ? '#f5d76e' : '#999' } }, "PLANO ATUAL"),
                 React.createElement("h3", { style: { fontSize: 22, fontWeight: 950, margin: '6px 0', color: hasV18Pro ? '#fff4c4' : '#fff' } }, realPlan === 'OWNER' ? (effectivePlan === 'OWNER' ? 'OWNER · ACESSO COMPLETO' : 'OWNER · VISUALIZANDO ' + effectivePlan) : hasV18Pro ? 'LIFE OS PRO · ATIVO' : 'LIFE OS FREE'),
                 React.createElement("p", { style: { fontSize: 11, color: '#999' } }, hasV18Pro ? ('Experiência premium desbloqueada.' + (planExpiryLabel ? ' Acesso previsto até ' + planExpiryLabel + '.' : '')) : (planMeta.rawPlan === 'PRO' && planMeta.proUntil ? 'Seu período PRO terminou. Seus dados continuam salvos; apenas os recursos avançados estão bloqueados.' : 'Seu LIFE essencial está ativo. O PRO desbloqueia a experiência completa.')),

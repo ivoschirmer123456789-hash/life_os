@@ -1,0 +1,298 @@
+/* LIFE OS 6.2 — responsive content layout fixes
+   Purpose: prevent rich guide/study content from being squeezed into small cards.
+   Loaded last so the fixes are isolated from legacy component styles. */
+
+/* Rich study plans need the full reading width. The old 3-column roadmap
+   nested another 3-column detail grid inside each card, which compressed
+   long subjects such as Marketing/Ads into tiny boxes. */
+.life-guide-page,
+.life-study-architect,
+.life-study-plan,
+.life-study-roadmap,
+.life-study-stage,
+.life-study-stage-detail,
+.life-study-stage-detail > div,
+.life-study-resources,
+.life-study-resource {
+  min-width: 0;
+}
+
+.life-guide-page {
+  width: min(1240px, calc(100% - 28px));
+}
+
+.life-study-roadmap {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 14px !important;
+}
+
+.life-study-stage {
+  display: grid !important;
+  grid-template-columns: 44px minmax(0, 1fr) !important;
+  column-gap: 14px !important;
+  align-items: start !important;
+  padding: 18px !important;
+  overflow: visible !important;
+}
+
+.life-study-stage > i {
+  grid-column: 1 !important;
+  grid-row: 1 / span 5 !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 11px !important;
+  font-size: 9px !important;
+}
+
+.life-study-stage > small,
+.life-study-stage > b,
+.life-study-stage > p,
+.life-study-stage > .life-study-stage-meta {
+  grid-column: 2 !important;
+  min-width: 0;
+}
+
+.life-study-stage > small {
+  margin-top: 1px !important;
+  font-size: 7.5px !important;
+}
+
+.life-study-stage > b {
+  font-size: clamp(15px, 1.8vw, 20px) !important;
+  line-height: 1.25 !important;
+  margin-top: 5px !important;
+  overflow-wrap: anywhere;
+}
+
+.life-study-stage > p {
+  max-width: 92ch;
+  font-size: 10px !important;
+  line-height: 1.65 !important;
+  margin-top: 7px !important;
+  overflow-wrap: anywhere;
+}
+
+.life-study-stage-meta {
+  margin-top: 10px !important;
+}
+
+.life-study-stage-detail {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin-top: 16px !important;
+}
+
+.life-study-stage-detail > div {
+  width: auto !important;
+  max-width: none !important;
+  padding: 15px !important;
+  overflow: visible !important;
+}
+
+.life-study-stage-detail small {
+  font-size: 7.5px !important;
+}
+
+.life-study-stage-detail li,
+.life-study-stage-detail p {
+  font-size: 10px !important;
+  line-height: 1.65 !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.life-study-stage-actions {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  margin-top: 13px !important;
+}
+
+.life-study-stage-actions button {
+  min-height: 42px !important;
+  padding: 9px 13px !important;
+}
+
+/* General LIFE guide modal: never allow its two content columns or tags
+   to shrink below their readable width. */
+.life-guide-sheet {
+  width: min(980px, calc(100vw - 28px)) !important;
+  max-width: 980px !important;
+  max-height: min(90dvh, 900px) !important;
+}
+
+.life-guide-sheet header > div,
+.life-guide-body,
+.life-guide-hero > div,
+.life-guide-columns,
+.life-guide-panel,
+.life-guide-steps li,
+.life-guide-steps li > span,
+.life-guide-dos,
+.life-guide-dos > div {
+  min-width: 0;
+}
+
+.life-guide-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: start;
+}
+
+.life-guide-panel,
+.life-guide-dos > div,
+.life-guide-steps li > span,
+.life-guide-sheet header p,
+.life-guide-hero p,
+.life-guide-note {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* Topic preview modal used before creating a study guide. */
+.life-study-topic-modal > article {
+  width: min(820px, calc(100vw - 28px)) !important;
+}
+
+.life-study-topic-roadmap,
+.life-study-topic-roadmap > div,
+.life-study-topic-roadmap span {
+  min-width: 0;
+}
+
+.life-study-topic-roadmap > div {
+  grid-template-columns: 44px minmax(0, 1fr) !important;
+  padding: 13px 14px !important;
+}
+
+.life-study-topic-roadmap span {
+  font-size: 10px !important;
+  line-height: 1.55 !important;
+  overflow-wrap: anywhere;
+}
+
+/* Keep study catalogue cards flexible when a subject has a long title/roadmap. */
+.life-study-topic-v6 {
+  height: auto !important;
+  min-width: 0 !important;
+}
+
+.life-study-topic-v6 > b,
+.life-study-topic-v6 > p {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* Similar rich grids: protect text from being clipped by min-content sizing. */
+.life-knowledge-grid,
+.life-library-grid,
+.life-v50-academy-grid,
+.life-function-grid,
+.life-study-home-grid {
+  min-width: 0;
+}
+
+.life-guide-card,
+.life-library-card,
+.life-v50-academy-grid article,
+.life-function-card {
+  min-width: 0 !important;
+}
+
+.life-guide-card b,
+.life-guide-card p,
+.life-library-card b,
+.life-library-card p,
+.life-function-card b,
+.life-function-card .life-function-desc {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+@media (max-width: 980px) {
+  .life-study-stage-detail {
+    grid-template-columns: 1fr !important;
+  }
+  .life-guide-columns {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .life-guide-page {
+    width: calc(100% - 16px) !important;
+    padding-top: 18px !important;
+  }
+
+  .life-study-architect {
+    padding: 14px !important;
+  }
+
+  .life-study-stage {
+    grid-template-columns: 34px minmax(0, 1fr) !important;
+    column-gap: 10px !important;
+    padding: 14px !important;
+    border-radius: 16px !important;
+  }
+
+  .life-study-stage > i {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 10px !important;
+  }
+
+  .life-study-stage > b {
+    font-size: 16px !important;
+  }
+
+  .life-study-stage > p,
+  .life-study-stage-detail li,
+  .life-study-stage-detail p {
+    font-size: 10.5px !important;
+  }
+
+  .life-study-stage-detail {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 13px !important;
+  }
+
+  .life-study-stage-detail > div {
+    padding: 13px !important;
+  }
+
+  .life-study-stage-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .life-study-stage-actions button {
+    width: 100% !important;
+  }
+
+  .life-guide-modal,
+  .life-study-topic-modal {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .life-guide-sheet,
+  .life-study-topic-modal > article {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .life-guide-body {
+    padding: 14px !important;
+  }
+
+  .life-guide-hero {
+    grid-template-columns: 1fr !important;
+  }
+
+  .life-guide-hero .life-guide-visual {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}

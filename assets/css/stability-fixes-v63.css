@@ -1,0 +1,110 @@
+/* LIFE OS 6.3 — stability + responsive hardening
+   Additive safeguards only. No business logic or data rules live here. */
+
+/* Prevent grid/flex children with long content from forcing narrow boxes or horizontal overflow. */
+.v18 :is(
+  .life-food-system-grid,.life-mastery-grid,.life-brain-grid,.life-fin-grid,
+  .life-project-columns-v4,.life-org-form-grid-v4,.life-day-planner-inputs-v4,
+  .life-graph-builder-v4,.life-graph-links-v4,.life-review-body-v4,
+  .life-plan-preview,.life-v50-chips,.life-recipe-results,.life-support-grid,
+  .life-market-grid,.life-notification-settings-grid,.life-profile-identity-actions
+),
+.v18 :is(
+  .life-food-system-grid,.life-mastery-grid,.life-brain-grid,.life-fin-grid,
+  .life-project-columns-v4,.life-org-form-grid-v4,.life-day-planner-inputs-v4,
+  .life-graph-builder-v4,.life-graph-links-v4,.life-review-body-v4,
+  .life-plan-preview,.life-recipe-results
+) > *{
+  min-width:0;
+}
+
+.v18 :is(h1,h2,h3,h4,b,p,span,small,em,label,li),
+#life-owner-panel :is(h1,h2,h3,b,p,span,small),
+#life-auth :is(h1,h2,p,span,small){
+  overflow-wrap:anywhere;
+}
+
+.v18 img,.v18 video,.v18 canvas,.v18 svg{max-width:100%}
+
+/* Pantry: previously depended almost entirely on generic descendants. */
+.life-pantry-list-v4{display:grid;gap:7px;margin:10px 0 12px;max-height:320px;overflow:auto;overscroll-behavior:contain}
+.life-pantry-list-v4>div{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.life-pantry-list-v4>div>span{min-width:0;display:block}
+.life-pantry-list-v4 b,.life-pantry-list-v4 small{display:block}
+.life-pantry-list-v4 b{font-size:10px}
+.life-pantry-list-v4 small{margin-top:3px;color:#7e8792;font-size:8px}
+.life-pantry-list-v4 button{flex:0 0 38px;width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:transparent;color:#aab2bf}
+.life-use-first-v4{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px;padding:10px;border:1px solid rgba(249,115,22,.16);border-radius:12px;background:rgba(249,115,22,.035)}
+.life-use-first-v4>small{width:100%}
+.life-use-first-v4>b{font-size:8px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.035)}
+
+/* Weekly review body should use the available modal width rather than shrink to content. */
+.life-review-body-v4{width:100%;display:block;overflow:visible}
+.life-review-body-v4>p{line-height:1.65}
+
+/* Day planner preview: readable rows, not a collapsed anonymous block. */
+.life-plan-preview{display:grid;gap:7px;margin-top:14px}
+.life-plan-preview>div:not(.life-empty){display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.018)}
+.life-plan-preview small{font-size:8px;color:#ff965b}
+.life-plan-preview b{font-size:10px;line-height:1.4}
+
+/* Chips used by several v50 panels must wrap instead of extending beyond the card. */
+.life-v50-chips{display:flex;gap:7px;flex-wrap:wrap;min-width:0}
+.life-v50-chips>*{min-width:0;max-width:100%}
+
+/* Support/recipe panels inherit modal styles but need safe viewport sizing. */
+.life-support-panel{width:min(820px,calc(100vw - 28px))!important}
+.v27-sheet.life-recipe-finder{width:min(760px,calc(100vw - 28px))!important;max-width:760px!important}
+.v32-sub{display:block;margin-top:3px;color:#77818b;font-size:8px;line-height:1.35}
+
+/* Shared modal scroll safety. */
+:is(
+  .life-guide-sheet,.life-exercise-sheet,.life-recipe-sheet,.life-mini-modal>article,
+  .life-org-modal-v4>article,.life-legal-panel,.life-notification-panel,
+  .life-fit35-review-card,.v27-sheet,.v18-sheet,.v18-modal,.v20-diet-panel,
+  .life-workout-player-card,.life-ai-quick,.life-study-topic-modal>article,
+  #life-owner-panel .lov-wrap
+){
+  max-width:calc(100vw - 20px);
+  max-height:min(90dvh,920px);
+  overflow:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* Forms: preserve usable controls when labels/content become long. */
+.v18 :is(input,select,textarea,button){max-width:100%}
+.v18 textarea{resize:vertical}
+
+/* Day theme additions for v63 components. */
+.life-theme-day .life-pantry-list-v4>div,
+.life-theme-day .life-plan-preview>div:not(.life-empty){border-color:#e5d9ce;background:#fff}
+.life-theme-day .life-pantry-list-v4 button{border-color:#ded4cb;color:#65584e;background:#fff}
+.life-theme-day .life-use-first-v4{border-color:#ead5c4;background:#fff7ef}
+.life-theme-day .life-use-first-v4>b{background:#fff;color:#5e5147}
+
+@media(max-width:820px){
+  /* Rich three/four column desktop systems become two columns before phone width. */
+  .life-brain-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .life-mastery-grid,.life-fin-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .life-graph-links-v4>div{grid-template-columns:minmax(0,1fr) auto!important}
+  .life-graph-links-v4>div>*{min-width:0}
+  .life-support-panel,.v27-sheet.life-recipe-finder{width:100%!important;max-width:100%!important}
+}
+
+@media(max-width:600px){
+  .life-brain-grid,.life-mastery-grid,.life-fin-grid,.life-project-columns-v4{grid-template-columns:1fr!important}
+  .life-pantry-add-v4{grid-template-columns:1fr!important}
+  .life-pantry-add-v4>button{min-height:44px!important}
+  .life-plan-preview>div:not(.life-empty){grid-template-columns:52px minmax(0,1fr)}
+  .life-notification-settings-grid{grid-template-columns:1fr!important}
+  .life-profile-identity-actions{grid-template-columns:1fr!important}
+  .life-profile-identity-actions .life-owner-control-entry{grid-column:auto!important}
+  .v18 :is(input,select,textarea){font-size:max(16px,1em)!important} /* prevents iOS auto-zoom */
+}
+
+@media(max-width:420px){
+  #life-owner-panel .lov-grid{grid-template-columns:1fr!important}
+  #life-owner-panel .lov-feature{grid-template-columns:minmax(0,1fr) 42px 42px!important}
+  .life-settings-options,.life-settings-links,.life-settings-actions{min-width:0}
+}
