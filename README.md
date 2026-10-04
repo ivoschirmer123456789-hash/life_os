@@ -1,4 +1,4 @@
-# LIFE OS 6.3.3 — Cache Break Fix
+# LIFE OS 6.3.4 — Hybrid Workout Fix
 
 Esta build usa nomes de arquivos JavaScript únicos para escapar de Service Workers antigos que ignoravam a query string e podiam continuar entregando o LIFE 6.3.
 
@@ -28,3 +28,10 @@ Supabase, Mercado Pago, LIFE AI remota, notificações push e sincronização en
 
 ## Hotfix 6.3.3
 Corrige o crash `c is not a function`: persistência em React effects não retorna mais boolean como cleanup. Efeitos de persistência foram blindados e helpers compartilhados de storage foram restaurados para módulos independentes.
+
+## Hotfix 6.3.4 — treino híbrido
+- Corrige o gerador que podia retornar somente musculação mesmo com objetivo “Treino híbrido”.
+- Adiciona estruturas híbridas base de 2 e 3 dias e permite entrada híbrida para quem ainda não corre.
+- Dias de corrida/cardio agora usam prescrição de cardio, não séries/repetições de musculação.
+- O player identifica Corrida/Cardio, Musculação e Mobilidade por sessão.
+- A visão semanal marca claramente quais dias são corrida/cardio.
