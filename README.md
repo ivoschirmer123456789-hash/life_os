@@ -1,24 +1,20 @@
-# LIFE OS 7.0 — Constellation
+# LIFE OS 6.0 — Signature System
 
-Esta versão reorganiza o LIFE como um ecossistema conectado: cada área continua tendo profundidade própria, mas o sistema passa a mostrar com mais clareza como tarefas, notas, estudos, fitness, receitas, finanças, projetos, histórico e LIFE AI se relacionam.
+Versão focada em identidade visual, valor do FREE e expansão do Study OS.
 
-## O que mudou
-- Nova identidade visual `Constellation 7.0` para dark e day mode.
-- Nova landing page editorial, desktop e mobile.
-- Camada V7 adicionada às áreas principais com sinais, fluxos, timelines, gráficos e conexões entre mini-apps.
-- Abertura cinematográfica redesenhada para a identidade Constellation.
-- Study Universe ampliado para mais de 160 assuntos únicos em escola, ciência, tecnologia, IA/dados, finanças, negócios, carreira, idiomas, humanas, criatividade e saúde.
-- Conteúdos financeiros de alto risco continuam estritamente educacionais: mecanismos, risco, regulação, conflitos de incentivo e prevenção de golpes; não são sinais ou instruções para operações reais.
-- Biblioteca e Meu LIFE reforçados como pontos de continuidade do sistema.
-- LIFE AI passa a mostrar melhor os fluxos em que pode ajudar e o contexto conectado.
-- Telas internas antigas foram trazidas para a mesma linguagem visual de cards, modais, inputs e navegação.
-- PWA, diagnóstico e cache alinhados em `7.0.0`.
-
-## FREE / PRO
-O FREE continua sendo um produto utilizável. A persuasão para o PRO é contextual e transparente: mostra o que o usuário já construiu e o que a profundidade PRO acrescenta, sem urgência falsa, bloqueio artificial ou dark patterns.
+## Principais mudanças
+- Redesign global `Signature System 6.0` para todas as áreas e telas internas.
+- Nova landing page com linguagem visual própria do LIFE.
+- `Study Universe`: catálogo amplo com dezenas de assuntos e filtros.
+- Catálogo de assuntos liberado no FREE; PRO passa a vender profundidade, mastery, mapas, histórico e contexto ampliado.
+- Conteúdos financeiros educativos: bolsa, renda fixa, ETFs, fundos, opções, cripto, macro/microeconomia e outros.
+- `Opções binárias` é tratada exclusivamente como educação sobre risco, probabilidade, regulação e golpes.
+- Card contextual de FREE → PRO sem urgência falsa ou dark patterns.
+- Nova linguagem de cores por mini-app mantendo o laranja como assinatura central.
+- PWA/cache `6.0.0`.
 
 ## Publicação
-Para um repositório que já contém a versão anterior, use o ZIP `LIFE_OS_7_0_Update_Only.zip`. Extraia e envie todos os arquivos mantendo exatamente as mesmas pastas.
+Envie o projeto inteiro mantendo as pastas. Para atualizar um repositório que já contém a versão anterior, use o pacote `Update_Only` fornecido junto da entrega.
 
 ## Testes externos ainda necessários
-A auditoria local cobre estrutura, sintaxe, assets e consistência. Supabase, Mercado Pago, LIFE AI remota, push e sincronização entre dispositivos precisam ser validados no domínio publicado porque dependem de serviços externos.
+Supabase, Mercado Pago, LIFE AI remota, notificações push e sincronização entre dispositivos precisam ser validados no domínio publicado.

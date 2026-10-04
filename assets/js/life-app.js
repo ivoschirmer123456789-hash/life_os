@@ -1402,104 +1402,6 @@ LIFE_STUDY_TOPICS.push(...[
     { title:'Psicologia básica', domain:'Psicologia', aliases:['psicologia','comportamento','mente'], stages:['Método científico em psicologia','Aprendizagem','Memória','Emoção','Desenvolvimento','Psicologia social e leitura crítica'], channels:['Crash Course Psychology','OpenStax'], books:['Psicologia introdutória — OpenStax'] }
 ]);
 
-
-// LIFE OS 7.0 — expansão editorial do Study Universe.
-// Conteúdos financeiros de alto risco são educacionais: foco em mecanismos, risco, regulação e leitura crítica — não em execução de operações.
-LIFE_STUDY_TOPICS.push(...[
-  {title:'Pensamento Crítico',domain:'Método / Humanas',aliases:['pensamento critico','argumentos','vieses'],stages:['Perguntas e afirmações','Evidência e fonte','Falácias comuns','Vieses cognitivos','Comparação de hipóteses','Síntese e decisão'],channels:['Crash Course Philosophy','Khan Academy'],books:['Introdução ao pensamento crítico']},
-  {title:'Lógica',domain:'Exatas / Filosofia',aliases:['logica','proposicoes','argumentos'],stages:['Proposições','Conectivos','Tabelas-verdade','Inferência','Validade de argumentos','Aplicações'],channels:['Khan Academy','MIT OpenCourseWare'],books:['Lógica introdutória']},
-  {title:'Probabilidade aplicada',domain:'Exatas / Dados',aliases:['probabilidade','risco','incerteza'],stages:['Eventos e espaço amostral','Probabilidade condicional','Independência','Valor esperado','Distribuições','Decisões sob incerteza'],channels:['Khan Academy','StatQuest'],books:['Probabilidade introdutória']},
-  {title:'Matemática Financeira',domain:'Finanças / Exatas',aliases:['juros compostos','valor presente','matematica financeira'],stages:['Porcentagem e taxas','Juros simples e compostos','Inflação','Valor presente e futuro','Parcelas e custo efetivo','Problemas práticos'],channels:['Khan Academy','Banco Central — cidadania financeira'],books:['Matemática financeira introdutória']},
-  {title:'Mercado de Capitais',domain:'Finanças / Mercados',aliases:['mercado de capitais','acoes','titulos'],stages:['Por que empresas captam recursos','Ações e dívida','Mercado primário e secundário','Risco e retorno','Custos e conflitos de interesse','Leitura crítica de produtos'],channels:['CVM Educacional','B3 Educação'],books:['Materiais educativos da CVM e B3'],riskNote:'Conteúdo educacional. Não constitui recomendação de investimento.'},
-  {title:'Derivativos — fundamentos',domain:'Finanças / Mercados',aliases:['derivativos','futuros','termo','swaps'],stages:['Por que derivativos existem','Contratos a termo','Futuros em nível conceitual','Opções em nível conceitual','Hedge, especulação e alavancagem','Riscos, margem e regulação'],channels:['CVM Educacional','B3 Educação'],books:['Materiais educativos sobre derivativos'],riskNote:'Alavancagem pode ampliar perdas. Estude mecanismos e riscos antes de qualquer decisão financeira real.'},
-  {title:'Finanças Comportamentais',domain:'Finanças / Psicologia',aliases:['financas comportamentais','vieses investimento'],stages:['Decisão e incerteza','Aversão à perda','Excesso de confiança','Efeito manada','Ancoragem','Como criar processo de decisão'],channels:['CVM Educacional','aulas universitárias abertas'],books:['Introdução a finanças comportamentais']},
-  {title:'Fraudes financeiras e golpes',domain:'Finanças / Segurança',aliases:['golpes','pirâmide','fraude financeira'],stages:['Promessas irreais','Pirâmides e Ponzi','Falsos especialistas','Phishing e engenharia social','Verificação de instituições','Checklist de proteção'],channels:['CVM Educacional','Banco Central'],books:['Cartilhas oficiais de prevenção a golpes'],riskNote:'Objetivo: reconhecer riscos e proteger-se de fraudes.'},
-  {title:'Contabilidade para não contadores',domain:'Negócios / Finanças',aliases:['contabilidade basica','dre','balanco'],stages:['Patrimônio e contas','Balanço patrimonial','DRE','Fluxo de caixa','Indicadores básicos','Leitura integrada'],channels:['Sebrae','aulas universitárias abertas'],books:['Contabilidade introdutória']},
-  {title:'Valuation — conceitos',domain:'Finanças / Negócios',aliases:['valuation','valor empresa','fluxo caixa descontado'],stages:['Preço x valor','Fluxos de caixa','Risco e taxa de desconto','Múltiplos','Cenários e sensibilidade','Limites e incerteza'],channels:['CVM Educacional','aulas universitárias abertas'],books:['Valuation introdutório'],riskNote:'Estudo conceitual; estimativas de valor dependem de premissas e não são garantia de retorno.'},
-  {title:'Empreendedorismo',domain:'Negócios',aliases:['empreendedorismo','startup','empresa'],stages:['Problema e público','Proposta de valor','Teste de demanda','Modelo de negócio','Operação e finanças','Aprendizado com clientes'],channels:['Sebrae','Y Combinator Startup School'],books:['The Mom Test — Rob Fitzpatrick']},
-  {title:'Produto Digital',domain:'Negócios / Produto',aliases:['produto digital','product management','saas'],stages:['Problema e usuário','Descoberta','Proposta de valor','MVP','Métricas úteis','Ciclo de melhoria'],channels:['Y Combinator','Product School'],books:['Inspired — Marty Cagan']},
-  {title:'UX Research',domain:'Design / Produto',aliases:['ux research','pesquisa usuario'],stages:['Pergunta de pesquisa','Recrutamento','Entrevistas','Observação','Síntese','Teste de solução'],channels:['Nielsen Norman Group','Google UX'],books:['The Mom Test — entrevistas sem viés']},
-  {title:'UX/UI Design',domain:'Design / Produto',aliases:['ux','ui','design interface'],stages:['Hierarquia visual','Fluxos','Wireframes','Componentes','Acessibilidade','Teste e iteração'],channels:['Nielsen Norman Group','Figma'],books:['Don’t Make Me Think — Steve Krug']},
-  {title:'Design Systems',domain:'Design / Tecnologia',aliases:['design system','componentes','tokens'],stages:['Princípios e tokens','Tipografia e cor','Componentes','Estados e acessibilidade','Documentação','Governança'],channels:['Figma','Material Design'],books:['Documentação de design systems públicos']},
-  {title:'Copywriting',domain:'Comunicação / Marketing',aliases:['copywriting','texto venda','persuasao'],stages:['Público e contexto','Clareza da promessa','Prova e especificidade','Objeções','CTA','Revisão ética'],channels:['HubSpot Academy','materiais de comunicação'],books:['Ogilvy on Advertising — leitura crítica']},
-  {title:'Marketing Digital',domain:'Negócios / Marketing',aliases:['marketing digital','trafego','conteudo'],stages:['Público e posicionamento','Conteúdo','Funil','Canais','Métricas','Experimentos e ética'],channels:['HubSpot Academy','Google Skillshop'],books:['Marketing introdutório + estudos de caso']},
-  {title:'Branding',domain:'Negócios / Criatividade',aliases:['branding','marca','posicionamento'],stages:['Estratégia de marca','Posicionamento','Identidade verbal','Identidade visual','Experiência','Consistência e medição'],channels:['The Futur','materiais de branding'],books:['Designing Brand Identity — Alina Wheeler']},
-  {title:'Vendas Consultivas',domain:'Negócios / Comunicação',aliases:['vendas','vendas consultivas','negociacao'],stages:['Descoberta de necessidade','Perguntas','Qualificação','Proposta','Objeções','Follow-up e ética'],channels:['HubSpot Academy','Sebrae'],books:['SPIN Selling — Neil Rackham']},
-  {title:'Negociação',domain:'Negócios / Comunicação',aliases:['negociacao','acordo','conflito'],stages:['Interesses e posições','BATNA','Perguntas e escuta','Opções de ganho mútuo','Critérios objetivos','Revisão do acordo'],channels:['Harvard Program on Negotiation','TED-Ed'],books:['Getting to Yes — Fisher, Ury e Patton']},
-  {title:'Gestão de Projetos',domain:'Negócios / Trabalho',aliases:['gestao projetos','project management'],stages:['Escopo e resultado','Entregas','Riscos','Cronograma','Execução e comunicação','Retrospectiva'],channels:['PMI','Google Project Management'],books:['Guia introdutório de gestão de projetos']},
-  {title:'Agile e Scrum',domain:'Tecnologia / Trabalho',aliases:['agile','scrum','kanban'],stages:['Princípios ágeis','Backlog','Sprints','Papéis','Kanban e fluxo','Retrospectiva e limites'],channels:['Scrum.org','Atlassian'],books:['Scrum Guide']},
-  {title:'Git e GitHub',domain:'Tecnologia',aliases:['git','github','versionamento'],stages:['Repositório e commit','Branches','Merge','Pull requests','Resolução de conflitos','Fluxo de projeto'],channels:['GitHub Skills','freeCodeCamp'],books:['Pro Git — documentação gratuita']},
-  {title:'Desenvolvimento Web',domain:'Tecnologia',aliases:['web','html','css','javascript'],stages:['HTML semântico','CSS e layout','JavaScript','HTTP e APIs','Acessibilidade','Projeto publicado'],channels:['MDN','freeCodeCamp'],books:['MDN Web Docs']},
-  {title:'React',domain:'Tecnologia',aliases:['react','frontend','componentes'],stages:['Componentes','Props e estado','Eventos','Effects','Arquitetura de UI','Projeto e performance'],channels:['React.dev','freeCodeCamp'],books:['Documentação oficial do React']},
-  {title:'APIs e HTTP',domain:'Tecnologia',aliases:['api','http','rest'],stages:['Cliente e servidor','Métodos HTTP','Status codes','JSON','Autenticação conceitual','Projeto com API'],channels:['MDN','Postman Learning Center'],books:['MDN Web Docs']},
-  {title:'Cloud Computing',domain:'Tecnologia',aliases:['cloud','nuvem','aws','azure','gcp'],stages:['IaaS/PaaS/SaaS','Compute e storage','Redes','Identidade','Observabilidade','Custos e arquitetura básica'],channels:['AWS Skill Builder','Microsoft Learn'],books:['Materiais introdutórios oficiais']},
-  {title:'DevOps',domain:'Tecnologia',aliases:['devops','ci cd','deploy'],stages:['Ciclo de entrega','Versionamento','CI/CD','Containers conceituais','Observabilidade','Segurança e melhoria'],channels:['GitHub Skills','Microsoft Learn'],books:['Materiais introdutórios DevOps']},
-  {title:'Linux',domain:'Tecnologia',aliases:['linux','terminal','shell'],stages:['Sistema de arquivos','Permissões','Processos','Shell','Pacotes','Administração básica em ambiente próprio'],channels:['Linux Foundation','freeCodeCamp'],books:['Linux Command Line — William Shotts']},
-  {title:'Inteligência Artificial — fundamentos',domain:'Tecnologia / IA',aliases:['inteligencia artificial','ia','ai'],stages:['O que é IA','Dados e modelos','Treino e inferência','Avaliação','Limitações e vieses','Aplicações responsáveis'],channels:['Elements of AI','Google AI'],books:['Materiais introdutórios de IA']},
-  {title:'LLMs e IA Generativa',domain:'Tecnologia / IA',aliases:['llm','ia generativa','chatgpt'],stages:['Tokens e modelos de linguagem','Pré-treino e ajuste','Prompting básico','RAG em nível conceitual','Avaliação e alucinações','Uso responsável'],channels:['DeepLearning.AI','OpenAI — materiais educativos'],books:['Materiais introdutórios sobre LLMs']},
-  {title:'Prompt Design',domain:'Tecnologia / IA',aliases:['prompt','engenharia prompt','prompt design'],stages:['Objetivo e contexto','Instruções claras','Exemplos','Restrições','Avaliação','Iteração e segurança'],channels:['DeepLearning.AI','documentação de provedores'],books:['Guias de prompting de fontes oficiais']},
-  {title:'Ética em IA',domain:'Tecnologia / Humanas',aliases:['etica ia','bias','privacidade ia'],stages:['Vieses','Privacidade','Transparência','Automação e trabalho','Segurança','Governança e casos'],channels:['UNESCO','OECD AI'],books:['Princípios e relatórios públicos de IA responsável']},
-  {title:'Visualização de Dados',domain:'Dados / Design',aliases:['data visualization','graficos','storytelling dados'],stages:['Escolha de gráfico','Escalas','Cor e acessibilidade','Comparação','Narrativa','Dashboard e revisão'],channels:['Datawrapper Academy','Tableau'],books:['Storytelling with Data — Cole Nussbaumer Knaflic']},
-  {title:'Estatística para Pesquisa',domain:'Dados / Acadêmico',aliases:['estatistica pesquisa','hipotese','p valor'],stages:['Pergunta e variáveis','Amostragem','Estatística descritiva','Intervalos e incerteza','Testes e interpretação','Reprodutibilidade'],channels:['StatQuest','Khan Academy'],books:['OpenIntro Statistics']},
-  {title:'Método Científico',domain:'Ciências / Método',aliases:['metodo cientifico','experimento','evidencia'],stages:['Pergunta','Hipótese','Desenho de estudo','Medição','Análise','Replicação e crítica'],channels:['Khan Academy','Crash Course'],books:['Materiais introdutórios de metodologia científica']},
-  {title:'Leitura de Artigos Científicos',domain:'Acadêmico / Método',aliases:['artigo cientifico','paper','pesquisa'],stages:['Resumo e pergunta','Métodos','Resultados','Figuras','Discussão e limitações','Avaliar qualidade'],channels:['Nature Masterclasses — materiais abertos','universidades'],books:['Guias universitários de leitura científica']},
-  {title:'Escrita Acadêmica',domain:'Acadêmico / Comunicação',aliases:['escrita academica','tcc','artigo'],stages:['Pergunta e recorte','Estrutura','Argumentação','Citação e fontes','Revisão','Apresentação'],channels:['universidades públicas','Purdue OWL'],books:['Guias institucionais de escrita acadêmica']},
-  {title:'Oratória Avançada',domain:'Comunicação',aliases:['oratoria avancada','apresentacao','fala publico'],stages:['Mensagem central','Estrutura narrativa','Voz','Linguagem corporal','Perguntas difíceis','Gravação e feedback'],channels:['TED-Ed','Toastmasters'],books:['Talk Like TED — leitura crítica']},
-  {title:'Storytelling',domain:'Comunicação / Criatividade',aliases:['storytelling','narrativa','historia'],stages:['Ideia central','Personagem e tensão','Estrutura','Cena e detalhe','Ritmo','Revisão para objetivo'],channels:['Pixar in a Box','TED-Ed'],books:['Story — Robert McKee, como referência']},
-  {title:'Escrita Criativa',domain:'Criatividade / Linguagens',aliases:['escrita criativa','conto','ficcao'],stages:['Ideia e conflito','Personagem','Cena','Diálogo','Estrutura','Reescrita'],channels:['Brandon Sanderson lectures','universidades abertas'],books:['Bird by Bird — Anne Lamott']},
-  {title:'Desenho',domain:'Criatividade',aliases:['desenho','sketch','ilustracao'],stages:['Linha e forma','Proporção','Perspectiva','Luz e sombra','Composição','Projeto autoral'],channels:['Proko','Drawabox'],books:['Drawing on the Right Side of the Brain — referência']},
-  {title:'Edição de Vídeo',domain:'Criatividade / Tecnologia',aliases:['edicao video','premiere','davinci'],stages:['Organização de mídia','Corte','Áudio','Cor','Texto e ritmo','Exportação e projeto'],channels:['DaVinci Resolve Training','Adobe Learn'],books:['Documentação da ferramenta escolhida']},
-  {title:'Produção Musical',domain:'Música / Tecnologia',aliases:['producao musical','daw','mixagem'],stages:['DAW e sinal','Arranjo','Gravação','Edição','Mixagem básica','Projeto final'],channels:['Ableton Learning Music','You Suck at Producing'],books:['Guias da DAW escolhida']},
-  {title:'Harmonia',domain:'Música',aliases:['harmonia','acordes','campo harmonico'],stages:['Intervalos','Tríades','Campo harmônico','Funções','Cadências','Análise de repertório'],channels:['musictheory.net','Cifra Club'],books:['Harmonia introdutória']},
-  {title:'História da Arte',domain:'Humanas / Criatividade',aliases:['historia arte','arte','movimentos artisticos'],stages:['Antiguidade','Renascimento','Barroco','Modernidade','Vanguardas','Arte contemporânea e contexto'],channels:['Khan Academy Arts & Humanities','Smarthistory'],books:['História da Arte — visão geral']},
-  {title:'Arquitetura — fundamentos',domain:'Criatividade / Técnica',aliases:['arquitetura','espaco','projeto arquitetonico'],stages:['Espaço e função','Escala e proporção','Representação','Estrutura conceitual','Clima e conforto','Análise de projetos'],channels:['MIT OpenCourseWare','ArchDaily — leitura crítica'],books:['Fundamentos de arquitetura']},
-  {title:'Primeiros Socorros — teoria',domain:'Saúde / Segurança',aliases:['primeiros socorros','emergencia','socorro'],stages:['Segurança da cena','Acionar emergência','Avaliação inicial conceitual','Situações comuns','O que não fazer','Treinamento certificado e revisão'],channels:['Cruz Vermelha','serviços públicos de saúde'],books:['Materiais oficiais de primeiros socorros'],riskNote:'Conteúdo educacional não substitui treinamento presencial ou atendimento de emergência.'},
-  {title:'Nutrição — fundamentos',domain:'Saúde / Ciências',aliases:['nutricao','macronutrientes','alimentacao'],stages:['Energia e nutrientes','Proteínas, carboidratos e gorduras','Micronutrientes','Fome e saciedade','Leitura de rótulos','Evidência e mitos'],channels:['Harvard Nutrition Source','materiais de saúde pública'],books:['Nutrição introdutória baseada em evidências']},
-  {title:'Sono — fundamentos',domain:'Saúde / Ciências',aliases:['sono','ritmo circadiano','dormir'],stages:['Arquitetura do sono','Ritmo circadiano','Luz e rotina','Sono e aprendizado','Sinais de alerta','Leitura crítica de evidências'],channels:['Sleep Foundation — conteúdo educativo','universidades'],books:['Materiais de divulgação científica sobre sono']},
-  {title:'Ecologia',domain:'Ciências',aliases:['ecologia','ecossistemas','meio ambiente'],stages:['Níveis ecológicos','Cadeias e redes','Ciclos biogeoquímicos','Populações','Comunidades','Mudanças ambientais'],channels:['Khan Academy','Crash Course Ecology'],books:['Biologia/ecologia introdutória']},
-  {title:'Mudanças Climáticas',domain:'Ciências / Atualidades',aliases:['clima','mudancas climaticas','aquecimento global'],stages:['Clima x tempo','Efeito estufa','Evidências observacionais','Modelos e incerteza','Impactos','Mitigação, adaptação e fontes'],channels:['NASA Climate','IPCC — materiais de síntese'],books:['Relatórios de síntese e materiais educativos']},
-  {title:'Política e Cidadania',domain:'Humanas / Sociedade',aliases:['politica','cidadania','democracia'],stages:['Estado e instituições','Representação','Separação de poderes','Políticas públicas','Participação e mídia','Comparação de fontes'],channels:['Câmara dos Deputados — educação','Senado — cidadania'],books:['Constituição e materiais de educação cívica']},
-  {title:'História do Brasil',domain:'Humanas',aliases:['historia brasil','brasil colonia','republica'],stages:['Povos originários e colonização','Brasil Colônia','Independência e Império','Abolição e República','Era Vargas e ditadura','Redemocratização e Brasil contemporâneo'],channels:['Khan Academy Brasil','Se Liga Nessa História'],books:['Livro didático + fontes históricas']},
-  {title:'História Mundial Contemporânea',domain:'Humanas',aliases:['historia contemporanea','seculo xx','guerras'],stages:['Imperialismo','Guerras Mundiais','Guerra Fria','Descolonização','Globalização','Século XXI e leitura de fontes'],channels:['Crash Course World History','Khan Academy'],books:['História contemporânea — visão geral']}
-].filter(x=>!LIFE_STUDY_TOPICS.some(t=>t.title===x.title)));
-
-
-// LIFE OS 7.0 — expansão complementar por carreiras, ciência, tecnologia e vida prática.
-LIFE_STUDY_TOPICS.push(...[
- {title:'Álgebra Linear',domain:'Exatas / Dados',aliases:['algebra linear','matrizes','vetores'],stages:['Vetores','Matrizes','Sistemas lineares','Transformações','Autovalores — intuição','Aplicações em dados'],channels:['Khan Academy','3Blue1Brown'],books:['Álgebra linear introdutória']},
- {title:'Equações Diferenciais — introdução',domain:'Exatas',aliases:['equacoes diferenciais','edo'],stages:['Taxas de mudança','Modelos simples','Equações separáveis','Crescimento e decaimento','Sistemas — intuição','Aplicações'],channels:['Khan Academy','MIT OpenCourseWare'],books:['Equações diferenciais introdutórias']},
- {title:'Física Moderna',domain:'Ciências / Exatas',aliases:['fisica moderna','relatividade','quantica'],stages:['Limites da física clássica','Relatividade — conceitos','Quanta e fótons','Átomo','Núcleo','Aplicações e limites do modelo'],channels:['PBS Space Time','Khan Academy'],books:['Física moderna introdutória']},
- {title:'Eletrônica — fundamentos',domain:'Tecnologia / Exatas',aliases:['eletronica','circuitos','resistor'],stages:['Tensão, corrente e resistência','Lei de Ohm','Circuitos série/paralelo','Capacitores e diodos — noções','Transistores — noções','Leitura de esquemas'],channels:['Khan Academy','Afrotechmods'],books:['Eletrônica básica — material introdutório']},
- {title:'Robótica — fundamentos',domain:'Tecnologia / Engenharia',aliases:['robotica','arduino','sensores'],stages:['Sistemas e atuadores','Sensores','Controle — conceitos','Programação embarcada','Integração','Projeto simulado/educacional'],channels:['Arduino Education','MIT OpenCourseWare'],books:['Robótica introdutória']},
- {title:'Redes de Computadores',domain:'Tecnologia',aliases:['redes','tcp ip','internet'],stages:['Camadas e protocolos','IP e endereçamento','TCP/UDP','DNS e HTTP','Roteamento — noções','Diagnóstico conceitual'],channels:['Cisco Skills for All','freeCodeCamp'],books:['Computer Networking — capítulos introdutórios']},
- {title:'Bancos de Dados',domain:'Tecnologia / Dados',aliases:['banco de dados','database','modelagem'],stages:['Entidades e relações','Modelagem relacional','Chaves','Consultas','Índices — conceitos','Projeto de dados'],channels:['freeCodeCamp','Khan Academy'],books:['Database Design introdutório']},
- {title:'TypeScript',domain:'Tecnologia / Programação',aliases:['typescript','tipagem javascript'],stages:['Tipos básicos','Objetos e interfaces','Funções','Generics — introdução','Narrowing','Projeto pequeno'],channels:['TypeScript Handbook','freeCodeCamp'],books:['Documentação oficial TypeScript']},
- {title:'Desenvolvimento Mobile',domain:'Tecnologia / Programação',aliases:['mobile','android','ios','react native'],stages:['Arquitetura de app','Interface responsiva','Estado e navegação','Dados locais','APIs','Publicação — conceitos'],channels:['Android Developers','React Native Docs'],books:['Documentação da stack escolhida']},
- {title:'Segurança Digital Pessoal',domain:'Tecnologia / Segurança',aliases:['seguranca digital','senhas','phishing'],stages:['Senhas e gerenciadores','2FA','Phishing','Privacidade','Atualizações e backups','Resposta a incidente'],channels:['CERT.br','Google Safety Center'],books:['Cartilhas do CERT.br']},
- {title:'Economia Brasileira',domain:'Finanças / Humanas',aliases:['economia brasileira','brasil economia'],stages:['Estrutura produtiva','Inflação e juros','Política fiscal','Mercado de trabalho','Setor externo','Leitura de indicadores'],channels:['IBGE Educa','Banco Central'],books:['Materiais de economia brasileira introdutória']},
- {title:'História Econômica',domain:'Humanas / Finanças',aliases:['historia economica','economia historia'],stages:['Trocas e moeda','Revolução Industrial','Capital e trabalho','Crises históricas','Globalização','Comparação de períodos'],channels:['Crash Course Economics','aulas universitárias abertas'],books:['História econômica introdutória']},
- {title:'Finanças Pessoais',domain:'Finanças / Vida prática',aliases:['financas pessoais','dinheiro pessoal','orcamento'],stages:['Diagnóstico de entradas e saídas','Reserva e imprevistos','Dívidas e juros','Metas','Produtos financeiros — leitura crítica','Revisão mensal'],channels:['Banco Central — cidadania financeira','CVM Educacional'],books:['Materiais oficiais de educação financeira'],riskNote:'Conteúdo educacional. Decisões financeiras reais devem considerar contexto, risco e responsáveis quando aplicável.'},
- {title:'Orçamento Pessoal',domain:'Finanças / Vida prática',aliases:['orcamento pessoal','gastos','planejamento financeiro'],stages:['Registrar','Categorizar','Separar fixos e variáveis','Criar limites realistas','Planejar metas','Revisar e ajustar'],channels:['Banco Central — cidadania financeira','Sebrae'],books:['Planilhas e materiais de orçamento pessoal']},
- {title:'Seguros — fundamentos',domain:'Finanças / Vida prática',aliases:['seguros','risco seguro','apolice'],stages:['Risco e proteção','Prêmio e cobertura','Franquia','Exclusões','Comparação de condições','Leitura de contrato'],channels:['SUSEP — educação','materiais de cidadania financeira'],books:['Guias oficiais de seguros'],riskNote:'Conteúdo educacional; condições reais variam por contrato e legislação.'},
- {title:'Logística',domain:'Negócios / Operações',aliases:['logistica','estoque','cadeia suprimentos'],stages:['Fluxo de materiais','Estoques','Transporte','Armazenagem','Nível de serviço','Indicadores e melhoria'],channels:['Sebrae','MIT OpenCourseWare'],books:['Logística introdutória']},
- {title:'Gestão de Operações',domain:'Negócios / Operações',aliases:['operacoes','processos','capacidade'],stages:['Processo e fluxo','Capacidade','Gargalos','Qualidade','Estoque e filas','Melhoria contínua'],channels:['MIT OpenCourseWare','Sebrae'],books:['Gestão de operações introdutória']},
- {title:'Gestão de Pessoas',domain:'Negócios / Carreira',aliases:['gestao pessoas','rh','equipe'],stages:['Papéis e expectativas','Comunicação','Feedback','Desenvolvimento','Conflitos','Cultura e inclusão'],channels:['Coursera — conteúdos abertos','Sebrae'],books:['Gestão de pessoas introdutória']},
- {title:'Liderança',domain:'Carreira / Negócios',aliases:['lideranca','lider','equipe'],stages:['Autogestão','Clareza de direção','Delegação','Feedback','Conflitos','Aprendizado do time'],channels:['Harvard Business Review — artigos','TED'],books:['The Making of a Manager — Julie Zhuo']},
- {title:'Pesquisa de Mercado',domain:'Negócios / Marketing',aliases:['pesquisa mercado','cliente','demanda'],stages:['Pergunta','Segmento','Pesquisa secundária','Entrevistas','Survey — noções','Síntese e decisão'],channels:['Sebrae','HubSpot Academy'],books:['The Mom Test — Rob Fitzpatrick']},
- {title:'SEO — fundamentos',domain:'Marketing / Tecnologia',aliases:['seo','google busca','otimizacao'],stages:['Intenção de busca','Arquitetura','Conteúdo útil','SEO técnico — noções','Links e autoridade','Medição e melhoria'],channels:['Google Search Central','Ahrefs — conteúdo educativo'],books:['Documentação Google Search Central']},
- {title:'E-commerce',domain:'Negócios / Tecnologia',aliases:['ecommerce','loja online','comercio eletronico'],stages:['Oferta e público','Catálogo','Checkout','Logística','Atendimento','Métricas e melhoria'],channels:['Sebrae','Shopify Learn'],books:['Guias introdutórios de comércio eletrônico']},
- {title:'Empreendedorismo Social',domain:'Negócios / Sociedade',aliases:['empreendedorismo social','impacto social'],stages:['Problema social','Público e contexto','Teoria de mudança','Modelo sustentável','Métricas de impacto','Piloto e aprendizado'],channels:['Acumen Academy','Sebrae'],books:['Guias de impacto social']},
- {title:'Bioética',domain:'Saúde / Humanas',aliases:['bioetica','etica medicina','saude etica'],stages:['Autonomia','Beneficência e não maleficência','Justiça','Consentimento','Pesquisa com humanos','Casos e argumentação'],channels:['UNESCO Bioethics','universidades'],books:['Bioética introdutória']},
- {title:'Saúde Pública — fundamentos',domain:'Saúde / Sociedade',aliases:['saude publica','epidemiologia','sus'],stages:['Determinantes de saúde','Prevenção','Epidemiologia — noções','Sistemas de saúde','Vigilância','Leitura de indicadores'],channels:['Fiocruz','OPAS'],books:['Materiais introdutórios de saúde pública']},
- {title:'Farmacologia — fundamentos',domain:'Saúde / Acadêmico',aliases:['farmacologia','medicamentos','farmacos'],stages:['O que é um fármaco','Farmacocinética — conceitos','Farmacodinâmica — conceitos','Classes e mecanismos — visão geral','Efeitos adversos e interações — conceitos','Uso responsável e leitura de fontes'],channels:['Khan Academy','Osmosis'],books:['Farmacologia introdutória'],riskNote:'Conteúdo acadêmico. Não orienta doses, automedicação ou substitui avaliação profissional.'},
- {title:'Genética',domain:'Ciências da Vida',aliases:['genetica','dna','hereditariedade'],stages:['DNA e genes','Divisão celular','Mendel','Herança complexa','Expressão gênica','Genética de populações — noções'],channels:['Khan Academy','Crash Course Biology'],books:['Biologia/genética introdutória']},
- {title:'Imunologia',domain:'Saúde / Ciências da Vida',aliases:['imunologia','imunidade','anticorpos'],stages:['Barreiras e imunidade inata','Imunidade adaptativa','Anticorpos','Células imunes','Memória imunológica','Vacinas e imunopatologia — conceitos'],channels:['Khan Academy','Osmosis'],books:['Imunologia introdutória']},
- {title:'Geologia',domain:'Ciências da Terra',aliases:['geologia','rochas','terra'],stages:['Estrutura da Terra','Minerais e rochas','Tectônica de placas','Vulcanismo e sismos','Tempo geológico','Recursos e riscos'],channels:['USGS Education','Crash Course Geography'],books:['Geologia introdutória']},
- {title:'Oceanografia',domain:'Ciências da Terra',aliases:['oceanografia','oceanos','mar'],stages:['Bacias oceânicas','Propriedades da água','Circulação','Ondas e marés','Ecossistemas marinhos','Clima e impactos humanos'],channels:['NOAA Education','universidades abertas'],books:['Oceanografia introdutória']},
- {title:'Cinema — linguagem e análise',domain:'Criatividade / Humanas',aliases:['cinema','filme','linguagem cinematografica'],stages:['Plano e enquadramento','Montagem','Som','Narrativa','Direção de arte','Análise de uma obra'],channels:['StudioBinder','BFI'],books:['Linguagem cinematográfica introdutória']},
- {title:'Gestão do Tempo',domain:'Carreira / Método',aliases:['gestao tempo','produtividade','agenda'],stages:['Inventário de compromissos','Prioridades','Blocos e margens','Energia e contexto','Revisão semanal','Ajuste do sistema'],channels:['Coursera — conteúdos de produtividade','Cal Newport — entrevistas'],books:['Essencialismo — Greg McKeown']}
-].filter(x=>!LIFE_STUDY_TOPICS.some(t=>t.title===x.title)));
-
 const LIFE_FREE_STUDY_TITLES = new Set(LIFE_STUDY_TOPICS.map(x => x.title));
 const lifeStudyIsProTopic = () => false;
 const lifeStudyNorm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -3249,7 +3151,7 @@ function LifeApp36({ area = 'LIFE', icon = 'dashboard', kicker = '', title = '',
         React.createElement('section', { className: 'life-app36-hero life-app40-hero' },
             React.createElement('div', { className: 'life-app40-hero-top' },
                 React.createElement('div', { className: 'life-app36-kicker' }, React.createElement('i', { className: 'material-symbols-rounded' }, icon), kicker || ('LIFE / ' + area.toUpperCase())),
-                React.createElement('span', { className: 'life-app40-state life-app50-state' }, 'LIFE OS 7')),
+                React.createElement('span', { className: 'life-app40-state life-app50-state' }, 'LIFE OS 6')),
             React.createElement('div', { className: 'life-app40-hero-copy' },
                 React.createElement('h1', { className: 'life-app36-title' }, title),
                 React.createElement('p', { className: 'life-app36-subtitle' }, subtitle)),
@@ -3309,8 +3211,8 @@ function LifeStudyUniverseV6({ onGuide, onAsk }) {
     const [domain,setDomain]=React.useState('TODOS');
     const [limit,setLimit]=React.useState(18);
     const [selected,setSelected]=React.useState(null);
-    const groups=['TODOS','ESCOLA','CIÊNCIAS','TECNOLOGIA','IA & DADOS','FINANÇAS','NEGÓCIOS','CARREIRA','IDIOMAS','HUMANAS','CRIATIVIDADE','SAÚDE'];
-    const bucket=t=>{ const d=lifeStudyNorm((t.domain||'')+' '+(t.title||'')); if(/ia|inteligencia artificial|machine learning|data science|dados|estatistica|visualizacao de dados|llm|prompt/.test(d))return 'IA & DADOS'; if(/finan|econom|invest|bolsa|renda fixa|opcoes|deriv|mercado de capitais|contab|valuation/.test(d))return 'FINANÇAS'; if(/negocio|marketing|vendas|empreend|gestao|lider|produto|branding|negociacao/.test(d))return 'NEGÓCIOS'; if(/carreira|trabalho|excel|power bi|oratoria|comunicacao|projeto/.test(d))return 'CARREIRA'; if(/tecnologia|programacao|sql|cyber|ciber|react|web|git|cloud|devops|linux|api/.test(d))return 'TECNOLOGIA'; if(/idioma|ingles|espanhol|alemao|linguagens/.test(d))return 'IDIOMAS'; if(/humanas|filosofia|sociologia|direito|geopolit|relacoes|historia|politica|cidadania/.test(d))return 'HUMANAS'; if(/design|criativ|musica|fotografia|story|desenho|arte|arquitetura|video/.test(d))return 'CRIATIVIDADE'; if(/saude|medicina|anatom|fisiologia|bioquim|microbi|imuno|nutricao|sono|primeiros socorros|psicologia|neuro/.test(d))return 'SAÚDE'; if(/fisica|quimica|biologia|astronomia|ecologia|clima|ciencias/.test(d))return 'CIÊNCIAS'; if(/enem|exatas|linguagens|metodo|matematica|portugues|redacao|geometria|calculo/.test(d))return 'ESCOLA'; return 'ESCOLA'; };
+    const groups=['TODOS','ESCOLA','TECNOLOGIA','FINANÇAS','NEGÓCIOS','IDIOMAS','HUMANAS','CRIATIVIDADE','SAÚDE'];
+    const bucket=t=>{ const d=lifeStudyNorm((t.domain||'')+' '+(t.title||'')); if(/enem|exatas|linguagens|ciencias da vida|ciências|metodo/.test(d))return 'ESCOLA'; if(/tecnologia|dados|programacao|sql|cyber|ciber/.test(d))return 'TECNOLOGIA'; if(/finan|econom|invest|bolsa|renda fixa|opcoes|cripto|contab/.test(d))return 'FINANÇAS'; if(/negocio|marketing|vendas|empreend|gestao|lider|produto/.test(d))return 'NEGÓCIOS'; if(/idioma|ingles|espanhol|alemao|linguagens/.test(d))return 'IDIOMAS'; if(/humanas|filosofia|sociologia|direito|geopolit|relacoes/.test(d))return 'HUMANAS'; if(/design|criativ|musica|fotografia|story/.test(d))return 'CRIATIVIDADE'; if(/saude|medicina|anatom|fisiologia|bio|neuro|psicologia/.test(d))return 'SAÚDE'; return 'ESCOLA'; };
     const q=lifeStudyNorm(query.trim());
     const rows=LIFE_STUDY_TOPICS.filter(t=>(domain==='TODOS'||bucket(t)===domain)&&(!q||lifeStudyNorm(t.title+' '+t.domain+' '+(t.aliases||[]).join(' ')).includes(q)));
     const visible=rows.slice(0,limit);
@@ -3567,83 +3469,6 @@ function LifeFitnessJournalV35() {
             React.createElement('div', { className: 'life-fit35-pills' }, ['Leve','Tranquilo','Médio','Exigente'].map(x => React.createElement('button', { type: 'button', key: x, className: effort === x ? 'on' : '', onClick: () => setEffort(x) }, x))),
             React.createElement('button', { type: 'button', className: 'primary', onClick: add }, 'SALVAR NOTA')),
         React.createElement('div', { className: 'life-fit35-journal-list' }, logs.length ? logs.slice(0, 8).map(x => React.createElement('article', { key: x.id }, React.createElement('small', null, new Date(x.date).toLocaleDateString('pt-BR') + ' · ' + x.effort), React.createElement('p', null, x.note))) : React.createElement('div', { className: 'life-empty' }, 'Seu diário ainda está vazio.')));
-}
-
-
-// ==========================================================
-// LIFE OS 7.0 — Constellation components
-// ==========================================================
-function LifeV70Section({ index='01', eyebrow='', title='', text='', action=null, children=null, className='' }) {
-    const active = action && typeof action.onClick === 'function';
-    return React.createElement('section',{className:'life-v70-section '+className},
-        React.createElement('header',{className:'life-v70-section-head'},
-            React.createElement('div',{className:'life-v70-section-index'},index),
-            React.createElement('div',{className:'life-v70-section-copy'},
-                eyebrow && React.createElement('small',null,eyebrow),
-                React.createElement('h2',null,title),
-                text && React.createElement('p',null,text)),
-            active && React.createElement('button',{type:'button',onClick:action.onClick},action.label)),
-        children);
-}
-function LifeV70SignalGrid({ items=[] }) {
-    return React.createElement('div',{className:'life-v70-signal-grid'},items.map((x,i)=>React.createElement('article',{className:'life-v70-signal',key:x.label||i},
-        React.createElement('div',{className:'life-v70-signal-top'},
-            React.createElement('span',{className:'material-symbols-rounded'},x.icon||'radio_button_checked'),
-            React.createElement('small',null,x.label)),
-        React.createElement('b',null,x.value??'—'),
-        x.note && React.createElement('p',null,x.note),
-        Number.isFinite(Number(x.progress)) && React.createElement('i',null,React.createElement('em',{style:{width:Math.max(0,Math.min(100,Number(x.progress)))+'%'}}))
-    )));
-}
-function LifeV70ActionDeck({ items=[] }) {
-    return React.createElement('div',{className:'life-v70-action-deck'},items.map((x,i)=>{
-        const live=typeof x.onClick==='function'&&!x.disabled;
-        const content=[
-            React.createElement('div',{className:'life-v70-action-glyph',key:'g'},React.createElement('span',{className:'material-symbols-rounded'},x.icon||'arrow_outward')),
-            React.createElement('small',{key:'e'},x.eyebrow||String(i+1).padStart(2,'0')),
-            React.createElement('b',{key:'t'},x.title),
-            x.text&&React.createElement('p',{key:'p'},x.text),
-            live&&React.createElement('em',{key:'a'},x.label||'ABRIR →')
-        ];
-        return live?React.createElement('button',{type:'button',className:'life-v70-action',key:x.title||i,onClick:x.onClick},content):React.createElement('article',{className:'life-v70-action is-static',key:x.title||i},content);
-    }));
-}
-function LifeV70Timeline({ items=[], empty='Nada para mostrar ainda.' }) {
-    if(!items.length)return React.createElement('div',{className:'life-v70-empty'},empty);
-    return React.createElement('div',{className:'life-v70-timeline'},items.map((x,i)=>{
-        const live=typeof x.onClick==='function';
-        const body=React.createElement(React.Fragment,null,
-            React.createElement('span',{className:'life-v70-time-dot'},x.icon||String(i+1).padStart(2,'0')),
-            React.createElement('div',null,React.createElement('b',null,x.title),x.meta&&React.createElement('small',null,x.meta)),
-            live&&React.createElement('span',{className:'material-symbols-rounded'},'arrow_forward'));
-        return live?React.createElement('button',{type:'button',key:x.id||i,onClick:x.onClick},body):React.createElement('article',{key:x.id||i},body);
-    }));
-}
-function LifeV70Flow({ items=[] }) {
-    return React.createElement('div',{className:'life-v70-flow'},items.map((x,i)=>React.createElement('div',{className:'life-v70-flow-step '+(x.active?'active ':'')+(x.done?'done':''),key:x.label||i},
-        React.createElement('i',null,x.done?'✓':String(i+1).padStart(2,'0')),
-        React.createElement('span',null,React.createElement('b',null,x.label),x.note&&React.createElement('small',null,x.note)),
-        i<items.length-1&&React.createElement('em',null))));
-}
-function LifeV70MiniBars({ items=[] }) {
-    const max=Math.max(1,...items.map(x=>Number(x.value||0)));
-    return React.createElement('div',{className:'life-v70-mini-bars'},items.map((x,i)=>React.createElement('div',{key:x.label||i},
-        React.createElement('span',null,x.label),
-        React.createElement('i',null,React.createElement('em',{style:{height:Math.max(8,Math.round(Number(x.value||0)/max*100))+'%'}})),
-        React.createElement('b',null,x.display??x.value))));
-}
-function LifeV70Constellation({ center='LIFE', nodes=[], onCenter=null }) {
-    return React.createElement('div',{className:'life-v70-constellation'},
-        React.createElement('div',{className:'life-v70-orbit-ring r1'}),
-        React.createElement('div',{className:'life-v70-orbit-ring r2'}),
-        typeof onCenter==='function'?React.createElement('button',{type:'button',className:'life-v70-constellation-core',onClick:onCenter},React.createElement('b',null,center),React.createElement('small',null,'CONTEXTO')):React.createElement('div',{className:'life-v70-constellation-core'},React.createElement('b',null,center),React.createElement('small',null,'CONTEXTO')),
-        nodes.slice(0,6).map((x,i)=>React.createElement('button',{type:'button',className:'life-v70-node n'+(i+1),key:x.label||i,onClick:x.onClick,disabled:typeof x.onClick!=='function'},React.createElement('span',{className:'material-symbols-rounded'},x.icon||'circle'),React.createElement('b',null,x.label),x.meta&&React.createElement('small',null,x.meta))));
-}
-function LifeV70Callout({ eyebrow='LIFE SIGNAL', title='', text='', action=null, tone='orange' }) {
-    const live=action&&typeof action.onClick==='function';
-    return React.createElement('div',{className:'life-v70-callout tone-'+tone},
-        React.createElement('div',null,React.createElement('small',null,eyebrow),React.createElement('b',null,title),text&&React.createElement('p',null,text)),
-        live&&React.createElement('button',{type:'button',onClick:action.onClick},action.label||'ABRIR →'));
 }
 
 function LifeOSV18() {
@@ -5775,7 +5600,7 @@ function LifeOSV18() {
     const [legalOpen, setLegalOpen] = React.useState(null);
     const [supportOpen, setSupportOpen] = React.useState(false);
     const [dangerOpen, setDangerOpen] = React.useState(false);
-    const lifeBuild = '7.0.0';
+    const lifeBuild = '6.0.0';
     const lifeDiagnostics = () => ({
         build: lifeBuild,
         plan: effectivePlan || realPlan || 'FREE',
@@ -7515,280 +7340,6 @@ function LifeOSV18() {
         return null;
     };
 
-    const renderLifeV70Layer = () => {
-        const ai = (area, prompt) => { setAiOriginView(area); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); };
-        const now = Date.now();
-        const dateKey = value => { const d = value ? new Date(value) : null; return d && !Number.isNaN(d.getTime()) ? d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0') : ''; };
-        const lastDays = (n, matcher = null) => Array.from({length:n},(_,i)=>{ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-(n-1-i)); const key=dateKey(d); const value=(lifeActivity||[]).filter(a=>dateKey(a.date)===key&&(!matcher||matcher(a))).length; return {label:d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}),value}; });
-        const activeTasks=(tasks||[]).filter(t=>!taskIsDone(t));
-        const completedTasks=(tasks||[]).filter(taskIsDone);
-        const studyPlan=lifeLocalGet('life_study_plan_v2',null);
-        const studyErrors=lifeLocalGet('life_study_errors_v3',[]);
-        const studyReviews=lifeLocalGet('life_study_reviews_v3',[]);
-        const studyCards=lifeLocalGet('life_study_cards_v3',[]);
-        const favCount=Object.values(lifeFavorites||{}).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0);
-        const weekActivity=(lifeActivity||[]).filter(a=>{const t=new Date(a.date||0).getTime();return Number.isFinite(t)&&now-t<=7*86400000;});
-        const monthActivity=(lifeActivity||[]).filter(a=>{const t=new Date(a.date||0).getTime();return Number.isFinite(t)&&now-t<=30*86400000;});
-        const getProjectProgress=p=>{const linked=(tasks||[]).filter(t=>String(t.projectId||'')===String(p.id||p.n));const stages=p.stages||[];if(stages.length)return Math.round(stages.filter(x=>x.done).length/stages.length*100);if(linked.length)return Math.round(linked.filter(taskIsDone).length/linked.length*100);return Math.max(0,Math.min(100,Number(p.p||0)));};
-
-        if(view==='Tarefas'){
-            const overdue=activeTasks.filter(t=>lifeTaskStatusV4(t)==='Atrasada');
-            const quick=activeTasks.filter(t=>Number(t.duration||30)<=15&&!t.waiting);
-            const waiting=activeTasks.filter(t=>t.waiting);
-            const important=activeTasks.filter(t=>String(t.priority||'').toLowerCase()==='alta');
-            const next7=activeTasks.filter(t=>['Hoje','7 dias','Atrasada'].includes(lifeTaskStatusV4(t))).slice(0,8);
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'A1',eyebrow:'EXECUTION LENS',title:'Veja a lista por decisão — não por volume.',text:'O LIFE separa o que é urgente, rápido, importante ou bloqueado para você decidir sem reler tudo.'},
-                    React.createElement(LifeV70SignalGrid,{items:[
-                        {icon:'priority_high',label:'ATRASADAS',value:overdue.length,note:'pedem renegociação ou ação',progress:Math.min(100,overdue.length*18)},
-                        {icon:'timer',label:'ATÉ 15 MIN',value:quick.length,note:'boas para janelas curtas',progress:Math.min(100,quick.length*14)},
-                        {icon:'flag',label:'PRIORIDADE ALTA',value:important.length,note:'merecem intenção explícita',progress:Math.min(100,important.length*18)},
-                        {icon:'hourglass_top',label:'AGUARDANDO',value:waiting.length,note:'não confundir espera com execução',progress:Math.min(100,waiting.length*22)}]})),
-                React.createElement('div',{className:'life-v70-split'},
-                    React.createElement(LifeV70Section,{index:'A2',eyebrow:'PRÓXIMOS 7 DIAS',title:'Compromissos que já estão entrando no radar.',text:'Uma faixa curta do futuro evita que urgências apareçam do nada.',action:{label:'PLANEJAR SEMANA →',onClick:()=>setDayPlannerOpen(true)}},
-                        React.createElement(LifeV70Timeline,{items:next7.map(t=>({id:t.id,icon:lifeTaskStatusV4(t)==='Atrasada'?'!':'·',title:t.text||t.title||'Tarefa',meta:[lifeTaskStatusV4(t),t.duration?t.duration+' min':null,t.priority].filter(Boolean).join(' · '),onClick:()=>{setSelectedTaskId(t.id);openAdvancedArea('Tarefas',null,'DETALHES DA TAREFA')}})),empty:'Nada pressionando os próximos dias.'})),
-                    React.createElement(LifeV70Section,{index:'A3',eyebrow:'FLUXO',title:'Da captura à conclusão.',text:'O sistema funciona melhor quando cada item muda de estado em vez de apenas acumular.'},
-                        React.createElement(LifeV70Flow,{items:[
-                            {label:'Capturar',note:(inbox?.length||0)+' na inbox',done:false,active:(inbox?.length||0)>0},
-                            {label:'Decidir',note:activeTasks.length+' abertas',done:activeTasks.length===0,active:activeTasks.length>0},
-                            {label:'Executar',note:important.length+' prioritárias',done:false,active:important.length>0},
-                            {label:'Concluir',note:completedTasks.length+' registradas',done:completedTasks.length>0}]}))),
-                React.createElement(LifeV70Callout,{eyebrow:'LIFE AI · EXECUÇÃO',title:'Quando a lista ficar grande, peça uma decisão — não mais tarefas.',text:'A LIFE AI pode separar bloqueios, pequenas ações e prioridades usando apenas o que já está no sistema.',action:{label:'REVISAR MINHA LISTA →',onClick:()=>ai('Tarefas','Revise minhas tarefas abertas. Separe em: agir agora, fazer em até 15 minutos, aguardar, agendar e reconsiderar. Não crie tarefas novas e não altere nada sem confirmação.')},tone:'orange'}));
-        }
-
-        if(view==='Notas'){
-            const unlinked=(v49Notes||[]).filter(n=>!n.projectId).slice().reverse().slice(0,6);
-            const linked=(v49Notes||[]).filter(n=>n.projectId).length;
-            const fromNotes=(tasks||[]).filter(t=>t.sourceNoteId).length;
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement('div',{className:'life-v70-split'},
-                    React.createElement(LifeV70Section,{index:'B1',eyebrow:'RESURFACE',title:'Ideias que merecem uma segunda olhada.',text:'Notas antigas e ainda soltas voltam para a superfície antes de virarem esquecimento.'},
-                        React.createElement(LifeV70Timeline,{items:unlinked.map((n,i)=>({id:n.id||i,icon:'N',title:String(n.text||'Nota').slice(0,88),meta:'Ainda sem projeto vinculado',onClick:()=>openAdvancedArea('Notas',null,'NOTA')})),empty:'Suas notas recentes já estão bem conectadas.'})),
-                    React.createElement(LifeV70Section,{index:'B2',eyebrow:'CONEXÕES',title:'Seu segundo cérebro vira útil quando conecta.',text:'A nota deixa de ser arquivo morto quando vira tarefa, projeto, estudo ou referência.'},
-                        React.createElement(LifeV70SignalGrid,{items:[
-                            {icon:'folder_open',label:'EM PROJETOS',value:linked,note:'capturas ligadas a frentes reais',progress:(v49Notes||[]).length?linked/(v49Notes||[]).length*100:0},
-                            {icon:'check_circle',label:'VIRARAM AÇÃO',value:fromNotes,note:'tarefas criadas a partir de nota',progress:Math.min(100,fromNotes*12)},
-                            {icon:'notes',label:'TOTAL',value:(v49Notes||[]).length,note:'memórias registradas',progress:Math.min(100,(v49Notes||[]).length)},
-                            {icon:'favorite',label:'FAVORITOS',value:favCount,note:'atalhos em todo o LIFE',progress:Math.min(100,favCount*8)}]}))),
-                React.createElement(LifeV70Constellation,{center:'NOTAS',onCenter:()=>openAdvancedArea('Notas',null,'CENTRAL DE NOTAS'),nodes:[
-                    {icon:'checklist',label:'Tarefas',meta:fromNotes+' originadas',onClick:()=>v42Go('Tarefas')},
-                    {icon:'folder_open',label:'Projetos',meta:projects.length+' projetos',onClick:()=>v42Go('Life')},
-                    {icon:'school',label:'Estudos',meta:studyPlan?.topic||'sem trilha',onClick:()=>v42Go('Estudos')},
-                    {icon:'library_books',label:'Biblioteca',meta:'referências',onClick:()=>v42Go('Biblioteca')},
-                    {icon:'auto_awesome',label:'LIFE AI',meta:'síntese',onClick:()=>ai('Notas','Leia minhas notas recentes e me ajude a separar: ideias, fatos, dúvidas, decisões e possíveis próximos passos. Não invente informação.')},
-                    {icon:'history',label:'Arquivo',meta:'memória longa',onClick:()=>v42Go('Archive')}]}));
-        }
-
-        if(view==='Estudos'){
-            const domains={};LIFE_STUDY_TOPICS.forEach(t=>{const d=String(t.domain||'Outros').split('/')[0].trim();domains[d]=(domains[d]||0)+1});
-            const topDomains=Object.entries(domains).sort((a,b)=>b[1]-a[1]).slice(0,8);
-            const completed=studyPlan?.completedStages?.length||0,total=studyPlan?.timeline?.length||0;
-            const collections=[
-                ['Mercados sem atalhos','Bolsa de Valores','account_balance','Aprenda estrutura, risco, regulação e leitura crítica antes de qualquer decisão real.'],
-                ['IA + Dados','Inteligência Artificial — fundamentos','neurology','Do raciocínio estatístico aos modelos e LLMs.'],
-                ['Criar na internet','Produto Digital','deployed_code','Produto, UX, marketing, conteúdo e métricas.'],
-                ['Pensar melhor','Pensamento Crítico','psychology','Lógica, evidência, vieses e tomada de decisão.'],
-                ['Construir software','Desenvolvimento Web','code','Web, Git, React, APIs, cloud e DevOps.'],
-                ['Comunicar com impacto','Oratória Avançada','campaign','Oratória, storytelling, escrita, negociação e vendas.']
-            ];
-            const openTopic=title=>{try{localStorage.setItem('life_study_prefill_v6',title)}catch(_){ }v42Go('Guia de Estudos')};
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'C1',eyebrow:'LEARNING STUDIO',title:'Estudar é alternar modos — não só consumir conteúdo.',text:'Use quatro modos diferentes para transformar informação em domínio.'},
-                    React.createElement(LifeV70ActionDeck,{items:[
-                        {icon:'school',eyebrow:'APRENDER',title:'Entender',text:'Construa vocabulário, modelo mental e exemplos antes de acelerar.',label:'ABRIR GUIA →',onClick:()=>v42Go('Guia de Estudos')},
-                        {icon:'quiz',eyebrow:'PRATICAR',title:'Resolver',text:'Questões e aplicações revelam lacunas que leitura passiva esconde.',label:'PRATICAR →',onClick:()=>openAdvancedArea('Estudos',null,'CADERNO DE ERROS')},
-                        {icon:'style',eyebrow:'REVISAR',title:'Revisitar',text:'Volte no momento certo para fortalecer o que começou a desaparecer.',label:'REVISÕES →',onClick:()=>openAdvancedArea('Estudos',null,'REVISÕES')},
-                        {icon:'record_voice_over',eyebrow:'EXPLICAR',title:'Ensinar',text:'Explique com suas palavras para testar se o conceito realmente está claro.',label:'TESTAR COM IA →',onClick:()=>ai('Estudos','Escolha um conceito da minha trilha atual e me peça para explicar com minhas palavras. Depois avalie lacunas e faça uma pergunta de cada vez.')}]})),
-                React.createElement('div',{className:'life-v70-split'},
-                    React.createElement(LifeV70Section,{index:'C2',eyebrow:'TRILHA ATUAL',title:studyPlan?studyPlan.topic:'Ainda sem trilha principal.',text:studyPlan?'O mapa abaixo representa seu avanço registrado, não uma estimativa inventada.':'Escolha qualquer assunto do Study Universe e o LIFE monta uma ordem para começar.'},
-                        React.createElement(LifeV70Flow,{items:studyPlan?.timeline?.slice(0,6).map((x,i)=>({label:x.title,note:x.goal||x.description||'Etapa da trilha',done:(studyPlan.completedStages||[]).includes(x.index),active:!(studyPlan.completedStages||[]).includes(x.index)&&i===completed}))||[
-                            {label:'Escolher assunto',note:LIFE_STUDY_TOPICS.length+' disponíveis',active:true},{label:'Montar trilha',note:'objetivo + nível + tempo'},{label:'Praticar',note:'questões e projetos'},{label:'Revisar',note:'retorno espaçado'}]})),
-                    React.createElement(LifeV70Section,{index:'C3',eyebrow:'UNIVERSO',title:LIFE_STUDY_TOPICS.length+' assuntos, organizados por domínio.',text:'O catálogo cresce sem virar uma lista infinita: você pode buscar ou entrar por coleções.'},
-                        React.createElement(LifeV70MiniBars,{items:topDomains.map(([label,value])=>({label,value,display:value}))}))),
-                React.createElement(LifeV70Section,{index:'C4',eyebrow:'COLEÇÕES EDITORIAIS',title:'Comece por uma intenção, não por um nome de matéria.',text:'Coleções conectam assuntos que normalmente ficam espalhados em cursos diferentes.'},React.createElement(LifeV70ActionDeck,{items:collections.map(c=>({icon:c[2],eyebrow:'COLEÇÃO',title:c[0],text:c[3],label:'COMEÇAR →',onClick:()=>openTopic(c[1])}))})),
-                React.createElement(LifeV70Callout,{eyebrow:'MERCADOS · EDUCAÇÃO',title:'Bolsa, derivativos e opções entram como alfabetização de risco.',text:'O LIFE ensina mecanismos, probabilidade, incentivos, regulação e golpes. Não transforma estudo em recomendação de operar dinheiro real.',action:{label:'ABRIR MERCADO DE CAPITAIS →',onClick:()=>openTopic('Mercado de Capitais')},tone:'blue'}));
-        }
-
-        if(view==='Fitness'){
-            const fitnessAct=monthActivity.filter(a=>/fitness|treino|exerc|sessao/i.test((a.type||'')+' '+(a.title||'')));
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'D1',eyebrow:'FITNESS CONSTELLATION',title:'Treino não vive isolado do resto do dia.',text:'Sono percebido, agenda, alimentação, tempo disponível e histórico ajudam a escolher uma sessão mais coerente.'},
-                    React.createElement(LifeV70Constellation,{center:'FITNESS',nodes:[
-                        {icon:'calendar_month',label:'Agenda',meta:(events?.length||0)+' itens',onClick:()=>v42Go('Life')},
-                        {icon:'restaurant',label:'Cozinha',meta:(savedMealPlans?.length||0)+' planos',onClick:()=>v42Go('Receitas')},
-                        {icon:'history',label:'30 dias',meta:fitnessAct.length+' registros',onClick:()=>v42Go('Evolução')},
-                        {icon:'fitness_center',label:'Meus treinos',meta:(savedCustomWorkouts?.length||0)+' salvos',onClick:()=>{setFitnessMainTab('Meus treinos');v42Go('Fitness')}},
-                        {icon:'exercise',label:'Exercícios',meta:IRON_EXERCISE_LIBRARY.length+' na biblioteca',onClick:()=>{setFitnessMainTab('Exercícios');v42Go('Fitness')}},
-                        {icon:'auto_awesome',label:'Coach',meta:'contextual',onClick:()=>ai('Fitness','Use meu histórico de Fitness, tempo disponível e check-ins registrados para me ajudar a escolher uma sessão apropriada hoje. Não use metas de aparência e não aumente volume se recuperação estiver ruim.')}]})),
-                React.createElement(LifeV70Callout,{eyebrow:'CONTINUIDADE',title:'O objetivo é voltar melhor informado, não manter uma sequência perfeita.',text:'O LIFE guarda sessões e contexto para que um dia de descanso não apague o que você já construiu.',action:{label:'VER PROGRESSO →',onClick:()=>{setFitnessMainTab('Progresso');v42Go('Fitness')}},tone:'green'}));
-        }
-
-        if(view==='Receitas'){
-            const quick=(v33Recipes||[]).filter(r=>parseInt(String(r.time||'').match(/\d+/)?.[0]||99)<=20).slice(0,6);
-            const sweet=(v33Recipes||[]).filter(r=>/doce|sobremesa|bolo|cookie|chocolate/i.test((r.cat||'')+' '+(r.tags||[]).join(' ')+' '+(r.name||''))).length;
-            const savory=(v33Recipes||[]).filter(r=>/salg|almoço|jantar|lanche|frango|carne|massa/i.test((r.cat||'')+' '+(r.tags||[]).join(' ')+' '+(r.name||''))).length;
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement('div',{className:'life-v70-split'},
-                    React.createElement(LifeV70Section,{index:'E1',eyebrow:'COZINHAR AGORA',title:'Pouco tempo? Comece pelo tempo disponível.',text:'A biblioteca vira decisão quando você filtra primeiro pela situação real.'},React.createElement(LifeV70Timeline,{items:quick.map(r=>({id:r.id,icon:'≤20',title:r.name,meta:[r.time,r.cat].filter(Boolean).join(' · '),onClick:()=>openLifeRecipe(r)})),empty:'Nenhuma receita rápida encontrada.'})),
-                    React.createElement(LifeV70Section,{index:'E2',eyebrow:'BIBLIOTECA',title:'Uma cozinha ampla sem parecer catálogo infinito.',text:'O conteúdo se organiza por intenção, tipo e contexto.'},React.createElement(LifeV70SignalGrid,{items:[
-                        {icon:'menu_book',label:'RECEITAS',value:(v33Recipes||[]).length,note:'na biblioteca'},
-                        {icon:'cake',label:'DOCES',value:sweet,note:'sobremesas e preparos doces'},
-                        {icon:'lunch_dining',label:'SALGADAS',value:savory,note:'refeições e lanches'},
-                        {icon:'favorite',label:'FAVORITAS',value:(lifeFavorites?.recipes||[]).length,note:'seu acervo pessoal'}]}))),
-                React.createElement(LifeV70ActionDeck,{items:[
-                    {icon:'search',eyebrow:'DESCOBRIR',title:'Buscar por ingrediente',text:'Encontre receitas a partir do que você já tem em casa.',label:'ABRIR BIBLIOTECA →',onClick:()=>openAdvancedArea('Receitas',null,'BIBLIOTECA DE RECEITAS')},
-                    {icon:'shopping_cart',eyebrow:'COMPRAS',title:'Lista de compras',text:'Transforme receitas escolhidas em itens para comprar.',label:'ORGANIZAR →',onClick:()=>openAdvancedArea('Receitas',null,'LISTA DE COMPRAS')},
-                    {icon:'inventory_2',eyebrow:'DESPENSA',title:'Usar o que já existe',text:'Evite esquecer ingredientes e facilite decisões rápidas.',label:'DESPENSA →',onClick:()=>openAdvancedArea('Receitas',null,'DESPENSA')},
-                    {icon:'auto_awesome',eyebrow:'LIFE AI',title:'Decidir sem navegar',text:'Conte o tempo, ingredientes e preferência; a IA ajuda a encontrar no acervo.',label:'PERGUNTAR →',onClick:()=>ai('Receitas','Me ajude a escolher uma receita do acervo do LIFE. Pergunte primeiro quanto tempo tenho, quais ingredientes já tenho e se quero doce ou salgado. Não invente restrições alimentares.')}]}));
-        }
-
-        if(view==='Finanças'){
-            const monthKey=new Date().toISOString().slice(0,7);
-            const cur=(financeTransactions||[]).filter(x=>String(x.date||'').slice(0,7)===monthKey);
-            const ins=cur.filter(x=>x.type==='Entrada').reduce((n,x)=>n+Number(x.value||0),0);
-            const outs=cur.filter(x=>x.type==='Saída').reduce((n,x)=>n+Number(x.value||0),0);
-            const cat={};cur.filter(x=>x.type==='Saída').forEach(x=>cat[x.category||'Outros']=(cat[x.category||'Outros']||0)+Number(x.value||0));
-            const cats=Object.entries(cat).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([label,value])=>({label,value,display:money(value)}));
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement('div',{className:'life-v70-split'},
-                    React.createElement(LifeV70Section,{index:'F1',eyebrow:'MÊS EM UMA LINHA',title:'Entenda antes de tentar otimizar.',text:'O LIFE primeiro descreve o que foi registrado; decisões financeiras continuam sendo suas.'},React.createElement(LifeV70SignalGrid,{items:[
-                        {icon:'south_west',label:'ENTRADAS',value:money(ins),note:cur.filter(x=>x.type==='Entrada').length+' registros'},
-                        {icon:'north_east',label:'SAÍDAS',value:money(outs),note:cur.filter(x=>x.type==='Saída').length+' registros'},
-                        {icon:'account_balance_wallet',label:'FLUXO',value:money(ins-outs),note:'entradas menos saídas'},
-                        {icon:'receipt_long',label:'MOVIMENTOS',value:cur.length,note:'neste mês'}]})),
-                    React.createElement(LifeV70Section,{index:'F2',eyebrow:'CATEGORIAS',title:'Onde o dinheiro apareceu no seu registro.',text:'Concentração por categoria é contexto, não julgamento.'},cats.length?React.createElement(LifeV70MiniBars,{items:cats}):React.createElement('div',{className:'life-v70-empty'},'Registre algumas saídas para enxergar categorias.'))),
-                React.createElement(LifeV70Section,{index:'F3',eyebrow:'MONEY LITERACY',title:'Aprenda o conceito antes de usar o dinheiro.',text:'O Study Universe conecta educação financeira ao seu Money sem transformar conhecimento em recomendação personalizada.'},React.createElement(LifeV70ActionDeck,{items:[
-                    {icon:'percent',eyebrow:'BASE',title:'Matemática Financeira',text:'Juros, inflação, valor presente e custo efetivo.',label:'ESTUDAR →',onClick:()=>{try{localStorage.setItem('life_study_prefill_v6','Matemática Financeira')}catch(_){};v42Go('Guia de Estudos')}},
-                    {icon:'monitoring',eyebrow:'MERCADOS',title:'Mercado de Capitais',text:'Ações, dívida, risco, retorno e conflitos de interesse.',label:'ESTUDAR →',onClick:()=>{try{localStorage.setItem('life_study_prefill_v6','Mercado de Capitais')}catch(_){};v42Go('Guia de Estudos')}},
-                    {icon:'shield',eyebrow:'SEGURANÇA',title:'Fraudes e golpes',text:'Promessas irreais, pirâmides, phishing e verificação.',label:'ESTUDAR →',onClick:()=>{try{localStorage.setItem('life_study_prefill_v6','Fraudes financeiras e golpes')}catch(_){};v42Go('Guia de Estudos')}},
-                    {icon:'psychology',eyebrow:'DECISÃO',title:'Finanças Comportamentais',text:'Vieses que aparecem quando existe dinheiro e incerteza.',label:'ESTUDAR →',onClick:()=>{try{localStorage.setItem('life_study_prefill_v6','Finanças Comportamentais')}catch(_){};v42Go('Guia de Estudos')}}]})),
-                React.createElement(LifeV70Callout,{eyebrow:'LIFE AI · MONEY',title:'Peça leitura dos seus registros, não uma aposta.',text:'A IA pode resumir categorias, recorrências e metas registradas, mas não deve escolher investimentos ou operações por você.',action:{label:'REVISAR MEU MÊS →',onClick:()=>ai('Finanças','Faça uma leitura descritiva das minhas finanças deste mês usando somente os registros do LIFE. Separe fatos, padrões e perguntas que eu deveria responder. Não recomende investimentos ou operações.')},tone:'gold'}));
-        }
-
-        if(view==='Life'){
-            const activeProjects=(projects||[]).filter(p=>getProjectProgress(p)<100).slice(0,6);
-            const upcoming=(events||[]).slice(0,7);
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'G1',eyebrow:'WEEK CANVAS',title:'Uma semana é um sistema de capacidade, não uma lista maior.',text:'Projetos, agenda, hábitos e tarefas disputam o mesmo tempo. O Planner existe para enxergar isso junto.'},
-                    React.createElement(LifeV70Flow,{items:activeProjects.slice(0,5).map(p=>({label:p.n||'Projeto',note:getProjectProgress(p)+'% · '+(p.next||'próximo passo'),done:getProjectProgress(p)>=100,active:getProjectProgress(p)>0&&getProjectProgress(p)<100}))})),
-                React.createElement('div',{className:'life-v70-split'},
-                    React.createElement(LifeV70Section,{index:'G2',eyebrow:'AGENDA',title:'O que já ocupa espaço.',text:'Compromissos existentes entram antes de você inventar capacidade que não tem.'},React.createElement(LifeV70Timeline,{items:upcoming.map((e,i)=>({id:e.id||i,icon:'•',title:e.n||e.title||'Compromisso',meta:[e.d||e.date,e.t||e.time].filter(Boolean).join(' · '),onClick:()=>openAdvancedArea('Life',null,'AGENDA')})),empty:'Nenhum compromisso registrado.'})),
-                    React.createElement(LifeV70Section,{index:'G3',eyebrow:'SISTEMA',title:'Tudo conectado ao Planner.',text:'O planejamento ganha força quando não precisa duplicar informação.'},React.createElement(LifeV70SignalGrid,{items:[
-                        {icon:'folder_open',label:'PROJETOS',value:projects.length,note:'frentes registradas'},
-                        {icon:'flag',label:'METAS',value:(lifeGoals||[]).filter(g=>!g.done).length,note:'ativas'},
-                        {icon:'repeat',label:'HÁBITOS',value:(lifeHabits||[]).filter(h=>!h.done).length,note:'em acompanhamento'},
-                        {icon:'checklist',label:'TAREFAS',value:activeTasks.length,note:'ações abertas'}]}))),
-                React.createElement(LifeV70Callout,{eyebrow:'REVISÃO SEMANAL',title:'O Planner deve diminuir promessas, não aumentar.',text:'Use a revisão para cancelar, adiar, renegociar e escolher — não apenas para encaixar mais coisas.',action:{label:'REVISAR SEMANA →',onClick:()=>setWeeklyReviewOpen(true)},tone:'teal'}));
-        }
-
-        if(view==='IA'){
-            const workflows=[
-                ['today','Briefing do dia','Cruza tarefas, agenda, clima e contexto para mostrar o que já existe.','Faça um briefing do meu dia usando somente dados reais do LIFE. Separe compromissos, prioridades, riscos e um próximo passo.'],
-                ['school','Sessão de estudo','Usa sua trilha para montar uma sessão com objetivo e teste de compreensão.','Monte uma sessão de estudo de 30 minutos usando minha trilha atual. Termine com uma forma de testar se entendi.'],
-                ['fitness_center','Escolher treino','Usa contexto do Fitness sem transformar descanso em falha.','Ajude a escolher uma sessão de Fitness compatível com meu tempo, energia e recuperação registrados.'],
-                ['account_balance_wallet','Fechar o mês','Resume registros financeiros e cria perguntas para revisão.','Revise meu mês financeiro usando somente meus registros. Separe fatos, padrões e perguntas; não recomende investimentos.'],
-                ['route','Destravar projeto','Quebra um projeto bloqueado em decisão e próxima ação.','Encontre um projeto parado e me ajude a identificar bloqueio, decisão pendente e uma próxima ação pequena.'],
-                ['hub','Conectar o LIFE','Mostra relações entre áreas quando você sente que tudo está espalhado.','Olhe meu contexto do LIFE e mostre no máximo cinco conexões úteis entre tarefas, notas, estudos, Fitness, finanças e projetos.']
-            ];
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'H1',eyebrow:'WORKFLOWS',title:'Não precisa saber “promptar”. Escolha o trabalho.',text:'Cada fluxo já informa à LIFE AI que contexto usar e qual limite respeitar.'},React.createElement(LifeV70ActionDeck,{items:workflows.map(w=>({icon:w[0],eyebrow:'WORKFLOW',title:w[1],text:w[2],label:'EXECUTAR →',onClick:()=>ai('IA',w[3])}))})),
-                React.createElement(LifeV70Constellation,{center:'LIFE AI',nodes:[
-                    {icon:'checklist',label:'Tarefas',meta:activeTasks.length+' abertas',onClick:()=>v42Go('Tarefas')},
-                    {icon:'edit_note',label:'Notas',meta:(v49Notes||[]).length+' salvas',onClick:()=>v42Go('Notas')},
-                    {icon:'school',label:'Estudos',meta:studyPlan?.topic||'sem trilha',onClick:()=>v42Go('Estudos')},
-                    {icon:'fitness_center',label:'Fitness',meta:(savedCustomWorkouts||[]).length+' treinos',onClick:()=>v42Go('Fitness')},
-                    {icon:'account_balance_wallet',label:'Money',meta:(financeTransactions||[]).length+' registros',onClick:()=>v42Go('Finanças')},
-                    {icon:'route',label:'Planner',meta:projects.length+' projetos',onClick:()=>v42Go('Life')}]}));
-        }
-
-        if(view==='Evolução'){
-            const weeks=Array.from({length:8},(_,i)=>{const end=new Date();end.setHours(23,59,59,999);end.setDate(end.getDate()-(7*(7-i)));const start=new Date(end);start.setDate(start.getDate()-6);start.setHours(0,0,0,0);const value=(lifeActivity||[]).filter(a=>{const t=new Date(a.date||0).getTime();return Number.isFinite(t)&&t>=start.getTime()&&t<=end.getTime()}).length;return {label:'S'+(i+1),value};});
-            const types={};monthActivity.forEach(a=>{const k=a.type||a.area||'LIFE';types[k]=(types[k]||0)+1});
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement('div',{className:'life-v70-split'},
-                    React.createElement(LifeV70Section,{index:'I1',eyebrow:'8 SEMANAS',title:'Veja continuidade em vez de perseguir perfeição diária.',text:'Sem streak obrigatório. O gráfico existe para mostrar ritmo e períodos de maior ou menor atividade.'},React.createElement(LifeV70MiniBars,{items:weeks})),
-                    React.createElement(LifeV70Section,{index:'I2',eyebrow:'30 DIAS',title:'Onde sua atividade apareceu.',text:'Distribuição não é “equilíbrio ideal”; é apenas um retrato do que foi registrado.'},React.createElement(LifeV70MiniBars,{items:Object.entries(types).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([label,value])=>({label,value,display:value}))}))),
-                React.createElement(LifeV70SignalGrid,{items:[
-                    {icon:'calendar_view_week',label:'7 DIAS',value:weekActivity.length,note:'atividades registradas'},
-                    {icon:'calendar_month',label:'30 DIAS',value:monthActivity.length,note:'atividades registradas'},
-                    {icon:'check_circle',label:'TAREFAS CONCLUÍDAS',value:completedTasks.length,note:'no histórico atual'},
-                    {icon:'school',label:'TRILHA DE ESTUDO',value:studyPlan?(studyPlan.topic||'ATIVA'):'—',note:studyPlan?((studyPlan.completedStages||[]).length+' etapas concluídas'):'nenhum guia ativo'}]}),
-                React.createElement(LifeV70Callout,{eyebrow:'INTERPRETAÇÃO',title:'Dado sem contexto é só número.',text:'A LIFE AI pode separar fatos, hipóteses e perguntas para a próxima semana sem transformar atividade em nota de valor pessoal.',action:{label:'INTERPRETAR MEUS DADOS →',onClick:()=>ai('Evolução','Interprete meus últimos 30 dias no LIFE. Separe: fatos observáveis, padrões possíveis, limites dos dados e duas perguntas para eu refletir. Não crie pontuação pessoal.')},tone:'teal'}));
-        }
-
-        if(view==='Biblioteca'){
-            const counts=[
-                {icon:'school',label:'ASSUNTOS',value:LIFE_STUDY_TOPICS.length,note:'Study Universe'},
-                {icon:'exercise',label:'EXERCÍCIOS',value:IRON_EXERCISE_LIBRARY.length,note:'Fitness'},
-                {icon:'fitness_center',label:'TREINOS',value:(v33Workouts||[]).length,note:'programas e sessões'},
-                {icon:'restaurant',label:'RECEITAS',value:(v33Recipes||[]).length,note:'cozinha'},
-            ];
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'J1',eyebrow:'SMART SHELVES',title:'A biblioteca é uma porta de entrada para o sistema inteiro.',text:'Em vez de lembrar onde cada coisa mora, procure pelo que quer fazer.'},React.createElement(LifeV70SignalGrid,{items:counts})),
-                React.createElement(LifeV70ActionDeck,{items:[
-                    {icon:'school',eyebrow:'CONHECIMENTO',title:'Study Universe',text:LIFE_STUDY_TOPICS.length+' assuntos com trilhas e materiais.',label:'EXPLORAR →',onClick:()=>v42Go('Estudos')},
-                    {icon:'fitness_center',eyebrow:'MOVIMENTO',title:'Fitness Library',text:'Exercícios, técnica, programas e treinos.',label:'EXPLORAR →',onClick:()=>v42Go('Fitness')},
-                    {icon:'restaurant',eyebrow:'COZINHA',title:'Receitas',text:(v33Recipes||[]).length+' preparos com filtros e favoritos.',label:'EXPLORAR →',onClick:()=>v42Go('Receitas')},
-                    {icon:'favorite',eyebrow:'SEU ACERVO',title:'Favoritos',text:favCount+' atalhos que você escolheu guardar.',label:'ABRIR →',onClick:()=>v42Go('Favoritos')}]}));
-        }
-
-        if(view==='Meu LIFE'){
-            const recent=(lifeActivity||[]).slice(0,6);
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'K1',eyebrow:'CONTINUE',title:'Seu LIFE deve lembrar onde você estava.',text:'A continuidade vale mais que um dashboard cheio: retome o que foi usado recentemente.'},React.createElement(LifeV70Timeline,{items:recent.map((a,i)=>({id:a.id||i,icon:'•',title:a.title||a.type||'Atividade',meta:new Date(a.date||Date.now()).toLocaleDateString('pt-BR'),onClick:()=>v42Go(a.area||(/fitness|treino/i.test(a.type||'')?'Fitness':/estud|foco/i.test(a.type||'')?'Estudos':'Hoje'))})),empty:'Use o LIFE e sua fila de continuidade aparece aqui.'})),
-                React.createElement(LifeV70Constellation,{center:'MEU LIFE',nodes:[
-                    {icon:'favorite',label:'Favoritos',meta:favCount+' salvos',onClick:()=>v42Go('Favoritos')},
-                    {icon:'edit_note',label:'Notas',meta:(v49Notes||[]).length+' notas',onClick:()=>v42Go('Notas')},
-                    {icon:'folder_open',label:'Projetos',meta:projects.length+' projetos',onClick:()=>v42Go('Life')},
-                    {icon:'school',label:'Estudos',meta:studyPlan?.topic||'explorar',onClick:()=>v42Go('Estudos')},
-                    {icon:'fitness_center',label:'Fitness',meta:(savedCustomWorkouts||[]).length+' treinos',onClick:()=>v42Go('Fitness')},
-                    {icon:'auto_awesome',label:'LIFE AI',meta:'contexto',onClick:()=>v42Go('IA')}]}));
-        }
-
-        if(view==='Favoritos'){
-            const buckets=[['Áreas','areas','apps'],['Receitas','recipes','restaurant'],['Treinos','workouts','fitness_center'],['Exercícios','exercises','exercise'],['Estudos','study','school']];
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'L1',eyebrow:'PERSONAL LAUNCHER',title:'Seu sistema começa a parecer seu quando você escolhe o que merece ficar perto.',text:'Favoritar não duplica conteúdo: só encurta o caminho de volta.'},React.createElement(LifeV70SignalGrid,{items:buckets.map(b=>({icon:b[2],label:b[0].toUpperCase(),value:(lifeFavorites?.[b[1]]||[]).length,note:'salvos'}))})),
-                React.createElement(LifeV70Callout,{eyebrow:'ATALHO',title:'Poucos favoritos ficam mais úteis que dezenas.',text:'Use o coração para guardar só aquilo que realmente volta para a sua rotina.',action:{label:'ABRIR MAIS ÁREAS →',onClick:()=>setMobileMore(true)},tone:'pink'}));
-        }
-
-        if(view==='Archive'){
-            const months={};(lifeActivity||[]).forEach(a=>{const d=new Date(a.date||0);if(Number.isNaN(d.getTime()))return;const k=d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'});months[k]=(months[k]||0)+1});
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'M1',eyebrow:'TIME CAPSULE',title:'Seu histórico ganha forma quando você olha por períodos.',text:'O Arquivo preserva contexto antigo sem deixar as telas atuais pesadas.'},React.createElement(LifeV70MiniBars,{items:Object.entries(months).slice(-10).map(([label,value])=>({label,value,display:value}))})),
-                React.createElement(LifeV70Callout,{eyebrow:'PRESERVAR',title:'Exporte antes de precisar.',text:'Backup e sincronização são mais úteis quando feitos enquanto tudo está funcionando.',action:{label:'IR PARA PERFIL →',onClick:()=>v42Go('Perfil')},tone:'slate'}));
-        }
-
-        if(view==='Perfil'){
-            const checks=[
-                {icon:'cloud_done',label:'NUVEM',value:cloudStatus==='synced'?'OK':String(cloudStatus||'LOCAL').toUpperCase(),note:cloudLastSync?'último sync '+new Date(cloudLastSync).toLocaleDateString('pt-BR'):'sem sync registrado',progress:cloudStatus==='synced'?100:35},
-                {icon:'wifi',label:'CONEXÃO',value:online?'ONLINE':'OFFLINE',note:'estado atual',progress:online?100:20},
-                {icon:'auto_awesome',label:'LIFE AI',value:aiBackendReady?'REMOTA':'LOCAL',note:aiBackendReady?'backend conectado':'fallback disponível',progress:aiBackendReady?100:55},
-                {icon:'verified_user',label:'PLANO',value:realPlan||'FREE',note:hasV18Pro?'recursos avançados ativos':'versão essencial',progress:hasV18Pro?100:60}
-            ];
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'N1',eyebrow:'SYSTEM HEALTH',title:'Você deve saber quando o LIFE está saudável.',text:'Conta, nuvem, rede e IA ficam visíveis antes de você trocar de aparelho ou depender de um recurso.'},React.createElement(LifeV70SignalGrid,{items:checks})),
-                React.createElement(LifeV70ActionDeck,{items:[
-                    {icon:'settings',eyebrow:'PREFERÊNCIAS',title:'Interface',text:'Tema, densidade, movimento, abertura e legendas.',label:'CONFIGURAR →',onClick:()=>v42Go('Configurações')},
-                    {icon:'sync',eyebrow:'DADOS',title:'Sincronizar',text:'Envie o estado atual para a nuvem quando estiver tudo certo.',label:'SINCRONIZAR →',onClick:()=>pushLifeCloud(true)},
-                    {icon:'download',eyebrow:'BACKUP',title:'Exportar',text:'Mantenha uma cópia dos seus dados fora do navegador.',label:'EXPORTAR →',onClick:exportLifeData},
-                    {icon:'notifications',eyebrow:'LEMBRETES',title:'Notificações',text:'Revise permissões e avisos do sistema.',label:'ABRIR →',onClick:()=>setNotificationCenterOpen(true)}]}));
-        }
-
-        if(view==='Tutorial'){
-            return React.createElement('div',{className:'life-v70-layer'},
-                React.createElement(LifeV70Section,{index:'O1',eyebrow:'FIRST 10 MINUTES',title:'Aprenda o LIFE fazendo três coisas reais.',text:'Você não precisa assistir a um tutorial gigante. Complete três ações e o resto começa a fazer sentido.'},React.createElement(LifeV70Flow,{items:[
-                    {label:'Planejar hoje',note:'adicione até 3 planos na Home',done:(tasks||[]).some(t=>!taskIsDone(t)),active:!(tasks||[]).some(t=>!taskIsDone(t))},
-                    {label:'Salvar uma nota',note:'capture algo que está na cabeça',done:(v49Notes||[]).length>0,active:(tasks||[]).some(t=>!taskIsDone(t))&&(v49Notes||[]).length===0},
-                    {label:'Escolher uma área',note:'Estudos, Fitness, Money ou Planner',done:(lifeActivity||[]).length>2,active:(v49Notes||[]).length>0},
-                    {label:'Perguntar à LIFE AI',note:'peça orientação sobre o próprio sistema',done:(aiMessages||[]).length>0,active:(lifeActivity||[]).length>2}]})),
-                React.createElement(LifeV70Callout,{eyebrow:'LIFE GUIDE',title:'Se você não souber onde alguma coisa fica, não procure manualmente.',text:'Pergunte à LIFE AI “onde faço X?” e ela pode explicar a função e direcionar para a área correta.',action:{label:'PERGUNTAR COMO USAR →',onClick:()=>ai('Tutorial','Quero aprender a usar o LIFE OS. Pergunte o que estou tentando fazer e me diga exatamente qual área usar e qual botão procurar.')},tone:'violet'}));
-        }
-        return null;
-    };
-
-
-
 return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-active' : 'life-free-active') + ' life-theme-' + lifeTheme + ' life-area-' + String(view || 'Hoje').toLowerCase().replace(/[^a-z0-9áéíóúãõç]+/gi,'-') + (lifeSettings.motion === false ? ' life-motion-off' : '') + (lifeSettings.descriptions === false ? ' life-hide-descriptions' : ''), style: { '--ep': Math.max(10, pct) + 'vh', fontSize: density === 'Compact' ? '14px' : density === 'Comfortable' ? '17px' : '16px' } },
         pageTransition && React.createElement("div", { className: 'life-page-transition ' + (pageTransition.phase || 'in'), "aria-hidden": "true" },
             React.createElement("div", { className: "life-page-transition-inner" },
@@ -7983,7 +7534,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => setSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 7.0.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 6.0.0"),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => setSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
@@ -8370,7 +7921,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
                             React.createElement("small", null, "LIFE AI"),
                             React.createElement("b", null, lifeTodayOpen.length > 1 ? 'Quer organizar a ordem do seu dia?' : lifeTodayOpen.length === 1 ? 'Quer ajuda com o próximo passo?' : 'Quer preparar o restante do dia?'))),
                     React.createElement("button", { type: "button", onClick: () => { setAiOriginView('Hoje'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(lifeTodayOpen.length ? 'Organize meus planos de hoje por ordem prática, usando somente as tarefas que já estão registradas no LIFE. Não crie tarefas novas.' : 'Meu dia está sem planos registrados. Faça uma pergunta curta para me ajudar a escolher no máximo três prioridades para hoje.'), 30); } }, "ORGANIZAR"))),
-            view !== 'Hoje' && advancedArea !== view && React.createElement(React.Fragment, null, renderLifeSimpleArea(), renderLifeV50Layer(), renderLifeV70Layer()),
+            view !== 'Hoje' && advancedArea !== view && React.createElement(React.Fragment, null, renderLifeSimpleArea(), renderLifeV50Layer()),
             !hasV18Pro && view !== 'Hoje' && advancedArea !== view && !['Configurações','Tutorial','Perfil'].includes(view) && React.createElement(LifeFreeMomentumV6,{area:view,usage:(tasks?.length||0)+(v49Notes?.length||0)+(lifeActivity?.length||0)+(projects?.length||0)+(financeTransactions?.length||0),onUpgrade:()=>openLifePro('free_momentum_v6_'+view)}),
             view !== 'Hoje' && advancedArea === view && React.createElement("div", { className: "life-advanced-return" },
                 React.createElement("button", { type: "button", onClick: closeAdvancedArea }, React.createElement("span", { className: "material-symbols-rounded" }, "arrow_back"), "VOLTAR AO RESUMO"),
