@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LIFE OS 6.3.4 Hybrid Workout Fix -->
+<!-- LIFE OS 6.8 Product Architecture -->
 
 <html lang="pt-BR" class="dark">
 <head>
@@ -14,14 +14,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="application-name" content="LIFE OS" />
-  <meta name="life-build" content="6.3.4" />
+  <meta name="life-build" content="6.8.0" />
   <meta name="apple-mobile-web-app-title" content="LIFE OS" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-TileColor" content="#07080B" />
   
   <script>
-  // LIFE 6.3.4: hybrid plans always preserve strength + cardio sessions.
+  // LIFE 6.8.0: product architecture, strict FREE/PRO separation and themed apps.
   (function(){
     try {
       if ('caches' in window) caches.keys().then(function(keys){ return Promise.all(keys.filter(function(k){ return /^life-os-/.test(k); }).map(function(k){ return caches.delete(k); })); }).catch(function(){});
@@ -50,6 +50,11 @@
   <link rel="stylesheet" href="assets/css/signature-polish-v61.css?v=6.3.3">
   <link rel="stylesheet" href="assets/css/layout-fixes-v62.css?v=6.3.3">
   <link rel="stylesheet" href="assets/css/stability-fixes-v63.css?v=6.3.3">
+  <link rel="stylesheet" href="assets/css/app-suite-v64.css?v=6.8.0">
+  <link rel="stylesheet" href="assets/css/app-suite-v65.css?v=6.8.0">
+  <link rel="stylesheet" href="assets/css/study-guide-v66.css?v=6.8.0">
+  <link rel="stylesheet" href="assets/css/guidance-v67.css?v=6.8.0">
+  <link rel="stylesheet" href="assets/css/product-tiers-v68.css?v=6.8.0">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
@@ -60,8 +65,9 @@
 <div id="life-v18-root"></div>
 
 <!-- Marketing/public pages moved to landing.html, privacy.html, terms.html and support.html -->
-  <script src="assets/js/config-6.3.3.js"></script>
-  <script src="assets/js/life-app-6.3.4.js"></script>
+  <script src="assets/js/config-6.8.0.js"></script>
+  <script src="assets/js/life-app-6.8.0.js"></script>
+  <script src="assets/js/context-help-v68.js"></script>
 
   <!-- ====================================================================
        LIFE OS — BANCO DE DADOS ATUALIZADO (ETAPA 5)
@@ -71,7 +77,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2'"></script>
 
-<div id="life-auth"><div class="la-shell"><aside class="la-showcase"><div class="la-showcase-brand">LIFE <em>OS</em><span>6.3.4</span></div><div class="la-showcase-copy"><small>UM SISTEMA PARA O SEU DIA</small><h2>Organize menos.<br>Entenda melhor.</h2><p>Tarefas, estudos, Fitness, finanças e LIFE AI no mesmo contexto.</p></div><div class="la-showcase-grid"><span><b>HOJE</b>Prioridades reais</span><span><b>ORGANIZAR</b>Projetos + tarefas</span><span><b>LIFE AI</b>Contexto do sistema</span></div><button id="la-theme-toggle" class="la-theme-toggle" type="button">ALTERNAR TEMA</button></aside><div class="la-box"><div class="la-logo">LIFE <em>OS</em></div><div id="la-main"><small class="la-eyebrow">CONTA LIFE</small><h1>Entrar.</h1><p>Continue de onde parou ou crie sua conta LIFE.</p><input id="la-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><input id="la-password" class="la-input" type="password" autocomplete="current-password" placeholder="Senha"><button id="la-login" class="la-btn" type="button">ENTRAR →</button><button id="la-signup" class="la-btn la-alt" type="button">CRIAR CONTA</button><button id="la-forgot" class="la-link" type="button">ESQUECI MINHA SENHA</button><a class="la-link life-public-link" href="landing.html">CONHECER O LIFE OS</a></div><div id="la-signup-view" style="display:none"><small class="la-eyebrow">PRIMEIRO ACESSO</small><h1>Criar conta.</h1><p>Cadastre seu e-mail e crie uma senha para salvar e sincronizar seu LIFE.</p><input id="la-signup-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><input id="la-signup-password" class="la-input" type="password" autocomplete="new-password" placeholder="Senha"><input id="la-signup-password2" class="la-input" type="password" autocomplete="new-password" placeholder="Confirmar senha"><button id="la-create-account" class="la-btn" type="button">CRIAR CONTA →</button><button id="la-signup-back" class="la-link la-back" type="button">JÁ TENHO CONTA</button></div><div id="la-recovery" style="display:none"><small class="la-eyebrow">RECUPERAÇÃO</small><h1>Recuperar.</h1><p>Informe seu e-mail. Enviaremos a recuperação para você criar uma nova senha.</p><input id="la-recovery-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><button id="la-send-recovery" class="la-btn" type="button">ENVIAR RECUPERAÇÃO</button><button id="la-back" class="la-link la-back" type="button">VOLTAR PARA ENTRAR</button></div><div id="la-new-password" style="display:none"><small class="la-eyebrow">SEGURANÇA</small><h1>Nova senha.</h1><p>Crie uma nova senha para sua conta LIFE.</p><input id="la-new-pass" class="la-input" type="password" autocomplete="new-password" placeholder="Nova senha"><input id="la-new-pass2" class="la-input" type="password" autocomplete="new-password" placeholder="Confirmar nova senha"><button id="la-save-pass" class="la-btn" type="button">SALVAR NOVA SENHA</button></div><div id="la-msg" class="la-msg"></div><div class="la-trust">Seus dados pertencem à sua conta. Senhas nunca são exibidas dentro do LIFE.</div></div></div></div><div id="life-account-chip" class="life-account-chip"></div>
+<div id="life-auth"><div class="la-shell"><aside class="la-showcase"><div class="la-showcase-brand">LIFE <em>OS</em><span>6.8.0</span></div><div class="la-showcase-copy"><small>UM SISTEMA PARA O SEU DIA</small><h2>Organize menos.<br>Entenda melhor.</h2><p>Tarefas, estudos, Fitness, finanças e LIFE AI no mesmo contexto.</p></div><div class="la-showcase-grid"><span><b>HOJE</b>Prioridades reais</span><span><b>ORGANIZAR</b>Projetos + tarefas</span><span><b>LIFE AI</b>Contexto do sistema</span></div><button id="la-theme-toggle" class="la-theme-toggle" type="button">ALTERNAR TEMA</button></aside><div class="la-box"><div class="la-logo">LIFE <em>OS</em></div><div id="la-main"><small class="la-eyebrow">CONTA LIFE</small><h1>Entrar.</h1><p>Continue de onde parou ou crie sua conta LIFE.</p><input id="la-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><input id="la-password" class="la-input" type="password" autocomplete="current-password" placeholder="Senha"><button id="la-login" class="la-btn" type="button">ENTRAR →</button><button id="la-signup" class="la-btn la-alt" type="button">CRIAR CONTA</button><button id="la-forgot" class="la-link" type="button">ESQUECI MINHA SENHA</button><a class="la-link life-public-link" href="landing.html">CONHECER O LIFE OS</a></div><div id="la-signup-view" style="display:none"><small class="la-eyebrow">PRIMEIRO ACESSO</small><h1>Criar conta.</h1><p>Cadastre seu e-mail e crie uma senha para salvar e sincronizar seu LIFE.</p><input id="la-signup-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><input id="la-signup-password" class="la-input" type="password" autocomplete="new-password" placeholder="Senha"><input id="la-signup-password2" class="la-input" type="password" autocomplete="new-password" placeholder="Confirmar senha"><button id="la-create-account" class="la-btn" type="button">CRIAR CONTA →</button><button id="la-signup-back" class="la-link la-back" type="button">JÁ TENHO CONTA</button></div><div id="la-recovery" style="display:none"><small class="la-eyebrow">RECUPERAÇÃO</small><h1>Recuperar.</h1><p>Informe seu e-mail. Enviaremos a recuperação para você criar uma nova senha.</p><input id="la-recovery-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><button id="la-send-recovery" class="la-btn" type="button">ENVIAR RECUPERAÇÃO</button><button id="la-back" class="la-link la-back" type="button">VOLTAR PARA ENTRAR</button></div><div id="la-new-password" style="display:none"><small class="la-eyebrow">SEGURANÇA</small><h1>Nova senha.</h1><p>Crie uma nova senha para sua conta LIFE.</p><input id="la-new-pass" class="la-input" type="password" autocomplete="new-password" placeholder="Nova senha"><input id="la-new-pass2" class="la-input" type="password" autocomplete="new-password" placeholder="Confirmar nova senha"><button id="la-save-pass" class="la-btn" type="button">SALVAR NOVA SENHA</button></div><div id="la-msg" class="la-msg"></div><div class="la-trust">Seus dados pertencem à sua conta. Senhas nunca são exibidas dentro do LIFE.</div></div></div></div><div id="life-account-chip" class="life-account-chip"></div>
 <button id="life-owner-open" type="button" aria-label="Abrir LIFE Control">OWNER</button>
 <div id="life-owner-panel" aria-hidden="true">
  <div class="lov-wrap">
@@ -91,13 +97,14 @@
   <section id="lov-plans" class="lov-card" style="display:none">
    <div class="lov-orange">FREE × PRO</div>
    <div class="lov-feature"><b>Recurso</b><b class="lov-center">FREE</b><b class="lov-center">PRO</b></div>
-   <div class="lov-feature"><span>Hoje, notas e tarefas</span><span class="lov-center">✓</span><span class="lov-center">✓</span></div>
-   <div class="lov-feature"><span>Catálogo amplo de estudos</span><span class="lov-center">✓</span><span class="lov-center">✓</span></div>
-   <div class="lov-feature"><span>Biblioteca completa de treinos</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
-   <div class="lov-feature"><span>Treino personalizado</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
-   <div class="lov-feature"><span>Biblioteca completa de receitas + busca inteligente</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
-   <div class="lov-feature"><span>Evolução avançada</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
-   <div class="lov-feature"><span>Históricos e organização avançada</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
+   <div class="lov-feature"><span>Hoje + tarefas + notas básicas</span><span class="lov-center">✓</span><span class="lov-center">✓</span></div>
+   <div class="lov-feature"><span>Study OS · 6 assuntos + 2 etapas do guia</span><span class="lov-center">✓</span><span class="lov-center">Completo</span></div>
+   <div class="lov-feature"><span>Fitness · 3 sessões starter</span><span class="lov-center">✓</span><span class="lov-center">Programas + híbrido + personalizado</span></div>
+   <div class="lov-feature"><span>Kitchen OS · 4 receitas</span><span class="lov-center">✓</span><span class="lov-center">Minha Cozinha + compras + biblioteca</span></div>
+   <div class="lov-feature"><span>Money OS · registro + saldo</span><span class="lov-center">✓</span><span class="lov-center">Orçamento + metas + análises + guia</span></div>
+   <div class="lov-feature"><span>LIFE AI</span><span class="lov-center">Chat simples</span><span class="lov-center">Planejador + Memória + contexto</span></div>
+   <div class="lov-feature"><span>Biblioteca / Evolução / Archive / Meu LIFE</span><span class="lov-center">Amostra</span><span class="lov-center">Completo</span></div>
+   <div class="lov-feature"><span>Automações, histórico e conexões entre apps</span><span class="lov-center lov-lock">🔒</span><span class="lov-center">✓</span></div>
    <p class="lov-note">Se um usuário PRO voltar ao FREE, os dados PRO devem permanecer no banco e ficar bloqueados até a assinatura ser reativada.</p>
   </section>
   <section id="lov-preview" class="lov-card" style="display:none">
@@ -113,7 +120,7 @@
   </section>
  </div>
 </div>
-<script src="assets/js/supabase-auth-6.3.3.js"></script>
+<script src="assets/js/supabase-auth-6.8.0.js"></script>
 
 
 

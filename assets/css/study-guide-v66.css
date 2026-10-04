@@ -1,0 +1,372 @@
+/* LIFE OS 6.6 — Study Guide depth layer
+   Makes Guia de Estudos read like a professional learning app: orientation,
+   first session, real-life application, practical checkpoints and sources. */
+
+.life-area-guia-de-estudos{
+  --study-accent:#5aa8ff;
+  --study-accent-2:#7cd6ff;
+  --study-soft:rgba(90,168,255,.10);
+  --study-border:rgba(111,185,255,.18);
+}
+
+.life-area-guia-de-estudos .life-guide-page{
+  width:min(1320px,calc(100% - 32px));
+  max-width:1320px;
+}
+.life-area-guia-de-estudos .life-guide-intro{
+  position:relative;
+  overflow:hidden;
+  padding:28px 30px!important;
+  border:1px solid var(--study-border)!important;
+  border-radius:28px!important;
+  background:
+    linear-gradient(rgba(90,168,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(90,168,255,.03) 1px,transparent 1px),
+    radial-gradient(620px 300px at 100% 0,rgba(90,168,255,.19),transparent 70%),
+    linear-gradient(145deg,rgba(8,18,30,.97),rgba(6,10,16,.98))!important;
+  background-size:34px 34px,34px 34px,auto,auto!important;
+}
+.life-area-guia-de-estudos .life-guide-intro:after{
+  content:'STUDY MAP';
+  position:absolute;
+  right:28px;
+  top:24px;
+  font-size:10px;
+  letter-spacing:.28em;
+  font-weight:950;
+  color:rgba(124,214,255,.30);
+}
+.life-area-guia-de-estudos .life-guide-intro small,
+.life-area-guia-de-estudos .life-study-architect-head small,
+.life-area-guia-de-estudos .life-study-plan-top small{
+  color:var(--study-accent-2)!important;
+}
+.life-area-guia-de-estudos .life-guide-intro p{
+  max-width:84ch!important;
+  color:#a7b8c8!important;
+  font-size:11px!important;
+}
+
+.life-area-guia-de-estudos .life-study-architect{
+  border-color:var(--study-border)!important;
+  background:
+    radial-gradient(760px 360px at 92% 0,rgba(90,168,255,.10),transparent 70%),
+    linear-gradient(145deg,rgba(8,15,24,.98),rgba(5,9,14,.98))!important;
+  box-shadow:0 28px 90px rgba(0,0,0,.22)!important;
+}
+.life-area-guia-de-estudos .life-study-architect-head>button,
+.life-area-guia-de-estudos .life-study-plan-actions button.primary,
+.life-area-guia-de-estudos .life-study-modal-actions button.primary{
+  border-color:var(--study-accent)!important;
+  background:linear-gradient(135deg,var(--study-accent),var(--study-accent-2))!important;
+  color:#04111e!important;
+}
+.life-area-guia-de-estudos .life-study-search input:focus{
+  border-color:rgba(90,168,255,.68)!important;
+  box-shadow:0 0 0 3px rgba(90,168,255,.10)!important;
+}
+.life-area-guia-de-estudos .life-study-tags button:hover{
+  border-color:rgba(90,168,255,.32)!important;
+  color:#dcefff!important;
+}
+.life-area-guia-de-estudos .life-study-plan-progress>i>em{
+  background:linear-gradient(90deg,var(--study-accent),var(--study-accent-2))!important;
+}
+.life-area-guia-de-estudos .life-study-plan-progress small{color:var(--study-accent-2)!important}
+
+/* Orientation / why this matters */
+.life-study-compass{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);
+  gap:14px;
+  margin:18px 0 14px;
+  padding:22px;
+  border:1px solid var(--study-border);
+  border-radius:24px;
+  background:linear-gradient(145deg,rgba(90,168,255,.075),rgba(8,13,20,.82));
+}
+.life-study-compass-copy small,
+.life-study-lifeuses>small,
+.life-study-start-card>small,
+.life-study-loop-title small,
+.life-study-resource-head small,
+.life-study-stage-practical small{
+  display:block;
+  color:var(--study-accent-2)!important;
+  font-size:7.5px!important;
+  font-weight:950!important;
+  letter-spacing:.15em!important;
+}
+.life-study-compass-copy h3,
+.life-study-start-card h3,
+.life-study-loop-title h3,
+.life-study-resource-head h3{
+  margin:6px 0 8px;
+  color:#f5fbff;
+  font-size:clamp(18px,2.2vw,27px);
+  letter-spacing:-.035em;
+}
+.life-study-compass-copy>p,
+.life-study-loop-title>p,
+.life-study-resource-head>p{
+  color:#a3b1bf;
+  font-size:10px;
+  line-height:1.72;
+  max-width:78ch;
+}
+.life-study-motivation{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid rgba(124,214,255,.14);
+  background:rgba(124,214,255,.045);
+}
+.life-study-motivation span{color:var(--study-accent-2);font-size:19px}
+.life-study-motivation p{margin:0;color:#c5d7e7;font-size:9.5px;line-height:1.6}
+.life-study-lifeuses{display:grid;gap:8px;align-content:start}
+.life-study-lifeuses>article{
+  display:grid;
+  grid-template-columns:32px minmax(0,1fr);
+  gap:10px;
+  align-items:start;
+  padding:11px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(3,8,14,.52);
+}
+.life-study-lifeuses>article i{
+  display:grid;
+  place-items:center;
+  width:30px;height:30px;
+  border-radius:10px;
+  background:var(--study-soft);
+  color:var(--study-accent-2);
+  font-size:7px;
+  font-style:normal;
+  font-weight:950;
+}
+.life-study-lifeuses>article p{margin:1px 0 0;color:#b5c4d2;font-size:9.5px;line-height:1.55}
+
+/* Start here / first session / sources */
+.life-study-start-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin:14px 0;
+}
+.life-study-start-card{
+  min-width:0;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:20px;
+  background:linear-gradient(155deg,rgba(255,255,255,.027),rgba(4,9,14,.74));
+}
+.life-study-start-card.session{border-color:rgba(90,168,255,.19);background:linear-gradient(155deg,rgba(90,168,255,.07),rgba(4,9,14,.80))}
+.life-study-start-card.sources{border-color:rgba(124,214,255,.16)}
+.life-study-start-card ol,.life-study-start-card ul{
+  display:grid;
+  gap:9px;
+  margin:11px 0 0;
+  padding-left:18px;
+}
+.life-study-start-card li,.life-study-source-rule{
+  color:#aab8c5;
+  font-size:9.5px;
+  line-height:1.62;
+}
+.life-study-source-rule{margin:0 0 10px!important}
+.life-study-start-button{
+  width:100%;
+  margin-top:14px;
+  min-height:40px;
+  border:1px solid rgba(90,168,255,.38)!important;
+  border-radius:12px!important;
+  background:linear-gradient(135deg,rgba(90,168,255,.16),rgba(124,214,255,.09))!important;
+  color:#cfeaff!important;
+  font-size:8px!important;
+  font-weight:950!important;
+}
+.life-study-session-plan{display:grid;gap:7px;margin-top:10px}
+.life-study-session-plan>div{
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr);
+  gap:9px;
+  padding:9px 0;
+  border-bottom:1px solid rgba(255,255,255,.055);
+}
+.life-study-session-plan>div:last-child{border-bottom:0}
+.life-study-session-plan b{color:var(--study-accent-2);font-size:8px}
+.life-study-session-plan span{color:#aab8c6;font-size:8.5px;line-height:1.5}
+.life-study-session-plan strong{display:block;color:#eef8ff;font-size:7.5px;letter-spacing:.08em;margin-bottom:2px}
+
+/* Learning loop */
+.life-study-learning-loop{
+  display:grid;
+  grid-template-columns:minmax(240px,.75fr) minmax(0,1.75fr);
+  gap:16px;
+  align-items:center;
+  margin:14px 0 20px;
+  padding:18px;
+  border:1px solid rgba(90,168,255,.14);
+  border-radius:20px;
+  background:rgba(6,12,19,.72);
+}
+.life-study-loop-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.life-study-loop-steps article{
+  min-width:0;
+  padding:11px 10px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.065);
+  background:rgba(255,255,255,.018);
+}
+.life-study-loop-steps i{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--study-soft);color:var(--study-accent-2);font-size:7px;font-style:normal;font-weight:950}
+.life-study-loop-steps b{display:block;margin-top:9px;color:#edf8ff;font-size:8px;letter-spacing:.06em}
+.life-study-loop-steps p{margin-top:5px;color:#8fa1b1;font-size:8px;line-height:1.5}
+
+/* Roadmap stage = actual learning lesson */
+.life-area-guia-de-estudos .life-study-stage{
+  border-color:rgba(90,168,255,.14)!important;
+  background:
+    linear-gradient(90deg,rgba(90,168,255,.025),transparent 22%),
+    rgba(255,255,255,.014)!important;
+  border-radius:22px!important;
+}
+.life-area-guia-de-estudos .life-study-stage>i{
+  background:rgba(90,168,255,.10)!important;
+  border-color:rgba(90,168,255,.25)!important;
+  color:var(--study-accent-2)!important;
+}
+.life-area-guia-de-estudos .life-study-stage-detail>div{
+  border-color:rgba(90,168,255,.10)!important;
+  background:rgba(3,9,15,.52)!important;
+}
+.life-area-guia-de-estudos .life-study-stage-detail small{color:#8bc7ff!important}
+.life-study-stage-practical{
+  grid-column:1/-1;
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+.life-study-stage-practical>article{
+  min-width:0;
+  padding:14px;
+  border:1px solid rgba(90,168,255,.105);
+  border-radius:15px;
+  background:linear-gradient(145deg,rgba(90,168,255,.035),rgba(4,9,14,.45));
+}
+.life-study-stage-practical p,.life-study-stage-practical li{
+  color:#a9b8c5!important;
+  font-size:9.5px!important;
+  line-height:1.62!important;
+}
+.life-study-stage-practical p{margin-top:7px!important}
+.life-study-stage-practical ul{margin:8px 0 0;padding-left:17px;display:grid;gap:5px}
+.life-study-stage-practical strong{color:#eef8ff}
+.life-study-victory{
+  margin-top:10px!important;
+  padding:9px 10px;
+  border-left:2px solid var(--study-accent);
+  border-radius:0 10px 10px 0;
+  background:rgba(90,168,255,.055);
+  color:#c7e5fb!important;
+}
+.life-study-stage-links{
+  grid-column:1/-1;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:10px;
+}
+.life-study-stage-links a,.life-study-stage-links button{
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(90,168,255,.18)!important;
+  border-radius:10px!important;
+  background:rgba(90,168,255,.055)!important;
+  color:#a9d8ff!important;
+  padding:8px 10px!important;
+  font-size:7.5px!important;
+  font-weight:950!important;
+  text-decoration:none!important;
+}
+.life-study-stage-links button{cursor:pointer}
+.life-study-stage-links a:hover,.life-study-stage-links button:hover{border-color:rgba(90,168,255,.42)!important;background:rgba(90,168,255,.10)!important;color:#e3f4ff!important}
+
+.life-study-resource-head{
+  grid-column:1/-1;
+  min-width:0;
+  padding:6px 2px 8px;
+}
+.life-area-guia-de-estudos .life-study-resource{
+  border-color:rgba(90,168,255,.10)!important;
+  background:linear-gradient(145deg,rgba(90,168,255,.035),rgba(4,9,14,.72))!important;
+}
+.life-area-guia-de-estudos .life-study-resource small{color:#83c3ff!important}
+.life-area-guia-de-estudos .life-study-resource a{color:#9fd7ff!important}
+.life-area-guia-de-estudos .life-study-final-goal{
+  border-color:rgba(90,168,255,.25)!important;
+  background:radial-gradient(circle at 90% 0,rgba(90,168,255,.13),transparent 34%),rgba(255,255,255,.02)!important;
+}
+.life-area-guia-de-estudos .life-study-final-goal small{color:#8bcaff!important}
+
+/* Day theme */
+.life-theme-day.life-area-guia-de-estudos .life-guide-intro,
+.life-theme-day.life-area-guia-de-estudos .life-study-architect{
+  background:linear-gradient(145deg,#f7fbff,#eef6ff)!important;
+  border-color:rgba(37,112,181,.18)!important;
+}
+.life-theme-day .life-study-compass,
+.life-theme-day .life-study-start-card,
+.life-theme-day .life-study-learning-loop,
+.life-theme-day .life-study-stage-practical>article{
+  background:#fbfdff!important;
+  border-color:rgba(37,112,181,.14)!important;
+}
+.life-theme-day .life-study-compass-copy h3,
+.life-theme-day .life-study-start-card h3,
+.life-theme-day .life-study-loop-title h3,
+.life-theme-day .life-study-resource-head h3{color:#173149}
+.life-theme-day .life-study-compass-copy>p,
+.life-theme-day .life-study-loop-title>p,
+.life-theme-day .life-study-resource-head>p,
+.life-theme-day .life-study-lifeuses>article p,
+.life-theme-day .life-study-start-card li,
+.life-theme-day .life-study-source-rule,
+.life-theme-day .life-study-session-plan span,
+.life-theme-day .life-study-stage-practical p,
+.life-theme-day .life-study-stage-practical li{color:#60778a!important}
+.life-theme-day .life-study-lifeuses>article,
+.life-theme-day .life-study-loop-steps article{background:#fff;border-color:rgba(37,112,181,.11)}
+.life-theme-day .life-study-session-plan strong,
+.life-theme-day .life-study-stage-practical strong{color:#1f3d55}
+
+@media(max-width:980px){
+  .life-study-start-grid{grid-template-columns:1fr 1fr}
+  .life-study-start-card.sources{grid-column:1/-1}
+  .life-study-learning-loop{grid-template-columns:1fr}
+  .life-study-loop-steps{grid-template-columns:repeat(5,minmax(120px,1fr));overflow-x:auto;padding-bottom:4px}
+}
+@media(max-width:760px){
+  .life-area-guia-de-estudos .life-guide-page{width:min(100% - 18px,1320px);padding-top:16px!important}
+  .life-area-guia-de-estudos .life-guide-intro{padding:20px!important;border-radius:22px!important}
+  .life-area-guia-de-estudos .life-guide-intro:after{display:none}
+  .life-study-compass{grid-template-columns:1fr;padding:16px}
+  .life-study-start-grid{grid-template-columns:1fr}
+  .life-study-start-card.sources{grid-column:auto}
+  .life-study-stage-practical{grid-template-columns:1fr}
+  .life-study-stage-links{display:grid;grid-template-columns:1fr}
+  .life-study-stage-links a,.life-study-stage-links button{width:100%}
+  .life-study-loop-steps{grid-template-columns:1fr 1fr;overflow:visible}
+}
+@media(max-width:460px){
+  .life-study-loop-steps{grid-template-columns:1fr}
+  .life-study-session-plan>div{grid-template-columns:42px 1fr}
+  .life-study-compass-copy h3,.life-study-start-card h3,.life-study-loop-title h3,.life-study-resource-head h3{font-size:18px}
+}

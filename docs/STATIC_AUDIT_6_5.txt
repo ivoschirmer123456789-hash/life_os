@@ -1,0 +1,23 @@
+JavaScript checked: 37 | syntax errors: 0
+CSS checked: 16 | parser errors: 0 across 0 files
+HTML checked: 6 | missing local refs: 0 | duplicate static IDs: 0
+Service worker shell refs: 42 | missing: 0 | cache: life-os-6.5.0
+Regression direct hybrid recent -> player: 0 occurrence(s)
+Regression pantry routed to Fitness: 0 occurrence(s)
+Regression shopping routed to Fitness: 0 occurrence(s)
+Regression favorite recipes reset to all: 0 occurrence(s)
+Regression library Learn generic route: 0 occurrence(s)
+Regression library Fitness generic route: 0 occurrence(s)
+Regression library Recipes generic route: 0 occurrence(s)
+Required canonical hybrid openLifeWorkout: 2 occurrence(s)
+Required recipe favorites filter: 2 occurrence(s)
+Required note deep link: 3 occurrence(s)
+Required finance deep link: 1 occurrence(s)
+Required archive deep link: 1 occurrence(s)
+Required cross-tab target focus: 2 occurrence(s)
+Required organization intent view: 1 occurrence(s)
+Active build meta 6.5.0: True
+Active JS 6.5.0: True
+Active CSS v65: True
+Theme selectors: True
+STATUS: PASS (static audit)

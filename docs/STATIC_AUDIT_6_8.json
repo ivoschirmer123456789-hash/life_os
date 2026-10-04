@@ -1,0 +1,56 @@
+{
+  "version": "6.8.0",
+  "status": "PASS",
+  "issues": [],
+  "notes": [
+    "Static audit only; real Supabase auth, RLS, payment, push and physical-device behavior require deployed integration testing."
+  ],
+  "metrics": {
+    "duplicate_static_html_ids": 0,
+    "index_local_refs": 33,
+    "index_missing_refs": 0,
+    "sw_shell_items": 41,
+    "sw_missing_refs": 0,
+    "active_js_checked": 12,
+    "js_syntax_errors": 0,
+    "active_css_checked": 19,
+    "css_parse_errors": 0,
+    "v42Go_literal_routes": [
+      "Archive",
+      "Biblioteca",
+      "Configurações",
+      "Estudos",
+      "Evolução",
+      "Favoritos",
+      "Finanças",
+      "Fitness",
+      "Guia de Estudos",
+      "Hoje",
+      "IA",
+      "Life",
+      "Meu LIFE",
+      "Notas",
+      "Perfil",
+      "Receitas",
+      "Tarefas",
+      "Tutorial"
+    ],
+    "invalid_literal_routes": [],
+    "entitlement_assertions": {
+      "free_study_topics_6": true,
+      "free_recipes_4": true,
+      "free_workouts_3": true,
+      "free_ai_minimal_context": true,
+      "free_ai_no_advanced_area": true,
+      "free_ai_actions_disabled": true,
+      "guide_modal_pro_guard": true,
+      "downgrade_closes_advanced": true,
+      "global_search_pro_label": true
+    },
+    "legacy_active_core_refs": [],
+    "misleading_free_copy_hits": [],
+    "gesture_fab_handlers": true,
+    "service_worker_cache": "life-os-6.8.0",
+    "index_build": "6.8.0"
+  }
+}

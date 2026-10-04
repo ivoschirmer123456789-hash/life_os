@@ -1,0 +1,14 @@
+{
+  "js_files_checked": 38,
+  "js_syntax_errors": 0,
+  "index_local_refs": 30,
+  "index_missing_refs": [],
+  "service_worker_refs": 43,
+  "service_worker_missing_refs": [],
+  "css_brace_errors": [],
+  "build_meta_660": true,
+  "canonical_js_loaded": true,
+  "study_css_loaded": true,
+  "cache_660": true,
+  "legacy_650_active": false
+}
