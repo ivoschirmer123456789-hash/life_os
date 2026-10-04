@@ -1,3 +1,9 @@
+# LIFE OS 6.3.3 — Cache Break Fix
+
+Esta build usa nomes de arquivos JavaScript únicos para escapar de Service Workers antigos que ignoravam a query string e podiam continuar entregando o LIFE 6.3.
+
+Se a tela de recuperação ainda aparecer nesta build, ela exibirá o diagnóstico real do erro.
+
 # LIFE OS 6.0 — Signature System
 
 Versão focada em identidade visual, valor do FREE e expansão do Study OS.
@@ -18,3 +24,7 @@ Envie o projeto inteiro mantendo as pastas. Para atualizar um repositório que j
 
 ## Testes externos ainda necessários
 Supabase, Mercado Pago, LIFE AI remota, notificações push e sincronização entre dispositivos precisam ser validados no domínio publicado.
+
+
+## Hotfix 6.3.3
+Corrige o crash `c is not a function`: persistência em React effects não retorna mais boolean como cleanup. Efeitos de persistência foram blindados e helpers compartilhados de storage foram restaurados para módulos independentes.

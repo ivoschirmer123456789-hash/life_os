@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  window.LIFE_BUILD={version:'6.3.1',name:'Signature System'};
+  window.LIFE_BUILD={version:'6.3.2',name:'Signature System'};
   window.LIFE_SINGLE_FILE=false;
   const paintNetwork=()=>{document.documentElement.dataset.network=navigator.onLine?'online':'offline'};
   window.addEventListener('online',paintNetwork);
@@ -13,7 +13,7 @@
     if(!hadController || controllerReloaded) return;
     controllerReloaded=true;
     try {
-      const key='life_sw_reload_6_3_1';
+      const key='life_sw_reload_6_3_2';
       if(sessionStorage.getItem(key)==='1') return;
       sessionStorage.setItem(key,'1');
     } catch(e) {}
