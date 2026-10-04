@@ -1,4 +1,4 @@
-const LIFE_CACHE='life-os-6.3.0';
+const LIFE_CACHE='life-os-6.3.1';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
   './manifest.webmanifest','./assets/css/utilities.css','./assets/css/marketing.css','./assets/css/marketing-v60.css','./assets/css/life.css','./assets/css/product.css','./assets/css/final.css','./assets/css/fitness-v35.css','./assets/css/modules-v36.css','./assets/css/system-v40.css','./assets/css/system-v50.css','./assets/css/system-v60.css','./assets/css/signature-polish-v61.css','./assets/css/layout-fixes-v62.css','./assets/css/stability-fixes-v63.css',

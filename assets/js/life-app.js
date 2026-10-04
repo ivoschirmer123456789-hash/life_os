@@ -84,6 +84,40 @@ const lifeLocalDateKeyValue = (input = new Date()) => {
     if (Number.isNaN(d.getTime())) return '';
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 };
+
+// LIFE OS 6.3.1 — validates data left by older builds before React uses it.
+// Valid values are preserved; only incompatible top-level shapes fall back safely.
+const lifeCoerceStoredValue = (value, fallback) => {
+    if (value === null || value === undefined) return fallback;
+    if (Array.isArray(fallback)) return Array.isArray(value) ? value : fallback;
+    if (fallback && typeof fallback === 'object') {
+        if (!value || typeof value !== 'object' || Array.isArray(value)) return fallback;
+        const out = { ...fallback, ...value };
+        Object.keys(fallback).forEach((key) => {
+            const expected = fallback[key], current = out[key];
+            if (Array.isArray(expected) && !Array.isArray(current)) out[key] = expected;
+            else if (expected && typeof expected === 'object' && !Array.isArray(expected) && (!current || typeof current !== 'object' || Array.isArray(current))) out[key] = expected;
+            else if (typeof expected === 'string' && typeof current !== 'string') out[key] = expected;
+            else if (typeof expected === 'boolean' && typeof current !== 'boolean') out[key] = expected;
+            else if (typeof expected === 'number' && !Number.isFinite(current)) out[key] = expected;
+        });
+        return out;
+    }
+    if (typeof fallback === 'string') return typeof value === 'string' ? value : fallback;
+    if (typeof fallback === 'boolean') return typeof value === 'boolean' ? value : fallback;
+    if (typeof fallback === 'number') return Number.isFinite(value) ? value : fallback;
+    return value;
+};
+const lifeReadStoredValue = (key, fallback) => {
+    try {
+        const raw = localStorage.getItem(key);
+        if (raw === null) return fallback;
+        return lifeCoerceStoredValue(JSON.parse(raw), fallback);
+    }
+    catch (e) {
+        return fallback;
+    }
+};
 const MASTER_QUESTIONS = [
     { id: 'q_foco', specialty: 'Objetivos & Direção', title: 'Qual é o seu objetivo número 1 agora?', desc: 'A grande meta que mudará o seu jogo nos próximos meses.', placeholder: 'Ex: Aprender inglês, lançar projeto...', type: 'text' },
     { id: 'q_gargalo', specialty: 'Rotina & Produtividade', title: 'O que mais costuma sabotar o seu dia?', desc: 'O gargalo ou distração que mais te afasta de manter o foco.', placeholder: 'Ex: Celular, cansaço à noite...', type: 'text' },
@@ -103,14 +137,7 @@ const v11Default = {
     dashboardOrder: ['agenda', 'tarefas', 'estudos', 'fitness', 'habitos', 'metas'],
     themeDensity: 'comfortable'
 };
-const v11Load = () => {
-    try {
-        return { ...v11Default, ...(JSON.parse(localStorage.getItem(V11_KEY)) || {}) };
-    }
-    catch {
-        return { ...v11Default };
-    }
-};
+const v11Load = () => lifeReadStoredValue(V11_KEY, { ...v11Default });
 const v11Save = (s) => localStorage.setItem(V11_KEY, JSON.stringify(s));
 const V11_MISSIONS = [
     { id: 'study3', title: '3 sessões de estudo', target: 3, unit: 'sessões' },
@@ -945,12 +972,7 @@ const PRO_MONTHLY_PRICE = 29.90;
 /* legacy function removed: AuthPage */
 // LIFE OS v10 — LIFE OS
 const V10KEY = 'life_os_v10';
-const v10Load = () => { try {
-    return JSON.parse(localStorage.getItem(V10KEY)) || { xp: 0, done: [], study: 0, workouts: 0 };
-}
-catch {
-    return { xp: 0, done: [], study: 0, workouts: 0 };
-} };
+const v10Load = () => lifeReadStoredValue(V10KEY, { xp: 0, done: [], study: 0, workouts: 0 });
 /* legacy function removed: UpgradeTotalView */
 /* legacy function removed: V12QuickCapture */
 /* legacy function removed: LifeExperienceV13 */
@@ -1502,12 +1524,7 @@ const lifeBuildStudyPlan = (answers) => {
     return { id: 'study_' + Date.now(), topic: topic.title, domain: topic.domain, answers, createdAt: new Date().toISOString(), timeline, completedStages: [], resources: [...reading, ...channels, ...videoDiscovery, ...blockerLinks], blocker, finalObjective, sessionMinutes, daysPerWeek, riskNote };
 };
 function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, autoStart = false }) {
-    const load = (k, d) => { try {
-        return JSON.parse(localStorage.getItem(k)) ?? d;
-    }
-    catch {
-        return d;
-    } };
+    const load = (k, d) => lifeReadStoredValue(k, d);
     const initialPrefill = (()=>{ try { return localStorage.getItem('life_study_prefill_v6') || ''; } catch { return ''; } })();
     const [open, setOpen] = React.useState(false), [step, setStep] = React.useState(0), [answers, setAnswers] = React.useState(()=>initialPrefill?{topic:initialPrefill}:{}), [topicQ, setTopicQ] = React.useState(initialPrefill), [topicFocus, setTopicFocus] = React.useState(false), [plan, setPlan] = React.useState(() => load('life_study_plan_v2', null));
     const topicSuggestions = React.useMemo(() => lifeStudySearch(topicQ), [topicQ]);
@@ -2091,13 +2108,7 @@ function LifeAreaDepthStudio({ area, onAsk }) {
             React.createElement("div", { className: "life-nut-actions" },
                 React.createElement("button", { type: "button", className: "life-nut-primary", onClick: analyze }, "\u2726 ANALISAR COM LIFE AI"))));
 }
-function lifeLocalGet(key, fallback) { try {
-    const v = JSON.parse(localStorage.getItem(key));
-    return v ?? fallback;
-}
-catch (e) {
-    return fallback;
-} }
+function lifeLocalGet(key, fallback) { return lifeReadStoredValue(key, fallback); }
 function lifeLocalSet(key, value) { try {
     localStorage.setItem(key, JSON.stringify(value));
 }
@@ -3479,12 +3490,7 @@ function LifeFitnessJournalV35() {
 }
 
 function LifeOSV18() {
-    const load = (k, d) => { try {
-        return JSON.parse(localStorage.getItem(k)) ?? d;
-    }
-    catch {
-        return d;
-    } }, save = (k, v) => {
+    const load = (k, d) => lifeReadStoredValue(k, d), save = (k, v) => {
         try {
             localStorage.setItem(k, JSON.stringify(v));
             if (k !== 'life_cloud_synced_at' && k !== 'life_local_dirty_at')
@@ -3707,12 +3713,7 @@ function LifeOSV18() {
     const lifeWeatherDaily = React.useMemo(() => { if (!lifeWeather?.daily?.time)
         return []; return lifeWeather.daily.time.map((t, i) => ({ t, max: lifeWeather.daily.temperature_2m_max?.[i], min: lifeWeather.daily.temperature_2m_min?.[i], rain: lifeWeather.daily.precipitation_probability_max?.[i], code: lifeWeather.daily.weather_code?.[i], sunrise: lifeWeather.daily.sunrise?.[i], sunset: lifeWeather.daily.sunset?.[i] })).slice(0, 7); }, [lifeWeather]);
     const [lifeAccess, setLifeAccess] = React.useState('checking');
-    const [tasks, setTasks] = React.useState(() => { try {
-        return JSON.parse(localStorage.getItem('lifeos_v5_tasks') || '[]');
-    }
-    catch (e) {
-        return [];
-    } });
+    const [tasks, setTasks] = React.useState(() => lifeReadStoredValue('lifeos_v5_tasks', []));
     React.useEffect(() => { try {
         localStorage.setItem('lifeos_v5_tasks', JSON.stringify(tasks));
     }
@@ -5596,27 +5597,15 @@ function LifeOSV18() {
         ]
     };
     const [v33Step, setV33Step] = React.useState(0);
-    const [v33Profile, setV33Profile] = React.useState(() => { try {
-        return JSON.parse(localStorage.getItem('l33_profile') || '{}');
-    }
-    catch (e) {
-        return {};
-    } });
+    const [v33Profile, setV33Profile] = React.useState(() => lifeReadStoredValue('l33_profile', {}));
     const [v32NameDraft, setV32NameDraft] = React.useState(() => localStorage.getItem('l32_name') || '');
     const lifeSettingsDefaults = { opening: true, openingFacts: true, motion: true, descriptions: true };
-    const [lifeSettings, setLifeSettings] = React.useState(() => {
-        try {
-            return { ...lifeSettingsDefaults, ...JSON.parse(localStorage.getItem('life_settings_v1') || '{}') };
-        }
-        catch (e) {
-            return lifeSettingsDefaults;
-        }
-    });
+    const [lifeSettings, setLifeSettings] = React.useState(() => lifeReadStoredValue('life_settings_v1', lifeSettingsDefaults));
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [legalOpen, setLegalOpen] = React.useState(null);
     const [supportOpen, setSupportOpen] = React.useState(false);
     const [dangerOpen, setDangerOpen] = React.useState(false);
-    const lifeBuild = '6.3.0';
+    const lifeBuild = '6.3.1';
     const lifeDiagnostics = () => ({
         build: lifeBuild,
         plan: effectivePlan || realPlan || 'FREE',
@@ -7551,7 +7540,7 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => setSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 6.3.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 6.3.1"),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => setSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
@@ -10179,16 +10168,21 @@ return React.createElement("div", { className: 'v18 ' + (hasV18Pro ? 'life-pro-a
 class LifeErrorBoundary extends React.Component {
     constructor(props) { super(props); this.state = { error: null }; }
     static getDerivedStateFromError(error) { return { error }; }
-    componentDidCatch(error, info) { console.error('LIFE render error', error, info); }
+    componentDidCatch(error, info) {
+        console.error('LIFE render error', error, info);
+        try {
+            sessionStorage.setItem('life_last_render_error', String(error?.message || error || 'render_error').slice(0, 500));
+            document.documentElement.dataset.renderError = '1';
+        } catch (e) {}
+    }
     render() {
-        if (!this.state.error)
-            return this.props.children;
+        if (!this.state.error) return this.props.children;
         return React.createElement("div", { className: "life-fatal" },
             React.createElement("div", null,
                 React.createElement("small", null, "LIFE / RECUPERA\u00C7\u00C3O"),
                 React.createElement("h1", null, "N\u00E3o foi poss\u00EDvel carregar esta tela."),
-                React.createElement("p", null, "Seus dados locais continuam neste dispositivo. Recarregue o LIFE; se o problema continuar, copie o diagn\u00F3stico nas configura\u00E7\u00F5es quando conseguir entrar."),
-                React.createElement("button", { type: "button", onClick: () => location.reload() }, "RECARREGAR LIFE")));
+                React.createElement("p", null, "O LIFE protegeu seus dados e interrompeu apenas esta renderiza\u00E7\u00E3o. A vers\u00E3o 6.3.1 valida dados antigos antes de us\u00E1-los."),
+                React.createElement("button", { type: "button", onClick: () => location.reload() }, "TENTAR NOVAMENTE")));
     }
 }
 ReactDOM.createRoot(document.getElementById('life-v18-root')).render(React.createElement(LifeErrorBoundary, null,
