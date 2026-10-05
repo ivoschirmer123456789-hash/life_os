@@ -1,11 +1,11 @@
-# LIFE OS 8.4.0 — QA / Systemwide Product Edition
+# LIFE OS 8.4.1 — QA / PRO Refined Edition
 
 **Resultado: 47/47 verificações aprovadas.**
 
 ## Escopo validado
 - Sintaxe dos scripts e Service Worker.
 - Referências locais e IDs das páginas.
-- Manifest e cache 8.4.0.
+- Manifest e cache 8.4.1.
 - Integridade estrutural dos CSS.
 - DNA visual em todas as áreas principais.
 - Contrato central de limites FREE.
@@ -13,11 +13,11 @@
 - Acessibilidade de transição entre áreas e reduced motion.
 
 ## Resultado detalhado
-- ✅ **Sintaxe JS · assets/js/config-8.4.0.js** — ok
-- ✅ **Sintaxe JS · assets/js/life-app-8.4.0.js** — ok
-- ✅ **Sintaxe JS · assets/js/context-help-8.4.0.js** — ok
-- ✅ **Sintaxe JS · assets/js/supabase-auth-8.4.0.js** — ok
-- ✅ **Sintaxe JS · assets/js/runtime-8.4.0.js** — ok
+- ✅ **Sintaxe JS · assets/js/config-8.4.1.js** — ok
+- ✅ **Sintaxe JS · assets/js/life-app-8.4.1.js** — ok
+- ✅ **Sintaxe JS · assets/js/context-help-8.4.1.js** — ok
+- ✅ **Sintaxe JS · assets/js/supabase-auth-8.4.1.js** — ok
+- ✅ **Sintaxe JS · assets/js/runtime-8.4.1.js** — ok
 - ✅ **Sintaxe JS · service-worker.js** — ok
 - ✅ **IDs únicos · index.html** — ok
 - ✅ **Referências locais · index.html** — ok
@@ -32,12 +32,12 @@
 - ✅ **IDs únicos · offline.html** — ok
 - ✅ **Referências locais · offline.html** — ok
 - ✅ **Service Worker · arquivos do shell existem** — 25 referências válidas
-- ✅ **Service Worker · cache 8.4.0** — cache isolado
-- ✅ **Manifest 8.4.0 válido** — LIFE OS 8.4.0
-- ✅ **CSS balanceado · assets/css/life-bundle-8.4.0.css** — {=7056 }=7056
-- ✅ **CSS balanceado · assets/css/signature-8.4.0.css** — {=214 }=214
-- ✅ **CSS balanceado · assets/css/apex-8.4.0.css** — {=494 }=494
-- ✅ **CSS balanceado · assets/css/apex-marketing-8.4.0.css** — {=52 }=52
+- ✅ **Service Worker · cache 8.4.1** — cache isolado
+- ✅ **Manifest 8.4.1 válido** — LIFE OS 8.4.1
+- ✅ **CSS balanceado · assets/css/life-bundle-8.4.1.css** — {=7056 }=7056
+- ✅ **CSS balanceado · assets/css/signature-8.4.1.css** — {=214 }=214
+- ✅ **CSS balanceado · assets/css/apex-8.4.1.css** — {=494 }=494
+- ✅ **CSS balanceado · assets/css/apex-marketing-8.4.1.css** — {=52 }=52
 - ✅ **DNA visual cobre todas as áreas** — 17 áreas
 - ✅ **Identidade de área alimenta foco e cards** — tokens por área ativos
 - ✅ **FREE tem contrato central de limites** — fonte única de verdade

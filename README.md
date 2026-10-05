@@ -1,14 +1,11 @@
-# LIFE OS 8.4.0 — Systemwide Product Edition
+# LIFE OS 8.4.1 — PRO Refined Edition
 
-Esta versão aplica a mesma régua de produto a todo o LIFE OS.
+Atualização focada na experiência PRO e na navegação inferior.
 
-## O que mudou
-- DNA visual próprio para cada área, preservando uma linguagem única de produto;
-- PRO metálico continua diferente do FREE e mantém a transformação visual por varredura;
-- hierarquia de ações, cards, estados vazios, foco e transições padronizada;
-- limites FREE centralizados em uma única regra de produto;
-- favoritos continuam persistentes, limitados a 4 áreas e conectados à Home/dock;
-- microinterações e acessibilidade harmonizadas entre desktop e mobile;
-- cache e assets atualizados para 8.4.0.
-
-Base funcional: 8.3.0.
+- PRO com metal escovado mais sofisticado e menos genérico.
+- Cards, hero, topbar, badges, botões e inputs refinados.
+- Identidade de cada área preservada dentro do acabamento PRO.
+- Corrigido o launcher de abas que ficava sobre o LIFE AI no desktop.
+- LIFE AI permanece no extremo direito; launcher fica ao lado com área de toque independente.
+- Mobile mantém somente a barra inferior, evitando controles duplicados.
+- Cache/assets subiram para 8.4.1.

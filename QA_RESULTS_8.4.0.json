@@ -1,31 +1,31 @@
 {
-  "build": "8.4.0",
+  "build": "8.4.1",
   "passed": 47,
   "total": 47,
   "failed": 0,
   "results": [
     {
-      "name": "Sintaxe JS · assets/js/config-8.4.0.js",
+      "name": "Sintaxe JS · assets/js/config-8.4.1.js",
       "ok": true,
       "detail": "ok"
     },
     {
-      "name": "Sintaxe JS · assets/js/life-app-8.4.0.js",
+      "name": "Sintaxe JS · assets/js/life-app-8.4.1.js",
       "ok": true,
       "detail": "ok"
     },
     {
-      "name": "Sintaxe JS · assets/js/context-help-8.4.0.js",
+      "name": "Sintaxe JS · assets/js/context-help-8.4.1.js",
       "ok": true,
       "detail": "ok"
     },
     {
-      "name": "Sintaxe JS · assets/js/supabase-auth-8.4.0.js",
+      "name": "Sintaxe JS · assets/js/supabase-auth-8.4.1.js",
       "ok": true,
       "detail": "ok"
     },
     {
-      "name": "Sintaxe JS · assets/js/runtime-8.4.0.js",
+      "name": "Sintaxe JS · assets/js/runtime-8.4.1.js",
       "ok": true,
       "detail": "ok"
     },
@@ -100,32 +100,32 @@
       "detail": "25 referências válidas"
     },
     {
-      "name": "Service Worker · cache 8.4.0",
+      "name": "Service Worker · cache 8.4.1",
       "ok": true,
       "detail": "cache isolado"
     },
     {
-      "name": "Manifest 8.4.0 válido",
+      "name": "Manifest 8.4.1 válido",
       "ok": true,
-      "detail": "LIFE OS 8.4.0"
+      "detail": "LIFE OS 8.4.1"
     },
     {
-      "name": "CSS balanceado · assets/css/life-bundle-8.4.0.css",
+      "name": "CSS balanceado · assets/css/life-bundle-8.4.1.css",
       "ok": true,
       "detail": "{=7056 }=7056"
     },
     {
-      "name": "CSS balanceado · assets/css/signature-8.4.0.css",
+      "name": "CSS balanceado · assets/css/signature-8.4.1.css",
       "ok": true,
       "detail": "{=214 }=214"
     },
     {
-      "name": "CSS balanceado · assets/css/apex-8.4.0.css",
+      "name": "CSS balanceado · assets/css/apex-8.4.1.css",
       "ok": true,
       "detail": "{=494 }=494"
     },
     {
-      "name": "CSS balanceado · assets/css/apex-marketing-8.4.0.css",
+      "name": "CSS balanceado · assets/css/apex-marketing-8.4.1.css",
       "ok": true,
       "detail": "{=52 }=52"
     },

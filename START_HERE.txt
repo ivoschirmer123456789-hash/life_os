@@ -1,6 +1,4 @@
-LIFE OS 8.4.0 — SYSTEMWIDE PRODUCT EDITION
+LIFE OS 8.4.1 — PRO REFINED EDITION
 
-Use este pacote inteiro no deploy.
-Não misture assets de versões anteriores.
-
-A versão 8.4 aplica o mesmo nível de exigência visual e lógico a todas as áreas do LIFE OS, mantendo FREE e PRO distintos e a transformação metálica ao ativar o PRO.
+Substitua a versão 8.4.0 inteira por este pacote.
+Não misture assets: o Service Worker e os arquivos foram versionados em 8.4.1.
