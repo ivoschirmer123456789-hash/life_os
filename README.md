@@ -1,16 +1,14 @@
-# LIFE OS 8.1 — Quality Assured Edition
+# LIFE OS 8.4.0 — Systemwide Product Edition
 
-Esta build substitui a 8.0 APEX como pacote recomendado.
+Esta versão aplica a mesma régua de produto a todo o LIFE OS.
 
-## Entradas
-- `index.html` — aplicativo LIFE OS
-- `landing.html` — página pública
-- `support.html`, `privacy.html`, `terms.html` — páginas auxiliares
+## O que mudou
+- DNA visual próprio para cada área, preservando uma linguagem única de produto;
+- PRO metálico continua diferente do FREE e mantém a transformação visual por varredura;
+- hierarquia de ações, cards, estados vazios, foco e transições padronizada;
+- limites FREE centralizados em uma única regra de produto;
+- favoritos continuam persistentes, limitados a 4 áreas e conectados à Home/dock;
+- microinterações e acessibilidade harmonizadas entre desktop e mobile;
+- cache e assets atualizados para 8.4.0.
 
-## QA
-- `QA_REPORT_8.1.md` — resumo legível
-- `QA_RESULTS.json` — resultados detalhados
-- `STATIC_AUDIT_8.1.json` — referências/HTML/CSS/PWA
-
-## Publicação
-Publique a pasta inteira, sem misturar assets de versões anteriores. O Service Worker já usa um cache próprio da 8.1.0.
+Base funcional: 8.3.0.

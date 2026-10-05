@@ -1,0 +1,54 @@
+/* LIFE OS 8.4.0 — APEX marketing skin */
+html[data-life-apex="8"] .life-marketing-v60{background:#030507!important;color:#f6f8fa!important;font-family:'Plus Jakarta Sans',sans-serif!important}
+html[data-life-apex="8"] .life-marketing-v60:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(900px 500px at 10% -5%,rgba(255,122,26,.14),transparent 62%),radial-gradient(800px 520px at 100% 35%,rgba(255,122,26,.07),transparent 65%),#030507}
+html[data-life-apex="8"] .life-marketing-v60:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(#000,transparent 78%)}
+html[data-life-apex="8"] .life-marketing-v60 .shell{max-width:1180px!important;padding-left:24px!important;padding-right:24px!important}
+html[data-life-apex="8"] .life-marketing-v60 .nav{background:rgba(3,5,7,.76)!important;border-bottom:1px solid rgba(255,255,255,.06)!important;backdrop-filter:blur(24px)!important}
+html[data-life-apex="8"] .life-marketing-v60 .brand{letter-spacing:.22em!important;color:#fff!important}
+html[data-life-apex="8"] .life-marketing-v60 .brand i{color:#ff852c!important;font-style:normal!important}
+html[data-life-apex="8"] .life-marketing-v60 .navlinks a{color:#7f8996!important}
+html[data-life-apex="8"] .life-marketing-v60 .navlinks a:hover{color:#fff!important}
+html[data-life-apex="8"] .life-marketing-v60 .cta{border-radius:12px!important;background:linear-gradient(135deg,#ff7a1a,#ff9c50)!important;color:#fff!important;border:1px solid rgba(255,160,90,.35)!important;box-shadow:0 12px 28px rgba(255,122,26,.16)!important}
+html[data-life-apex="8"] .life-marketing-v60 .cta.ghost{background:#0a1016!important;border-color:rgba(255,255,255,.09)!important;box-shadow:none!important}
+html[data-life-apex="8"] .life-marketing-v60 .hero60{min-height:760px!important;align-items:center!important;gap:60px!important;padding-top:120px!important;padding-bottom:100px!important}
+html[data-life-apex="8"] .life-marketing-v60 .eyebrow{color:#ff9a50!important;letter-spacing:.16em!important;font-weight:700!important}
+html[data-life-apex="8"] .life-marketing-v60 .hero60 h1{font-size:clamp(56px,7vw,92px)!important;letter-spacing:-.065em!important;line-height:.90!important;color:#fff!important}
+html[data-life-apex="8"] .life-marketing-v60 .hero60 h1 em{color:#ff9550!important;font-style:normal!important}
+html[data-life-apex="8"] .life-marketing-v60 .hero60 p{color:#98a2ae!important;font-size:15px!important;line-height:1.8!important;max-width:670px!important}
+html[data-life-apex="8"] .life-marketing-v60 .proofline span{background:#090e13!important;border:1px solid rgba(255,255,255,.07)!important;border-radius:999px!important;color:#7f8996!important}
+html[data-life-apex="8"] .life-marketing-v60 .system-orbit{border-radius:30px!important;background:radial-gradient(circle at 50% 50%,rgba(255,122,26,.12),transparent 28%),linear-gradient(155deg,#0e141b,#070a0e)!important;border:1px solid rgba(255,255,255,.08)!important;box-shadow:0 40px 100px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.035)!important}
+html[data-life-apex="8"] .life-marketing-v60 .core{border-color:rgba(255,130,45,.38)!important;background:#0a1016!important;box-shadow:0 0 80px rgba(255,122,26,.11)!important}
+html[data-life-apex="8"] .life-marketing-v60 .core b{color:#fff!important}
+html[data-life-apex="8"] .life-marketing-v60 .core b::first-letter{color:#ff7a1a!important}
+html[data-life-apex="8"] .life-marketing-v60 .orb{background:#0a1016!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:16px!important;box-shadow:0 14px 40px rgba(0,0,0,.28)!important}
+html[data-life-apex="8"] .life-marketing-v60 .orb small{color:#ff9450!important}
+html[data-life-apex="8"] .life-marketing-v60 .signal span{background:#080d12!important;border-color:rgba(255,255,255,.07)!important;color:#7e8995!important}
+html[data-life-apex="8"] .life-marketing-v60 .section60{border-top:1px solid rgba(255,255,255,.055)!important;padding:115px 0!important}
+html[data-life-apex="8"] .life-marketing-v60 .sectionhead60 small{color:#ff9650!important}
+html[data-life-apex="8"] .life-marketing-v60 .sectionhead60 h2{font-size:clamp(42px,5vw,68px)!important;line-height:.96!important;letter-spacing:-.055em!important;color:#fff!important}
+html[data-life-apex="8"] .life-marketing-v60 .sectionhead60 p{color:#8d98a4!important;line-height:1.75!important}
+html[data-life-apex="8"] .life-marketing-v60 .apps60{gap:12px!important}
+html[data-life-apex="8"] .life-marketing-v60 .app60{border-radius:18px!important;background:linear-gradient(150deg,rgba(15,22,29,.95),rgba(7,11,15,.96))!important;border:1px solid rgba(255,255,255,.07)!important;min-height:250px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important}
+html[data-life-apex="8"] .life-marketing-v60 .app60:before{opacity:.26!important}
+html[data-life-apex="8"] .life-marketing-v60 .app60 h3{color:#fff!important;font-size:28px!important;letter-spacing:-.04em!important}
+html[data-life-apex="8"] .life-marketing-v60 .app60 p{color:#87929e!important;line-height:1.65!important}
+html[data-life-apex="8"] .life-marketing-v60 .app60 span{color:#ff9954!important}
+html[data-life-apex="8"] .life-marketing-v60 .study60{gap:50px!important}
+html[data-life-apex="8"] .life-marketing-v60 .topiccloud span{background:#0a1016!important;border:1px solid rgba(255,255,255,.075)!important;border-radius:12px!important;color:#b0b7bf!important}
+html[data-life-apex="8"] .life-marketing-v60 .topiccloud .risk{border-color:rgba(255,138,63,.20)!important;color:#ffac73!important}
+html[data-life-apex="8"] .life-marketing-v60 .bigcount{border-radius:22px!important;background:linear-gradient(145deg,rgba(255,122,26,.08),#0a1016 42%)!important;border:1px solid rgba(255,139,63,.18)!important}
+html[data-life-apex="8"] .life-marketing-v60 .bigcount b{color:#ff934a!important}
+html[data-life-apex="8"] .life-marketing-v60 .free60 article{border-radius:22px!important;background:#0a1016!important;border:1px solid rgba(255,255,255,.08)!important}
+html[data-life-apex="8"] .life-marketing-v60 .free60 article.pro{background:linear-gradient(145deg,rgba(255,122,26,.08),#0a1016 34%)!important;border-color:rgba(255,132,52,.24)!important}
+html[data-life-apex="8"] .life-marketing-v60 .free60 h3{color:#fff!important;letter-spacing:-.045em!important}
+html[data-life-apex="8"] .life-marketing-v60 .free60 p,html[data-life-apex="8"] .life-marketing-v60 .free60 li{color:#8b96a2!important}
+html[data-life-apex="8"] .life-marketing-v60 .final60{background:radial-gradient(620px 320px at 50% 100%,rgba(255,122,26,.12),transparent 70%),#05080b!important;border-top:1px solid rgba(255,255,255,.06)!important}
+html[data-life-apex="8"] .life-marketing-v60 .final60 h2{font-size:clamp(48px,6vw,78px)!important;letter-spacing:-.06em!important;line-height:.94!important;color:#fff!important}
+html[data-life-apex="8"] .life-marketing-v60 .footer{background:#020304!important;border-top:1px solid rgba(255,255,255,.05)!important;color:#707b87!important}
+@media(max-width:800px){
+  html[data-life-apex="8"] .life-marketing-v60 .hero60{padding-top:100px!important;min-height:auto!important;gap:35px!important}
+  html[data-life-apex="8"] .life-marketing-v60 .hero60 h1{font-size:52px!important}
+  html[data-life-apex="8"] .life-marketing-v60 .system-orbit{min-height:520px!important}
+  html[data-life-apex="8"] .life-marketing-v60 .section60{padding:78px 0!important}
+  html[data-life-apex="8"] .life-marketing-v60 .sectionhead60 h2{font-size:42px!important}
+}

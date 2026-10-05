@@ -1,0 +1,243 @@
+{
+  "build": "8.4.0",
+  "passed": 47,
+  "total": 47,
+  "failed": 0,
+  "results": [
+    {
+      "name": "Sintaxe JS · assets/js/config-8.4.0.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Sintaxe JS · assets/js/life-app-8.4.0.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Sintaxe JS · assets/js/context-help-8.4.0.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Sintaxe JS · assets/js/supabase-auth-8.4.0.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Sintaxe JS · assets/js/runtime-8.4.0.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Sintaxe JS · service-worker.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "IDs únicos · index.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Referências locais · index.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "IDs únicos · landing.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Referências locais · landing.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "IDs únicos · privacy.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Referências locais · privacy.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "IDs únicos · terms.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Referências locais · terms.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "IDs únicos · support.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Referências locais · support.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "IDs únicos · offline.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Referências locais · offline.html",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Service Worker · arquivos do shell existem",
+      "ok": true,
+      "detail": "25 referências válidas"
+    },
+    {
+      "name": "Service Worker · cache 8.4.0",
+      "ok": true,
+      "detail": "cache isolado"
+    },
+    {
+      "name": "Manifest 8.4.0 válido",
+      "ok": true,
+      "detail": "LIFE OS 8.4.0"
+    },
+    {
+      "name": "CSS balanceado · assets/css/life-bundle-8.4.0.css",
+      "ok": true,
+      "detail": "{=7056 }=7056"
+    },
+    {
+      "name": "CSS balanceado · assets/css/signature-8.4.0.css",
+      "ok": true,
+      "detail": "{=214 }=214"
+    },
+    {
+      "name": "CSS balanceado · assets/css/apex-8.4.0.css",
+      "ok": true,
+      "detail": "{=494 }=494"
+    },
+    {
+      "name": "CSS balanceado · assets/css/apex-marketing-8.4.0.css",
+      "ok": true,
+      "detail": "{=52 }=52"
+    },
+    {
+      "name": "DNA visual cobre todas as áreas",
+      "ok": true,
+      "detail": "17 áreas"
+    },
+    {
+      "name": "Identidade de área alimenta foco e cards",
+      "ok": true,
+      "detail": "tokens por área ativos"
+    },
+    {
+      "name": "FREE tem contrato central de limites",
+      "ok": true,
+      "detail": "fonte única de verdade"
+    },
+    {
+      "name": "Limite FREE · tasksVisible",
+      "ok": true,
+      "detail": "3"
+    },
+    {
+      "name": "Limite FREE · notesVisible",
+      "ok": true,
+      "detail": "3"
+    },
+    {
+      "name": "Limite FREE · studyStarters",
+      "ok": true,
+      "detail": "3"
+    },
+    {
+      "name": "Limite FREE · fitnessSessions",
+      "ok": true,
+      "detail": "2"
+    },
+    {
+      "name": "Limite FREE · exercisesPerMuscle",
+      "ok": true,
+      "detail": "2"
+    },
+    {
+      "name": "Limite FREE · recipesVisible",
+      "ok": true,
+      "detail": "2"
+    },
+    {
+      "name": "Limite FREE · favoriteAreas",
+      "ok": true,
+      "detail": "4"
+    },
+    {
+      "name": "Favoritos usam limite central",
+      "ok": true,
+      "detail": "até 4"
+    },
+    {
+      "name": "Fitness FREE usa limite central",
+      "ok": true,
+      "detail": "2 sessões"
+    },
+    {
+      "name": "Estudos FREE usa limite central",
+      "ok": true,
+      "detail": "3 starters"
+    },
+    {
+      "name": "Notas FREE usa limite central",
+      "ok": true,
+      "detail": "3 recentes"
+    },
+    {
+      "name": "Tarefas FREE usa limite central",
+      "ok": true,
+      "detail": "3 pendentes"
+    },
+    {
+      "name": "PRO metálico permanece ativo",
+      "ok": true,
+      "detail": "morph + metálico"
+    },
+    {
+      "name": "Troca FREE→PRO dispara morph",
+      "ok": true,
+      "detail": "transição visual"
+    },
+    {
+      "name": "Retorno de ferramentas preserva posição",
+      "ok": true,
+      "detail": "continuidade de navegação"
+    },
+    {
+      "name": "Mudança de área anunciada para acessibilidade",
+      "ok": true,
+      "detail": "aria-live"
+    },
+    {
+      "name": "Motion reduzido respeitado",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Sem copies antigas conflitantes",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Arquivos live sem assets obsoletos",
+      "ok": true,
+      "detail": "ok"
+    }
+  ]
+}
