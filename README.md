@@ -1,35 +1,35 @@
-# LIFE OS 7.2.3 — Connected Experience · PRO Preview QA
+# LIFE OS 7.2.4 — PRO Flow Rebuild
 
-Esta versão parte da 7.2.2 e corrige os caminhos PRO para que a experiência FREE nunca pareça quebrada ou genérica.
+Esta versão reconstrói o fluxo FREE → prévia PRO → planos → checkout.
 
-## Regra de produto
-1. Usuário FREE toca em um recurso PRO.
-2. O LIFE abre uma prévia **daquele recurso específico**.
-3. A prévia mostra como funciona, passos, exemplo de tela e benefício.
-4. O usuário pode continuar no FREE.
-5. Só **Ver planos e assinar** abre o comparativo/checkout.
+## O que foi corrigido
 
-## Correções desta versão
-- Busca inteligente de receitas agora mostra o Recipe Finder, não a busca de treino.
-- Mapa de Conhecimento ganhou prévia própria.
-- LIFE AI separa Planejador, Memória, Ações, Guia e organização do Hoje.
-- Upgrade sugerido pela LIFE AI preserva a origem do recurso.
-- Treinos personalizados salvos/recentes não caem mais em preview genérico.
-- Plano alimentar personalizado sempre informa seu contexto ao abrir o PRO.
-- Exercícios avançados mostram a Exercise Library, não Programas de Treino.
-- Favoritos PRO, Biblioteca de Conhecimento e Guias da Biblioteca ganharam previews próprios.
-- Teasers FREE de Tarefas, Notas, Estudos, Finanças e Planner são contextuais.
-- Nenhuma chamada `openLifePro()` ativa ficou sem contexto.
+- A prévia PRO e o comparativo de planos são renderizados via portal diretamente no `body`, evitando conflitos com `overflow`, `isolation` e `z-index` do app principal.
+- `window.lifeOpenProPreview`, `window.lifeOpenProPlans` e `window.lifeStartProCheckout` formam uma bridge global de segurança.
+- O runtime reconhece botões PRO e garante resposta ao clique.
+- Se o modal React não aparecer, um modal de fallback independente é criado no DOM.
+- O botão de planos possui fallback próprio.
+- O runtime também reconhece o contexto da aba para mostrar uma prévia coerente com Fitness, Estudos, Receitas, Finanças, LIFE AI, Evolução e Biblioteca.
+- Todos os assets críticos foram versionados como 7.2.4 para reduzir risco de cache de lógica antiga.
 
-## Arquivos ativos
-- assets/css/life-bundle-7.2.3.css
-- assets/js/life-app-7.2.3.js
-- assets/js/context-help-v723.js
-- assets/js/config-7.2.3.js
-- assets/js/supabase-auth-7.2.3.js
-- assets/js/runtime-7.2.3.js
+## Arquivos principais
 
-## Validação
-Veja `docs/QA_7_2_3.md` e `docs/STATIC_AUDIT_7_2_3.json`.
+- `index.html`
+- `assets/css/life-bundle-7.2.4.css`
+- `assets/js/life-app-7.2.4.js`
+- `assets/js/context-help-v724.js`
+- `assets/js/config-7.2.4.js`
+- `assets/js/supabase-auth-7.2.4.js`
+- `assets/js/runtime-7.2.4.js`
+- `service-worker.js`
 
-Supabase real, Mercado Pago, LIFE AI remoto e push precisam de validação após o deploy.
+## Teste recomendado após o deploy
+
+Com conta FREE:
+1. toque em um recurso PRO;
+2. confirme que aparece uma prévia contextual;
+3. toque em `VER PLANOS E ASSINAR`;
+4. confirme que aparece o comparativo FREE x PRO;
+5. toque em `DESBLOQUEAR LIFE OS PRO` e valide a resposta do backend de checkout.
+
+A aplicação não inclui segredos do Mercado Pago no frontend. O checkout real depende da função de backend publicada no Supabase.

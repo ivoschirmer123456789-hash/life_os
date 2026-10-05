@@ -1,0 +1,19 @@
+{
+  "version": "7.2.4",
+  "local_refs_checked": 9,
+  "missing_local_refs": [],
+  "duplicate_html_ids": [],
+  "service_worker_shell_entries": 19,
+  "service_worker_missing": [],
+  "css_parse_errors": {},
+  "pro_button_lines_checked": 102,
+  "pro_button_lines_without_onclick": [],
+  "openLifePro_empty_calls": 0,
+  "react_portal_present": true,
+  "global_preview_bridge": true,
+  "global_plans_bridge": true,
+  "global_checkout_bridge": true,
+  "runtime_pro_click_fallback": true,
+  "runtime_plans_fallback": true,
+  "stale_7_2_3_refs": []
+}
