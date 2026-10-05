@@ -1,12 +1,12 @@
-const LIFE_CACHE='life-os-7.0.0';
+const LIFE_CACHE='life-os-7.2.1';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
   './manifest.webmanifest',
-  './assets/css/life-bundle-7.0.0.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
-  './assets/js/config-7.0.0.js','./assets/js/life-app-7.0.0.js','./assets/js/context-help-v70.js','./assets/js/supabase-auth-7.0.0.js','./assets/js/runtime-7.0.0.js',
+  './assets/css/life-bundle-7.2.1.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
+  './assets/js/config-7.2.1.js','./assets/js/life-app-7.2.1.js','./assets/js/context-help-v721.js','./assets/js/supabase-auth-7.2.1.js','./assets/js/runtime-7.2.1.js',
   './assets/icons/icon.svg','./assets/icons/icon-192.png','./assets/icons/icon-512.png'
 ];
-const EXTERNAL_CACHE_HOSTS=new Set(['unpkg.com','cdn.jsdelivr.net','fonts.googleapis.com','fonts.gstatic.com']);
+const EXTERNAL_CACHE_HOSTS=new Set(['unpkg.com','cdn.jsdelivr.net','cdnjs.cloudflare.com','fonts.googleapis.com','fonts.gstatic.com']);
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(LIFE_CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));

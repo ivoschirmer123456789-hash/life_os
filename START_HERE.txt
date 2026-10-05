@@ -1,10 +1,7 @@
-LIFE OS 7.0.0 — EXCEPTIONAL
+LIFE OS 7.2.1 — CONNECTED EXPERIENCE · REVISED
 
-1. Extraia o ZIP mantendo toda a estrutura de pastas.
-2. Publique a pasta inteira no Vercel/GitHub da mesma forma que a versão anterior.
-3. Depois do deploy, confirme que a tela de login mostra 7.0.0.
-4. Teste FREE, PRO e OWNER em celular e desktop.
-5. Para pagamentos/login/push, valide também os serviços externos no ambiente publicado.
-
-BASE PRINCIPAL: index.html
-CACHE PWA: life-os-7.0.0
+1. Publique o CONTEÚDO desta pasta no repositório/deploy.
+2. O index.html deve ficar na raiz do projeto publicado.
+3. Confirme 7.2.1 na tela de login.
+4. No PRO, abra Hoje e procure o bloco LIFE CONNECT.
+5. Use Estudos/Fitness/Finanças/Receitas e volte ao Hoje para ver o contexto cruzado.

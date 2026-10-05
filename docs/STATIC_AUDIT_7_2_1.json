@@ -1,0 +1,69 @@
+{
+  "build": "7.2.1",
+  "name": "Connected Experience · Revised",
+  "duplicate_ids": {},
+  "missing_local_references": [],
+  "css_parse_errors": {
+    "assets/css/marketing-v60.css": 0,
+    "assets/css/marketing.css": 0,
+    "assets/css/life-bundle-7.2.1.css": 0
+  },
+  "service_worker_shell_count": 18,
+  "service_worker_missing": [],
+  "literal_route_targets": [
+    "Archive",
+    "Biblioteca",
+    "Configurações",
+    "Estudos",
+    "Evolução",
+    "Favoritos",
+    "Finanças",
+    "Fitness",
+    "Guia de Estudos",
+    "Hoje",
+    "IA",
+    "Life",
+    "Meu LIFE",
+    "Notas",
+    "Perfil",
+    "Receitas",
+    "Tarefas",
+    "Tutorial"
+  ],
+  "invalid_literal_routes": [],
+  "react_buttons_scanned": 530,
+  "buttons_without_action_heuristic": [],
+  "core_files": [
+    {
+      "file": "index.html",
+      "bytes": 14849,
+      "sha256": "0e435b5f8037e5292733ada81fd66daf47ed95e30b428e1c137d09d3f52c6a7a"
+    },
+    {
+      "file": "service-worker.js",
+      "bytes": 4390,
+      "sha256": "ac975ff8b70825852e0df172fa328a705f5817764b03851a5bd23aac020160e8"
+    },
+    {
+      "file": "manifest.webmanifest",
+      "bytes": 924,
+      "sha256": "974d877ed9ba084771e07124f339b0c54fc31ad018145f7609c786c2a98bf451"
+    },
+    {
+      "file": "assets/css/life-bundle-7.2.1.css",
+      "bytes": 812982,
+      "sha256": "8c564cc23fed02578377b414838da79966a22b178ad4b964a8ed7846c8624ece"
+    },
+    {
+      "file": "assets/js/life-app-7.2.1.js",
+      "bytes": 1559563,
+      "sha256": "87e358cb4b60a5afab09c39fb3e0d30a6f503d6f57555c7c758d9aaa149aaa8c"
+    },
+    {
+      "file": "assets/js/runtime-7.2.1.js",
+      "bytes": 14178,
+      "sha256": "223cc0bb0698fb50f3eed327dcaaad7eef29ccb761a4d664dcc6dfcb9833cd2b"
+    }
+  ],
+  "project_bytes": 2501900
+}
