@@ -1,0 +1,20 @@
+{
+  "version": "6.9.0",
+  "status": "pass",
+  "checks": {
+    "javascript_syntax": "pass",
+    "css_parse": "pass",
+    "local_references": "pass",
+    "duplicate_static_ids": 0,
+    "service_worker_shell_missing": 0,
+    "stale_active_cache_version": 0,
+    "simulated_render_failures": 0,
+    "simulated_click_exceptions": 0
+  },
+  "external_validation_required": [
+    "Supabase authentication/RLS",
+    "Mercado Pago subscription edge function",
+    "LIFE AI edge function",
+    "Web Push backend and device permission"
+  ]
+}

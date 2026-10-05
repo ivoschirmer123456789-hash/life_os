@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- LIFE OS 6.8 Product Architecture -->
+<!-- LIFE OS 7.0 Exceptional -->
 
 <html lang="pt-BR" class="dark">
 <head>
@@ -14,18 +14,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="application-name" content="LIFE OS" />
-  <meta name="life-build" content="6.8.0" />
+  <meta name="life-build" content="7.0.0" />
   <meta name="apple-mobile-web-app-title" content="LIFE OS" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-TileColor" content="#07080B" />
   
   <script>
-  // LIFE 6.8.0: product architecture, strict FREE/PRO separation and themed apps.
+  // LIFE 7.0.0: exceptional product polish, stable cache lifecycle and runtime hardening.
   (function(){
     try {
-      if ('caches' in window) caches.keys().then(function(keys){ return Promise.all(keys.filter(function(k){ return /^life-os-/.test(k); }).map(function(k){ return caches.delete(k); })); }).catch(function(){});
-      if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(function(regs){ regs.forEach(function(reg){ reg.update().catch(function(){}); }); }).catch(function(){});
+      // Do not delete the current cache on every load. The service worker owns cache cleanup.
+      if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistration('./').then(function(reg){ if(reg) reg.update().catch(function(){}); }).catch(function(){});
     } catch(e) {}
   })();
   </script>
@@ -38,36 +38,21 @@
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js'"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js'"></script>
 
-  <link rel="stylesheet" href="assets/css/utilities.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/life.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/product.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/final.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/fitness-v35.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/modules-v36.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/system-v40.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/system-v50.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/system-v60.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/signature-polish-v61.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/layout-fixes-v62.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/stability-fixes-v63.css?v=6.3.3">
-  <link rel="stylesheet" href="assets/css/app-suite-v64.css?v=6.8.0">
-  <link rel="stylesheet" href="assets/css/app-suite-v65.css?v=6.8.0">
-  <link rel="stylesheet" href="assets/css/study-guide-v66.css?v=6.8.0">
-  <link rel="stylesheet" href="assets/css/guidance-v67.css?v=6.8.0">
-  <link rel="stylesheet" href="assets/css/product-tiers-v68.css?v=6.8.0">
+  <link rel="stylesheet" href="assets/css/life-bundle-7.0.0.css?v=7.0.0">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
 <body class="tech-bg min-h-screen flex flex-col text-txt-primary">
+<a class="life-skip-link" href="#life-v18-root">Pular para o LIFE</a>
 <div id="life-load-fallback" role="status" aria-live="polite"><div><b>LIFE<span>.</span></b><h1>Carregando seu sistema…</h1><p>Se esta tela permanecer por muito tempo, verifique sua conexão e recarregue a página.</p><button type="button" onclick="location.reload()">RECARREGAR</button></div></div>
 <noscript><div style="padding:24px;background:#07080b;color:white;font-family:system-ui">O LIFE precisa de JavaScript ativado para funcionar.</div></noscript>
 <div id="life-v18-root"></div>
 
 <!-- Marketing/public pages moved to landing.html, privacy.html, terms.html and support.html -->
-  <script src="assets/js/config-6.8.0.js"></script>
-  <script src="assets/js/life-app-6.8.0.js"></script>
-  <script src="assets/js/context-help-v68.js"></script>
+  <script src="assets/js/config-7.0.0.js"></script>
+  <script src="assets/js/life-app-7.0.0.js"></script>
+  <script src="assets/js/context-help-v70.js"></script>
 
   <!-- ====================================================================
        LIFE OS — BANCO DE DADOS ATUALIZADO (ETAPA 5)
@@ -77,7 +62,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2'"></script>
 
-<div id="life-auth"><div class="la-shell"><aside class="la-showcase"><div class="la-showcase-brand">LIFE <em>OS</em><span>6.8.0</span></div><div class="la-showcase-copy"><small>UM SISTEMA PARA O SEU DIA</small><h2>Organize menos.<br>Entenda melhor.</h2><p>Tarefas, estudos, Fitness, finanças e LIFE AI no mesmo contexto.</p></div><div class="la-showcase-grid"><span><b>HOJE</b>Prioridades reais</span><span><b>ORGANIZAR</b>Projetos + tarefas</span><span><b>LIFE AI</b>Contexto do sistema</span></div><button id="la-theme-toggle" class="la-theme-toggle" type="button">ALTERNAR TEMA</button></aside><div class="la-box"><div class="la-logo">LIFE <em>OS</em></div><div id="la-main"><small class="la-eyebrow">CONTA LIFE</small><h1>Entrar.</h1><p>Continue de onde parou ou crie sua conta LIFE.</p><input id="la-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><input id="la-password" class="la-input" type="password" autocomplete="current-password" placeholder="Senha"><button id="la-login" class="la-btn" type="button">ENTRAR →</button><button id="la-signup" class="la-btn la-alt" type="button">CRIAR CONTA</button><button id="la-forgot" class="la-link" type="button">ESQUECI MINHA SENHA</button><a class="la-link life-public-link" href="landing.html">CONHECER O LIFE OS</a></div><div id="la-signup-view" style="display:none"><small class="la-eyebrow">PRIMEIRO ACESSO</small><h1>Criar conta.</h1><p>Cadastre seu e-mail e crie uma senha para salvar e sincronizar seu LIFE.</p><input id="la-signup-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><input id="la-signup-password" class="la-input" type="password" autocomplete="new-password" placeholder="Senha"><input id="la-signup-password2" class="la-input" type="password" autocomplete="new-password" placeholder="Confirmar senha"><button id="la-create-account" class="la-btn" type="button">CRIAR CONTA →</button><button id="la-signup-back" class="la-link la-back" type="button">JÁ TENHO CONTA</button></div><div id="la-recovery" style="display:none"><small class="la-eyebrow">RECUPERAÇÃO</small><h1>Recuperar.</h1><p>Informe seu e-mail. Enviaremos a recuperação para você criar uma nova senha.</p><input id="la-recovery-email" class="la-input" type="email" autocomplete="email" placeholder="E-mail"><button id="la-send-recovery" class="la-btn" type="button">ENVIAR RECUPERAÇÃO</button><button id="la-back" class="la-link la-back" type="button">VOLTAR PARA ENTRAR</button></div><div id="la-new-password" style="display:none"><small class="la-eyebrow">SEGURANÇA</small><h1>Nova senha.</h1><p>Crie uma nova senha para sua conta LIFE.</p><input id="la-new-pass" class="la-input" type="password" autocomplete="new-password" placeholder="Nova senha"><input id="la-new-pass2" class="la-input" type="password" autocomplete="new-password" placeholder="Confirmar nova senha"><button id="la-save-pass" class="la-btn" type="button">SALVAR NOVA SENHA</button></div><div id="la-msg" class="la-msg"></div><div class="la-trust">Seus dados pertencem à sua conta. Senhas nunca são exibidas dentro do LIFE.</div></div></div></div><div id="life-account-chip" class="life-account-chip"></div>
+<div id="life-auth"><div class="la-shell"><aside class="la-showcase"><div class="la-showcase-brand">LIFE <em>OS</em><span>7.0.0</span></div><div class="la-showcase-copy"><small>UM SISTEMA PARA O SEU DIA</small><h2>Organize menos.<br>Entenda melhor.</h2><p>Tarefas, estudos, Fitness, finanças e LIFE AI no mesmo contexto.</p></div><div class="la-showcase-grid"><span><b>HOJE</b>Prioridades reais</span><span><b>ORGANIZAR</b>Projetos + tarefas</span><span><b>LIFE AI</b>Contexto do sistema</span></div><button id="la-theme-toggle" class="la-theme-toggle" type="button">ALTERNAR TEMA</button></aside><div class="la-box"><div class="la-logo">LIFE <em>OS</em></div><div id="la-main"><small class="la-eyebrow">CONTA LIFE</small><h1>Entrar.</h1><p>Continue de onde parou ou crie sua conta LIFE.</p><input id="la-email" class="la-input" type="email" autocomplete="email" inputmode="email" aria-label="E-mail" placeholder="E-mail"><div class="la-pass-wrap"><input id="la-password" class="la-input" type="password" autocomplete="current-password" aria-label="Senha" placeholder="Senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-password" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><button id="la-login" class="la-btn" type="button">ENTRAR →</button><button id="la-signup" class="la-btn la-alt" type="button">CRIAR CONTA</button><button id="la-forgot" class="la-link" type="button">ESQUECI MINHA SENHA</button><a class="la-link life-public-link" href="landing.html">CONHECER O LIFE OS</a></div><div id="la-signup-view" style="display:none"><small class="la-eyebrow">PRIMEIRO ACESSO</small><h1>Criar conta.</h1><p>Cadastre seu e-mail e crie uma senha para salvar e sincronizar seu LIFE.</p><input id="la-signup-email" class="la-input" type="email" autocomplete="email" inputmode="email" aria-label="E-mail para criar a conta" placeholder="E-mail"><div class="la-pass-wrap"><input id="la-signup-password" class="la-input" type="password" autocomplete="new-password" aria-label="Criar senha" placeholder="Senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-signup-password" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><div class="la-pass-wrap"><input id="la-signup-password2" class="la-input" type="password" autocomplete="new-password" aria-label="Confirmar senha" placeholder="Confirmar senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-signup-password2" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><button id="la-create-account" class="la-btn" type="button">CRIAR CONTA →</button><button id="la-signup-back" class="la-link la-back" type="button">JÁ TENHO CONTA</button></div><div id="la-recovery" style="display:none"><small class="la-eyebrow">RECUPERAÇÃO</small><h1>Recuperar.</h1><p>Informe seu e-mail. Enviaremos a recuperação para você criar uma nova senha.</p><input id="la-recovery-email" class="la-input" type="email" autocomplete="email" inputmode="email" aria-label="E-mail para recuperação" placeholder="E-mail"><button id="la-send-recovery" class="la-btn" type="button">ENVIAR RECUPERAÇÃO</button><button id="la-back" class="la-link la-back" type="button">VOLTAR PARA ENTRAR</button></div><div id="la-new-password" style="display:none"><small class="la-eyebrow">SEGURANÇA</small><h1>Nova senha.</h1><p>Crie uma nova senha para sua conta LIFE.</p><div class="la-pass-wrap"><input id="la-new-pass" class="la-input" type="password" autocomplete="new-password" aria-label="Nova senha" placeholder="Nova senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-new-pass" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><div class="la-pass-wrap"><input id="la-new-pass2" class="la-input" type="password" autocomplete="new-password" aria-label="Confirmar nova senha" placeholder="Confirmar nova senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-new-pass2" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><button id="la-save-pass" class="la-btn" type="button">SALVAR NOVA SENHA</button></div><div id="la-msg" class="la-msg" role="status" aria-live="polite"></div><div class="la-trust">Seus dados pertencem à sua conta. Senhas nunca são exibidas dentro do LIFE.</div></div></div></div><div id="life-account-chip" class="life-account-chip"></div>
 <button id="life-owner-open" type="button" aria-label="Abrir LIFE Control">OWNER</button>
 <div id="life-owner-panel" aria-hidden="true">
  <div class="lov-wrap">
@@ -120,7 +105,7 @@
   </section>
  </div>
 </div>
-<script src="assets/js/supabase-auth-6.8.0.js"></script>
+<script src="assets/js/supabase-auth-7.0.0.js"></script>
 
 
 
@@ -131,28 +116,6 @@
 
 
 
-<script src="assets/js/quality-runtime-6.3.3.js"></script>
-
-
-
-<script src="assets/js/product-runtime-6.3.3.js"></script>
-
-
-<script src="assets/js/design-runtime-6.3.3.js"></script>
-
-
-
-
-
-<!-- Product Edition runtime is loaded from assets/js/pwa-runtime.js -->
-
-<!-- life-supabase-quality-sql moved to database/security.sql -->
-<!-- life-supabase-professional-sql moved to database/product-analytics.sql -->
-
-<script src="assets/js/experience-v40-6.3.3.js"></script>
-<script src="assets/js/experience-v50-6.3.3.js"></script>
-<script src="assets/js/experience-v60-6.3.3.js"></script>
-<script src="assets/js/experience-v61-6.3.3.js"></script>
-<script src="assets/js/pwa-runtime-6.3.3.js"></script>
+<script src="assets/js/runtime-7.0.0.js"></script>
 </body>
 </html>

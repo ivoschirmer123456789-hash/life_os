@@ -1,0 +1,19 @@
+{
+  "version": "7.0.0",
+  "name": "Exceptional",
+  "html_issues": [],
+  "css_parse_errors": [],
+  "service_worker_missing": [],
+  "auth_static_id_missing": [],
+  "old_active_refs": [],
+  "js_files_checked": 6,
+  "css_files_checked": 3,
+  "active_build_refs": [
+    "assets/css/life-bundle-7.0.0.css",
+    "assets/js/config-7.0.0.js",
+    "assets/js/context-help-v70.js",
+    "assets/js/life-app-7.0.0.js",
+    "assets/js/runtime-7.0.0.js",
+    "assets/js/supabase-auth-7.0.0.js"
+  ]
+}
