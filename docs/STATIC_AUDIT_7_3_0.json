@@ -1,0 +1,19 @@
+{
+  "build": "7.3.0",
+  "edition": "Signature Edition",
+  "js_files": [
+    "assets/js/config-7.3.0.js",
+    "assets/js/context-help-v730.js",
+    "assets/js/life-app-7.3.0.js",
+    "assets/js/runtime-7.3.0.js",
+    "assets/js/supabase-auth-7.3.0.js"
+  ],
+  "css_files": [
+    "assets/css/life-bundle-7.3.0.css",
+    "assets/css/marketing-v60.css",
+    "assets/css/marketing.css",
+    "assets/css/signature-7.3.0.css"
+  ],
+  "signature_css_bytes": 32005,
+  "project_bytes": 2584014
+}

@@ -1,14 +1,9 @@
-LIFE OS 7.2.4 — PRO FLOW REBUILD
+LIFE OS 8.1.0 — QUALITY ASSURED EDITION
 
-1. Publique todo o conteúdo desta pasta.
-2. Não misture estes arquivos com builds anteriores.
-3. Confirme 7.2.4 na tela de login.
-4. Em uma conta FREE, teste qualquer botão PRO: ele deve abrir uma prévia contextual.
-5. Na prévia, "VER PLANOS E ASSINAR" deve abrir o comparativo FREE x PRO.
+1. Publique esta pasta inteira mantendo a estrutura.
+2. `index.html` é o aplicativo.
+3. `landing.html` é a página pública.
+4. Não misture assets de builds anteriores no deploy.
+5. Consulte `QA_REPORT_8.1.md` e `QA_RESULTS.json` para a auditoria.
 
-Mudança principal desta versão:
-- prévias PRO renderizadas fora do container principal do app;
-- bridge global para abrir prévia/planos;
-- fallback de clique independente do React;
-- fallback visual de emergência se o modal principal não aparecer;
-- assets versionados para evitar cache antigo.
+Observação: autenticação, sincronização, LIFE AI remoto e checkout dependem do backend Supabase/serviços publicados.

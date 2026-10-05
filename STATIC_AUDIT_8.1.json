@@ -1,0 +1,16 @@
+{
+  "html_pages": 6,
+  "missing_local_refs": [],
+  "duplicate_ids": {},
+  "missing_hash_targets": {},
+  "css_parse_errors": {
+    "apex-marketing-8.1.0.css": [],
+    "marketing.css": [],
+    "life-bundle-8.1.0.css": [],
+    "marketing-v60.css": [],
+    "signature-8.1.0.css": [],
+    "apex-8.1.0.css": []
+  },
+  "manifest_valid": true,
+  "old_primary_asset_refs": []
+}

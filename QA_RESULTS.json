@@ -1,0 +1,960 @@
+{
+  "summary": {
+    "build": "8.1.0 Quality Assured Edition",
+    "status": "PASS",
+    "free_pro_view_combinations_mobile": 36,
+    "button_handlers_invoked": 2128,
+    "field_handlers_invoked": 95,
+    "mobile_error_views": 0,
+    "desktop_views": 36,
+    "desktop_handlerless_buttons": 0,
+    "targeted_journeys_passed": "16/16",
+    "plan_logic_cases_passed": "7/7",
+    "stale_free_paid_gate_cases_passed": "10/10",
+    "html_pages_checked": 6,
+    "missing_local_refs": 0,
+    "duplicate_ids": 0,
+    "css_parse_errors": 0,
+    "manifest_valid": true,
+    "notes": [
+      "Backend Supabase, LIFE AI remoto e Mercado Pago dependem dos serviços publicados e de uma conta/sessão reais; os caminhos de erro e fallback foram auditados no código, mas uma cobrança real não foi executada."
+    ]
+  },
+  "mobile_fuzz": {
+    "summary": {
+      "views": 36,
+      "button_handlers_invoked": 2128,
+      "field_handlers_invoked": 95,
+      "error_views": 0,
+      "bad_text_views": 0,
+      "unlabeled_button_views": 0
+    },
+    "rows": [
+      {
+        "plan": "FREE",
+        "view": "Hoje",
+        "adv": false,
+        "clicked": 32,
+        "changed": 1,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4402
+      },
+      {
+        "plan": "FREE",
+        "view": "Tarefas",
+        "adv": false,
+        "clicked": 25,
+        "changed": 1,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4063
+      },
+      {
+        "plan": "FREE",
+        "view": "Favoritos",
+        "adv": false,
+        "clicked": 25,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4581
+      },
+      {
+        "plan": "FREE",
+        "view": "Biblioteca",
+        "adv": false,
+        "clicked": 31,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 8629
+      },
+      {
+        "plan": "FREE",
+        "view": "Notas",
+        "adv": false,
+        "clicked": 25,
+        "changed": 1,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4775
+      },
+      {
+        "plan": "FREE",
+        "view": "Estudos",
+        "adv": false,
+        "clicked": 32,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4502
+      },
+      {
+        "plan": "FREE",
+        "view": "Guia de Estudos",
+        "adv": false,
+        "clicked": 33,
+        "changed": 1,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 5160
+      },
+      {
+        "plan": "FREE",
+        "view": "Fitness",
+        "adv": false,
+        "clicked": 28,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4621
+      },
+      {
+        "plan": "FREE",
+        "view": "Receitas",
+        "adv": false,
+        "clicked": 29,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 8384
+      },
+      {
+        "plan": "FREE",
+        "view": "IA",
+        "adv": false,
+        "clicked": 24,
+        "changed": 1,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 3907
+      },
+      {
+        "plan": "FREE",
+        "view": "Life",
+        "adv": false,
+        "clicked": 25,
+        "changed": 1,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4708
+      },
+      {
+        "plan": "FREE",
+        "view": "Finanças",
+        "adv": false,
+        "clicked": 27,
+        "changed": 2,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 3995
+      },
+      {
+        "plan": "FREE",
+        "view": "Meu LIFE",
+        "adv": false,
+        "clicked": 25,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4508
+      },
+      {
+        "plan": "FREE",
+        "view": "Evolução",
+        "adv": false,
+        "clicked": 25,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4636
+      },
+      {
+        "plan": "FREE",
+        "view": "Archive",
+        "adv": false,
+        "clicked": 25,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4613
+      },
+      {
+        "plan": "FREE",
+        "view": "Perfil",
+        "adv": false,
+        "clicked": 32,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 5773
+      },
+      {
+        "plan": "FREE",
+        "view": "Tutorial",
+        "adv": false,
+        "clicked": 62,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 6346
+      },
+      {
+        "plan": "FREE",
+        "view": "Configurações",
+        "adv": false,
+        "clicked": 53,
+        "changed": 4,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 6958
+      },
+      {
+        "plan": "PRO",
+        "view": "Hoje",
+        "adv": false,
+        "clicked": 32,
+        "changed": 1,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 3746
+      },
+      {
+        "plan": "PRO",
+        "view": "Tarefas",
+        "adv": true,
+        "clicked": 104,
+        "changed": 14,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 8712
+      },
+      {
+        "plan": "PRO",
+        "view": "Favoritos",
+        "adv": false,
+        "clicked": 36,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4646
+      },
+      {
+        "plan": "PRO",
+        "view": "Biblioteca",
+        "adv": false,
+        "clicked": 67,
+        "changed": 1,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 17999
+      },
+      {
+        "plan": "PRO",
+        "view": "Notas",
+        "adv": true,
+        "clicked": 75,
+        "changed": 6,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 6630
+      },
+      {
+        "plan": "PRO",
+        "view": "Estudos",
+        "adv": true,
+        "clicked": 102,
+        "changed": 5,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 7933
+      },
+      {
+        "plan": "PRO",
+        "view": "Guia de Estudos",
+        "adv": false,
+        "clicked": 36,
+        "changed": 1,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4308
+      },
+      {
+        "plan": "PRO",
+        "view": "Fitness",
+        "adv": true,
+        "clicked": 131,
+        "changed": 4,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 7780
+      },
+      {
+        "plan": "PRO",
+        "view": "Receitas",
+        "adv": true,
+        "clicked": 382,
+        "changed": 6,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 9536
+      },
+      {
+        "plan": "PRO",
+        "view": "IA",
+        "adv": true,
+        "clicked": 52,
+        "changed": 3,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 5670
+      },
+      {
+        "plan": "PRO",
+        "view": "Life",
+        "adv": true,
+        "clicked": 95,
+        "changed": 9,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 8898
+      },
+      {
+        "plan": "PRO",
+        "view": "Finanças",
+        "adv": true,
+        "clicked": 95,
+        "changed": 17,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 5171
+      },
+      {
+        "plan": "PRO",
+        "view": "Meu LIFE",
+        "adv": true,
+        "clicked": 70,
+        "changed": 4,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 7002
+      },
+      {
+        "plan": "PRO",
+        "view": "Evolução",
+        "adv": true,
+        "clicked": 75,
+        "changed": 4,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 7593
+      },
+      {
+        "plan": "PRO",
+        "view": "Archive",
+        "adv": true,
+        "clicked": 72,
+        "changed": 4,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 7063
+      },
+      {
+        "plan": "PRO",
+        "view": "Perfil",
+        "adv": false,
+        "clicked": 31,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 4450
+      },
+      {
+        "plan": "PRO",
+        "view": "Tutorial",
+        "adv": false,
+        "clicked": 62,
+        "changed": 0,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 6074
+      },
+      {
+        "plan": "PRO",
+        "view": "Configurações",
+        "adv": false,
+        "clicked": 53,
+        "changed": 4,
+        "errors": [],
+        "badText": [],
+        "unlabeled": 0,
+        "textLen": 6682
+      }
+    ]
+  },
+  "targeted": {
+    "journeys": [
+      {
+        "plan": "FREE",
+        "view": "Tarefas",
+        "checks": [
+          [
+            "task-created",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Notas",
+        "checks": [
+          [
+            "note-created",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Life",
+        "checks": [
+          [
+            "goal-created",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Finanças",
+        "checks": [
+          [
+            "finance-created",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "FREE",
+        "view": "IA",
+        "checks": [
+          [
+            "ai-free-replied",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Tarefas",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Notas",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Estudos",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Fitness",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Receitas",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "IA",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Life",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Finanças",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Meu LIFE",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Evolução",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Archive",
+        "checks": [
+          [
+            "advanced-render-nontrivial",
+            true
+          ]
+        ],
+        "pass": true,
+        "invalid": []
+      }
+    ],
+    "journey_passed": 16,
+    "journey_total": 16,
+    "plan_logic": [
+      {
+        "name": "free",
+        "expected": "FREE",
+        "got": "FREE",
+        "pass": true
+      },
+      {
+        "name": "pro-no-expiry",
+        "expected": "PRO",
+        "got": "PRO",
+        "pass": true
+      },
+      {
+        "name": "pro-future",
+        "expected": "PRO",
+        "got": "PRO",
+        "pass": true
+      },
+      {
+        "name": "pro-past",
+        "expected": "FREE",
+        "got": "FREE",
+        "pass": true
+      },
+      {
+        "name": "pro-invalid-date",
+        "expected": "FREE",
+        "got": "FREE",
+        "pass": true
+      },
+      {
+        "name": "pro-refunded",
+        "expected": "FREE",
+        "got": "FREE",
+        "pass": true
+      },
+      {
+        "name": "owner",
+        "expected": "OWNER",
+        "got": "OWNER",
+        "pass": true
+      }
+    ],
+    "plan_passed": 7,
+    "plan_total": 7,
+    "stale_free_paid_gate": [
+      {
+        "view": "Tarefas",
+        "pass": true
+      },
+      {
+        "view": "Notas",
+        "pass": true
+      },
+      {
+        "view": "Estudos",
+        "pass": true
+      },
+      {
+        "view": "Fitness",
+        "pass": true
+      },
+      {
+        "view": "Receitas",
+        "pass": true
+      },
+      {
+        "view": "IA",
+        "pass": true
+      },
+      {
+        "view": "Life",
+        "pass": true
+      },
+      {
+        "view": "Finanças",
+        "pass": true
+      },
+      {
+        "view": "Meu LIFE",
+        "pass": true
+      },
+      {
+        "view": "Archive",
+        "pass": true
+      }
+    ],
+    "stale_gate_passed": 10,
+    "stale_gate_total": 10
+  },
+  "desktop": {
+    "summary": {
+      "views": 36,
+      "handlerless_buttons": 0,
+      "bad_text_views": 0
+    },
+    "rows": [
+      {
+        "plan": "FREE",
+        "view": "Hoje",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Tarefas",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Favoritos",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Biblioteca",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Notas",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Estudos",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Guia de Estudos",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Fitness",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Receitas",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "IA",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Life",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Finanças",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Meu LIFE",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Evolução",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Archive",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Perfil",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Tutorial",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "FREE",
+        "view": "Configurações",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Hoje",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Tarefas",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Favoritos",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Biblioteca",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Notas",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Estudos",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Guia de Estudos",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Fitness",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Receitas",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "IA",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Life",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Finanças",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Meu LIFE",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Evolução",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Archive",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Perfil",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Tutorial",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      },
+      {
+        "plan": "PRO",
+        "view": "Configurações",
+        "handlerless_buttons": 0,
+        "bad_text": []
+      }
+    ]
+  },
+  "static": {
+    "html_pages": 6,
+    "missing_local_refs": [],
+    "duplicate_ids": {},
+    "missing_hash_targets": {},
+    "css_parse_errors": {
+      "apex-marketing-8.1.0.css": [],
+      "marketing.css": [],
+      "life-bundle-8.1.0.css": [],
+      "marketing-v60.css": [],
+      "signature-8.1.0.css": [],
+      "apex-8.1.0.css": []
+    },
+    "manifest_valid": true,
+    "old_primary_asset_refs": []
+  }
+}

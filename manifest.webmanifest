@@ -1,14 +1,14 @@
 {
-  "name": "LIFE OS 7.2.4",
+  "name": "LIFE OS 8.1.0",
   "short_name": "LIFE",
-  "description": "LIFE OS 7.2.4 — apps conectados para rotina, estudos, fitness, alimentação, finanças e LIFE AI.",
+  "description": "LIFE OS 8.1.0 — APEX Edition, um sistema pessoal premium para rotina, estudos, fitness, alimentação, finanças e LIFE AI.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#05070a",
-  "theme_color": "#05070a",
+  "background_color": "#04070a",
+  "theme_color": "#04070a",
   "icons": [
     {
       "src": "assets/icons/icon-192.png",

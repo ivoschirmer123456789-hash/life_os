@@ -1,0 +1,21 @@
+{
+  "build": "8.0.0",
+  "edition": "APEX",
+  "date": "2026-10-05",
+  "checks": {
+    "javascript_syntax": "pass",
+    "local_asset_references": "pass",
+    "duplicate_html_ids": "pass",
+    "css_structure": "pass",
+    "service_worker_cache_version": "pass",
+    "mobile_navigation_rebuild": "pass",
+    "home_launcher": "pass"
+  },
+  "external_runtime_validation": [
+    "Supabase",
+    "Mercado Pago",
+    "push",
+    "weather APIs",
+    "LIFE AI remote backend"
+  ]
+}
