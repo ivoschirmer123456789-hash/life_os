@@ -1,7 +1,7 @@
-LIFE OS 7.2.1 — CONNECTED EXPERIENCE · REVISED
+LIFE OS 7.2.3 — PRO PREVIEW QA
 
-1. Publique o CONTEÚDO desta pasta no repositório/deploy.
-2. O index.html deve ficar na raiz do projeto publicado.
-3. Confirme 7.2.1 na tela de login.
-4. No PRO, abra Hoje e procure o bloco LIFE CONNECT.
-5. Use Estudos/Fitness/Finanças/Receitas e volte ao Hoje para ver o contexto cruzado.
+1. Extraia esta pasta inteira.
+2. Publique o conteúdo da pasta no GitHub/Vercel.
+3. Confirme 7.2.3 na tela de login.
+4. Em uma conta FREE, toque em recursos PRO: cada um deve abrir sua própria prévia antes do checkout.
+5. Supabase, Mercado Pago, LIFE AI remoto e push dependem do ambiente publicado.

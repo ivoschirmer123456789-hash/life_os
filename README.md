@@ -1,25 +1,35 @@
-# LIFE OS 7.2.1 — Connected Experience · Revised
+# LIFE OS 7.2.3 — Connected Experience · PRO Preview QA
 
-A 7.2.1 revisa e estabiliza a 7.2: o LIFE em um sistema conectado: cada app continua independente, mas passa a compartilhar contexto através do histórico central.
+Esta versão parte da 7.2.2 e corrige os caminhos PRO para que a experiência FREE nunca pareça quebrada ou genérica.
 
-## O que mudou
-- LIFE Connect na Home PRO com atividade recente, métricas cruzadas e próximos passos.
-- Fitness → Evolução/Receitas; Estudos → Notas/Evolução; Notas → Tarefas/Life; Finanças → Evolução; e outras pontes contextuais.
-- Etapas dominadas no Study Engine entram no histórico central.
-- Minha Cozinha e lista de compras registram mudanças úteis no histórico.
-- Home reage ao que realmente aconteceu no LIFE, sem inventar dados.
-- FREE mantém a arquitetura Starter (~20%); conexões profundas ficam no PRO.
-- Cache/build/PWA atualizados para 7.2.1.
-- Histórico central normalizado: registros inválidos/futuros antigos não distorcem LIFE Connect e Evolução.
-- LIFE Connect ordena atividades por data, normaliza progresso de estudos, valores financeiros e listas antigas da Cozinha.
-- Identificadores de atualização e páginas públicas alinhados com a versão real.
+## Regra de produto
+1. Usuário FREE toca em um recurso PRO.
+2. O LIFE abre uma prévia **daquele recurso específico**.
+3. A prévia mostra como funciona, passos, exemplo de tela e benefício.
+4. O usuário pode continuar no FREE.
+5. Só **Ver planos e assinar** abre o comparativo/checkout.
+
+## Correções desta versão
+- Busca inteligente de receitas agora mostra o Recipe Finder, não a busca de treino.
+- Mapa de Conhecimento ganhou prévia própria.
+- LIFE AI separa Planejador, Memória, Ações, Guia e organização do Hoje.
+- Upgrade sugerido pela LIFE AI preserva a origem do recurso.
+- Treinos personalizados salvos/recentes não caem mais em preview genérico.
+- Plano alimentar personalizado sempre informa seu contexto ao abrir o PRO.
+- Exercícios avançados mostram a Exercise Library, não Programas de Treino.
+- Favoritos PRO, Biblioteca de Conhecimento e Guias da Biblioteca ganharam previews próprios.
+- Teasers FREE de Tarefas, Notas, Estudos, Finanças e Planner são contextuais.
+- Nenhuma chamada `openLifePro()` ativa ficou sem contexto.
 
 ## Arquivos ativos
-- assets/css/life-bundle-7.2.1.css
-- assets/js/life-app-7.2.1.js
-- assets/js/context-help-v721.js
-- assets/js/config-7.2.1.js
-- assets/js/supabase-auth-7.2.1.js
-- assets/js/runtime-7.2.1.js
+- assets/css/life-bundle-7.2.3.css
+- assets/js/life-app-7.2.3.js
+- assets/js/context-help-v723.js
+- assets/js/config-7.2.3.js
+- assets/js/supabase-auth-7.2.3.js
+- assets/js/runtime-7.2.3.js
 
-Serviços externos (Supabase, Mercado Pago, LIFE AI remoto e push) precisam ser validados no deploy real.
+## Validação
+Veja `docs/QA_7_2_3.md` e `docs/STATIC_AUDIT_7_2_3.json`.
+
+Supabase real, Mercado Pago, LIFE AI remoto e push precisam de validação após o deploy.

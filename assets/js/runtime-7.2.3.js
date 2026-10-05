@@ -1,0 +1,256 @@
+/* LIFE OS 7.2.3 — Reliability runtime
+   One consolidated runtime for stability, accessibility, PWA, feedback and page polish.
+*/
+(function(){
+  'use strict';
+  const VERSION='7.2.3';
+  const root=document.documentElement;
+  window.LIFE_BUILD={version:VERSION,name:'Connected Experience · PRO Preview'};
+  window.LIFE_SINGLE_FILE=false;
+  root.dataset.lifeVersion=VERSION;
+  root.dataset.lifeDesign='7.2';
+  root.dataset.lifePolish='connected';
+
+  const safeGet=(k,f='')=>{try{const v=localStorage.getItem(k);return v===null?f:v}catch(_){return f}};
+  const safeSet=(k,v)=>{try{localStorage.setItem(k,v);return true}catch(_){return false}};
+  const isVisible=el=>{if(!el)return false;const s=getComputedStyle(el);return s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0'&&el.getClientRects().length>0};
+  try{if(!window.CSS)window.CSS={};if(typeof window.CSS.escape!=='function')window.CSS.escape=value=>String(value??'').replace(/[^a-zA-Z0-9_-]/g,ch=>'\\'+ch.codePointAt(0).toString(16)+' ')}catch(_){ }
+
+  /* Diagnostics: keep only small technical messages, never content typed by the user. */
+  const errorKey='life_runtime_errors_v2';
+  const storeError=(kind,value)=>{
+    try{
+      const parsed=(()=>{try{return JSON.parse(safeGet(errorKey,'[]'))}catch(_){return []}})();
+      const list=Array.isArray(parsed)?parsed:[];
+      list.unshift({kind,message:String(value?.message||value||'Erro desconhecido').slice(0,320),at:new Date().toISOString(),path:location.pathname,build:VERSION});
+      safeSet(errorKey,JSON.stringify(list.slice(0,20)));
+    }catch(_){ }
+  };
+  addEventListener('error',e=>storeError('error',e.error||e.message));
+  addEventListener('unhandledrejection',e=>storeError('promise',e.reason));
+
+  /* Dynamic viewport variables for mobile browser chrome. */
+  function syncViewport(){
+    const vv=window.visualViewport;
+    const h=vv?vv.height:innerHeight;
+    const w=vv?vv.width:innerWidth;
+    const top=vv?vv.offsetTop:0;
+    root.style.setProperty('--life-vh',(h*.01)+'px');
+    root.style.setProperty('--life-window-h',h+'px');
+    root.style.setProperty('--life-window-w',w+'px');
+    root.style.setProperty('--life-vv-top',top+'px');
+  }
+  syncViewport();
+  addEventListener('resize',syncViewport,{passive:true});
+  if(window.visualViewport){
+    visualViewport.addEventListener('resize',syncViewport,{passive:true});
+    visualViewport.addEventListener('scroll',syncViewport,{passive:true});
+  }
+
+  /* Device / input mode. */
+  try{
+    if(matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)root.classList.add('life-standalone');
+    if(/iP(hone|od|ad)/.test(navigator.userAgent))root.classList.add('life-ios');
+    if(matchMedia('(pointer:coarse)').matches)root.classList.add('life-touch');
+  }catch(_){ }
+  let keyboardMode=false;
+  addEventListener('keydown',e=>{if(e.key==='Tab'&&!keyboardMode){keyboardMode=true;root.classList.add('life-keyboard')}} ,true);
+  addEventListener('pointerdown',()=>{if(keyboardMode){keyboardMode=false;root.classList.remove('life-keyboard')}},{passive:true,capture:true});
+
+  /* Network status with a small non-blocking status pill. */
+  let networkPill=null,networkTimer=0;
+  function showNetwork(text,kind){
+    if(!networkPill){
+      networkPill=document.createElement('div');
+      networkPill.id='life-network-pill';
+      networkPill.setAttribute('role','status');
+      networkPill.setAttribute('aria-live','polite');
+      document.body.appendChild(networkPill);
+    }
+    networkPill.className='life-network-pill '+(kind||'');
+    networkPill.textContent=text;
+    requestAnimationFrame(()=>networkPill.classList.add('show'));
+    clearTimeout(networkTimer);
+    if(kind!=='offline') networkTimer=setTimeout(()=>networkPill&&networkPill.classList.remove('show'),2200);
+  }
+  function syncNetwork(initial=false){
+    const online=navigator.onLine!==false;
+    root.dataset.network=online?'online':'offline';
+    root.classList.toggle('life-offline',!online);
+    if(!initial)showNetwork(online?'Conexão restaurada':'Você está offline',online?'online':'offline');
+  }
+  syncNetwork(true);
+  addEventListener('online',()=>syncNetwork(false));
+  addEventListener('offline',()=>syncNetwork(false));
+
+  /* Current app identity: title, data attribute and restrained enter transition. */
+  const titleMap={
+    'Hoje':'Today OS','Tarefas':'Action OS','Notas':'Notes OS','Estudos':'Study OS','Guia de Estudos':'Study OS','Fitness':'Fitness OS','Receitas':'Kitchen OS','Finanças':'Money OS','IA':'LIFE AI','Life':'Planner OS','Evolução':'Insights OS','Biblioteca':'Library OS','Favoritos':'Launcher OS','Meu LIFE':'Personal OS','Archive':'Archive OS','Perfil':'Account OS','Configurações':'Account OS','Tutorial':'Academy OS'
+  };
+  let lastArea='';
+  function syncArea(){
+    const app=document.querySelector('.v18[data-life-view], [data-life-view].v18');
+    if(!app)return;
+    const area=app.getAttribute('data-life-view')||'Hoje';
+    if(area===lastArea)return;
+    lastArea=area;
+    root.dataset.lifeArea=area;
+    document.title='LIFE OS · '+(titleMap[area]||area);
+    app.classList.remove('life-exceptional-enter');
+    void app.offsetWidth;
+    app.classList.add('life-exceptional-enter');
+    setTimeout(()=>app.classList.remove('life-exceptional-enter'),520);
+  }
+
+  /* Modal state + accessible focus management. */
+  const modalSelectors=[
+    '.v18-sheetwrap','.v18-overlay','.life-how-overlay','.life-ai-quickwrap','.life-ai-confirm','.life-notification-overlay','.life-pro-paywall','.life-fit35-review-modal','.life-mobile-more','#life-owner-panel[aria-hidden="false"]','.life-context-help-v68','.life-study-topic-modal','.v27-modal'
+  ];
+  let lastTopModal=null,lastFocus=null,modalRaf=0;
+  function modalCandidates(){
+    const all=[];
+    modalSelectors.forEach(sel=>document.querySelectorAll(sel).forEach(x=>{if(isVisible(x)&&!all.includes(x))all.push(x)}));
+    document.querySelectorAll('[role="dialog"]').forEach(x=>{if(isVisible(x)&&!all.includes(x))all.push(x)});
+    return all;
+  }
+  function syncModal(){
+    modalRaf=0;
+    const list=modalCandidates();
+    const top=list[list.length-1]||null;
+    document.body.classList.toggle('life-modal-open',!!top);
+    if(top){
+      if(!top.hasAttribute('role'))top.setAttribute('role','dialog');
+      top.setAttribute('aria-modal','true');
+      if(top!==lastTopModal){
+        lastFocus=document.activeElement;
+        lastTopModal=top;
+        setTimeout(()=>{
+          if(!isVisible(top))return;
+          const auto=top.querySelector('[autofocus],input:not([disabled]),textarea:not([disabled]),select:not([disabled]),button:not([disabled]),a[href]');
+          if(auto && !top.contains(document.activeElement))try{auto.focus({preventScroll:true})}catch(_){ }
+        },50);
+      }
+    }else if(lastTopModal){
+      const restore=lastFocus;
+      lastTopModal=null;lastFocus=null;
+      if(restore&&document.contains(restore)&&typeof restore.focus==='function')setTimeout(()=>{try{restore.focus({preventScroll:true})}catch(_){ }},30);
+    }
+  }
+  let controlsDirty=true;
+  const observer=new MutationObserver(records=>{
+    if(records.some(r=>r.type==='childList'))controlsDirty=true;
+    if(!modalRaf)modalRaf=requestAnimationFrame(()=>{syncModal();syncArea();if(controlsDirty){controlsDirty=false;enhanceControls();}});
+  });
+  observer.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style','aria-hidden','data-life-view']});
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Tab'){
+      const list=modalCandidates(),top=list[list.length-1];
+      if(top){
+        const focusables=Array.from(top.querySelectorAll('button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(isVisible);
+        if(focusables.length){
+          const first=focusables[0],last=focusables[focusables.length-1];
+          if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+          else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+        }
+      }
+    }
+    if(e.key==='Escape'){
+      const list=modalCandidates(),top=list[list.length-1];
+      if(!top)return;
+      const btn=Array.from(top.querySelectorAll('[data-close],button[aria-label*="Fechar" i],button[aria-label*="close" i],.life-pro-paywall-close,.life-mobile-more-head button,.life-ai-quick-head>button,.lov-close')).find(isVisible);
+      if(btn){e.preventDefault();btn.click();}
+    }
+  });
+
+  /* Prevent disabled UI from leaking clicks and provide a consistent tactile press state. */
+  let pressed=null;
+  document.addEventListener('pointerdown',e=>{
+    const b=e.target?.closest?.('button,[role="button"]');
+    if(!b||b.disabled||b.getAttribute('aria-disabled')==='true')return;
+    pressed=b;b.classList.add('life70-pressed');
+  },{passive:true});
+  const clearPressed=()=>{if(pressed){pressed.classList.remove('life70-pressed');pressed=null}};
+  document.addEventListener('pointerup',clearPressed,{passive:true});
+  document.addEventListener('pointercancel',clearPressed,{passive:true});
+  document.addEventListener('click',e=>{
+    const disabled=e.target?.closest?.('[aria-disabled="true"],button:disabled');
+    if(disabled){e.preventDefault();e.stopPropagation();return;}
+    const b=e.target?.closest?.('button,[role="button"]');
+    if(b&&!b.disabled){
+      b.classList.add('life70-ack');setTimeout(()=>b.classList.remove('life70-ack'),260);
+      try{if(navigator.vibrate&&matchMedia('(pointer:coarse)').matches)navigator.vibrate(5)}catch(_){ }
+    }
+  },true);
+
+  /* Scroll polish. */
+  let scrollRaf=0;
+  function syncScroll(){scrollRaf=0;root.classList.toggle('life-scrolled',scrollY>24);root.style.setProperty('--life-scroll-y',Math.min(1,scrollY/420).toFixed(3));}
+  addEventListener('scroll',()=>{if(!scrollRaf)scrollRaf=requestAnimationFrame(syncScroll)},{passive:true});
+  syncScroll();
+
+  /* Fine pointer ambient position, used only by subtle CSS lighting. */
+  try{
+    if(matchMedia('(pointer:fine)').matches){
+      let px=innerWidth*.5,py=innerHeight*.2,raf=0;
+      addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;if(raf)return;raf=requestAnimationFrame(()=>{raf=0;root.style.setProperty('--life-pointer-x',px+'px');root.style.setProperty('--life-pointer-y',py+'px');});},{passive:true});
+    }
+  }catch(_){ }
+
+  /* Keyboard shortcuts and authentication form quality. */
+  addEventListener('keydown',e=>{
+    const tag=(e.target?.tagName||'').toLowerCase();
+    if(e.key==='/'&&!['input','textarea','select'].includes(tag)){
+      const btn=document.querySelector('button[aria-label="Abrir busca global"]');
+      if(btn){e.preventDefault();btn.click();}
+    }
+  });
+  function authEnter(id,buttonId){const el=document.getElementById(id),btn=document.getElementById(buttonId);if(el&&btn&&!el.dataset.lifeEnter){el.dataset.lifeEnter='1';el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();btn.click();}})}}
+  function enhanceAuth(){
+    authEnter('la-password','la-login');authEnter('la-signup-password2','la-create-account');authEnter('la-recovery-email','la-send-recovery');authEnter('la-new-pass2','la-save-pass');
+    document.querySelectorAll('[data-life-pass-toggle]').forEach(btn=>{
+      if(btn.dataset.bound)return;btn.dataset.bound='1';
+      btn.addEventListener('click',()=>{const input=document.getElementById(btn.dataset.lifePassToggle);if(!input)return;const showing=input.type==='text';input.type=showing?'password':'text';btn.setAttribute('aria-pressed',String(!showing));btn.querySelector('.material-symbols-rounded')?.replaceChildren(document.createTextNode(showing?'visibility':'visibility_off'));});
+    });
+  }
+
+  /* Add missing accessible names to icon-only buttons without touching visible copy. */
+  const iconLabels={close:'Fechar',search:'Buscar',add:'Adicionar',more_horiz:'Mais opções',more_vert:'Mais opções',settings:'Configurações',arrow_back:'Voltar',chevron_left:'Voltar',chevron_right:'Avançar',notifications:'Notificações',favorite:'Favoritos',delete:'Excluir',edit:'Editar',play_arrow:'Iniciar',pause:'Pausar'};
+  function enhanceControls(){
+    enhanceAuth();
+    document.querySelectorAll('button').forEach(btn=>{
+      if(btn.hasAttribute('aria-label')||String(btn.textContent||'').trim().length>18)return;
+      const icon=btn.querySelector(':scope > .material-symbols-rounded,:scope > span.material-symbols-rounded');
+      if(!icon)return;
+      const key=String(icon.textContent||'').trim();
+      if(iconLabels[key])btn.setAttribute('aria-label',iconLabels[key]);
+    });
+  }
+
+  /* PWA install/update. */
+  let installPrompt=null;
+  addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;dispatchEvent(new CustomEvent('life:pwa-ready'));});
+  addEventListener('appinstalled',()=>{installPrompt=null;safeSet('life_pwa_installed','1');window.lifeProductEvent&&window.lifeProductEvent('pwa_installed',{});});
+  window.lifeInstallPWA=async function(){
+    if(matchMedia&&matchMedia('(display-mode: standalone)').matches)return true;
+    if(!installPrompt)return false;
+    try{installPrompt.prompt();const choice=await installPrompt.userChoice;installPrompt=null;return choice?.outcome==='accepted'}catch(e){storeError('pwa-install',e);return false}
+  };
+  if('serviceWorker' in navigator){
+    const hadController=!!navigator.serviceWorker.controller;
+    let reloaded=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      if(!hadController||reloaded)return;
+      reloaded=true;
+      const key='life_sw_reload_7_2_1';
+      try{if(sessionStorage.getItem(key)==='1')return;sessionStorage.setItem(key,'1')}catch(_){ }
+      location.reload();
+    });
+    addEventListener('load',()=>{
+      navigator.serviceWorker.register('./service-worker.js',{scope:'./',updateViaCache:'none'}).then(reg=>{window.LIFE_SERVICE_WORKER=reg;reg.update().catch(()=>{});}).catch(err=>storeError('service-worker',err));
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>{syncArea();syncModal();enhanceControls();});
+  syncArea();syncModal();enhanceControls();
+})();

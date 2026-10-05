@@ -1,0 +1,51 @@
+{
+  "version": "7.2.3",
+  "name": "Connected Experience · PRO Preview QA",
+  "checks": {
+    "javascript_syntax": "validated with node --check for active JS and service worker",
+    "css_parse_errors": [],
+    "missing_local_references": [],
+    "duplicate_static_ids": [],
+    "service_worker_missing_files": [],
+    "openLifePro_calls_without_context": 0,
+    "literal_pro_sources": [
+      "ai_guide",
+      "ai_pro",
+      "ai_workspace",
+      "archive",
+      "area_",
+      "area_Evolução",
+      "estudos_catalogo",
+      "estudos_knowledge_map",
+      "estudos_mastery",
+      "financas_analise",
+      "fitness_busca",
+      "fitness_exercises",
+      "fitness_planos",
+      "header",
+      "home_vault",
+      "library_full",
+      "life_connect",
+      "nutrition_personalized",
+      "perfil",
+      "perfil_memoria",
+      "recipe_finder",
+      "recipe_library",
+      "today_ai",
+      "treino_personalizado"
+    ]
+  },
+  "pro_preview_fixes": [
+    "Recipe Finder usa preview recipe_finder, não Fitness Finder",
+    "Mapa de Conhecimento usa preview estudos_knowledge_map",
+    "LIFE AI Planejador, Memória e Ações têm previews independentes",
+    "Upgrade sugerido pela LIFE AI carrega a origem correta",
+    "Treino personalizado salvo/recente usa preview treino_personalizado",
+    "Plano alimentar nunca chama upgrade sem contexto",
+    "Biblioteca de exercícios usa preview fitness_exercises",
+    "Favoritos PRO usa preview favorites_full",
+    "Guias de Biblioteca/Conhecimento têm previews próprios",
+    "Teasers FREE de Tarefas, Notas, Estudos, Finanças e Planner recebem preview contextual"
+  ],
+  "runtime_browser_note": "A headless browser execution was attempted but this environment blocks local/file navigation with ERR_BLOCKED_BY_ADMINISTRATOR; browser/Supabase/checkout behavior still requires deploy validation."
+}
