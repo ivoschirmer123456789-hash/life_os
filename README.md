@@ -1,16 +1,16 @@
-# LIFE OS 8.4.2 — Performance + Weather Reliability Edition
+# LIFE OS 8.5.2 — Form Logic Audit Edition
 
-Baseada na 8.4.1 PRO Refined.
+Esta versão parte da 8.5.1 e revisa os principais questionários/geradores do LIFE.
 
-## Corrigido
-- fluxo de clima com timeouts menores e feedback imediato;
-- localização exige contexto seguro e trata permissão negada sem ficar carregando;
-- clima não dispara requisições pesadas no boot; atualização acontece sob demanda;
-- busca por cidade mantém fallback e dados salvos;
-- observadores de DOM não reprocessam mais o documento inteiro a cada mudança visual;
-- sincronização em nuvem ocorre somente quando há alterações locais pendentes e em intervalo maior;
-- verificações de notificação são reduzidas quando a página não está visível;
-- transições de abas ficaram mais rápidas;
-- efeitos GPU caros são reduzidos em mobile/touch, preservando o design PRO.
+Principais mudanças:
+- formulários auditados para que as respostas realmente alterem os resultados;
+- treino personalizado consolidado e mais completo;
+- FREE pode concluir o questionário de treino antes do bloqueio PRO;
+- nutrição usa orçamento, fome, restrições, preferências e rotina de forma explícita;
+- lista de compras aparece no resultado;
+- busca de treino mostra motivos do match;
+- validação de combinações semanais impossíveis;
+- diagnóstico das áreas exige todas as perguntas;
+- HTML/JS/referências/cache revisados.
 
-Use o pacote completo no deploy para que o cache 8.4.2 substitua a versão anterior.
+Veja `QA_REPORT_8.5.2.md` e `QA_RESULTS_8.5.2.json`.

@@ -1,6 +1,6 @@
-LIFE OS 8.4.2 — PERFORMANCE + WEATHER RELIABILITY
+LIFE OS 8.5.2 — FORM LOGIC AUDIT EDITION
 
-Substitua a versão anterior inteira por este pacote.
-O Service Worker usa cache próprio 8.4.2.
+Substitua o pacote 8.5.1 inteiro por esta versão.
+Não misture assets ou Service Worker de versões anteriores.
 
-Clima: publique em HTTPS para usar localização do navegador. A busca manual por cidade permanece disponível.
+Abra index.html ou publique o conteúdo completo no Vercel.

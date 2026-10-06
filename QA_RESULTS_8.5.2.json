@@ -1,0 +1,162 @@
+{
+  "build": "8.5.2",
+  "summary": {
+    "passed": 29,
+    "total": 29
+  },
+  "checks": [
+    {
+      "name": "HTML válido: index.html",
+      "ok": true,
+      "detail": "erros_parse=0 ids_duplicados=0 refs_faltando=0"
+    },
+    {
+      "name": "HTML válido: landing.html",
+      "ok": true,
+      "detail": "erros_parse=0 ids_duplicados=0 refs_faltando=0"
+    },
+    {
+      "name": "HTML válido: offline.html",
+      "ok": true,
+      "detail": "erros_parse=0 ids_duplicados=0 refs_faltando=0"
+    },
+    {
+      "name": "HTML válido: privacy.html",
+      "ok": true,
+      "detail": "erros_parse=0 ids_duplicados=0 refs_faltando=0"
+    },
+    {
+      "name": "HTML válido: support.html",
+      "ok": true,
+      "detail": "erros_parse=0 ids_duplicados=0 refs_faltando=0"
+    },
+    {
+      "name": "HTML válido: terms.html",
+      "ok": true,
+      "detail": "erros_parse=0 ids_duplicados=0 refs_faltando=0"
+    },
+    {
+      "name": "JS sintaxe: config-8.5.2.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS sintaxe: context-help-8.5.2.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS sintaxe: life-app-8.5.2.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS sintaxe: runtime-8.5.2.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS sintaxe: supabase-auth-8.5.2.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS sintaxe: service-worker.js",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Manifest 8.5.2 válido",
+      "ok": true,
+      "detail": "LIFE OS 8.5.2"
+    },
+    {
+      "name": "Service Worker aponta apenas para arquivos existentes",
+      "ok": true,
+      "detail": "21 refs ok"
+    },
+    {
+      "name": "Cache exclusivo 8.5.2",
+      "ok": true,
+      "detail": "cache versionado"
+    },
+    {
+      "name": "Guia de Estudos usa 8/8 respostas",
+      "ok": true,
+      "detail": "topic, goal, level, reading, blocker, session, frequency, deadline"
+    },
+    {
+      "name": "Nutrição cobre 18/18 respostas no resultado/contexto",
+      "ok": true,
+      "detail": "18 perguntas; altura/peso = contexto apenas por design"
+    },
+    {
+      "name": "Nutrição exige detalhe quando “Outra” restrição é escolhida",
+      "ok": true,
+      "detail": "validação condicional"
+    },
+    {
+      "name": "Nutrição mostra lista de compras gerada",
+      "ok": true,
+      "detail": "visível no resultado"
+    },
+    {
+      "name": "Nutrição médica não inventa substituições",
+      "ok": true,
+      "detail": "estrutura neutra"
+    },
+    {
+      "name": "Busca de receitas usa 4/4 respostas",
+      "ok": true,
+      "detail": "time, taste, method, base"
+    },
+    {
+      "name": "Treino personalizado usa 15/15 respostas",
+      "ok": true,
+      "detail": "índices 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14"
+    },
+    {
+      "name": "Treino personalizado normaliza dias incompatíveis",
+      "ok": true,
+      "detail": "sem sessões escondidas"
+    },
+    {
+      "name": "Treino personalizado mostra exercícios/séries/repetições/descanso",
+      "ok": true,
+      "detail": "prescrição visível"
+    },
+    {
+      "name": "FREE responde questionário antes do bloqueio",
+      "ok": true,
+      "detail": "resultado preservado para PRO"
+    },
+    {
+      "name": "Busca de treino usa 14/14 respostas",
+      "ok": true,
+      "detail": "age, height, experience, goal, days, strengthDays, runExperience, cardioDays, balance, time, place, recovery, medical, impact"
+    },
+    {
+      "name": "Busca de treino explica o match",
+      "ok": true,
+      "detail": "motivos + ergonomia visíveis"
+    },
+    {
+      "name": "Diagnósticos das abas exigem 3/3 respostas",
+      "ok": true,
+      "detail": "sem diagnóstico parcial"
+    },
+    {
+      "name": "Arquivos ativos não referenciam assets 8.5.1",
+      "ok": true,
+      "detail": "versão/cache coerentes"
+    }
+  ],
+  "forms": {
+    "study_questions": 8,
+    "nutrition_questions": 18,
+    "recipe_finder_questions": 4,
+    "personal_training_questions": 15,
+    "workout_finder_questions": 14,
+    "area_diagnostics_questions_each": 3
+  }
+}

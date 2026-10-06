@@ -1,9 +1,9 @@
-const LIFE_CACHE='life-os-8.4.2-performance-weather';
+const LIFE_CACHE='life-os-8.5.2-form-logic-audit';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
   './manifest.webmanifest',
-  './assets/css/life-bundle-8.4.2.css','./assets/css/signature-8.4.2.css','./assets/css/apex-8.4.2.css','./assets/css/apex-marketing-8.4.2.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
-  './assets/js/config-8.4.2.js','./assets/js/life-app-8.4.2.js','./assets/js/context-help-8.4.2.js','./assets/js/supabase-auth-8.4.2.js','./assets/js/runtime-8.4.2.js',
+  './assets/css/life-bundle-8.5.2.css','./assets/css/signature-8.5.2.css','./assets/css/apex-8.5.2.css','./assets/css/apex-marketing-8.5.2.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
+  './assets/js/config-8.5.2.js','./assets/js/life-app-8.5.2.js','./assets/js/context-help-8.5.2.js','./assets/js/supabase-auth-8.5.2.js','./assets/js/runtime-8.5.2.js',
   './assets/icons/icon.svg','./assets/icons/icon-192.png','./assets/icons/icon-512.png'
 ];
 const EXTERNAL_CACHE_HOSTS=new Set(['unpkg.com','cdn.jsdelivr.net','cdnjs.cloudflare.com','fonts.googleapis.com','fonts.gstatic.com']);
