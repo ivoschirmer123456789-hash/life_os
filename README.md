@@ -1,16 +1,15 @@
-# LIFE OS 8.5.2 — Form Logic Audit Edition
+# LIFE OS 8.6.0 — Titanium Luxe PRO / OWNER Edition
 
-Esta versão parte da 8.5.1 e revisa os principais questionários/geradores do LIFE.
+Esta versão mantém toda a lógica da 8.5.2 e reconstrói a experiência visual premium.
 
 Principais mudanças:
-- formulários auditados para que as respostas realmente alterem os resultados;
-- treino personalizado consolidado e mais completo;
-- FREE pode concluir o questionário de treino antes do bloqueio PRO;
-- nutrição usa orçamento, fome, restrições, preferências e rotina de forma explícita;
-- lista de compras aparece no resultado;
-- busca de treino mostra motivos do match;
-- validação de combinações semanais impossíveis;
-- diagnóstico das áreas exige todas as perguntas;
-- HTML/JS/referências/cache revisados.
+- PRO e OWNER usam a mesma linguagem visual Titanium Luxe;
+- navegação desktop premium em rail lateral completo e agrupado;
+- masthead premium diferente em cada área;
+- hierarquia, superfícies, botões, inputs e topbar próprios do premium;
+- OWNER herda toda a interface PRO e mantém apenas controles administrativos extras;
+- FREE permanece visualmente separado;
+- premium mobile foi redesenhado sem blur pesado para preservar performance;
+- cache/assets próprios da versão 8.6.0.
 
-Veja `QA_REPORT_8.5.2.md` e `QA_RESULTS_8.5.2.json`.
+Substitua o pacote anterior inteiro no deploy.

@@ -1,4 +1,4 @@
-# LIFE OS 8.5.2 — QA / Form Logic Audit
+# LIFE OS 8.6.0 — QA / Form Logic Audit
 
 ## Resultado
 29/29 verificações estruturais e de lógica passaram.
@@ -44,4 +44,4 @@ Todos os arquivos JavaScript ativos e o Service Worker passaram em `node --check
 ## Limite da auditoria
 Esta auditoria cobre estrutura, sintaxe e lógica estática dos geradores. Ela não substitui um teste E2E em navegador real com todas as integrações externas (Supabase, checkout, permissões do navegador e APIs remotas).
 
-Detalhes máquina-a-máquina: `QA_RESULTS_8.5.2.json`.
+Detalhes máquina-a-máquina: `QA_RESULTS_8.6.0.json`.

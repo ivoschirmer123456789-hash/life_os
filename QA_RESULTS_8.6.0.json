@@ -1,0 +1,177 @@
+{
+  "build": "8.6.0",
+  "passed": 34,
+  "total": 34,
+  "results": [
+    {
+      "name": "HTML parse index.html",
+      "passed": true,
+      "detail": "sem exceção de parser"
+    },
+    {
+      "name": "IDs únicos index.html",
+      "passed": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "HTML parse landing.html",
+      "passed": true,
+      "detail": "sem exceção de parser"
+    },
+    {
+      "name": "IDs únicos landing.html",
+      "passed": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "HTML parse offline.html",
+      "passed": true,
+      "detail": "sem exceção de parser"
+    },
+    {
+      "name": "IDs únicos offline.html",
+      "passed": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "HTML parse privacy.html",
+      "passed": true,
+      "detail": "sem exceção de parser"
+    },
+    {
+      "name": "IDs únicos privacy.html",
+      "passed": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "HTML parse terms.html",
+      "passed": true,
+      "detail": "sem exceção de parser"
+    },
+    {
+      "name": "IDs únicos terms.html",
+      "passed": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "HTML parse support.html",
+      "passed": true,
+      "detail": "sem exceção de parser"
+    },
+    {
+      "name": "IDs únicos support.html",
+      "passed": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Referências locais",
+      "passed": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "JS syntax config-8.6.0.js",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS syntax context-help-8.6.0.js",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS syntax life-app-8.6.0.js",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS syntax runtime-8.6.0.js",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS syntax supabase-auth-8.6.0.js",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "JS syntax service-worker.js",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "CSS braces apex-8.6.0.css",
+      "passed": true,
+      "detail": "687 / 687"
+    },
+    {
+      "name": "CSS braces apex-marketing-8.6.0.css",
+      "passed": true,
+      "detail": "52 / 52"
+    },
+    {
+      "name": "CSS braces life-bundle-8.6.0.css",
+      "passed": true,
+      "detail": "7060 / 7060"
+    },
+    {
+      "name": "CSS braces marketing-v60.css",
+      "passed": true,
+      "detail": "109 / 109"
+    },
+    {
+      "name": "CSS braces marketing.css",
+      "passed": true,
+      "detail": "209 / 209"
+    },
+    {
+      "name": "CSS braces signature-8.6.0.css",
+      "passed": true,
+      "detail": "214 / 214"
+    },
+    {
+      "name": "Manifest 8.6.0",
+      "passed": true,
+      "detail": "LIFE OS 8.6.0"
+    },
+    {
+      "name": "Tier OWNER/PRO no DOM",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Nav premium completa",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Grupos premium",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Masthead premium",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "OWNER usa assinatura premium",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "FREE separado",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Mobile premium sem blur",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "name": "Cache 8.6.0",
+      "passed": true,
+      "detail": "ok"
+    }
+  ]
+}

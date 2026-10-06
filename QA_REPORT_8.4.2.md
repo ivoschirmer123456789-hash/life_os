@@ -1,4 +1,4 @@
-# LIFE OS 8.4.2 — QA Performance + Weather
+# LIFE OS 8.5.1 — QA Performance + Weather
 
 **Resultado: 18/18 verificações estáticas aprovadas.**
 

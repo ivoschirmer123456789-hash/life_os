@@ -1,6 +1,5 @@
-LIFE OS 8.5.2 — FORM LOGIC AUDIT EDITION
+LIFE OS 8.6.0 — TITANIUM LUXE PRO / OWNER
 
-Substitua o pacote 8.5.1 inteiro por esta versão.
+Use este pacote inteiro no lugar da 8.5.2.
+PRO e OWNER agora possuem uma interface premium própria e claramente diferente do FREE.
 Não misture assets ou Service Worker de versões anteriores.
-
-Abra index.html ou publique o conteúdo completo no Vercel.
