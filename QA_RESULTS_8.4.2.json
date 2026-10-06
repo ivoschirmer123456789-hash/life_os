@@ -1,0 +1,97 @@
+{
+  "build": "8.4.2",
+  "passed": 18,
+  "total": 18,
+  "checks": [
+    {
+      "name": "Versão ativa 8.4.2",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Clima sob demanda",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Timeout previsão <= 7s",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Timeout busca cidade <= 5.5s",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Permissão de geolocalização tratada",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Feedback no botão do clima",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem fetch de clima pesado no boot",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Nuvem só sincroniza quando suja",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Relógio reduzido e pausado oculto",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Observer não monitora class/style",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "A11y processada em idle",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Enhance controls escopado",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Budget GPU mobile",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais válidas",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS balanceado",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest válido",
+      "pass": true,
+      "detail": "LIFE OS 8.4.2"
+    },
+    {
+      "name": "Sem referências ativas 8.4.1",
+      "pass": true,
+      "detail": ""
+    }
+  ]
+}

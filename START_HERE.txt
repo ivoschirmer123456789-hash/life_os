@@ -1,4 +1,6 @@
-LIFE OS 8.4.1 — PRO REFINED EDITION
+LIFE OS 8.4.2 — PERFORMANCE + WEATHER RELIABILITY
 
-Substitua a versão 8.4.0 inteira por este pacote.
-Não misture assets: o Service Worker e os arquivos foram versionados em 8.4.1.
+Substitua a versão anterior inteira por este pacote.
+O Service Worker usa cache próprio 8.4.2.
+
+Clima: publique em HTTPS para usar localização do navegador. A busca manual por cidade permanece disponível.

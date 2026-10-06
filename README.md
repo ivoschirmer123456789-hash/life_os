@@ -1,11 +1,16 @@
-# LIFE OS 8.4.1 — PRO Refined Edition
+# LIFE OS 8.4.2 — Performance + Weather Reliability Edition
 
-Atualização focada na experiência PRO e na navegação inferior.
+Baseada na 8.4.1 PRO Refined.
 
-- PRO com metal escovado mais sofisticado e menos genérico.
-- Cards, hero, topbar, badges, botões e inputs refinados.
-- Identidade de cada área preservada dentro do acabamento PRO.
-- Corrigido o launcher de abas que ficava sobre o LIFE AI no desktop.
-- LIFE AI permanece no extremo direito; launcher fica ao lado com área de toque independente.
-- Mobile mantém somente a barra inferior, evitando controles duplicados.
-- Cache/assets subiram para 8.4.1.
+## Corrigido
+- fluxo de clima com timeouts menores e feedback imediato;
+- localização exige contexto seguro e trata permissão negada sem ficar carregando;
+- clima não dispara requisições pesadas no boot; atualização acontece sob demanda;
+- busca por cidade mantém fallback e dados salvos;
+- observadores de DOM não reprocessam mais o documento inteiro a cada mudança visual;
+- sincronização em nuvem ocorre somente quando há alterações locais pendentes e em intervalo maior;
+- verificações de notificação são reduzidas quando a página não está visível;
+- transições de abas ficaram mais rápidas;
+- efeitos GPU caros são reduzidos em mobile/touch, preservando o design PRO.
+
+Use o pacote completo no deploy para que o cache 8.4.2 substitua a versão anterior.
