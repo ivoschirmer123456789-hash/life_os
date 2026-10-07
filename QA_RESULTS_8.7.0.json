@@ -1,0 +1,202 @@
+{
+  "build": "8.7.0",
+  "passed": 39,
+  "total": 39,
+  "checks": [
+    {
+      "name": "index.html parse",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "index.html ids únicos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "index.html refs locais",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "landing.html parse",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "landing.html ids únicos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "landing.html refs locais",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy.html parse",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy.html ids únicos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy.html refs locais",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "terms.html parse",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "terms.html ids únicos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "terms.html refs locais",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "support.html parse",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "support.html ids únicos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "support.html refs locais",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "offline.html parse",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "offline.html ids únicos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "offline.html refs locais",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem 8.6.2 em index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem 8.6.2 em landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem 8.6.2 em service-worker.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem 8.6.2 em manifest.webmanifest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem 8.6.2 em README.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem 8.6.2 em START_HERE.txt",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW shell",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Cache 8.7.0",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest",
+      "ok": true,
+      "detail": "LIFE OS 8.7.0"
+    },
+    {
+      "name": "JS life-pro-cockpit",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS life-pro-command-grid",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS life-pro-intelligence",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS OWNER / PRIVATE SYSTEM",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS !hasV18Pro && view === 'Hoje'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS hasV18Pro && view === 'Hoje'",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS OBSIDIAN ATELIER",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS life-pro-cockpit-hero",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS .v18-tabs:before",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS data-life-tier=\"OWNER\"",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS .v31-launch{display:none!important}",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "OWNER herda PRO",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

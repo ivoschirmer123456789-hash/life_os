@@ -1,3 +1,6 @@
-LIFE OS 8.6.2 — FOCUSED FREE + PRO ECOSYSTEM
+LIFE OS 8.7.0 — OBSIDIAN ATELIER PRO / OWNER
 
-Substitua a versão anterior inteira. Não misture assets ou Service Worker 8.6.1 com 8.6.2.
+Use este pacote inteiro no lugar da versão anterior.
+FREE continua simples e limitado. PRO/OWNER agora usam uma interface própria, com cockpit, rail de navegação e superfícies exclusivas.
+
+Não misture assets nem Service Worker de versões anteriores.
