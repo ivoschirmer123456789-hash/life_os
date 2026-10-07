@@ -1,6 +1,3 @@
-LIFE OS 8.7.0 — OBSIDIAN ATELIER PRO / OWNER
+LIFE OS 8.9.0 — SIGNATURE ACCOUNT EDITION
 
-Use este pacote inteiro no lugar da versão anterior.
-FREE continua simples e limitado. PRO/OWNER agora usam uma interface própria, com cockpit, rail de navegação e superfícies exclusivas.
-
-Não misture assets nem Service Worker de versões anteriores.
+Substitua o pacote anterior inteiro. Não misture assets/cache de outras versões.

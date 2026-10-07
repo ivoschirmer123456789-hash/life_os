@@ -1,4 +1,4 @@
-# LIFE OS 8.7.0 — QA / Obsidian Atelier
+# LIFE OS 8.9.0 — QA / Signature Account
 
 ## Resultado
 - 39/39 verificações passaram.
@@ -29,8 +29,8 @@
 - PASS — Sem 8.6.2 em README.md
 - PASS — Sem 8.6.2 em START_HERE.txt
 - PASS — SW shell
-- PASS — Cache 8.7.0
-- PASS — Manifest — LIFE OS 8.7.0
+- PASS — Cache 8.9.0
+- PASS — Manifest — LIFE OS 8.9.0
 - PASS — JS life-pro-cockpit
 - PASS — JS life-pro-command-grid
 - PASS — JS life-pro-intelligence
