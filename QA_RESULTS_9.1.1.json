@@ -1,0 +1,341 @@
+{
+  "version": "9.1.1",
+  "edition": "Calm Hierarchy Edition",
+  "passed": 66,
+  "total": 66,
+  "checks": [
+    {
+      "name": "HTML parse: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: config-9.1.1.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: context-help-9.1.1.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: life-app-9.1.1.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: product-core-9.1.1.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: product-spacious-9.1.1.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: runtime-9.1.1.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: supabase-auth-9.1.1.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: service-worker.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest JSON valid",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest version 9.1.1",
+      "ok": true,
+      "detail": "LIFE OS 9.1.1"
+    },
+    {
+      "name": "Service Worker shell refs exist",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Service Worker cache 9.1.1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No active 9.1.0 refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO calm workspace class",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO context disclosure",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO tools disclosure",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO disclosure styling",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Day quick reading disclosure",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Day quick reading CSS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Inbox organize disclosure",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Inbox organize CSS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Timeline preview limit 5",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Inbox preview limit 3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Home PRO no redundant system card",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Home PRO primary shortcut: Estudos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Home PRO primary shortcut: Fitness",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Home PRO primary shortcut: Finanças",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Home PRO primary shortcut: IA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Home PRO removed secondary Notes shortcut",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Home PRO removed secondary Planner shortcut",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Home PRO AI-only row",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO preview lists max 3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Favorites preview capped 6",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO signal/library max 2 columns",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO command grid 2 columns",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Mobile decisions one column",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Day console one column",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Calm disclosures closed by default",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Build config 9.1.1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Runtime 9.1.1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS braces: apex-9.1.1.css",
+      "ok": true,
+      "detail": "{=1149 }=1149"
+    },
+    {
+      "name": "CSS braces: apex-marketing-9.1.1.css",
+      "ok": true,
+      "detail": "{=52 }=52"
+    },
+    {
+      "name": "CSS braces: design-system-9.1.1.css",
+      "ok": true,
+      "detail": "{=170 }=170"
+    },
+    {
+      "name": "CSS braces: life-bundle-9.1.1.css",
+      "ok": true,
+      "detail": "{=7060 }=7060"
+    },
+    {
+      "name": "CSS braces: marketing-v60.css",
+      "ok": true,
+      "detail": "{=109 }=109"
+    },
+    {
+      "name": "CSS braces: marketing.css",
+      "ok": true,
+      "detail": "{=209 }=209"
+    },
+    {
+      "name": "CSS braces: product-core-9.1.1.css",
+      "ok": true,
+      "detail": "{=192 }=192"
+    },
+    {
+      "name": "CSS braces: signature-9.1.1.css",
+      "ok": true,
+      "detail": "{=225 }=225"
+    }
+  ],
+  "limitations": [
+    "Static/structural QA only; no authenticated browser E2E with Supabase or checkout in this environment."
+  ]
+}

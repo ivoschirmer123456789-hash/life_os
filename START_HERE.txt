@@ -1,4 +1,2 @@
-LIFE OS 9.0.0 — PRODUCT CONSOLIDATION
-
-Publique a pasta inteira. index.html deve permanecer na raiz.
-Substitua a versão anterior por completo para evitar mistura de cache.
+LIFE OS 9.1.1 — CALM HIERARCHY EDITION
+Abra index.html ou publique a pasta inteira. Não misture com assets de versões anteriores.
