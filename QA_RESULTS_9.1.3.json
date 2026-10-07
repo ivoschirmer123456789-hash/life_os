@@ -1,0 +1,316 @@
+{
+  "version": "9.1.3",
+  "edition": "Fitness Focus Edition",
+  "passed": 61,
+  "total": 61,
+  "checks": [
+    {
+      "name": "HTML válido: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais existem: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais existem: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais existem: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais existem: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais existem: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais existem: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: config-9.1.3.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: context-help-9.1.3.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: life-app-9.1.3.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: product-core-9.1.3.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: product-spacious-9.1.3.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: runtime-9.1.3.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: supabase-auth-9.1.3.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: service-worker.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest JSON válido",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest em 9.1.3",
+      "ok": true,
+      "detail": "LIFE OS 9.1.3"
+    },
+    {
+      "name": "Service Worker só referencia arquivos existentes",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Cache exclusivo 9.1.3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Assets ativos do index usam 9.1.3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Config build 9.1.3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Runtime build 9.1.3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Estado de Modo Foco existe",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Hub ativa Modo Foco",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Modo Foco: Treinos prontos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Modo Foco: Treino personalizado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Modo Foco: Biblioteca de exercícios",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Modo Foco: Treinos salvos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Treinos prontos começam com 6 itens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Biblioteca começa com 8 exercícios",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Filtros avançados ficam recolhidos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Treinos salvos usam lista simples",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Personalizado abre questionário direto",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Personalizado mostra progresso",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Botão Voltar para Fitness existe",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Modo Foco limpa ao voltar",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Navegação geral limpa Modo Foco",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Tela antiga do Fitness é suprimida no foco",
+      "ok": true,
+      "detail": "7"
+    },
+    {
+      "name": "Bridge de área some no foco",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Studio profundo some no foco",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS do foco: life-fit-focus-v913",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS do foco: life-fit-focus-head-v913",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS do foco: life-fit-focus-workout-row-v913",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS do foco: life-fit-focus-exercise-row-v913",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS do foco: life-fit-focus-saved-row-v913",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS do foco: life-fit-focus-personal-v913",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Modo Dia específico do foco",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Mobile em uma coluna",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Identidade PRO usa prata",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem referências ativas a 9.1.2",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "limitations": [
+    "QA estático/estrutural e de lógica. Não substitui E2E autenticado em navegador com Supabase/checkout."
+  ]
+}

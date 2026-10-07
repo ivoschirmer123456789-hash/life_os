@@ -1,8 +1,7 @@
-LIFE OS 9.1.2 — FITNESS + NUTRITION HUB EDITION
+LIFE OS 9.1.3 — FITNESS FOCUS
 
-1. Extraia o ZIP.
-2. Publique o conteúdo com index.html na raiz.
-3. Substitua a versão anterior inteira para evitar mistura de cache.
-
-FITNESS: Treinos prontos / Treino personalizado / Biblioteca de exercícios / Treinos salvos.
-ALIMENTAÇÃO: Planos prontos / Plano personalizado / Biblioteca de receitas / Planos salvos.
+1. Publique este pacote substituindo a versão anterior inteira.
+2. Mantenha index.html na raiz.
+3. O Service Worker usa cache exclusivo 9.1.3.
+4. Fitness: hub de 4 portas -> Modo Foco por função.
+5. Não misture assets 9.1.2 com 9.1.3.

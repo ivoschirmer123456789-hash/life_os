@@ -1,27 +1,32 @@
-# LIFE OS 9.1.2 — Fitness + Nutrition Hub Edition
+# LIFE OS 9.1.3 — Fitness Focus Edition
 
-Esta versão simplifica a entrada de Fitness e Alimentação para reduzir confusão sem remover recursos.
+Esta versão mantém o hub simples do Fitness e simplifica também a segunda tela.
 
 ## Fitness
-Ao abrir Fitness, a primeira tela mostra apenas quatro caminhos grandes:
+Ao abrir Fitness, o usuário continua vendo 4 portas:
 1. Treinos prontos
 2. Treino personalizado
 3. Biblioteca de exercícios
 4. Treinos salvos
 
-Cada caminho abre diretamente a ferramenta correspondente. Progresso, recuperação e outras ferramentas continuam dentro das áreas profundas, não na tela inicial.
+Ao entrar em uma delas, o LIFE abre **Modo Foco**:
+- sem dashboard antigo por baixo;
+- sem navegação cheia competindo com a ação atual;
+- botão claro de voltar para Fitness;
+- poucos itens por vez;
+- filtros avançados recolhidos;
+- resultados progressivos com “ver mais”.
 
-## Alimentação
-Ao abrir Alimentação, a primeira tela segue o mesmo padrão:
-1. Planos prontos
-2. Plano personalizado
-3. Biblioteca de receitas
-4. Planos salvos
+### Treinos prontos
+Busca + categorias + 6 treinos por vez.
 
-Os planos salvos usam o armazenamento já existente do LIFE; nenhuma base paralela foi criada.
+### Treino personalizado
+Questionário sozinho, com progresso e retomada.
 
-## FREE / PRO / OWNER
-O FREE mantém o mesmo mapa mental, mas com os limites do plano. PRO e OWNER usam os hubs completos e a identidade prateada/platina existente.
+### Biblioteca de exercícios
+Busca grande + grupos principais + 8 resultados iniciais. Equipamento/dificuldade/favoritos ficam em Filtros.
 
-## Instalação
-Substitua a versão anterior inteira. O cache do Service Worker é `life-os-9.1.2-fitness-nutrition-hub`.
+### Treinos salvos
+Pasta em lista simples, busca e retomada direta.
+
+O FREE continua respeitando os limites do plano e o PRO/OWNER mantém a identidade prateada.
