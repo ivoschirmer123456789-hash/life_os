@@ -1,0 +1,272 @@
+{
+  "build": "8.6.2",
+  "passed": 53,
+  "total": 53,
+  "checks": [
+    {
+      "name": "JS syntax: config-8.6.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: context-help-8.6.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: life-app-8.6.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: runtime-8.6.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: supabase-auth-8.6.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local asset references exist",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest 8.6.2 valid",
+      "ok": true,
+      "detail": "LIFE OS 8.6.2"
+    },
+    {
+      "name": "FREE nav exactly 5 areas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Locked area catalog: Notas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Locked area catalog: Receitas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Locked area catalog: IA",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Locked area catalog: Life",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Locked area catalog: Biblioteca",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Locked area catalog: Favoritos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Locked area catalog: Meu LIFE",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Locked area catalog: Evolução",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Locked area catalog: Archive",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct locked navigation opens PRO preview",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "FREE favorites restricted to FREE areas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Quick AI remains a FREE sample",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Full AI is PRO-gated",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "FREE launcher lists 5 essential areas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "FREE mobile More only exposes remaining FREE areas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Persuasive PRO universe in launcher",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Persuasive PRO universe in mobile",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Persuasive PRO universe in paywall",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Persuasive PRO universe on Home",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Study FREE limit = 3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Fitness FREE sessions = 2",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Fitness FREE exercises/group = 2",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Tasks FREE visible = 3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Service Worker cache unique",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW precaches life-app-8.6.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW precaches runtime-8.6.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW precaches apex-8.6.2.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW precaches life-bundle-8.6.2.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No stale 8.6.1 asset refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS for life-free-locked-ecosystem",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS for life-pro-universe-showcase",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS for life-mobile-pro-universe",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS for life-pro-vault-app",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}
