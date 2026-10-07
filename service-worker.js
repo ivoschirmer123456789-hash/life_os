@@ -1,9 +1,9 @@
-const LIFE_CACHE='life-os-9.1.1-calm-hierarchy';
+const LIFE_CACHE='life-os-9.1.2-fitness-nutrition-hub';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
   './manifest.webmanifest',
-  './assets/css/life-bundle-9.1.1.css','./assets/css/signature-9.1.1.css','./assets/css/apex-9.1.1.css','./assets/css/product-core-9.1.1.css','./assets/css/design-system-9.1.1.css','./assets/css/apex-marketing-9.1.1.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
-  './assets/js/config-9.1.1.js','./assets/js/product-core-9.1.1.js','./assets/js/product-spacious-9.1.1.js','./assets/js/life-app-9.1.1.js','./assets/js/context-help-9.1.1.js','./assets/js/supabase-auth-9.1.1.js','./assets/js/runtime-9.1.1.js',
+  './assets/css/life-bundle-9.1.2.css','./assets/css/signature-9.1.2.css','./assets/css/apex-9.1.2.css','./assets/css/product-core-9.1.2.css','./assets/css/design-system-9.1.2.css','./assets/css/apex-marketing-9.1.2.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
+  './assets/js/config-9.1.2.js','./assets/js/product-core-9.1.2.js','./assets/js/product-spacious-9.1.2.js','./assets/js/life-app-9.1.2.js','./assets/js/context-help-9.1.2.js','./assets/js/supabase-auth-9.1.2.js','./assets/js/runtime-9.1.2.js',
   './assets/icons/icon.svg','./assets/icons/icon-192.png','./assets/icons/icon-512.png'
 ];
 const EXTERNAL_CACHE_HOSTS=new Set(['unpkg.com','cdn.jsdelivr.net','cdnjs.cloudflare.com','fonts.googleapis.com','fonts.gstatic.com']);
