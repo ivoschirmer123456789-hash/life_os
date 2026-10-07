@@ -1,0 +1,555 @@
+{
+  "version": "9.0.0",
+  "edition": "Product Consolidation Edition",
+  "passed": 109,
+  "total": 109,
+  "failed": [],
+  "checks": [
+    {
+      "name": "page exists: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML valid: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no duplicate ids: index.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "local refs exist: index.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "page exists: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML valid: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no duplicate ids: landing.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "local refs exist: landing.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "page exists: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML valid: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no duplicate ids: offline.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "local refs exist: offline.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "page exists: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML valid: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no duplicate ids: privacy.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "local refs exist: privacy.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "page exists: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML valid: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no duplicate ids: support.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "local refs exist: support.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "page exists: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML valid: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no duplicate ids: terms.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "local refs exist: terms.html",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "JS syntax: config-9.0.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: context-help-9.0.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: life-app-9.0.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: product-core-9.0.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: runtime-9.0.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: supabase-auth-9.0.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax: service-worker.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "manifest valid JSON",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "manifest version name 9.0.0",
+      "ok": true,
+      "detail": "LIFE OS 9.0.0"
+    },
+    {
+      "name": "SW cache 9.0.0 exclusive",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW shell refs exist",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "SW includes product core JS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW includes product core CSS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW avoids caching Supabase API",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "active refs have no 8.9.0",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "config build 9.0.0",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "runtime build name coherent",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "FREE exactly five primary areas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "FREE locked ecosystem present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO primary nav simplified",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "plan matrix centralized",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "public name Meu Dia",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "public name Salvos",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "public name Arquivo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO second interface renderer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "OWNER inherits premium visual",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Meu Dia unified timeline",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "duplicate FREE Home cards hidden",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "duplicate PRO now grid hidden",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quick add global",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quick commands task",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quick capture date tomorrow",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quick capture weekday parsing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quick capture money",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quick capture category inference",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "commitments recurrence",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "task to commitment",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "commitment to task",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "trash state",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "30 day trash retention",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "undo deletion",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "task soft delete",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "note soft delete",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "commitment soft delete",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "backup export",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "backup import",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "cloud conflict protection",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy mode",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy quick toggle",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "auto reduced motion",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "low end heuristic",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "44px touch target",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "focus visible accessibility",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile 380 support",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "content visibility optimization",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "global error logging",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "React ErrorBoundary logging",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Study form resume",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Nutrition form resume",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Recipe finder resume",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Workout finder resume",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Personal training resume",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "LIFE AI tomorrow context",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "LIFE AI weekly spending context",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "LIFE AI workout context",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "contextual upgrade toggle",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "session confirmation",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "switch account option",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "logout door control",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "logout confirmation panel",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "offline page",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "offline app banner",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "sync keys include forms",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "sync keys include trash",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO premium restrained CSS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "settings diagnostics",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "system diagnostics build",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "notification quiet hours",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "notification center",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "export excludes password by whitelist",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no dangerous teen nutrition goal text",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS brace balance: product-core-9.0.0.css",
+      "ok": true,
+      "detail": "95/95"
+    },
+    {
+      "name": "CSS brace balance: apex-9.0.0.css",
+      "ok": true,
+      "detail": "1149/1149"
+    },
+    {
+      "name": "CSS brace balance: signature-9.0.0.css",
+      "ok": true,
+      "detail": "225/225"
+    },
+    {
+      "name": "quick parser behavior 4/4",
+      "ok": true,
+      "detail": "PARSER_OK 4"
+    }
+  ],
+  "browser_e2e": "not run: Chromium dump-dom unavailable in this container session; static/logic/parser validation performed."
+}

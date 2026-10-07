@@ -1,3 +1,4 @@
-LIFE OS 8.9.0 — SIGNATURE ACCOUNT EDITION
+LIFE OS 9.0.0 — PRODUCT CONSOLIDATION
 
-Substitua o pacote anterior inteiro. Não misture assets/cache de outras versões.
+Publique a pasta inteira. index.html deve permanecer na raiz.
+Substitua a versão anterior por completo para evitar mistura de cache.

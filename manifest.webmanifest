@@ -1,7 +1,7 @@
 {
-  "name": "LIFE OS 8.9.0",
-  "short_name": "LIFE",
-  "description": "LIFE OS 8.9.0 — Signature Account Edition, com confirmação de sessão, troca de conta rápida e experiência PRO/OWNER refinada.",
+  "name": "LIFE OS 9.0.0",
+  "short_name": "LIFE 9",
+  "description": "LIFE OS 9.0 — Product Consolidation: Meu Dia, captura inteligente, privacidade, recuperação e experiência simplificada.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

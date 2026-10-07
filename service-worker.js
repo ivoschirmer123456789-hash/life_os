@@ -1,9 +1,9 @@
-const LIFE_CACHE='life-os-8.9.0-signature-account';
+const LIFE_CACHE='life-os-9.0.0-product-consolidation';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
   './manifest.webmanifest',
-  './assets/css/life-bundle-8.9.0.css','./assets/css/signature-8.9.0.css','./assets/css/apex-8.9.0.css','./assets/css/apex-marketing-8.9.0.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
-  './assets/js/config-8.9.0.js','./assets/js/life-app-8.9.0.js','./assets/js/context-help-8.9.0.js','./assets/js/supabase-auth-8.9.0.js','./assets/js/runtime-8.9.0.js',
+  './assets/css/life-bundle-9.0.0.css','./assets/css/signature-9.0.0.css','./assets/css/apex-9.0.0.css','./assets/css/product-core-9.0.0.css','./assets/css/apex-marketing-9.0.0.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
+  './assets/js/config-9.0.0.js','./assets/js/product-core-9.0.0.js','./assets/js/life-app-9.0.0.js','./assets/js/context-help-9.0.0.js','./assets/js/supabase-auth-9.0.0.js','./assets/js/runtime-9.0.0.js',
   './assets/icons/icon.svg','./assets/icons/icon-192.png','./assets/icons/icon-512.png'
 ];
 const EXTERNAL_CACHE_HOSTS=new Set(['unpkg.com','cdn.jsdelivr.net','cdnjs.cloudflare.com','fonts.googleapis.com','fonts.gstatic.com']);
