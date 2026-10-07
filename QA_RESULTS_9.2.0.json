@@ -1,0 +1,696 @@
+{
+  "version": "9.2.0",
+  "edition": "Clarity Hubs Edition",
+  "passed": 137,
+  "total": 137,
+  "checks": [
+    {
+      "name": "HTML válido: index.html",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "IDs únicos: index.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Refs locais: index.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: landing.html",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "IDs únicos: landing.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Refs locais: landing.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: offline.html",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "IDs únicos: offline.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Refs locais: offline.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: privacy.html",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "IDs únicos: privacy.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Refs locais: privacy.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: support.html",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "IDs únicos: support.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Refs locais: support.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: terms.html",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "IDs únicos: terms.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Refs locais: terms.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "JS syntax: config-9.2.0.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS syntax: context-help-9.2.0.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS syntax: life-app-9.2.0.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS syntax: product-core-9.2.0.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS syntax: product-spacious-9.2.0.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS syntax: runtime-9.2.0.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS syntax: supabase-auth-9.2.0.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS syntax: service-worker.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Manifest JSON",
+      "ok": true,
+      "detail": "LIFE OS 9.2.0"
+    },
+    {
+      "name": "Manifest build 9.2.0",
+      "ok": true,
+      "detail": "LIFE OS 9.2.0 — Clarity Hubs Edition"
+    },
+    {
+      "name": "SW shell completo",
+      "ok": true,
+      "detail": "29 refs, 0 ausentes"
+    },
+    {
+      "name": "Cache 9.2.0 exclusivo",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Assets ativos sem identidade anterior",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Estado Modo Foco",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Busca do Modo Foco",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Resets de foco",
+      "ok": true,
+      "detail": "4 ocorrências"
+    },
+    {
+      "name": "Renderer universal de foco",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Hub universal de clareza",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Hub não empilha Fitness/Alimentação",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Tela foco antes do legado",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Legado oculto durante foco",
+      "ok": true,
+      "detail": "41 gates"
+    },
+    {
+      "name": "Modo completo preservado",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Contexto IA não corrompido",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Hub de Tarefas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Tarefas: Minhas tarefas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Tarefas: Nova tarefa",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Tarefas: Projetos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Tarefas: Revisão da semana",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Notas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Notas: Nova nota",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Notas: Minhas notas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Notas: Buscar",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Notas: Organizar com IA",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Estudos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Estudos: Meu plano de estudos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Estudos: Sessão de foco",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Estudos: Revisões e erros",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Estudos: Biblioteca de estudos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Finanças",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Finanças: Nova movimentação",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Finanças: Resumo do mês",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Finanças: Histórico",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Finanças: Metas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de IA",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "IA: Chat",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "IA: Meu dia",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "IA: Meus dados",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "IA: Ações rápidas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Life",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Life: Agenda",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Life: Metas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Life: Projetos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Life: Hábitos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Meu LIFE",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Meu LIFE: Fixados",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Meu LIFE: Recentes",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Meu LIFE: Salvos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Meu LIFE: Buscar no LIFE",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Evolução",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Evolução: Visão geral",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Evolução: Estudos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Evolução: Fitness",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Evolução: Finanças",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Biblioteca",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Biblioteca: Busca rápida",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Biblioteca: Estudos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Biblioteca: Fitness",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Biblioteca: Alimentação",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Favoritos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Favoritos: Todos os salvos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Favoritos: Áreas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Favoritos: Conteúdos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Favoritos: Recentes",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Archive",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Archive: Recentes",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Archive: Buscar",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Archive: Por período",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Perfil",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Perfil: Minha conta",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Perfil: Meu plano",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Perfil: Sincronização",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Perfil: Trocar de conta",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Configurações",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Configurações: Aparência",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Configurações: Notificações",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Configurações: Privacidade e dados",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Configurações: Acessibilidade",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Hub de Tutorial",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Tutorial: Começar no LIFE",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Tutorial: Organizar o dia",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Tutorial: Entender as abas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Tutorial: Preciso de ajuda",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Fitness: Treinos prontos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Fitness: Treino personalizado",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Fitness: Biblioteca de exercícios",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Fitness: Treinos salvos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Alimentação: Planos prontos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Alimentação: Plano personalizado",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Alimentação: Biblioteca de receitas",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Alimentação: Planos salvos",
+      "ok": true,
+      "detail": "presente"
+    },
+    {
+      "name": "Alimentação modo foco: nutrition_ready",
+      "ok": true,
+      "detail": "conectado"
+    },
+    {
+      "name": "Alimentação modo foco: nutrition_personal",
+      "ok": true,
+      "detail": "conectado"
+    },
+    {
+      "name": "Alimentação modo foco: nutrition_recipes",
+      "ok": true,
+      "detail": "conectado"
+    },
+    {
+      "name": "Alimentação modo foco: nutrition_saved",
+      "ok": true,
+      "detail": "conectado"
+    },
+    {
+      "name": "Alimentação abre ferramenta completa existente",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Todos os modos têm descrição de foco",
+      "ok": true,
+      "detail": "59 modos"
+    },
+    {
+      "name": "Todos os modos têm conteúdo/handler",
+      "ok": true,
+      "detail": "59 modos"
+    },
+    {
+      "name": "Listas de foco limitadas",
+      "ok": true,
+      "detail": "87 limites encontrados"
+    },
+    {
+      "name": "Footer explica foco",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "CSS universal de foco",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Largura de leitura 1080px",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Mobile uma coluna",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Tema Dia suportado",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "FREE com 5 áreas",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Confirmação de conta",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Porta de sair/trocar conta",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Identidade prata PRO preservada",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Título 9.2 correto",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Comentário Clarity Hubs",
+      "ok": true,
+      "detail": "OK"
+    }
+  ],
+  "limitations": [
+    "QA estrutural/lógico. Não substitui teste E2E autenticado com Supabase, checkout e APIs remotas reais."
+  ]
+}

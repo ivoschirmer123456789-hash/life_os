@@ -1,7 +1,10 @@
-LIFE OS 9.1.3 — FITNESS FOCUS
+LIFE OS 9.2.0 — CLARITY HUBS EDITION
 
 1. Publique este pacote substituindo a versão anterior inteira.
 2. Mantenha index.html na raiz.
-3. O Service Worker usa cache exclusivo 9.1.3.
-4. Fitness: hub de 4 portas -> Modo Foco por função.
-5. Não misture assets 9.1.2 com 9.1.3.
+3. O Service Worker usa cache exclusivo 9.2.0.
+4. Cada área abre em um hub simples de 3–4 intenções.
+5. Depois do clique, o Modo Foco mostra só o necessário.
+6. Ferramentas avançadas continuam em “Modo completo”.
+7. Fitness e Alimentação preservam os hubs de quatro portas.
+8. Não misture assets de versões anteriores com os de 9.2.0.

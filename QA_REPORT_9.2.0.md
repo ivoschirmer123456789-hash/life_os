@@ -1,0 +1,145 @@
+# QA LIFE OS 9.2.0 — Clarity Hubs Edition
+
+**Resultado: 137/137 verificações aprovadas.**
+
+## Verificações
+- ✅ **HTML válido: index.html** — OK
+- ✅ **IDs únicos: index.html** — 0 duplicados
+- ✅ **Refs locais: index.html** — 0 ausentes
+- ✅ **HTML válido: landing.html** — OK
+- ✅ **IDs únicos: landing.html** — 0 duplicados
+- ✅ **Refs locais: landing.html** — 0 ausentes
+- ✅ **HTML válido: offline.html** — OK
+- ✅ **IDs únicos: offline.html** — 0 duplicados
+- ✅ **Refs locais: offline.html** — 0 ausentes
+- ✅ **HTML válido: privacy.html** — OK
+- ✅ **IDs únicos: privacy.html** — 0 duplicados
+- ✅ **Refs locais: privacy.html** — 0 ausentes
+- ✅ **HTML válido: support.html** — OK
+- ✅ **IDs únicos: support.html** — 0 duplicados
+- ✅ **Refs locais: support.html** — 0 ausentes
+- ✅ **HTML válido: terms.html** — OK
+- ✅ **IDs únicos: terms.html** — 0 duplicados
+- ✅ **Refs locais: terms.html** — 0 ausentes
+- ✅ **JS syntax: config-9.2.0.js** — OK
+- ✅ **JS syntax: context-help-9.2.0.js** — OK
+- ✅ **JS syntax: life-app-9.2.0.js** — OK
+- ✅ **JS syntax: product-core-9.2.0.js** — OK
+- ✅ **JS syntax: product-spacious-9.2.0.js** — OK
+- ✅ **JS syntax: runtime-9.2.0.js** — OK
+- ✅ **JS syntax: supabase-auth-9.2.0.js** — OK
+- ✅ **JS syntax: service-worker.js** — OK
+- ✅ **Manifest JSON** — LIFE OS 9.2.0
+- ✅ **Manifest build 9.2.0** — LIFE OS 9.2.0 — Clarity Hubs Edition
+- ✅ **SW shell completo** — 29 refs, 0 ausentes
+- ✅ **Cache 9.2.0 exclusivo** — OK
+- ✅ **Assets ativos sem identidade anterior** — OK
+- ✅ **Estado Modo Foco** — OK
+- ✅ **Busca do Modo Foco** — OK
+- ✅ **Resets de foco** — 4 ocorrências
+- ✅ **Renderer universal de foco** — OK
+- ✅ **Hub universal de clareza** — OK
+- ✅ **Hub não empilha Fitness/Alimentação** — OK
+- ✅ **Tela foco antes do legado** — OK
+- ✅ **Legado oculto durante foco** — 41 gates
+- ✅ **Modo completo preservado** — OK
+- ✅ **Contexto IA não corrompido** — OK
+- ✅ **Hub de Tarefas** — presente
+- ✅ **Tarefas: Minhas tarefas** — presente
+- ✅ **Tarefas: Nova tarefa** — presente
+- ✅ **Tarefas: Projetos** — presente
+- ✅ **Tarefas: Revisão da semana** — presente
+- ✅ **Hub de Notas** — presente
+- ✅ **Notas: Nova nota** — presente
+- ✅ **Notas: Minhas notas** — presente
+- ✅ **Notas: Buscar** — presente
+- ✅ **Notas: Organizar com IA** — presente
+- ✅ **Hub de Estudos** — presente
+- ✅ **Estudos: Meu plano de estudos** — presente
+- ✅ **Estudos: Sessão de foco** — presente
+- ✅ **Estudos: Revisões e erros** — presente
+- ✅ **Estudos: Biblioteca de estudos** — presente
+- ✅ **Hub de Finanças** — presente
+- ✅ **Finanças: Nova movimentação** — presente
+- ✅ **Finanças: Resumo do mês** — presente
+- ✅ **Finanças: Histórico** — presente
+- ✅ **Finanças: Metas** — presente
+- ✅ **Hub de IA** — presente
+- ✅ **IA: Chat** — presente
+- ✅ **IA: Meu dia** — presente
+- ✅ **IA: Meus dados** — presente
+- ✅ **IA: Ações rápidas** — presente
+- ✅ **Hub de Life** — presente
+- ✅ **Life: Agenda** — presente
+- ✅ **Life: Metas** — presente
+- ✅ **Life: Projetos** — presente
+- ✅ **Life: Hábitos** — presente
+- ✅ **Hub de Meu LIFE** — presente
+- ✅ **Meu LIFE: Fixados** — presente
+- ✅ **Meu LIFE: Recentes** — presente
+- ✅ **Meu LIFE: Salvos** — presente
+- ✅ **Meu LIFE: Buscar no LIFE** — presente
+- ✅ **Hub de Evolução** — presente
+- ✅ **Evolução: Visão geral** — presente
+- ✅ **Evolução: Estudos** — presente
+- ✅ **Evolução: Fitness** — presente
+- ✅ **Evolução: Finanças** — presente
+- ✅ **Hub de Biblioteca** — presente
+- ✅ **Biblioteca: Busca rápida** — presente
+- ✅ **Biblioteca: Estudos** — presente
+- ✅ **Biblioteca: Fitness** — presente
+- ✅ **Biblioteca: Alimentação** — presente
+- ✅ **Hub de Favoritos** — presente
+- ✅ **Favoritos: Todos os salvos** — presente
+- ✅ **Favoritos: Áreas** — presente
+- ✅ **Favoritos: Conteúdos** — presente
+- ✅ **Favoritos: Recentes** — presente
+- ✅ **Hub de Archive** — presente
+- ✅ **Archive: Recentes** — presente
+- ✅ **Archive: Buscar** — presente
+- ✅ **Archive: Por período** — presente
+- ✅ **Hub de Perfil** — presente
+- ✅ **Perfil: Minha conta** — presente
+- ✅ **Perfil: Meu plano** — presente
+- ✅ **Perfil: Sincronização** — presente
+- ✅ **Perfil: Trocar de conta** — presente
+- ✅ **Hub de Configurações** — presente
+- ✅ **Configurações: Aparência** — presente
+- ✅ **Configurações: Notificações** — presente
+- ✅ **Configurações: Privacidade e dados** — presente
+- ✅ **Configurações: Acessibilidade** — presente
+- ✅ **Hub de Tutorial** — presente
+- ✅ **Tutorial: Começar no LIFE** — presente
+- ✅ **Tutorial: Organizar o dia** — presente
+- ✅ **Tutorial: Entender as abas** — presente
+- ✅ **Tutorial: Preciso de ajuda** — presente
+- ✅ **Fitness: Treinos prontos** — presente
+- ✅ **Fitness: Treino personalizado** — presente
+- ✅ **Fitness: Biblioteca de exercícios** — presente
+- ✅ **Fitness: Treinos salvos** — presente
+- ✅ **Alimentação: Planos prontos** — presente
+- ✅ **Alimentação: Plano personalizado** — presente
+- ✅ **Alimentação: Biblioteca de receitas** — presente
+- ✅ **Alimentação: Planos salvos** — presente
+- ✅ **Alimentação modo foco: nutrition_ready** — conectado
+- ✅ **Alimentação modo foco: nutrition_personal** — conectado
+- ✅ **Alimentação modo foco: nutrition_recipes** — conectado
+- ✅ **Alimentação modo foco: nutrition_saved** — conectado
+- ✅ **Alimentação abre ferramenta completa existente** — OK
+- ✅ **Todos os modos têm descrição de foco** — 59 modos
+- ✅ **Todos os modos têm conteúdo/handler** — 59 modos
+- ✅ **Listas de foco limitadas** — 87 limites encontrados
+- ✅ **Footer explica foco** — OK
+- ✅ **CSS universal de foco** — OK
+- ✅ **Largura de leitura 1080px** — OK
+- ✅ **Mobile uma coluna** — OK
+- ✅ **Tema Dia suportado** — OK
+- ✅ **FREE com 5 áreas** — OK
+- ✅ **Confirmação de conta** — OK
+- ✅ **Porta de sair/trocar conta** — OK
+- ✅ **Identidade prata PRO preservada** — OK
+- ✅ **Título 9.2 correto** — OK
+- ✅ **Comentário Clarity Hubs** — OK
+
+## Limitação
+O QA valida estrutura, sintaxe, referências e a lógica estática dos hubs/modos focados. Não substitui teste E2E autenticado com Supabase, checkout e APIs remotas reais.
