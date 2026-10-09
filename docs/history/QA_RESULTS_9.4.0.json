@@ -1,0 +1,332 @@
+{
+  "version": "9.4.0",
+  "passed": 65,
+  "total": 65,
+  "checks": [
+    {
+      "name": "index.html parses",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "index.html unique ids",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "index.html local refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "landing.html parses",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "landing.html unique ids",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "landing.html local refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "offline.html parses",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "offline.html unique ids",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "offline.html local refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy.html parses",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy.html unique ids",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy.html local refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "support.html parses",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "support.html unique ids",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "support.html local refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "terms.html parses",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "terms.html unique ids",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "terms.html local refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS runtime-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS product-core-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS clarity-guardrails-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS quality-guardrails-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS product-spacious-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS context-help-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS supabase-auth-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS config-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS life-app-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS interaction-layer-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS service-worker.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "manifest json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "manifest 9.4.0",
+      "ok": true,
+      "detail": "LIFE OS 9.4.0"
+    },
+    {
+      "name": "SW shell refs exist",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW cache 9.4.0",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW new interaction module",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SW quality module",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "index focus-refinement-9.4.0.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "index interaction-layer-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "index quality-guardrails-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no active 9.3.1 refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Fitness initial limit 4",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Fitness resets 4",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Exercise initial limit 6",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Search result cap 8",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Settings discoverable search",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Evolution narrative",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Nutrition today plan",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Focus footer simplified",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Hub tile slice max 4",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "right click quick peek",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "long press quick peek",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "escape closes preview",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "scroll restore",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quick actions only open/copy",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "copy action",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no destructive quick command",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "hub >4 audit",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "font audit",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "naming audit",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quality API",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "hub max visual 4",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile one column",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "safe area",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "focus visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quick peek style",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "reduced motion",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

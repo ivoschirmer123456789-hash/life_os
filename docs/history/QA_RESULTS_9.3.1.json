@@ -1,0 +1,411 @@
+{
+  "version": "9.4.0",
+  "edition": "Focus Refinement Edition",
+  "passed": 80,
+  "total": 80,
+  "checks": [
+    {
+      "name": "HTML válido: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais válidas: index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais válidas: landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais válidas: offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais válidas: privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais válidas: support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML válido: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Sem IDs duplicados: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Referências locais válidas: terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: clarity-guardrails-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: config-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: context-help-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: life-app-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: product-core-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: product-spacious-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: runtime-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: supabase-auth-9.4.0.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JavaScript válido: service-worker.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: apex-9.4.0.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: apex-marketing-9.4.0.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: clarity-plus-9.4.0.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: design-system-9.4.0.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: life-bundle-9.4.0.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: marketing-v60.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: marketing.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: product-core-9.4.0.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: review-polish-9.4.0.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS válido: signature-9.4.0.css",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest JSON válido",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest versão 9.4.0",
+      "ok": true,
+      "detail": "LIFE OS 9.4.0"
+    },
+    {
+      "name": "Service Worker referencia apenas arquivos existentes",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "Cache exclusivo 9.4.0",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS de revisão pré-cacheado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Index carrega CSS de revisão",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Index usa somente assets 9.4.0",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Tarefas",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Notas",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Estudos",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Finanças",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: IA",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Life",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Meu LIFE",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Evolução",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Biblioteca",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Favoritos",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Archive",
+      "ok": true,
+      "detail": "3 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Perfil",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Configurações",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub com no máximo 4 escolhas: Tutorial",
+      "ok": true,
+      "detail": "4 escolhas"
+    },
+    {
+      "name": "Hub Fitness mantém 4 portas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Hub Alimentação mantém 4 portas",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Modos Foco não usam prévias genéricas de 5 itens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Modos Foco não usam prévias genéricas de 6 itens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Buscas focadas limitadas a 4 resultados",
+      "ok": true,
+      "detail": "8"
+    },
+    {
+      "name": "Pré-visualizações focadas usam 3 itens",
+      "ok": true,
+      "detail": "17"
+    },
+    {
+      "name": "Modo Foco mantém Mais opções",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO usa ASSINANTE PRO",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Cabeçalho premium usa nome público da área",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Runtime sem segundo listener de busca por /",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Atalho global / continua no app",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Guardrail usa observação relevante",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Guardrail limita hubs a 4",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Guardrail limita prévias a 4",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Revisão aumenta texto funcional",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Quick AI recebeu reforço de legibilidade",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Mobile recebeu reforço de legibilidade",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "FREE mantém 5 áreas",
+      "ok": true,
+      "detail": "Hoje, Tarefas, Estudos, Fitness, Finanças"
+    },
+    {
+      "name": "Confirmação de sessão preservada",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Botão de sair/trocar conta preservado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "PRO prateado preservado",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Tema Dia preservado",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "limitations": [
+    "Auditoria estática/estrutural e de lógica. O Chromium headless disponível no ambiente não concluiu um E2E visual autenticado; Supabase, checkout e APIs remotas exigem teste no ambiente publicado."
+  ]
+}

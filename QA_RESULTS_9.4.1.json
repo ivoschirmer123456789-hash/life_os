@@ -1,0 +1,705 @@
+{
+  "version": "9.4.1",
+  "edition": "Command Audit Edition",
+  "passed": 138,
+  "total": 138,
+  "checks": [
+    {
+      "name": "HTML válido: index.html",
+      "ok": true,
+      "detail": "parse recover=False"
+    },
+    {
+      "name": "IDs únicos: index.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Referências locais: index.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: landing.html",
+      "ok": true,
+      "detail": "parse recover=False"
+    },
+    {
+      "name": "IDs únicos: landing.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Referências locais: landing.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: offline.html",
+      "ok": true,
+      "detail": "parse recover=False"
+    },
+    {
+      "name": "IDs únicos: offline.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Referências locais: offline.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: privacy.html",
+      "ok": true,
+      "detail": "parse recover=False"
+    },
+    {
+      "name": "IDs únicos: privacy.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Referências locais: privacy.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: support.html",
+      "ok": true,
+      "detail": "parse recover=False"
+    },
+    {
+      "name": "IDs únicos: support.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Referências locais: support.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "HTML válido: terms.html",
+      "ok": true,
+      "detail": "parse recover=False"
+    },
+    {
+      "name": "IDs únicos: terms.html",
+      "ok": true,
+      "detail": "0 duplicados"
+    },
+    {
+      "name": "Referências locais: terms.html",
+      "ok": true,
+      "detail": "0 ausentes"
+    },
+    {
+      "name": "JS sintaxe: clarity-guardrails-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: config-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: context-help-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: interaction-layer-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: life-app-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: product-core-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: product-spacious-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: quality-guardrails-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: runtime-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: supabase-auth-9.4.1.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "JS sintaxe: service-worker.js",
+      "ok": true,
+      "detail": "OK"
+    },
+    {
+      "name": "Manifest JSON válido",
+      "ok": true,
+      "detail": "LIFE OS 9.4.1"
+    },
+    {
+      "name": "Manifest versão 9.4.1",
+      "ok": true,
+      "detail": "LIFE OS 9.4.1"
+    },
+    {
+      "name": "Título index 9.4.1",
+      "ok": true,
+      "detail": "title atualizado"
+    },
+    {
+      "name": "Meta build 9.4.1",
+      "ok": true,
+      "detail": "meta build"
+    },
+    {
+      "name": "Config build 9.4.1",
+      "ok": true,
+      "detail": "config"
+    },
+    {
+      "name": "Runtime build 9.4.1",
+      "ok": true,
+      "detail": "runtime"
+    },
+    {
+      "name": "Cache exclusivo 9.4.1",
+      "ok": true,
+      "detail": "service worker cache"
+    },
+    {
+      "name": "Sem referências ativas a builds antigos",
+      "ok": true,
+      "detail": "0 referências"
+    },
+    {
+      "name": "Service Worker referencia somente arquivos existentes",
+      "ok": true,
+      "detail": "35 refs; ausentes=[]"
+    },
+    {
+      "name": "Botões React possuem interação",
+      "ok": true,
+      "detail": "713 botões; sem handler=0"
+    },
+    {
+      "name": "Hub mode implementado: tasks_today",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: tasks_new",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: tasks_projects",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: tasks_review",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: notes_new",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: notes_mine",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: notes_search",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: notes_ai",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: study_plan",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: study_focus",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: study_review",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: study_library",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: finance_new",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: finance_summary",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: finance_history",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: finance_goals",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: ai_chat",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: ai_today",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: ai_data",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: ai_actions",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: life_day",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: life_goals",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: life_projects",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: life_habits",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: my_pins",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: my_recent",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: my_saved",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: my_search",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: evolution_overview",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: evolution_study",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: evolution_fitness",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: evolution_finance",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: library_search",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: library_study",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: library_fitness",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: library_food",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: favorites_all",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: favorites_areas",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: favorites_content",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: favorites_recent",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: archive_recent",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: archive_search",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: archive_periods",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: profile_account",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: profile_plan",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: profile_sync",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: profile_security",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: settings_appearance",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: settings_notifications",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: settings_privacy",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: settings_accessibility",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: tutorial_start",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: tutorial_day",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: tutorial_areas",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Hub mode implementado: tutorial_help",
+      "ok": true,
+      "detail": "renderAreaFocusV920"
+    },
+    {
+      "name": "Todos os modos dos Hubs têm destino",
+      "ok": true,
+      "detail": "55/55"
+    },
+    {
+      "name": "Fitness focus implementado: ready",
+      "ok": true,
+      "detail": "renderFitnessFocusV913"
+    },
+    {
+      "name": "Fitness focus implementado: personal",
+      "ok": true,
+      "detail": "renderFitnessFocusV913"
+    },
+    {
+      "name": "Fitness focus implementado: exercises",
+      "ok": true,
+      "detail": "renderFitnessFocusV913"
+    },
+    {
+      "name": "Fitness focus implementado: saved",
+      "ok": true,
+      "detail": "renderFitnessFocusV913"
+    },
+    {
+      "name": "Captura rápida: /tarefa enviar trabalho amanhã 19h 50 min",
+      "ok": true,
+      "detail": "{'kind': 'TAREFA', 'title': 'enviar trabalho', 'category': 'Trabalho', 'amount': None, 'time': '19:00', 'date': '2026-10-10', 'duration': 50}"
+    },
+    {
+      "name": "Captura rápida: /nota ideia do projeto",
+      "ok": true,
+      "detail": "{'kind': 'NOTA', 'title': 'ideia do projeto', 'category': 'Pessoal', 'amount': None, 'time': '', 'date': '', 'duration': 30}"
+    },
+    {
+      "name": "Captura rápida: /gasto lanche R$25",
+      "ok": true,
+      "detail": "{'kind': 'GASTO', 'title': 'lanche', 'category': 'Finanças', 'amount': 25, 'time': '', 'date': '', 'duration': 30}"
+    },
+    {
+      "name": "Captura rápida: /compromisso dentista amanhã 15h",
+      "ok": true,
+      "detail": "{'kind': 'EVENTO', 'title': 'dentista', 'category': 'Saúde', 'amount': None, 'time': '15:00', 'date': '2026-10-10', 'duration': 30}"
+    },
+    {
+      "name": "Captura rápida: /evento reunião sexta 14:30",
+      "ok": true,
+      "detail": "{'kind': 'EVENTO', 'title': 'reunião', 'category': 'Trabalho', 'amount': None, 'time': '14:30', 'date': '2026-10-16', 'duration': 30}"
+    },
+    {
+      "name": "Captura rápida: /projeto lançar site 20/10",
+      "ok": true,
+      "detail": "{'kind': 'PROJETO', 'title': 'lançar site', 'category': 'Pessoal', 'amount': None, 'time': '', 'date': '2026-10-20', 'duration': 30}"
+    },
+    {
+      "name": "Captura rápida: gastei R$ 32,50 no lanche",
+      "ok": true,
+      "detail": "{'kind': 'GASTO', 'title': 'lanche', 'category': 'Finanças', 'amount': 32.5, 'time': '', 'date': '', 'duration': 30}"
+    },
+    {
+      "name": "Captura rápida: paguei 18,90 no almoço",
+      "ok": true,
+      "detail": "{'kind': 'GASTO', 'title': 'almoço', 'category': 'Finanças', 'amount': 18.9, 'time': '', 'date': '', 'duration': 30}"
+    },
+    {
+      "name": "Captura rápida: /estudo química 40 min",
+      "ok": true,
+      "detail": "{'kind': 'ESTUDO', 'title': 'química', 'category': 'Estudos', 'amount': None, 'time': '', 'date': '', 'duration': 40}"
+    },
+    {
+      "name": "Captura rápida: /gasto conta 20/10",
+      "ok": true,
+      "detail": "{'kind': 'GASTO', 'title': 'conta', 'category': 'Finanças', 'amount': None, 'time': '', 'date': '2026-10-20', 'duration': 30}"
+    },
+    {
+      "name": "Captura rápida: coisa qualquer sem destino",
+      "ok": true,
+      "detail": "{'kind': 'INBOX', 'title': 'coisa qualquer sem destino', 'category': 'Pessoal', 'amount': None, 'time': '', 'date': '', 'duration': 30}"
+    },
+    {
+      "name": "Suite captura rápida completa",
+      "ok": true,
+      "detail": "11/11"
+    },
+    {
+      "name": "Roteador possui destino EVENTO",
+      "ok": true,
+      "detail": "routeCapturedItem"
+    },
+    {
+      "name": "Roteador possui destino GASTO",
+      "ok": true,
+      "detail": "routeCapturedItem"
+    },
+    {
+      "name": "Roteador possui destino PROJETO",
+      "ok": true,
+      "detail": "routeCapturedItem"
+    },
+    {
+      "name": "Roteador possui destino ESTUDO",
+      "ok": true,
+      "detail": "routeCapturedItem"
+    },
+    {
+      "name": "Roteador possui destino NOTA",
+      "ok": true,
+      "detail": "routeCapturedItem"
+    },
+    {
+      "name": "Roteador possui destino TAREFA",
+      "ok": true,
+      "detail": "routeCapturedItem"
+    },
+    {
+      "name": "Roteador possui destino ARQUIVAR",
+      "ok": true,
+      "detail": "routeCapturedItem"
+    },
+    {
+      "name": "Projeto preserva data da captura",
+      "ok": true,
+      "detail": "projeto"
+    },
+    {
+      "name": "Auth/control handler: la-login",
+      "ok": true,
+      "detail": "la-login referenciado"
+    },
+    {
+      "name": "Auth/control handler: la-signup",
+      "ok": true,
+      "detail": "la-signup referenciado"
+    },
+    {
+      "name": "Auth/control handler: la-create-account",
+      "ok": true,
+      "detail": "la-create-account referenciado"
+    },
+    {
+      "name": "Auth/control handler: la-forgot",
+      "ok": true,
+      "detail": "la-forgot referenciado"
+    },
+    {
+      "name": "Auth/control handler: la-send-recovery",
+      "ok": true,
+      "detail": "la-send-recovery referenciado"
+    },
+    {
+      "name": "Auth/control handler: la-save-pass",
+      "ok": true,
+      "detail": "la-save-pass referenciado"
+    },
+    {
+      "name": "Auth/control handler: la-session-continue",
+      "ok": true,
+      "detail": "la-session-continue referenciado"
+    },
+    {
+      "name": "Auth/control handler: la-session-switch",
+      "ok": true,
+      "detail": "la-session-switch referenciado"
+    },
+    {
+      "name": "Auth/control handler: life-account-exit",
+      "ok": true,
+      "detail": "life-account-exit referenciado"
+    },
+    {
+      "name": "Auth/control handler: life-account-exit-confirm",
+      "ok": true,
+      "detail": "life-account-exit-confirm referenciado"
+    },
+    {
+      "name": "Auth/control handler: life-owner-open",
+      "ok": true,
+      "detail": "life-owner-open referenciado"
+    },
+    {
+      "name": "Auth/control handler: life-owner-close",
+      "ok": true,
+      "detail": "life-owner-close referenciado"
+    },
+    {
+      "name": "OWNER tabs conectadas",
+      "ok": true,
+      "detail": "tabs"
+    },
+    {
+      "name": "OWNER preview conectada",
+      "ok": true,
+      "detail": "preview"
+    },
+    {
+      "name": "Long press bloqueia clique sintético",
+      "ok": true,
+      "detail": "interaction layer"
+    },
+    {
+      "name": "Preview só abre ação em alvo clicável",
+      "ok": true,
+      "detail": "interaction layer"
+    },
+    {
+      "name": "Clipboard tem fallback",
+      "ok": true,
+      "detail": "copy fallback"
+    },
+    {
+      "name": "FREE mantém 5 áreas",
+      "ok": true,
+      "detail": "matriz FREE"
+    },
+    {
+      "name": "OWNER herda PRO",
+      "ok": true,
+      "detail": "matriz OWNER"
+    }
+  ],
+  "isolated_browser_tests": {
+    "auth_fresh": "PASS: login, exit menu, logout; 0 page errors",
+    "auth_existing_session": "PASS: confirmation gate, continue, exit hidden until confirmation; 0 page errors",
+    "owner": "PASS: panel, tabs, FREE preview, close; 0 page errors",
+    "interaction_layer": "PASS: preview, non-actionable hides open, long-press suppresses original click; 0 page errors"
+  },
+  "limitation": "Full integrated React E2E was not completed because the sandbox cannot fetch React 18 from the CDN and the local bundled React is 16.0. Isolated browser tests and static/logical tests were run instead."
+}

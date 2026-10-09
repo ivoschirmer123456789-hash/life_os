@@ -1,9 +1,9 @@
-const LIFE_CACHE='life-os-9.2.0-clarity-hubs';
+const LIFE_CACHE='life-os-9.4.1-command-audit';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
   './manifest.webmanifest',
-  './assets/css/life-bundle-9.2.0.css','./assets/css/signature-9.2.0.css','./assets/css/apex-9.2.0.css','./assets/css/product-core-9.2.0.css','./assets/css/design-system-9.2.0.css','./assets/css/apex-marketing-9.2.0.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
-  './assets/js/config-9.2.0.js','./assets/js/product-core-9.2.0.js','./assets/js/product-spacious-9.2.0.js','./assets/js/life-app-9.2.0.js','./assets/js/context-help-9.2.0.js','./assets/js/supabase-auth-9.2.0.js','./assets/js/runtime-9.2.0.js',
+  './assets/css/life-bundle-9.4.1.css','./assets/css/signature-9.4.1.css','./assets/css/apex-9.4.1.css','./assets/css/product-core-9.4.1.css','./assets/css/design-system-9.4.1.css','./assets/css/clarity-plus-9.4.1.css','./assets/css/review-polish-9.4.1.css','./assets/css/focus-refinement-9.4.1.css','./assets/css/apex-marketing-9.4.1.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
+  './assets/js/config-9.4.1.js','./assets/js/product-core-9.4.1.js','./assets/js/product-spacious-9.4.1.js','./assets/js/clarity-guardrails-9.4.1.js','./assets/js/life-app-9.4.1.js','./assets/js/context-help-9.4.1.js','./assets/js/supabase-auth-9.4.1.js','./assets/js/runtime-9.4.1.js','./assets/js/interaction-layer-9.4.1.js','./assets/js/quality-guardrails-9.4.1.js',
   './assets/icons/icon.svg','./assets/icons/icon-192.png','./assets/icons/icon-512.png'
 ];
 const EXTERNAL_CACHE_HOSTS=new Set(['unpkg.com','cdn.jsdelivr.net','cdnjs.cloudflare.com','fonts.googleapis.com','fonts.gstatic.com']);

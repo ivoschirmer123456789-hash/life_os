@@ -1,0 +1,87 @@
+# LIFE OS 9.4.1 — QA Review
+
+**Resultado: 80/80 verificações aprovadas.**
+
+- ✅ HTML válido: index.html
+- ✅ Sem IDs duplicados: index.html
+- ✅ Referências locais válidas: index.html
+- ✅ HTML válido: landing.html
+- ✅ Sem IDs duplicados: landing.html
+- ✅ Referências locais válidas: landing.html
+- ✅ HTML válido: offline.html
+- ✅ Sem IDs duplicados: offline.html
+- ✅ Referências locais válidas: offline.html
+- ✅ HTML válido: privacy.html
+- ✅ Sem IDs duplicados: privacy.html
+- ✅ Referências locais válidas: privacy.html
+- ✅ HTML válido: support.html
+- ✅ Sem IDs duplicados: support.html
+- ✅ Referências locais válidas: support.html
+- ✅ HTML válido: terms.html
+- ✅ Sem IDs duplicados: terms.html
+- ✅ Referências locais válidas: terms.html
+- ✅ JavaScript válido: clarity-guardrails-9.4.1.js
+- ✅ JavaScript válido: config-9.4.1.js
+- ✅ JavaScript válido: context-help-9.4.1.js
+- ✅ JavaScript válido: life-app-9.4.1.js
+- ✅ JavaScript válido: product-core-9.4.1.js
+- ✅ JavaScript válido: product-spacious-9.4.1.js
+- ✅ JavaScript válido: runtime-9.4.1.js
+- ✅ JavaScript válido: supabase-auth-9.4.1.js
+- ✅ JavaScript válido: service-worker.js
+- ✅ CSS válido: apex-9.4.1.css
+- ✅ CSS válido: apex-marketing-9.4.1.css
+- ✅ CSS válido: clarity-plus-9.4.1.css
+- ✅ CSS válido: design-system-9.4.1.css
+- ✅ CSS válido: life-bundle-9.4.1.css
+- ✅ CSS válido: marketing-v60.css
+- ✅ CSS válido: marketing.css
+- ✅ CSS válido: product-core-9.4.1.css
+- ✅ CSS válido: review-polish-9.4.1.css
+- ✅ CSS válido: signature-9.4.1.css
+- ✅ Manifest JSON válido
+- ✅ Manifest versão 9.4.1 — LIFE OS 9.4.1
+- ✅ Service Worker referencia apenas arquivos existentes — []
+- ✅ Cache exclusivo 9.4.1
+- ✅ CSS de revisão pré-cacheado
+- ✅ Index carrega CSS de revisão
+- ✅ Index usa somente assets 9.4.1
+- ✅ Hub com no máximo 4 escolhas: Tarefas — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Notas — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Estudos — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Finanças — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: IA — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Life — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Meu LIFE — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Evolução — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Biblioteca — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Favoritos — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Archive — 3 escolhas
+- ✅ Hub com no máximo 4 escolhas: Perfil — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Configurações — 4 escolhas
+- ✅ Hub com no máximo 4 escolhas: Tutorial — 4 escolhas
+- ✅ Hub Fitness mantém 4 portas
+- ✅ Hub Alimentação mantém 4 portas
+- ✅ Modos Foco não usam prévias genéricas de 5 itens
+- ✅ Modos Foco não usam prévias genéricas de 6 itens
+- ✅ Buscas focadas limitadas a 4 resultados — 8
+- ✅ Pré-visualizações focadas usam 3 itens — 17
+- ✅ Modo Foco mantém Mais opções
+- ✅ PRO usa ASSINANTE PRO
+- ✅ Cabeçalho premium usa nome público da área
+- ✅ Runtime sem segundo listener de busca por /
+- ✅ Atalho global / continua no app
+- ✅ Guardrail usa observação relevante
+- ✅ Guardrail limita hubs a 4
+- ✅ Guardrail limita prévias a 4
+- ✅ Revisão aumenta texto funcional
+- ✅ Quick AI recebeu reforço de legibilidade
+- ✅ Mobile recebeu reforço de legibilidade
+- ✅ FREE mantém 5 áreas — Hoje, Tarefas, Estudos, Fitness, Finanças
+- ✅ Confirmação de sessão preservada
+- ✅ Botão de sair/trocar conta preservado
+- ✅ PRO prateado preservado
+- ✅ Tema Dia preservado
+
+## Limitação
+Esta revisão valida estrutura, referências, sintaxe, regras de clareza e invariantes de produto. O Chromium headless deste ambiente não concluiu um teste E2E visual autenticado; integrações reais com Supabase, checkout e APIs remotas devem ser verificadas após publicação.

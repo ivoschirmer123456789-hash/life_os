@@ -1,0 +1,166 @@
+/* LIFE OS 9.4.1 — Review & Polish
+   Keeps the Clarity Hubs structure intact while improving legibility,
+   spacing and low-noise focus screens. */
+
+:root{
+  --life-functional-min:12px;
+  --life-functional-small:12.5px;
+}
+
+/* Functional microcopy must remain readable. Decorative labels can stay compact,
+   but never at 7–9px on the active app surfaces. */
+.life-hub-resume-v930 small,
+.life-mobile-more-actions-v930 .search,
+.life-day-timeline>header small,
+.life-day-side>header small,
+.life-capture-insight small,
+.life-capture-command-hint span,
+.life-system-health small,
+.life-settings-mini-card small,
+.life-pro-system-links button,
+.life-command-palette-hints span,
+.life-form-resume,
+.life-day-head-actions button,
+.life-day-quick-actions button,
+.life-mobile-nav button span,
+.life-mobile-area-card small,
+.life-knowledge-map-v4 small,
+.life-automation-center-v4 span,
+.life-automation-center-v4 em,
+.life-knowledge-map-actions-v4 button,
+.life-graph-builder-v4 button,
+.life-pro89-brandline,
+.life-pro89-seal small,
+.life-pro-system-card small,
+.life-pro-system-card button,
+.life-premium-nav-group,
+.life-day-row .copy small,
+.life-day-row em,
+.life-day-side-stat small,
+.life-inbox91-head>button,
+.life-inbox91-actions button,
+.life-inbox91 footer button,
+.life-ai36-context button,
+.life-pro91-disclosure>summary small,
+.life-day-side91>summary small,
+.life-inbox91-organize>summary,
+.life-entry-hub-intro-v912 small,
+.life-entry-hub-card-v912>small,
+.life-fit-focus-count-v913,
+.life-fit-focus-chips-v913 button,
+.life-fit-focus-workout-row-v913 em,
+.life-fit-focus-saved-row-v913 em,
+.life-fit-focus-exercise-row-v913 em,
+.life-fit-focus-sectionline-v913 span,
+.life-fit-focus-options-v913 summary,
+.life-fit-focus-filtergrid-v913 label,
+.life-fit-focus-personal-copy-v913 small,
+.life-fit-focus-progress-v913 span,
+.life-design-focus-shell>small,
+.life-design-focus p,
+.life-design-focus-actions button,
+.life-ai-quick-head small,
+.life-ai-qmsg small,
+.life-ai-qmsg p,
+.life-ai-qcards b,
+.life-ai-qcards span,
+.life-ai-quick-empty p,
+.life-ai-quick-suggest button,
+.life-ai-quick-compose input,
+.life-ai-quick-full{
+  font-size:var(--life-functional-min)!important;
+  line-height:1.42!important;
+}
+
+.life-settings-mini-card b,
+.life-ai-quick-head b,
+.life-fit34-history>div b{
+  font-size:13px!important;
+}
+
+/* Focus screens: one task at a time, with comfortable reading width. */
+.life-area-focus-v920,
+.life-fit-focus-v913{
+  width:min(100%,1120px);
+  margin-inline:auto;
+}
+.life-area-focus-card-v920,
+.life-fit-focus-toolbar-v913,
+.life-fit-focus-searchhero-v913,
+.life-fit-focus-personal-v913{
+  padding:clamp(18px,2.5vw,28px)!important;
+}
+.life-area-focus-list-v920,
+.life-fit-focus-workout-list-v913,
+.life-fit-focus-saved-list-v913,
+.life-fit-focus-exercise-list-v913{
+  gap:10px!important;
+}
+.life-area-focus-row-v920,
+.life-fit-focus-workout-row-v913,
+.life-fit-focus-saved-row-v913,
+.life-fit-focus-exercise-row-v913{
+  min-height:64px!important;
+  padding:14px 16px!important;
+}
+.life-area-focus-row-v920 b,
+.life-fit-focus-workout-row-v913 b,
+.life-fit-focus-saved-row-v913 b,
+.life-fit-focus-exercise-row-v913 b{
+  font-size:14px!important;
+  line-height:1.3!important;
+}
+.life-area-focus-row-v920 small,
+.life-fit-focus-workout-row-v913 small,
+.life-fit-focus-saved-row-v913 small,
+.life-fit-focus-exercise-row-v913 small{
+  font-size:12px!important;
+  line-height:1.45!important;
+}
+
+/* Hub copy: keep the premium look, but prioritize clarity over tiny labels. */
+.life-entry-hub-card-v912>p{
+  font-size:13.5px!important;
+  line-height:1.58!important;
+  max-width:42ch;
+}
+.life-entry-hub-foot-v912 em{
+  font-size:12px!important;
+  line-height:1.3!important;
+}
+.life-entry-hub-note-v912{
+  font-size:12.5px!important;
+  line-height:1.55!important;
+}
+
+/* Quick AI used to be one of the smallest-text surfaces. */
+.life-ai-quick{font-size:14px}
+.life-ai-quick-compose input{min-height:44px!important}
+.life-ai-qmsg{padding:12px 13px!important}
+.life-ai-qmsg p{font-size:13px!important}
+.life-ai-qcards b{font-size:12.5px!important}
+.life-ai-qcards span{font-size:12px!important}
+
+/* Dedicated focus/timer screen. */
+.life-design-focus-shell>small{letter-spacing:.16em!important}
+.life-design-focus p{font-size:13px!important;max-width:520px!important}
+.life-design-focus-actions button{font-size:12px!important;min-height:42px!important;padding:10px 15px!important}
+
+/* Day theme: reinforce readable text on the light background. */
+.life-theme-day :is(.life-entry-hub-card-v912,.life-area-focus-card-v920,.life-fit-focus-v913) small{
+  color:#5b6770!important;
+}
+.life-theme-day :is(.life-entry-hub-card-v912,.life-area-focus-row-v920,.life-fit-focus-workout-row-v913,.life-fit-focus-saved-row-v913,.life-fit-focus-exercise-row-v913) b{
+  color:#12171b!important;
+}
+
+/* Mobile: no tiny navigation or cramped focus actions. */
+@media(max-width:720px){
+  .life-mobile-nav button span{font-size:11.5px!important}
+  .life-mobile-area-card small{font-size:11.5px!important}
+  .life-mobile-more-actions-v930 .search{font-size:12px!important}
+  .life-entry-hub-card-v912{min-height:0!important;padding:22px!important}
+  .life-area-focus-v920,.life-fit-focus-v913{width:100%}
+  .life-area-focus-card-v920{padding:18px!important}
+  .life-area-focus-row-v920,.life-fit-focus-workout-row-v913,.life-fit-focus-saved-row-v913,.life-fit-focus-exercise-row-v913{min-height:60px!important}
+}

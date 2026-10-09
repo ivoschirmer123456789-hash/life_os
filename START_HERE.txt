@@ -1,10 +1,6 @@
-LIFE OS 9.2.0 — CLARITY HUBS EDITION
+LIFE OS 9.4.1 — COMMAND AUDIT EDITION
 
-1. Publique este pacote substituindo a versão anterior inteira.
-2. Mantenha index.html na raiz.
-3. O Service Worker usa cache exclusivo 9.2.0.
-4. Cada área abre em um hub simples de 3–4 intenções.
-5. Depois do clique, o Modo Foco mostra só o necessário.
-6. Ferramentas avançadas continuam em “Modo completo”.
-7. Fitness e Alimentação preservam os hubs de quatro portas.
-8. Não misture assets de versões anteriores com os de 9.2.0.
+1. Publique o conteúdo desta pasta/ZIP inteiro.
+2. Não misture assets 9.4.0 e 9.4.1.
+3. O index.html deve permanecer na raiz.
+4. Service Worker e cache são próprios da 9.4.1.

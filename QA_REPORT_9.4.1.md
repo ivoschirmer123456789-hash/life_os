@@ -1,0 +1,174 @@
+# LIFE OS 9.4.1 — Command Audit QA
+
+**Resultado: 138/138 verificações passaram.**
+
+## O que foi revisado
+- Sintaxe de todos os scripts e Service Worker.
+- Estrutura HTML, IDs e referências locais.
+- 713 botões React: todos possuem handler/interação direta.
+- 55 caminhos dos Clarity Hubs: todos possuem destino no Modo Foco.
+- 4 caminhos do Fitness: todos possuem implementação própria.
+- Captura rápida/comandos: tarefa, nota, gasto, compromisso, evento, estudo, projeto e Inbox.
+- Roteamento das capturas para os estados corretos.
+- Login, confirmação de sessão, saída/troca de conta e controles OWNER em navegador isolado com Supabase simulado.
+- Prévia rápida/toque longo em navegador isolado.
+
+## Correções feitas nesta auditoria
+- Hora e data não são mais confundidas com dinheiro (`14:30`, `20/10`).
+- `gastei R$ 32,50` e `paguei 18,90` passam a gerar gasto corretamente.
+- Títulos da captura ficam limpos: `dentista amanhã 15h` vira título `dentista`, com data/hora nos campos próprios.
+- Projetos criados pela captura preservam a data informada.
+- Toque longo no mobile não dispara o clique original ao soltar.
+- Ação **ABRIR** da prévia aparece apenas para itens realmente clicáveis.
+- Copiar nome possui fallback sem Clipboard API.
+- Comparação FREE × PRO do painel OWNER foi alinhada à matriz atual de planos.
+- Build, título e cache atualizados para 9.4.1.
+
+## Testes de navegador isolados
+- **Login fresco:** PASS — login, menu de saída e logout; 0 erros de página.
+- **Sessão existente:** PASS — confirmação antes de entrar, botão de saída oculto durante confirmação e exibido depois; 0 erros.
+- **OWNER:** PASS — painel, abas, visualização FREE e fechamento; 0 erros.
+- **Prévia rápida:** PASS — item clicável abre preview, item não clicável não mostra ABRIR e long-press suprime o clique original; 0 erros.
+
+## Limitação honesta
+Não foi possível executar um E2E integrado completo do React no sandbox: o navegador não consegue buscar React 18 dos CDNs e a cópia local disponível é React 16.0, incompatível com Hooks usados pelo LIFE. Portanto, esta revisão combina auditoria estática/lógica ampla + testes reais de módulos isolados no Chromium, mas não substitui um E2E autenticado no site publicado com Supabase/checkout reais.
+
+## Verificações detalhadas
+- ✅ **HTML válido: index.html** — parse recover=False
+- ✅ **IDs únicos: index.html** — 0 duplicados
+- ✅ **Referências locais: index.html** — 0 ausentes
+- ✅ **HTML válido: landing.html** — parse recover=False
+- ✅ **IDs únicos: landing.html** — 0 duplicados
+- ✅ **Referências locais: landing.html** — 0 ausentes
+- ✅ **HTML válido: offline.html** — parse recover=False
+- ✅ **IDs únicos: offline.html** — 0 duplicados
+- ✅ **Referências locais: offline.html** — 0 ausentes
+- ✅ **HTML válido: privacy.html** — parse recover=False
+- ✅ **IDs únicos: privacy.html** — 0 duplicados
+- ✅ **Referências locais: privacy.html** — 0 ausentes
+- ✅ **HTML válido: support.html** — parse recover=False
+- ✅ **IDs únicos: support.html** — 0 duplicados
+- ✅ **Referências locais: support.html** — 0 ausentes
+- ✅ **HTML válido: terms.html** — parse recover=False
+- ✅ **IDs únicos: terms.html** — 0 duplicados
+- ✅ **Referências locais: terms.html** — 0 ausentes
+- ✅ **JS sintaxe: clarity-guardrails-9.4.1.js** — OK
+- ✅ **JS sintaxe: config-9.4.1.js** — OK
+- ✅ **JS sintaxe: context-help-9.4.1.js** — OK
+- ✅ **JS sintaxe: interaction-layer-9.4.1.js** — OK
+- ✅ **JS sintaxe: life-app-9.4.1.js** — OK
+- ✅ **JS sintaxe: product-core-9.4.1.js** — OK
+- ✅ **JS sintaxe: product-spacious-9.4.1.js** — OK
+- ✅ **JS sintaxe: quality-guardrails-9.4.1.js** — OK
+- ✅ **JS sintaxe: runtime-9.4.1.js** — OK
+- ✅ **JS sintaxe: supabase-auth-9.4.1.js** — OK
+- ✅ **JS sintaxe: service-worker.js** — OK
+- ✅ **Manifest JSON válido** — LIFE OS 9.4.1
+- ✅ **Manifest versão 9.4.1** — LIFE OS 9.4.1
+- ✅ **Título index 9.4.1** — title atualizado
+- ✅ **Meta build 9.4.1** — meta build
+- ✅ **Config build 9.4.1** — config
+- ✅ **Runtime build 9.4.1** — runtime
+- ✅ **Cache exclusivo 9.4.1** — service worker cache
+- ✅ **Sem referências ativas a builds antigos** — 0 referências
+- ✅ **Service Worker referencia somente arquivos existentes** — 35 refs; ausentes=[]
+- ✅ **Botões React possuem interação** — 713 botões; sem handler=0
+- ✅ **Hub mode implementado: tasks_today** — renderAreaFocusV920
+- ✅ **Hub mode implementado: tasks_new** — renderAreaFocusV920
+- ✅ **Hub mode implementado: tasks_projects** — renderAreaFocusV920
+- ✅ **Hub mode implementado: tasks_review** — renderAreaFocusV920
+- ✅ **Hub mode implementado: notes_new** — renderAreaFocusV920
+- ✅ **Hub mode implementado: notes_mine** — renderAreaFocusV920
+- ✅ **Hub mode implementado: notes_search** — renderAreaFocusV920
+- ✅ **Hub mode implementado: notes_ai** — renderAreaFocusV920
+- ✅ **Hub mode implementado: study_plan** — renderAreaFocusV920
+- ✅ **Hub mode implementado: study_focus** — renderAreaFocusV920
+- ✅ **Hub mode implementado: study_review** — renderAreaFocusV920
+- ✅ **Hub mode implementado: study_library** — renderAreaFocusV920
+- ✅ **Hub mode implementado: finance_new** — renderAreaFocusV920
+- ✅ **Hub mode implementado: finance_summary** — renderAreaFocusV920
+- ✅ **Hub mode implementado: finance_history** — renderAreaFocusV920
+- ✅ **Hub mode implementado: finance_goals** — renderAreaFocusV920
+- ✅ **Hub mode implementado: ai_chat** — renderAreaFocusV920
+- ✅ **Hub mode implementado: ai_today** — renderAreaFocusV920
+- ✅ **Hub mode implementado: ai_data** — renderAreaFocusV920
+- ✅ **Hub mode implementado: ai_actions** — renderAreaFocusV920
+- ✅ **Hub mode implementado: life_day** — renderAreaFocusV920
+- ✅ **Hub mode implementado: life_goals** — renderAreaFocusV920
+- ✅ **Hub mode implementado: life_projects** — renderAreaFocusV920
+- ✅ **Hub mode implementado: life_habits** — renderAreaFocusV920
+- ✅ **Hub mode implementado: my_pins** — renderAreaFocusV920
+- ✅ **Hub mode implementado: my_recent** — renderAreaFocusV920
+- ✅ **Hub mode implementado: my_saved** — renderAreaFocusV920
+- ✅ **Hub mode implementado: my_search** — renderAreaFocusV920
+- ✅ **Hub mode implementado: evolution_overview** — renderAreaFocusV920
+- ✅ **Hub mode implementado: evolution_study** — renderAreaFocusV920
+- ✅ **Hub mode implementado: evolution_fitness** — renderAreaFocusV920
+- ✅ **Hub mode implementado: evolution_finance** — renderAreaFocusV920
+- ✅ **Hub mode implementado: library_search** — renderAreaFocusV920
+- ✅ **Hub mode implementado: library_study** — renderAreaFocusV920
+- ✅ **Hub mode implementado: library_fitness** — renderAreaFocusV920
+- ✅ **Hub mode implementado: library_food** — renderAreaFocusV920
+- ✅ **Hub mode implementado: favorites_all** — renderAreaFocusV920
+- ✅ **Hub mode implementado: favorites_areas** — renderAreaFocusV920
+- ✅ **Hub mode implementado: favorites_content** — renderAreaFocusV920
+- ✅ **Hub mode implementado: favorites_recent** — renderAreaFocusV920
+- ✅ **Hub mode implementado: archive_recent** — renderAreaFocusV920
+- ✅ **Hub mode implementado: archive_search** — renderAreaFocusV920
+- ✅ **Hub mode implementado: archive_periods** — renderAreaFocusV920
+- ✅ **Hub mode implementado: profile_account** — renderAreaFocusV920
+- ✅ **Hub mode implementado: profile_plan** — renderAreaFocusV920
+- ✅ **Hub mode implementado: profile_sync** — renderAreaFocusV920
+- ✅ **Hub mode implementado: profile_security** — renderAreaFocusV920
+- ✅ **Hub mode implementado: settings_appearance** — renderAreaFocusV920
+- ✅ **Hub mode implementado: settings_notifications** — renderAreaFocusV920
+- ✅ **Hub mode implementado: settings_privacy** — renderAreaFocusV920
+- ✅ **Hub mode implementado: settings_accessibility** — renderAreaFocusV920
+- ✅ **Hub mode implementado: tutorial_start** — renderAreaFocusV920
+- ✅ **Hub mode implementado: tutorial_day** — renderAreaFocusV920
+- ✅ **Hub mode implementado: tutorial_areas** — renderAreaFocusV920
+- ✅ **Hub mode implementado: tutorial_help** — renderAreaFocusV920
+- ✅ **Todos os modos dos Hubs têm destino** — 55/55
+- ✅ **Fitness focus implementado: ready** — renderFitnessFocusV913
+- ✅ **Fitness focus implementado: personal** — renderFitnessFocusV913
+- ✅ **Fitness focus implementado: exercises** — renderFitnessFocusV913
+- ✅ **Fitness focus implementado: saved** — renderFitnessFocusV913
+- ✅ **Captura rápida: /tarefa enviar trabalho amanhã 19h 50 min** — {'kind': 'TAREFA', 'title': 'enviar trabalho', 'category': 'Trabalho', 'amount': None, 'time': '19:00', 'date': '2026-10-10', 'duration': 50}
+- ✅ **Captura rápida: /nota ideia do projeto** — {'kind': 'NOTA', 'title': 'ideia do projeto', 'category': 'Pessoal', 'amount': None, 'time': '', 'date': '', 'duration': 30}
+- ✅ **Captura rápida: /gasto lanche R$25** — {'kind': 'GASTO', 'title': 'lanche', 'category': 'Finanças', 'amount': 25, 'time': '', 'date': '', 'duration': 30}
+- ✅ **Captura rápida: /compromisso dentista amanhã 15h** — {'kind': 'EVENTO', 'title': 'dentista', 'category': 'Saúde', 'amount': None, 'time': '15:00', 'date': '2026-10-10', 'duration': 30}
+- ✅ **Captura rápida: /evento reunião sexta 14:30** — {'kind': 'EVENTO', 'title': 'reunião', 'category': 'Trabalho', 'amount': None, 'time': '14:30', 'date': '2026-10-16', 'duration': 30}
+- ✅ **Captura rápida: /projeto lançar site 20/10** — {'kind': 'PROJETO', 'title': 'lançar site', 'category': 'Pessoal', 'amount': None, 'time': '', 'date': '2026-10-20', 'duration': 30}
+- ✅ **Captura rápida: gastei R$ 32,50 no lanche** — {'kind': 'GASTO', 'title': 'lanche', 'category': 'Finanças', 'amount': 32.5, 'time': '', 'date': '', 'duration': 30}
+- ✅ **Captura rápida: paguei 18,90 no almoço** — {'kind': 'GASTO', 'title': 'almoço', 'category': 'Finanças', 'amount': 18.9, 'time': '', 'date': '', 'duration': 30}
+- ✅ **Captura rápida: /estudo química 40 min** — {'kind': 'ESTUDO', 'title': 'química', 'category': 'Estudos', 'amount': None, 'time': '', 'date': '', 'duration': 40}
+- ✅ **Captura rápida: /gasto conta 20/10** — {'kind': 'GASTO', 'title': 'conta', 'category': 'Finanças', 'amount': None, 'time': '', 'date': '2026-10-20', 'duration': 30}
+- ✅ **Captura rápida: coisa qualquer sem destino** — {'kind': 'INBOX', 'title': 'coisa qualquer sem destino', 'category': 'Pessoal', 'amount': None, 'time': '', 'date': '', 'duration': 30}
+- ✅ **Suite captura rápida completa** — 11/11
+- ✅ **Roteador possui destino EVENTO** — routeCapturedItem
+- ✅ **Roteador possui destino GASTO** — routeCapturedItem
+- ✅ **Roteador possui destino PROJETO** — routeCapturedItem
+- ✅ **Roteador possui destino ESTUDO** — routeCapturedItem
+- ✅ **Roteador possui destino NOTA** — routeCapturedItem
+- ✅ **Roteador possui destino TAREFA** — routeCapturedItem
+- ✅ **Roteador possui destino ARQUIVAR** — routeCapturedItem
+- ✅ **Projeto preserva data da captura** — projeto
+- ✅ **Auth/control handler: la-login** — la-login referenciado
+- ✅ **Auth/control handler: la-signup** — la-signup referenciado
+- ✅ **Auth/control handler: la-create-account** — la-create-account referenciado
+- ✅ **Auth/control handler: la-forgot** — la-forgot referenciado
+- ✅ **Auth/control handler: la-send-recovery** — la-send-recovery referenciado
+- ✅ **Auth/control handler: la-save-pass** — la-save-pass referenciado
+- ✅ **Auth/control handler: la-session-continue** — la-session-continue referenciado
+- ✅ **Auth/control handler: la-session-switch** — la-session-switch referenciado
+- ✅ **Auth/control handler: life-account-exit** — life-account-exit referenciado
+- ✅ **Auth/control handler: life-account-exit-confirm** — life-account-exit-confirm referenciado
+- ✅ **Auth/control handler: life-owner-open** — life-owner-open referenciado
+- ✅ **Auth/control handler: life-owner-close** — life-owner-close referenciado
+- ✅ **OWNER tabs conectadas** — tabs
+- ✅ **OWNER preview conectada** — preview
+- ✅ **Long press bloqueia clique sintético** — interaction layer
+- ✅ **Preview só abre ação em alvo clicável** — interaction layer
+- ✅ **Clipboard tem fallback** — copy fallback
+- ✅ **FREE mantém 5 áreas** — matriz FREE
+- ✅ **OWNER herda PRO** — matriz OWNER
