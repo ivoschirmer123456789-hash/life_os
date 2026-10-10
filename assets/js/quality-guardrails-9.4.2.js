@@ -1,0 +1,10 @@
+(()=>{
+  'use strict';
+  const forbidden=[/\bPRIVATE MEMBER\b/i,/\bARCHIVE\b/i,/\bPLANNER\b/i];let timer=null,last={};
+  const visible=el=>!!(el&&el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden');
+  const scan=()=>{const hubs=[...document.querySelectorAll('.life-entry-hub-grid-v912')].filter(visible);const focusLists=[...document.querySelectorAll('.life-area-focus-list-v920,.life-fit-focus-workout-list-v913,.life-fit-focus-saved-list-v913')].filter(visible);const hubOver=hubs.map(x=>[x,[...x.children].filter(visible).length]).filter(([,n])=>n>4).map(([,n])=>n);const focusOver=focusLists.map(x=>[x,[...x.children].filter(el=>visible(el)&&!el.classList.contains('life-fit-focus-more-v913')).length]).filter(([,n])=>n>4).map(([,n])=>n);const tinyActions=[...document.querySelectorAll('button,a,input,select,textarea')].filter(visible).filter(el=>parseFloat(getComputedStyle(el).fontSize||'16')<11).length;const text=(document.querySelector('.v18')?.innerText||'').slice(0,120000);const naming=forbidden.filter(rx=>rx.test(text)).map(rx=>String(rx));last={version:'9.4.2',at:new Date().toISOString(),hubOver,focusOver,tinyActions,naming,ok:!hubOver.length&&!focusOver.length&&!tinyActions&&!naming.length};document.documentElement.dataset.lifeClarity=last.ok?'ok':'review';window.__lifeQuality942=last;return last};
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(()=>{if('requestIdleCallback'in window)requestIdleCallback(scan,{timeout:350});else scan()},160)};
+  const start=()=>{scan();const attach=()=>{const app=document.querySelector('.v18[data-life-view]');if(!app)return false;new MutationObserver(schedule).observe(app,{attributes:true,attributeFilter:['data-life-view','data-area-focus','data-fitness-focus']});return true};if(!attach()){let tries=0;const id=setInterval(()=>{tries++;if(attach()||tries>20)clearInterval(id)},150)}};
+  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',start,{once:true}):start();
+  window.LIFEQualityGuardrails942={scan,getReport:()=>({...last})};
+})();

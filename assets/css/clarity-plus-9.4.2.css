@@ -1,0 +1,70 @@
+/* LIFE OS 9.4.2 — Clarity Plus. Keep the interface spacious and predictable. */
+.life-entry-hub-v912,
+.life-area-focus-v920{--life-readable:72ch}
+
+.life-entry-hub-intro-v912,
+.life-entry-hub-grid-v912,
+.life-hub-resume-v930,
+.life-entry-hub-note-v912{width:min(100%,1120px);margin-left:auto;margin-right:auto}
+
+.life-entry-hub-grid-v912{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px!important}
+.life-entry-hub-card-v912{min-height:210px!important;padding:24px!important;align-content:start}
+.life-entry-hub-card-v912 p{max-width:var(--life-readable);line-height:1.55}
+
+.life-hub-resume-v930{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:14px;margin-top:14px;margin-bottom:22px;padding:14px 16px;border:1px solid color-mix(in srgb,var(--line,#ffffff22) 78%,transparent);border-radius:18px;background:color-mix(in srgb,var(--card,#11151a) 90%,transparent);text-align:left;color:inherit}
+.life-hub-resume-v930>span{font-size:22px;opacity:.9}
+.life-hub-resume-v930 div{display:grid;gap:2px;min-width:0}
+.life-hub-resume-v930 small{font-size:11px;letter-spacing:.11em;opacity:.62}
+.life-hub-resume-v930 b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.life-hub-resume-v930 i{font-style:normal;font-size:18px;opacity:.7}
+.life-hub-resume-v930:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--accent,#c9ced6) 45%,var(--line,#ffffff22))}
+
+.life-area-focus-v920{width:min(calc(100% - 32px),1040px)!important;margin-inline:auto!important}
+.life-area-focus-card-v920{padding:clamp(18px,2.4vw,28px)!important}
+.life-area-focus-list-v920{gap:10px!important}
+.life-area-focus-row-v920{min-height:58px!important;padding:14px 16px!important}
+.life-area-focus-row-v920 b{font-size:14px!important}
+.life-area-focus-row-v920 small{font-size:12px!important;line-height:1.45}
+.life-area-focus-title-v920 p,.life-area-focus-card-v920 p{max-width:var(--life-readable)}
+
+.life-mobile-more-actions-v930{display:flex;align-items:center;gap:8px}
+.life-mobile-more-actions-v930 button{min-height:42px;min-width:42px}
+.life-mobile-more-actions-v930 .search{display:inline-flex;align-items:center;gap:6px;padding-inline:12px;border-radius:999px;font-size:11px;letter-spacing:.06em}
+.life-mobile-more-actions-v930 .search .material-symbols-rounded{font-size:18px}
+.life-spot-recent-v930{display:grid!important;grid-template-columns:1fr auto!important;grid-template-areas:"small span" "b span";column-gap:14px!important;text-align:left!important}
+.life-spot-recent-v930 small{grid-area:small}
+.life-spot-recent-v930 b{grid-area:b}
+.life-spot-recent-v930 span{grid-area:span;align-self:center}
+
+.life-large-text .life-entry-hub-card-v912 b,
+.life-large-text .life-area-focus-row-v920 b{font-size:16px!important}
+.life-large-text .life-entry-hub-card-v912 p,
+.life-large-text .life-area-focus-row-v920 small,
+.life-large-text .life-area-focus-card-v920 p{font-size:14px!important}
+.life-large-text .life-entry-hub-card-v912{min-height:228px!important}
+
+.life-high-contrast .life-entry-hub-card-v912,
+.life-high-contrast .life-area-focus-card-v920,
+.life-high-contrast .life-hub-resume-v930{border-color:color-mix(in srgb,currentColor 38%,transparent)!important}
+.life-high-contrast .life-entry-hub-card-v912 p,
+.life-high-contrast .life-area-focus-v920 small{opacity:.86!important}
+.life-high-contrast button:focus-visible,
+.life-high-contrast a:focus-visible{outline:3px solid currentColor!important;outline-offset:3px!important}
+
+.life-entry-hub-v912 button:focus-visible,
+.life-area-focus-v920 button:focus-visible,
+.life-mobile-more button:focus-visible{outline:2px solid color-mix(in srgb,var(--accent,#c9ced6) 85%,white);outline-offset:3px}
+
+@media (max-width:760px){
+  .life-entry-hub-grid-v912{grid-template-columns:1fr!important;gap:14px!important}
+  .life-entry-hub-card-v912{min-height:unset!important;padding:20px!important}
+  .life-hub-resume-v930{grid-template-columns:36px 1fr auto;margin-top:10px;margin-bottom:18px}
+  .life-area-focus-v920{width:min(calc(100% - 20px),1040px)!important}
+  .life-area-focus-card-v920{padding:18px!important}
+  .life-area-focus-row-v920{min-height:60px!important}
+  .life-mobile-more-actions-v930 .search{font-size:10px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .life-hub-resume-v930{transition:none!important;transform:none!important}
+}

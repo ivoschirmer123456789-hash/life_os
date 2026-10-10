@@ -1,6 +1,6 @@
-LIFE OS 9.4.1 — COMMAND AUDIT EDITION
+LIFE OS 9.4.2 — PREMIUM PERFORMANCE
 
-1. Publique o conteúdo desta pasta/ZIP inteiro.
-2. Não misture assets 9.4.0 e 9.4.1.
-3. O index.html deve permanecer na raiz.
-4. Service Worker e cache são próprios da 9.4.1.
+1. Substitua a versão anterior inteira por esta pasta.
+2. Publique index.html, service-worker.js, manifest.webmanifest e assets juntos.
+3. O cache desta versão é próprio: life-os-9.4.2-premium-performance.
+4. Não misture assets 9.4.1 com 9.4.2.

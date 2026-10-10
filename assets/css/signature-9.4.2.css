@@ -1,0 +1,507 @@
+
+/* ==========================================================
+   LIFE OS 7.3 — SIGNATURE EDITION
+   Quiet-luxury product layer. Loaded last on purpose.
+   ========================================================== */
+:root{
+  --sig-bg:#08090b;
+  --sig-bg-2:#0b0d10;
+  --sig-surface:#0f1115;
+  --sig-surface-2:#13161b;
+  --sig-surface-3:#171a1f;
+  --sig-text:#f3f2ef;
+  --sig-muted:#939aa3;
+  --sig-dim:#68707a;
+  --sig-line:rgba(255,255,255,.075);
+  --sig-line-strong:rgba(255,255,255,.12);
+  --sig-copper:#d89459;
+  --sig-copper-2:#b66f3b;
+  --sig-copper-soft:rgba(216,148,89,.12);
+  --sig-shadow:0 24px 70px rgba(0,0,0,.28);
+  --sig-shadow-lg:0 44px 140px rgba(0,0,0,.50);
+  --sig-ease:cubic-bezier(.2,.72,.2,1);
+  --sig-radius:20px;
+  --sig-radius-lg:28px;
+}
+html{background:var(--sig-bg);scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(900px 520px at 85% -8%,rgba(216,148,89,.055),transparent 72%),
+    radial-gradient(760px 520px at 0% 100%,rgba(111,147,183,.028),transparent 70%),
+    var(--sig-bg)!important;
+  color:var(--sig-text)!important;
+  font-family:"Plus Jakarta Sans",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.18;
+  background-image:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.011) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.5),transparent 78%);
+}
+
+/* ---------- App identity ---------- */
+.life-suite-v65{
+  --sig-app:#d89459;--sig-app-rgb:216,148,89;
+  background:transparent!important;
+  color:var(--sig-text)!important;
+}
+.life-area-hoje{--sig-app:#d89459;--sig-app-rgb:216,148,89}
+.life-area-tarefas{--sig-app:#c48754;--sig-app-rgb:196,135,84}
+.life-area-notas{--sig-app:#987fb4;--sig-app-rgb:152,127,180}
+.life-area-estudos,.life-area-guia-de-estudos{--sig-app:#7499bd;--sig-app-rgb:116,153,189}
+.life-area-fitness{--sig-app:#72a58a;--sig-app-rgb:114,165,138}
+.life-area-receitas{--sig-app:#bd7c68;--sig-app-rgb:189,124,104}
+.life-area-finanças{--sig-app:#6f9d84;--sig-app-rgb:111,157,132}
+.life-area-ia{--sig-app:#8e7cc0;--sig-app-rgb:142,124,192}
+.life-area-life{--sig-app:#b79368;--sig-app-rgb:183,147,104}
+.life-area-evolução{--sig-app:#7296a7;--sig-app-rgb:114,150,167}
+.life-area-biblioteca{--sig-app:#a78e6c;--sig-app-rgb:167,142,108}
+.life-area-favoritos{--sig-app:#c7a760;--sig-app-rgb:199,167,96}
+.life-area-meu-life{--sig-app:#8e91b7;--sig-app-rgb:142,145,183}
+.life-area-archive{--sig-app:#92847a;--sig-app-rgb:146,132,122}
+.life-area-tutorial{--sig-app:#7c9b90;--sig-app-rgb:124,155,144}
+.life-area-perfil,.life-area-configurações{--sig-app:#89929d;--sig-app-rgb:137,146,157}
+
+.life-suite-v65:before{
+  background:
+    radial-gradient(860px 520px at 90% 1%,rgba(var(--sig-app-rgb),.085),transparent 68%),
+    radial-gradient(620px 460px at -8% 52%,rgba(var(--sig-app-rgb),.028),transparent 70%)!important;
+  opacity:1!important;
+}
+.life-suite-v65:after{
+  content:"";position:fixed;inset:72px 0 auto 0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(var(--sig-app-rgb),.22),transparent);opacity:.55
+}
+
+/* ---------- Top bar / chrome ---------- */
+.v18-top{
+  height:72px!important;
+  padding:0 clamp(16px,3vw,42px)!important;
+  background:rgba(8,9,11,.82)!important;
+  border-bottom:1px solid var(--sig-line)!important;
+  box-shadow:0 10px 34px rgba(0,0,0,.20)!important;
+  backdrop-filter:blur(26px) saturate(1.15)!important;
+  -webkit-backdrop-filter:blur(26px) saturate(1.15)!important;
+}
+.v18-logo{
+  color:var(--sig-text)!important;font-size:12px!important;font-weight:800!important;
+  letter-spacing:.22em!important;background:transparent!important;border:0!important
+}
+.v18-logo em{color:var(--sig-copper)!important;font-style:normal}
+.v18-code{
+  color:#707781!important;font:700 8px/1 "JetBrains Mono",monospace!important;letter-spacing:.14em!important;
+  padding:7px 9px!important;border:1px solid var(--sig-line)!important;border-radius:999px!important;background:rgba(255,255,255,.018)!important
+}
+.v18-chip,.v18-island,.life-theme-toggle,.life-notify-trigger,.life-settings-trigger,.life-pro-status,.life-free-status-v68,.life-sync-chip{
+  min-height:38px!important;border:1px solid var(--sig-line)!important;border-radius:12px!important;
+  background:rgba(255,255,255,.025)!important;color:#b9c0c8!important;
+  box-shadow:none!important;transition:.18s var(--sig-ease)!important
+}
+.v18-chip:hover,.v18-island:hover,.life-theme-toggle:hover,.life-notify-trigger:hover,.life-settings-trigger:hover{
+  background:rgba(255,255,255,.05)!important;border-color:var(--sig-line-strong)!important;color:#eef0f2!important
+}
+.v18-island{padding:0 13px!important;gap:8px!important}
+.v18-island .v18-dot{background:var(--sig-app)!important;box-shadow:0 0 0 5px rgba(var(--sig-app-rgb),.08)!important}
+.life-pro-status{
+  color:#201207!important;border-color:rgba(216,148,89,.28)!important;
+  background:linear-gradient(135deg,#c9854d,#e4ad78)!important;font-weight:850!important
+}
+.life-free-status-v68{color:#c8cdd2!important}
+.life-settings-trigger em,.life-theme-label{font-size:7px!important;letter-spacing:.08em!important}
+
+/* ---------- Layout ---------- */
+.v18-main,.life-app36,.life-app50,.life-tasks-page,.life-notes-page,.life-finance-page,.life-archive-page,.v72-evo{
+  width:min(1480px,calc(100% - 44px))!important;margin-left:auto!important;margin-right:auto!important
+}
+.v18-main{padding-top:28px!important;padding-bottom:112px!important}
+.life-suite-v65 main{position:relative}
+.life-suite-v65 :is(h1,h2,h3,h4){text-wrap:balance}
+.life-suite-v65 :is(p,li){text-wrap:pretty}
+.life-suite-v65 h1,.life-suite-v65 h2,.life-suite-v65 h3{color:var(--sig-text)}
+.life-suite-v65 .v18-muted,.life-suite-v65 p{color:var(--sig-muted)}
+
+/* ---------- Hero: editorial, quiet, premium ---------- */
+.life-app36-hero,.life-simple-hero,.v43-page-head,
+.life-tasks-page>header,.life-notes-page>header,.life-finance-page>header,.life-archive-page>header,.v72-evo>header{
+  position:relative!important;overflow:hidden!important;
+  border:1px solid var(--sig-line)!important;border-radius:30px!important;
+  background:
+    linear-gradient(135deg,rgba(var(--sig-app-rgb),.048),transparent 33%),
+    linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,.006)),
+    #0d0f12!important;
+  box-shadow:0 30px 90px rgba(0,0,0,.20),inset 0 1px rgba(255,255,255,.026)!important;
+}
+.life-app36-hero{padding:38px 40px 34px!important}
+.life-app36-hero:before,.life-simple-hero:before,.v43-page-head:before{
+  content:""!important;position:absolute!important;width:520px!important;height:520px!important;right:-250px!important;top:-310px!important;
+  border-radius:50%!important;background:radial-gradient(circle,rgba(var(--sig-app-rgb),.12),transparent 66%)!important;filter:blur(2px)!important;opacity:.8!important
+}
+.life-app36-hero:after{
+  position:absolute!important;right:26px!important;top:24px!important;width:auto!important;height:auto!important;
+  transform:none!important;background:transparent!important;opacity:1!important;
+  color:rgba(var(--sig-app-rgb),.88)!important;font:700 8px/1 "JetBrains Mono",monospace!important;
+  letter-spacing:.14em!important;border:1px solid rgba(var(--sig-app-rgb),.18)!important;border-radius:999px!important;padding:8px 10px!important
+}
+.life-area-hoje .life-app36-hero:after{content:"TODAY OS"}
+.life-area-tarefas .life-app36-hero:after{content:"ACTION OS"}
+.life-area-notas .life-app36-hero:after{content:"NOTES OS"}
+.life-area-estudos .life-app36-hero:after{content:"STUDY OS"}
+.life-area-fitness .life-app36-hero:after{content:"FITNESS OS"}
+.life-area-receitas .life-app36-hero:after{content:"KITCHEN OS"}
+.life-area-finanças .life-app36-hero:after{content:"MONEY OS"}
+.life-area-ia .life-app36-hero:after{content:"LIFE AI"}
+.life-area-life .life-app36-hero:after{content:"PLANNER OS"}
+.life-area-evolução .life-app36-hero:after{content:"INSIGHTS OS"}
+.life-area-biblioteca .life-app36-hero:after{content:"LIBRARY OS"}
+.life-area-favoritos .life-app36-hero:after{content:"LAUNCHER OS"}
+.life-area-meu-life .life-app36-hero:after{content:"PERSONAL OS"}
+.life-area-archive .life-app36-hero:after{content:"ARCHIVE OS"}
+.life-area-perfil .life-app36-hero:after,.life-area-configurações .life-app36-hero:after{content:"ACCOUNT OS"}
+.life-area-tutorial .life-app36-hero:after{content:"ACADEMY OS"}
+
+.life-app36-kicker,.v28-k,.v18-micro,.life-section-head small,.life-depth-head small{
+  color:var(--sig-app)!important;font-size:9px!important;font-weight:750!important;letter-spacing:.12em!important
+}
+.life-app36-title{
+  max-width:820px!important;margin-top:16px!important;
+  font-size:clamp(40px,5.2vw,72px)!important;line-height:.94!important;
+  letter-spacing:-.058em!important;font-weight:750!important
+}
+.life-app36-subtitle{
+  max-width:760px!important;margin-top:17px!important;color:#9ba2aa!important;
+  font-size:12px!important;line-height:1.8!important;font-weight:450!important
+}
+.life-app36-hero-actions{margin-top:28px!important;gap:9px!important}
+
+/* ---------- Buttons ---------- */
+.life-suite-v65 button,.life-suite-v65 a{ -webkit-tap-highlight-color:transparent }
+.life-suite-v65 :is(.v18-btn,.v28-primary,.primary,.life-app36-action,.life-app36-inline-button,.life-app36-hero-actions button,.life-nut-primary){
+  border-radius:12px!important;transition:transform .16s var(--sig-ease),background .18s ease,border-color .18s ease,box-shadow .18s ease,color .18s ease!important
+}
+.life-suite-v65 :is(.v28-primary,.primary,.life-app36-hero-actions button.primary,.life-app36-inline-button.primary,.life-nut-primary){
+  border:1px solid rgba(var(--sig-app-rgb),.36)!important;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--sig-app) 83%,#fff 0%),color-mix(in srgb,var(--sig-app) 78%,#000 12%))!important;
+  color:#090a0c!important;box-shadow:0 12px 28px rgba(var(--sig-app-rgb),.14)!important
+}
+.life-suite-v65 :is(.v28-primary,.primary,.life-app36-hero-actions button.primary,.life-app36-inline-button.primary):hover{
+  transform:translateY(-1px)!important;box-shadow:0 18px 36px rgba(var(--sig-app-rgb),.18)!important;filter:saturate(.94) brightness(1.04)
+}
+.life-suite-v65 :is(.ghost,.v18-btn.ghost,.life-app36-hero-actions button:not(.primary)){
+  background:rgba(255,255,255,.024)!important;border:1px solid var(--sig-line)!important;color:#c2c8ce!important;box-shadow:none!important
+}
+.life-suite-v65 :is(.ghost,.v18-btn.ghost,.life-app36-hero-actions button:not(.primary)):hover{
+  border-color:var(--sig-line-strong)!important;background:rgba(255,255,255,.048)!important;color:#fff!important
+}
+
+/* ---------- Surfaces / cards ---------- */
+.life-suite-v65 :is(
+  .life-app36-panel,.life-v50-section,.v18-sec,.v38-section,.v46-section,
+  .life-task-section,.life-task-create,.life-finance-card,.life-my-section,
+  .life-v50-profile-card,.life-v50-kitchen-feature,.life-food-system,
+  .life-study-architect,.life-mastery,.life-life-controls-v65,
+  .life-ai36-chat,.life-ai36-side,.life-settings-block,.life-settings-group,
+  .life-pro-locked-card,.life-fin-learning-v67
+){
+  border:1px solid var(--sig-line)!important;
+  border-radius:22px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,.008)),var(--sig-surface)!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.14),inset 0 1px rgba(255,255,255,.02)!important
+}
+.life-suite-v65 :is(
+  .life-app36-metric,.life-app36-card,.life-app36-row,.life-v50-metric-card,
+  .life-v50-context-grid button,.life-v50-agent-grid button,.life-v50-card-row button,
+  .life-v50-shelves button,.life-v50-projects>button,.life-function-card,.v38-card,
+  .life-study-topic-v6,.life-fin-learning-map-v67>article,.life-study-start-card,
+  .life-study-loop-steps article
+){
+  border-color:var(--sig-line)!important;border-radius:16px!important;background:rgba(255,255,255,.018)!important;
+  box-shadow:none!important
+}
+.life-suite-v65 :is(.life-app36-card,.life-function-card,.v38-card,.life-v50-context-grid button,.life-v50-agent-grid button,.life-v50-card-row button,.life-v50-shelves button){
+  transition:transform .18s var(--sig-ease),border-color .18s ease,background .18s ease!important
+}
+.life-suite-v65 :is(.life-app36-card,.life-function-card,.v38-card,.life-v50-context-grid button,.life-v50-agent-grid button,.life-v50-card-row button,.life-v50-shelves button):hover{
+  transform:translateY(-2px)!important;border-color:rgba(var(--sig-app-rgb),.22)!important;background:rgba(var(--sig-app-rgb),.035)!important
+}
+.life-suite-v65 .life-section-head,.life-suite-v65 .life-depth-head{
+  border-bottom:1px solid var(--sig-line)!important;padding-bottom:14px!important;margin-bottom:16px!important
+}
+.life-suite-v65 .life-section-head h2,.life-suite-v65 .life-section-head h3,.life-suite-v65 .life-depth-head h2{
+  letter-spacing:-.035em!important;font-weight:700!important
+}
+
+/* ---------- Forms ---------- */
+.life-suite-v65 :is(input,textarea,select){
+  border:1px solid var(--sig-line)!important;border-radius:12px!important;background:#0c0f13!important;color:#eef0f2!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.018)!important
+}
+.life-suite-v65 :is(input,textarea,select)::placeholder{color:#626a73!important}
+.life-suite-v65 :is(input,textarea,select):focus{
+  border-color:rgba(var(--sig-app-rgb),.42)!important;box-shadow:0 0 0 3px rgba(var(--sig-app-rgb),.075)!important;outline:0!important
+}
+
+/* ---------- Tabs / micro navigation ---------- */
+.life-fit35-topnav,.life-kitchen-nav-v67,.life-settings-options,.lov-tabs,.life-app36-tabs{
+  border:1px solid var(--sig-line)!important;border-radius:14px!important;background:#0b0e12!important;box-shadow:none!important
+}
+.life-fit35-topnav button,.life-kitchen-nav-v67 button,.life-settings-options button,.lov-tabs button{
+  border-radius:10px!important;color:#818994!important
+}
+.life-fit35-topnav button.on,.life-kitchen-nav-v67 button.on,.life-settings-options button.on,.lov-tabs button.active{
+  background:rgba(var(--sig-app-rgb),.10)!important;color:#f0f2f3!important;box-shadow:inset 0 0 0 1px rgba(var(--sig-app-rgb),.18)!important
+}
+
+/* ---------- Menu of apps ---------- */
+.v31-launch{
+  border:1px solid var(--sig-line)!important;background:rgba(12,14,17,.88)!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.28)!important;backdrop-filter:blur(20px)!important
+}
+.v31-menu{background:rgba(3,4,6,.72)!important;backdrop-filter:blur(24px)!important}
+.v31-panel{
+  width:min(1060px,calc(100% - 36px))!important;max-height:min(84vh,820px)!important;
+  border:1px solid var(--sig-line)!important;border-radius:28px!important;
+  background:linear-gradient(180deg,#101216,#0a0c0f)!important;box-shadow:var(--sig-shadow-lg)!important
+}
+.v31-head{border-bottom:1px solid var(--sig-line)!important}
+.v31-item-wrap{border-radius:14px!important;border:1px solid transparent!important}
+.v31-item-wrap:hover,.v31-item-wrap.on{background:rgba(var(--sig-app-rgb),.045)!important;border-color:rgba(var(--sig-app-rgb),.10)!important}
+.v31-item{background:transparent!important}
+.v31-num{font-family:"JetBrains Mono",monospace!important;color:#5f6670!important}
+.v31-item.on .v31-num{color:var(--sig-app)!important}
+
+/* ---------- Mobile nav ---------- */
+.life-design-mobile-nav{
+  left:12px!important;right:12px!important;bottom:max(10px,env(safe-area-inset-bottom))!important;
+  min-height:68px!important;padding:7px 8px!important;border:1px solid var(--sig-line)!important;border-radius:22px!important;
+  background:rgba(11,13,16,.88)!important;box-shadow:0 22px 70px rgba(0,0,0,.42)!important;
+  backdrop-filter:blur(24px) saturate(1.1)!important;-webkit-backdrop-filter:blur(24px) saturate(1.1)!important
+}
+.life-design-mobile-nav button{border-radius:14px!important;color:#777f89!important}
+.life-design-mobile-nav button.on{color:#f3f4f5!important;background:rgba(var(--sig-app-rgb),.08)!important}
+.life-design-mobile-nav button.on i{color:var(--sig-app)!important}
+.life-design-nav-add{
+  width:52px!important;height:52px!important;margin-top:-18px!important;border:1px solid rgba(216,148,89,.36)!important;
+  background:linear-gradient(145deg,#d99a64,#b87441)!important;color:#100c09!important;
+  box-shadow:0 14px 36px rgba(184,116,65,.25)!important
+}
+.life-mobile-more{background:rgba(3,4,6,.68)!important;backdrop-filter:blur(22px)!important}
+.life-mobile-more>div{border-radius:26px 26px 0 0!important;background:#0e1115!important;border-color:var(--sig-line)!important}
+.life-mobile-area-card{border:1px solid var(--sig-line)!important;background:rgba(255,255,255,.018)!important;border-radius:15px!important}
+
+/* ---------- Modals / sheets ---------- */
+.v18-overlay,.v18-sheetwrap,.life-how-overlay,.life-study-topic-modal,.life-pro-preview-overlay,.life-context-help-v67,.life-context-help-v68{
+  background:rgba(3,4,6,.68)!important;backdrop-filter:blur(24px) saturate(1.05)!important;-webkit-backdrop-filter:blur(24px) saturate(1.05)!important
+}
+.v18-modal,.v18-sheet,.life-study-topic-modal>article,.life-context-help-v67>article,.life-context-help-v68>article,
+.v45-recipe-panel,.life-recipe-sheet,.life-legal-panel{
+  border:1px solid var(--sig-line)!important;border-radius:26px!important;background:#101216!important;box-shadow:var(--sig-shadow-lg)!important
+}
+.v18-sheetwrap .v18-sheet{border-top-color:rgba(var(--sig-app-rgb),.26)!important}
+.v18-command{background:#0b0e12!important;border:1px solid var(--sig-line)!important;border-radius:13px!important}
+.life-spotlight-v4{padding:16px!important}
+
+/* ---------- LIFE AI ---------- */
+.life-ai36-top,.life-ai36-chat,.life-ai36-side{
+  border-color:var(--sig-line)!important;background:linear-gradient(180deg,rgba(142,124,192,.03),transparent),#0e1014!important
+}
+.life-ai36-top h1{font-weight:720!important;letter-spacing:-.058em!important}
+.life-ai-simple-bubble,.life-ai-qmsg,.life-ai-side-card{border-color:var(--sig-line)!important;background:rgba(255,255,255,.018)!important}
+.life-ai-quickwrap{background:rgba(3,4,6,.55)!important;backdrop-filter:blur(20px)!important}
+.life-ai-quick{border:1px solid var(--sig-line)!important;background:#101216!important;box-shadow:var(--sig-shadow-lg)!important}
+
+/* ---------- Settings / account ---------- */
+.life-area-configurações .life-settings-page,.life-area-perfil .life-settings-page{max-width:1120px!important;margin:0 auto!important}
+.life-settings-group,.life-settings-block{padding:18px!important}
+.life-settings-copy small{color:#7f8791!important}
+.life-settings-copy b{font-size:14px!important;letter-spacing:-.015em!important}
+.life-settings-copy span{color:#8e969f!important;line-height:1.62!important}
+.life-switch{background:#24282e!important;border:1px solid var(--sig-line)!important}
+.life-switch.on{background:rgba(var(--sig-app-rgb),.20)!important;border-color:rgba(var(--sig-app-rgb),.28)!important}
+.life-switch.on i{background:var(--sig-app)!important}
+
+/* ---------- PRO: premium, not loud ---------- */
+.life-pro-preview-overlay,.life-pro-paywall{background:rgba(3,4,6,.76)!important;backdrop-filter:blur(28px)!important}
+.life-pro-preview-card,.life-pro-paywall-card{
+  border:1px solid rgba(216,148,89,.20)!important;border-radius:30px!important;
+  background:
+    radial-gradient(600px 320px at 100% 0,rgba(216,148,89,.085),transparent 70%),
+    linear-gradient(180deg,#111317,#0b0d10)!important;
+  box-shadow:0 48px 160px rgba(0,0,0,.58)!important
+}
+.life-pro-preview-head small,.life-pro-demo-body>aside>small,.life-pro-demo-body>main>small{color:#d99a64!important}
+.life-pro-preview-head h2{font-weight:740!important;letter-spacing:-.052em!important}
+.life-pro-preview-chip{color:#ddb084!important;border-color:rgba(216,148,89,.24)!important;background:rgba(216,148,89,.065)!important}
+.life-pro-demo-window,.life-pro-demo-metrics article,.life-pro-demo-body>aside,.life-pro-demo-body>main{
+  border-color:var(--sig-line)!important;background:rgba(255,255,255,.016)!important
+}
+.life-pro-demo-step span{background:rgba(216,148,89,.08)!important;color:#dda36e!important}
+.life-pro-demo-row em,.life-pro-demo-benefit b{color:#d99a64!important}
+.life-pro-preview-actions .primary,.life-runtime-pro-fallback footer .primary{
+  background:linear-gradient(135deg,#c8854e,#e0ad79)!important;border-color:rgba(224,173,121,.36)!important;color:#17100b!important;
+  box-shadow:0 12px 30px rgba(184,116,65,.18)!important
+}
+.life-pro-locked-card{
+  position:relative!important;overflow:hidden!important;border-color:rgba(216,148,89,.14)!important;
+  background:linear-gradient(135deg,rgba(216,148,89,.045),rgba(255,255,255,.01)),#0f1114!important
+}
+.life-pro-locked-card:before{content:"PRO";position:absolute;right:14px;top:14px;color:#d69a67;font:800 8px/1 "JetBrains Mono",monospace;letter-spacing:.15em}
+.life-runtime-pro-fallback>section{
+  border-color:rgba(216,148,89,.20)!important;background:radial-gradient(circle at 90% 0,rgba(216,148,89,.08),transparent 38%),#0d0f12!important
+}
+
+/* ---------- Empty states / help ---------- */
+.life-empty{
+  border:1px dashed var(--sig-line-strong)!important;border-radius:18px!important;background:rgba(255,255,255,.01)!important;color:#858d96!important;padding:22px!important
+}
+.life-micro-how-v67,.life-how-entry{
+  border-color:rgba(var(--sig-app-rgb),.16)!important;background:rgba(var(--sig-app-rgb),.045)!important;color:#c9ced4!important
+}
+
+/* ---------- Opening / intro ---------- */
+.v18-wake,.life-boot{background:#050607!important}
+.life-boot-material{opacity:.18!important}
+.life-boot-symbol{opacity:.10!important;filter:grayscale(.35)!important}
+.life-boot-lines{opacity:.16!important}
+.life-boot-brand{color:#d9dde1!important;letter-spacing:.30em!important}
+.life-boot-brand span{color:#d89459!important}
+.life-boot-time{font-weight:650!important;letter-spacing:-.07em!important;color:#f2f2ef!important}
+.life-boot-enter{
+  border:1px solid rgba(216,148,89,.26)!important;background:rgba(216,148,89,.08)!important;color:#e4b185!important;
+  border-radius:999px!important;padding:12px 18px!important;box-shadow:none!important
+}
+
+/* ---------- Auth / login ---------- */
+#life-auth{
+  background:
+    radial-gradient(900px 620px at 12% 5%,rgba(216,148,89,.07),transparent 68%),
+    radial-gradient(800px 580px at 100% 100%,rgba(116,153,189,.025),transparent 70%),
+    #07080a!important;
+}
+#life-auth .la-shell{
+  width:min(1160px,calc(100% - 40px))!important;min-height:min(720px,calc(100dvh - 48px))!important;
+  grid-template-columns:1.08fr .92fr!important;border:1px solid var(--sig-line)!important;border-radius:32px!important;
+  background:#0d0f12!important;box-shadow:0 55px 180px rgba(0,0,0,.48)!important
+}
+#life-auth .la-showcase{
+  padding:46px!important;background:
+    radial-gradient(540px 420px at 20% 30%,rgba(216,148,89,.09),transparent 68%),
+    linear-gradient(145deg,#101216,#090b0e)!important
+}
+#life-auth .la-showcase:after{
+  inset:auto -20% -30% 10%!important;height:60%!important;border-radius:50%!important;
+  background:radial-gradient(circle,rgba(216,148,89,.08),transparent 68%)!important;filter:blur(30px)!important
+}
+.la-showcase-brand{font-size:11px!important;letter-spacing:.22em!important;font-weight:800!important}
+.la-showcase-brand em{color:#d89459!important}
+.la-showcase-brand span{color:#8c949d!important;border-color:var(--sig-line)!important;background:rgba(255,255,255,.02)!important}
+.la-showcase-copy small,.la-eyebrow{color:#c68a5a!important;letter-spacing:.14em!important}
+.la-showcase-copy h2{font-size:clamp(44px,5.8vw,76px)!important;line-height:.91!important;letter-spacing:-.068em!important;font-weight:720!important}
+.la-showcase-copy p{color:#929aa3!important;font-size:12px!important;line-height:1.8!important}
+.la-showcase-grid{gap:10px!important}
+.la-showcase-grid span{border:1px solid var(--sig-line)!important;border-radius:14px!important;background:rgba(255,255,255,.014)!important;padding:13px!important;color:#7f8790!important}
+.la-showcase-grid b{color:#d4d8dc!important;font-weight:650!important}
+#life-auth .la-box{background:#0d0f12!important;padding:clamp(32px,5vw,56px)!important}
+.la-box h1{font-size:clamp(40px,5vw,58px)!important;font-weight:720!important;letter-spacing:-.06em!important}
+.la-box p{color:#8e969f!important;line-height:1.72!important}
+#life-auth .la-input{
+  min-height:50px!important;border:1px solid var(--sig-line)!important;border-radius:12px!important;background:#0a0d10!important;color:#f0f2f3!important
+}
+#life-auth .la-input:focus{border-color:rgba(216,148,89,.42)!important;box-shadow:0 0 0 3px rgba(216,148,89,.075)!important}
+#life-auth .la-btn{min-height:50px!important;border-radius:12px!important}
+#life-auth .la-btn:not(.la-alt){background:linear-gradient(135deg,#d99a64,#b87340)!important;color:#120e0a!important;box-shadow:0 14px 34px rgba(184,115,64,.18)!important}
+#life-auth .la-alt{border:1px solid var(--sig-line)!important;background:rgba(255,255,255,.018)!important;color:#c9ced3!important}
+.la-theme-toggle{right:28px!important;top:28px!important}
+
+/* ---------- Owner ---------- */
+#life-owner-panel{background:rgba(3,4,6,.74)!important;backdrop-filter:blur(24px)!important}
+.lov-wrap{border:1px solid var(--sig-line)!important;background:#0f1114!important;box-shadow:var(--sig-shadow-lg)!important}
+.lov-card{border-color:var(--sig-line)!important;background:rgba(255,255,255,.015)!important}
+.lov-orange{color:#d89459!important}
+
+/* ---------- Day theme ---------- */
+.life-theme-day{
+  --sig-bg:#f4f2ee;--sig-surface:#fff;--sig-surface-2:#f8f6f2;--sig-text:#1d2024;--sig-muted:#68717a;--sig-line:rgba(30,35,41,.09);--sig-line-strong:rgba(30,35,41,.14)
+}
+body:has(.life-theme-day){background:#f2f0eb!important;color:#20242a!important}
+.life-theme-day:before{
+  background:radial-gradient(840px 500px at 90% 0%,rgba(var(--sig-app-rgb),.08),transparent 68%)!important
+}
+.life-theme-day .v18-top{background:rgba(247,245,241,.87)!important;border-color:rgba(26,31,36,.08)!important}
+.life-theme-day :is(.life-app36-hero,.life-simple-hero,.v43-page-head,.life-tasks-page>header,.life-notes-page>header,.life-finance-page>header,.life-archive-page>header,.v72-evo>header){
+  background:linear-gradient(135deg,rgba(var(--sig-app-rgb),.045),transparent 35%),#fff!important;border-color:rgba(27,32,37,.08)!important;box-shadow:0 24px 70px rgba(35,40,46,.07)!important
+}
+.life-theme-day :is(.life-app36-panel,.life-v50-section,.v18-sec,.v38-section,.v46-section,.life-task-section,.life-task-create,.life-finance-card,.life-my-section,.life-settings-block,.life-settings-group){
+  background:#fff!important;border-color:rgba(27,32,37,.08)!important;box-shadow:0 15px 44px rgba(35,40,46,.055)!important
+}
+.life-theme-day :is(.life-app36-metric,.life-app36-card,.life-app36-row,.life-v50-metric-card,.life-function-card,.v38-card){
+  background:#f8f7f4!important;border-color:rgba(27,32,37,.07)!important
+}
+.life-theme-day :is(input,textarea,select){background:#fbfaf7!important;color:#20242a!important;border-color:rgba(27,32,37,.10)!important}
+.life-theme-day .v18-logo,.life-theme-day h1,.life-theme-day h2,.life-theme-day h3{color:#20242a!important}
+.life-theme-day .v18-code{background:#fff!important;color:#747b83!important}
+.life-theme-day .life-design-mobile-nav{background:rgba(250,249,247,.91)!important;border-color:rgba(27,32,37,.09)!important}
+.life-theme-day .life-design-mobile-nav button.on{color:#20242a!important}
+.life-theme-day .v31-panel,.life-theme-day .v18-modal,.life-theme-day .v18-sheet,.life-theme-day .life-ai-quick{background:#fff!important;color:#20242a!important;border-color:rgba(27,32,37,.09)!important}
+
+/* ---------- Marketing/public pages ---------- */
+.life-marketing-v60{
+  --m-accent:#d89459;background:
+    radial-gradient(900px 560px at 80% 0%,rgba(216,148,89,.07),transparent 70%),
+    #08090b!important;color:#f3f2ef!important
+}
+.life-marketing-v60 .nav{background:rgba(8,9,11,.82)!important;border-bottom:1px solid var(--sig-line)!important;backdrop-filter:blur(24px)!important}
+.life-marketing-v60 .brand i{color:#d89459!important}
+.life-marketing-v60 .cta{
+  border-radius:12px!important;background:linear-gradient(135deg,#d99a64,#b87340)!important;color:#120e0a!important;
+  box-shadow:0 12px 28px rgba(184,115,64,.16)!important
+}
+.life-marketing-v60 .cta.ghost{background:transparent!important;color:#c7ccd1!important;border:1px solid var(--sig-line)!important;box-shadow:none!important}
+.life-marketing-v60 .eyebrow,.life-marketing-v60 .sectionhead60 small{color:#c68a5a!important}
+.life-marketing-v60 .hero60 h1,.life-marketing-v60 .sectionhead60 h2,.life-marketing-v60 .final60 h2{font-weight:720!important;letter-spacing:-.065em!important}
+.life-marketing-v60 .hero60 h1 em{color:#d9a06d!important}
+.life-marketing-v60 .system-orbit,.life-marketing-v60 .app60,.life-marketing-v60 .free60 article,.life-marketing-v60 .bigcount{
+  border-color:var(--sig-line)!important;background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,.006)),#0e1013!important;
+  box-shadow:0 22px 70px rgba(0,0,0,.18)!important
+}
+.life-marketing-v60 .app60{border-radius:20px!important}
+.life-marketing-v60 .topiccloud span{border-color:var(--sig-line)!important;background:rgba(255,255,255,.018)!important}
+.life-marketing-v60 .free60 .pro{border-color:rgba(216,148,89,.20)!important;background:linear-gradient(145deg,rgba(216,148,89,.055),rgba(255,255,255,.01)),#0f1114!important}
+
+/* ---------- Responsive ---------- */
+@media(max-width:980px){
+  .v18-main,.life-app36,.life-app50,.life-tasks-page,.life-notes-page,.life-finance-page,.life-archive-page,.v72-evo{width:min(100% - 24px,1480px)!important}
+  .life-app36-hero{padding:30px 26px 26px!important}
+  .life-app36-title{font-size:clamp(38px,7vw,64px)!important}
+}
+@media(max-width:760px){
+  .v18-top{height:58px!important;padding:0 12px!important;background:rgba(8,9,11,.90)!important}
+  .v18-code,.v18-chip,.life-theme-toggle .life-theme-label,.life-settings-trigger em{display:none!important}
+  .v18-main,.life-app36,.life-app50,.life-tasks-page,.life-notes-page,.life-finance-page,.life-archive-page,.v72-evo{width:100%!important}
+  .v18-main{padding-top:10px!important;padding-bottom:104px!important}
+  .life-app36-hero,.life-simple-hero,.v43-page-head,.life-tasks-page>header,.life-notes-page>header,.life-finance-page>header,.life-archive-page>header,.v72-evo>header{
+    margin-left:10px!important;margin-right:10px!important;border-radius:24px!important;border-left:1px solid var(--sig-line)!important;border-right:1px solid var(--sig-line)!important
+  }
+  .life-app36-hero{padding:24px 18px 20px!important}
+  .life-app36-hero:after{right:16px!important;top:14px!important;padding:6px 8px!important;font-size:7px!important}
+  .life-app36-title{font-size:clamp(36px,12vw,54px)!important;padding-right:12px!important}
+  .life-app36-subtitle{font-size:11px!important;line-height:1.72!important}
+  .life-suite-v65 :is(.life-app36-panel,.life-v50-section,.v18-sec,.v38-section,.v46-section,.life-task-section,.life-task-create,.life-finance-card,.life-my-section,.life-settings-block,.life-settings-group){
+    margin-left:10px!important;margin-right:10px!important;border-radius:18px!important
+  }
+  .v31-panel{width:calc(100% - 18px)!important;border-radius:24px!important}
+  #life-auth{padding:0!important}
+  #life-auth .la-shell{width:100%!important;min-height:100dvh!important;border:0!important;border-radius:0!important;grid-template-columns:1fr!important}
+  #life-auth .la-showcase{display:none!important}
+  #life-auth .la-box{min-height:100dvh!important;padding:calc(28px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom))!important}
+  .life-pro-preview-card,.life-pro-paywall-card{border-radius:24px 24px 0 0!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .life-suite-v65 *,#life-auth *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+
+/* 9.0 — premium restraint */
+html[data-life-plan="PRO"] .life-pro88-workspace,html[data-life-plan="OWNER"] .life-pro88-workspace{--sig-line:rgba(255,255,255,.075)}
+.life-pro88-commands{grid-template-columns:repeat(2,minmax(0,1fr))!important}.life-pro88-command{min-height:150px!important;padding:20px!important}.life-pro88-command b{font-size:18px!important}.life-pro88-hero{padding:26px 30px!important}.life-pro89-brandline{margin-bottom:12px!important}.life-premium-masthead{border-radius:0 0 22px 22px!important}
+@media(max-width:900px){.life-pro88-commands{grid-template-columns:1fr!important}.life-pro88-command{min-height:118px!important}.life-pro88-hero{padding:20px!important}}

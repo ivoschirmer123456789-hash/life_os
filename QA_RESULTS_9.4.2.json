@@ -1,0 +1,318 @@
+{
+  "version": "9.4.2",
+  "edition": "Premium Performance Edition",
+  "passed": 62,
+  "total": 62,
+  "checks": [
+    {
+      "name": "HTML parse index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist index.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist landing.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist offline.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist privacy.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist support.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "HTML parse terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No duplicate IDs terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Local refs exist terms.html",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax clarity-guardrails-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax config-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax context-help-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax interaction-layer-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax life-app-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax product-core-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax product-spacious-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax quality-guardrails-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax runtime-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax supabase-auth-9.4.2.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JS syntax service-worker.js",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest JSON",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Manifest 9.4.2",
+      "ok": true,
+      "detail": "LIFE OS 9.4.2"
+    },
+    {
+      "name": "Service worker shell files exist",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Service worker cache 9.4.2",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No active 9.4.1 refs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "600 recipes memoized",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Recipe library initial limit 12",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Editorial recipes initial limit 12",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Editorial tools normalized",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Editorial point normalized",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Editorial swap normalized",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Recipe premium summary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Recipe common mistakes",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Nutrition recipe rows clickable",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Generic focus premium rail",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Premium focus CSS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Premium fitness focus CSS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "No heavy recipe backdrop blur",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Clarity observer lightweight",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Quality observer lightweight",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Context help observer lightweight",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "CSS brace balance apex-9.4.2.css",
+      "ok": true,
+      "detail": "1149 vs 1149"
+    },
+    {
+      "name": "CSS brace balance apex-marketing-9.4.2.css",
+      "ok": true,
+      "detail": "52 vs 52"
+    },
+    {
+      "name": "CSS brace balance clarity-plus-9.4.2.css",
+      "ok": true,
+      "detail": "44 vs 44"
+    },
+    {
+      "name": "CSS brace balance design-system-9.4.2.css",
+      "ok": true,
+      "detail": "368 vs 368"
+    },
+    {
+      "name": "CSS brace balance focus-refinement-9.4.2.css",
+      "ok": true,
+      "detail": "44 vs 44"
+    },
+    {
+      "name": "CSS brace balance life-bundle-9.4.2.css",
+      "ok": true,
+      "detail": "7060 vs 7060"
+    },
+    {
+      "name": "CSS brace balance marketing-v60.css",
+      "ok": true,
+      "detail": "109 vs 109"
+    },
+    {
+      "name": "CSS brace balance marketing.css",
+      "ok": true,
+      "detail": "209 vs 209"
+    },
+    {
+      "name": "CSS brace balance premium-performance-9.4.2.css",
+      "ok": true,
+      "detail": "55 vs 55"
+    },
+    {
+      "name": "CSS brace balance product-core-9.4.2.css",
+      "ok": true,
+      "detail": "192 vs 192"
+    },
+    {
+      "name": "CSS brace balance review-polish-9.4.2.css",
+      "ok": true,
+      "detail": "31 vs 31"
+    },
+    {
+      "name": "CSS brace balance signature-9.4.2.css",
+      "ok": true,
+      "detail": "225 vs 225"
+    }
+  ]
+}

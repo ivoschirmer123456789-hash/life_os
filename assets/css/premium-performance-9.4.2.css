@@ -1,0 +1,223 @@
+/* LIFE OS 9.4.2 — Premium Performance Layer
+   Premium micro-panels without heavy blur; progressive rendering by default. */
+:root{
+  --life-942-silver:#e5ebf0;
+  --life-942-silver-2:#b8c3cc;
+  --life-942-line:rgba(221,231,239,.14);
+  --life-942-panel:#0e1217;
+  --life-942-panel-2:#131922;
+}
+
+/* PRO/OWNER micro tabs should feel like a product surface, not an expanded card. */
+.life-pro-active .life-area-focus-v920,
+.life-pro-active .life-fit-focus-v913{
+  position:relative;
+  isolation:isolate;
+  max-width:1160px!important;
+  margin:18px auto 64px!important;
+  padding:22px clamp(18px,3vw,40px) 52px!important;
+  border:1px solid var(--life-942-line);
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 92% 0%,rgba(229,235,240,.075),transparent 28%),
+    linear-gradient(180deg,#11161d 0%,#0b0f14 58%,#0a0d11 100%);
+  box-shadow:0 18px 55px rgba(0,0,0,.24);
+  contain:layout paint style;
+}
+.life-pro-active .life-area-focus-v920:before,
+.life-pro-active .life-fit-focus-v913:before{
+  content:"LIFE PRO · FOCUS PANEL";
+  display:block;
+  width:max-content;
+  max-width:100%;
+  margin:0 0 4px;
+  color:var(--life-942-silver-2);
+  font-size:11px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.17em;
+}
+.life-pro-active .life-focus-premium-rail-v942{
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--life-942-line);
+  color:#eef3f7;
+}
+.life-focus-premium-rail-v942 span,
+.life-focus-premium-rail-v942 em{
+  font-size:10.5px;
+  letter-spacing:.12em;
+  font-style:normal;
+  color:var(--life-942-silver-2);
+}
+.life-focus-premium-rail-v942 b{font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.life-focus-premium-rail-v942 em{margin-left:auto}
+.life-pro-active .life-area-focus-head-v920,
+.life-pro-active .life-fit-focus-head-v913{
+  margin:0 -4px;
+  padding:20px 4px 24px!important;
+  border-bottom:1px solid var(--life-942-line)!important;
+}
+.life-pro-active .life-area-focus-title-v920>.material-symbols-rounded,
+.life-pro-active .life-fit-focus-title-v913>.material-symbols-rounded{
+  background:linear-gradient(145deg,rgba(229,235,240,.13),rgba(229,235,240,.035))!important;
+  border-color:rgba(229,235,240,.22)!important;
+  color:#f1f5f8!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.life-pro-active .life-area-focus-card-v920,
+.life-pro-active .life-fit-focus-personal-copy-v913,
+.life-pro-active .life-fit-focus-progress-v913,
+.life-pro-active .life-fit-focus-options-v913{
+  background:linear-gradient(155deg,rgba(255,255,255,.05),rgba(255,255,255,.018))!important;
+  border-color:rgba(224,233,240,.14)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045);
+}
+.life-pro-active .life-area-focus-card-v920{
+  min-height:0!important;
+}
+.life-pro-active .life-area-focus-row-v920,
+.life-pro-active .life-fit-focus-workout-row-v913,
+.life-pro-active .life-fit-focus-saved-row-v913,
+.life-pro-active .life-fit-focus-exercise-row-v913{
+  background:rgba(255,255,255,.025)!important;
+  border-color:rgba(224,233,240,.11)!important;
+  transition:border-color .16s ease,transform .16s ease,background .16s ease;
+}
+@media (hover:hover){
+  .life-pro-active .life-area-focus-row-v920:hover,
+  .life-pro-active .life-fit-focus-workout-row-v913:hover,
+  .life-pro-active .life-fit-focus-saved-row-v913:hover,
+  .life-pro-active .life-fit-focus-exercise-row-v913:hover{
+    transform:translateY(-1px);
+    border-color:rgba(229,235,240,.26)!important;
+    background:rgba(255,255,255,.045)!important;
+  }
+}
+
+/* Progressive rendering: expensive areas below the fold do not render until needed. */
+@supports(content-visibility:auto){
+  .v35-grid,.life-editorial-grid,.life-v50-section,.life-depth-studio,.life-recipe-library,
+  .life-fit35-section,.life-pro88-embedded,.life-area-focus-card-v920{
+    content-visibility:auto;
+    contain-intrinsic-size:520px;
+  }
+}
+
+/* Recipe detail = premium instruction panel, not a text dump. */
+.v45-recipe-sheet,.life-recipe-modal{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  background:rgba(3,5,8,.88)!important;
+}
+.v45-recipe-panel,.life-recipe-sheet{
+  border:1px solid rgba(229,235,240,.17)!important;
+  background:
+    radial-gradient(circle at 92% 0%,rgba(229,235,240,.07),transparent 24%),
+    linear-gradient(180deg,#121820,#0b1016 55%,#090d12)!important;
+  box-shadow:0 22px 70px rgba(0,0,0,.35)!important;
+}
+.v45-recipe-top{
+  padding-bottom:20px!important;
+  border-bottom:1px solid rgba(229,235,240,.12)!important;
+}
+.v45-recipe-top h2{font-size:clamp(28px,5vw,48px)!important;letter-spacing:-.045em!important;line-height:1!important}
+.v45-recipe-top p{font-size:13px!important;line-height:1.5!important}
+.v70-recipe-facts{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:9px!important;
+}
+.v70-recipe-facts>div{
+  min-height:72px!important;
+  padding:14px!important;
+  border:1px solid rgba(229,235,240,.1)!important;
+  border-radius:15px!important;
+  background:rgba(255,255,255,.025)!important;
+}
+.v70-recipe-facts small,.life-recipe-premium-summary-v942 small,.life-recipe-mistakes-v942>small{
+  display:block;
+  margin-bottom:6px;
+  color:var(--life-942-silver-2)!important;
+  font-size:10.5px!important;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.v70-recipe-facts b{font-size:13px!important;line-height:1.35!important}
+.life-recipe-premium-summary-v942{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr;
+  gap:10px;
+  margin:16px 0 20px;
+}
+.life-recipe-premium-summary-v942>div{
+  padding:16px;
+  border:1px solid rgba(229,235,240,.12);
+  border-radius:17px;
+  background:linear-gradient(145deg,rgba(229,235,240,.06),rgba(229,235,240,.018));
+}
+.life-recipe-premium-summary-v942 b{display:block;font-size:13px;line-height:1.48;font-weight:720;color:#f1f4f7}
+.v45-step-v67{
+  padding:15px 0!important;
+  border-bottom:1px solid rgba(229,235,240,.08);
+}
+.v45-step-v67:last-child{border-bottom:0}
+.v45-step-v67 strong{
+  min-width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+  background:rgba(229,235,240,.08);border:1px solid rgba(229,235,240,.12);color:#eef3f7!important;
+}
+.v45-step-v67 span>b{font-size:14px!important;line-height:1.5!important}
+.v45-step-v67 small{font-size:12px!important;line-height:1.55!important;color:#aeb9c2!important}
+.life-recipe-mistakes-v942{
+  margin:22px 0;
+  padding:18px;
+  border:1px solid rgba(229,235,240,.11);
+  border-radius:18px;
+  background:rgba(255,255,255,.025);
+}
+.life-recipe-mistakes-v942 h3{margin:0 0 10px!important;font-size:18px!important}
+.life-recipe-mistakes-v942 ul{margin:0;padding-left:20px;display:grid;gap:8px}
+.life-recipe-mistakes-v942 li{font-size:13px;line-height:1.55;color:#bac4cc}
+.v45-ing{font-size:13px!important;line-height:1.6!important}
+.v70-recipe-text{font-size:13px!important;line-height:1.65!important}
+
+/* Lighter day theme without losing PRO silver identity. */
+.life-theme-day.life-pro-active .life-area-focus-v920,
+.life-theme-day.life-pro-active .life-fit-focus-v913{
+  background:linear-gradient(180deg,#fbfcfd,#f3f6f8)!important;
+  border-color:rgba(37,50,61,.13)!important;
+  box-shadow:0 14px 38px rgba(35,47,58,.08)!important;
+}
+.life-theme-day .life-focus-premium-rail-v942{border-color:rgba(37,50,61,.12);color:#18232b}
+.life-theme-day .life-focus-premium-rail-v942 span,
+.life-theme-day .life-focus-premium-rail-v942 em{color:#65737d}
+.life-theme-day .life-recipe-premium-summary-v942>div,
+.life-theme-day .life-recipe-mistakes-v942{background:#f7f9fa;border-color:rgba(31,45,56,.12)}
+.life-theme-day .life-recipe-premium-summary-v942 b,
+.life-theme-day .life-recipe-mistakes-v942 h3{color:#172129}
+.life-theme-day .life-recipe-mistakes-v942 li{color:#52616c}
+
+/* Mobile performance + spacious hierarchy. */
+@media(max-width:760px){
+  .life-pro-active .life-area-focus-v920,
+  .life-pro-active .life-fit-focus-v913{
+    margin:8px 0 42px!important;
+    padding:18px 16px 38px!important;
+    border-left:0!important;border-right:0!important;border-radius:22px!important;
+    box-shadow:none!important;
+  }
+  .life-focus-premium-rail-v942{gap:7px}.life-focus-premium-rail-v942 em{display:none}
+  .v70-recipe-facts{grid-template-columns:1fr 1fr!important}
+  .life-recipe-premium-summary-v942{grid-template-columns:1fr!important}
+  .v45-recipe-panel,.life-recipe-sheet{box-shadow:none!important}
+  .v35-grid,.life-editorial-grid{grid-template-columns:1fr!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .life-pro-active .life-area-focus-row-v920,
+  .life-pro-active .life-fit-focus-workout-row-v913,
+  .life-pro-active .life-fit-focus-saved-row-v913,
+  .life-pro-active .life-fit-focus-exercise-row-v913{transition:none!important}
+}

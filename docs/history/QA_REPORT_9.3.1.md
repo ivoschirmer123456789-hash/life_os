@@ -1,4 +1,4 @@
-# LIFE OS 9.4.1 — QA Review
+# LIFE OS 9.4.2 — QA Review
 
 **Resultado: 80/80 verificações aprovadas.**
 
@@ -20,32 +20,32 @@
 - ✅ HTML válido: terms.html
 - ✅ Sem IDs duplicados: terms.html
 - ✅ Referências locais válidas: terms.html
-- ✅ JavaScript válido: clarity-guardrails-9.4.1.js
-- ✅ JavaScript válido: config-9.4.1.js
-- ✅ JavaScript válido: context-help-9.4.1.js
-- ✅ JavaScript válido: life-app-9.4.1.js
-- ✅ JavaScript válido: product-core-9.4.1.js
-- ✅ JavaScript válido: product-spacious-9.4.1.js
-- ✅ JavaScript válido: runtime-9.4.1.js
-- ✅ JavaScript válido: supabase-auth-9.4.1.js
+- ✅ JavaScript válido: clarity-guardrails-9.4.2.js
+- ✅ JavaScript válido: config-9.4.2.js
+- ✅ JavaScript válido: context-help-9.4.2.js
+- ✅ JavaScript válido: life-app-9.4.2.js
+- ✅ JavaScript válido: product-core-9.4.2.js
+- ✅ JavaScript válido: product-spacious-9.4.2.js
+- ✅ JavaScript válido: runtime-9.4.2.js
+- ✅ JavaScript válido: supabase-auth-9.4.2.js
 - ✅ JavaScript válido: service-worker.js
-- ✅ CSS válido: apex-9.4.1.css
-- ✅ CSS válido: apex-marketing-9.4.1.css
-- ✅ CSS válido: clarity-plus-9.4.1.css
-- ✅ CSS válido: design-system-9.4.1.css
-- ✅ CSS válido: life-bundle-9.4.1.css
+- ✅ CSS válido: apex-9.4.2.css
+- ✅ CSS válido: apex-marketing-9.4.2.css
+- ✅ CSS válido: clarity-plus-9.4.2.css
+- ✅ CSS válido: design-system-9.4.2.css
+- ✅ CSS válido: life-bundle-9.4.2.css
 - ✅ CSS válido: marketing-v60.css
 - ✅ CSS válido: marketing.css
-- ✅ CSS válido: product-core-9.4.1.css
-- ✅ CSS válido: review-polish-9.4.1.css
-- ✅ CSS válido: signature-9.4.1.css
+- ✅ CSS válido: product-core-9.4.2.css
+- ✅ CSS válido: review-polish-9.4.2.css
+- ✅ CSS válido: signature-9.4.2.css
 - ✅ Manifest JSON válido
-- ✅ Manifest versão 9.4.1 — LIFE OS 9.4.1
+- ✅ Manifest versão 9.4.2 — LIFE OS 9.4.2
 - ✅ Service Worker referencia apenas arquivos existentes — []
-- ✅ Cache exclusivo 9.4.1
+- ✅ Cache exclusivo 9.4.2
 - ✅ CSS de revisão pré-cacheado
 - ✅ Index carrega CSS de revisão
-- ✅ Index usa somente assets 9.4.1
+- ✅ Index usa somente assets 9.4.2
 - ✅ Hub com no máximo 4 escolhas: Tarefas — 4 escolhas
 - ✅ Hub com no máximo 4 escolhas: Notas — 4 escolhas
 - ✅ Hub com no máximo 4 escolhas: Estudos — 4 escolhas
