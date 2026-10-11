@@ -1,4 +1,4 @@
-const LIFE_CACHE='life-os-14.2.1-boot-repair';
+const LIFE_CACHE='life-os-14.3-power-premium-complete';
 const SHELL=[
   './',
   './index.html',
@@ -8,7 +8,15 @@ const SHELL=[
   './support.html',
   './offline.html',
   './manifest.webmanifest',
-  './assets/css/life-app-14.2.css',
+  './assets/css/life-app-14.3.css',
+  './assets/media/hero-mountain.webp',
+  './assets/media/fitness.webp',
+  './assets/media/estudos.webp',
+  './assets/media/alimentacao.webp',
+  './assets/media/financas.webp',
+  './assets/media/sono.webp',
+  './assets/media/evolucao.webp',
+  './assets/media/sidebar-mountain.webp',
   './assets/css/signature-9.4.2.css',
   './assets/css/visual-marketing-10.2.css',
   './assets/css/apex-marketing-9.4.2.css',
@@ -31,6 +39,7 @@ const SHELL=[
   './assets/js/runtime-9.4.2.js',
   './assets/js/interaction-layer-9.4.2.js',
   './assets/js/quality-guardrails-9.4.2.js',
+  './assets/icons/life143-sprite.svg',
   './assets/icons/icon.svg',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png'

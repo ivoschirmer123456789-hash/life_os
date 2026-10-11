@@ -1,0 +1,22 @@
+"use strict";
+const fs=require("node:fs"),path=require("node:path"),assert=require("node:assert/strict");
+const root=__dirname;
+const app=fs.readFileSync(path.join(root,"assets/js/life-app-9.4.2.js"),"utf8");
+const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
+const sw=fs.readFileSync(path.join(root,"service-worker.js"),"utf8");
+const css=fs.readFileSync(path.join(root,"assets/css/life-app-14.3.css"),"utf8");
+const manifest=JSON.parse(fs.readFileSync(path.join(root,"CSS_BUNDLE_MANIFEST_14.3.json"),"utf8"));
+let count=0;function test(title,fn){fn();count++;console.log("✓ "+title)}
+test("Home é React interativo, não screenshot estática",()=>{for(const x of ["life143-home","life143-welcome","life143-briefing","life143-metrics","life143-capture","life143-area-tiles","life143-agenda","life143-ecosystem","life143-ai-card"])assert(app.includes("className:'"+x),x)});
+test("Navegação original preservada",()=>{assert(app.includes("lifeNavItems.map((x, i) =>"));assert(app.includes("onClick: () => v18Go(x)"));assert(app.includes("const premiumNav = ['Hoje','Tarefas','Notas','Estudos','Fitness','Receitas','Finanças','IA','Life','Evolução','Favoritos','Perfil']"))});
+test("Botões da Home têm ações existentes",()=>{for(const x of ["onClick:()=>setSpot(true)","onClick:()=>setFocus(true)","onClick:()=>v42Go('Tarefas')","onClick:()=>v42Go(go)","onClick:()=>toggleLifeTask(t.id)","onSubmit:e=>{e.preventDefault();addLifeTodayPlan();}","onClick:()=>{setAiOriginView('Hoje');setAiQuickOpen(true);"])assert(app.includes(x),x)});
+test("Sono não aponta para rota inválida",()=>{assert(app.includes("['Life','bedtime','SONO'"));assert(!app.includes("['Sono','bedtime','SONO'"))});
+test("Relógio e progresso reais",()=>{for(const x of ["lifeTodayProgress","lifeTodayPlans","lifeTodayDone","lifeTodayDateLabel","lifeCommitmentsOpen.length","cloudStatus","hh","mm"])assert(app.includes(x),x)});
+test("Metadados 14.3 e carregamento reparado",()=>{assert(html.includes('content="14.3"'));assert(html.includes("lifeReactReady"));assert(html.includes("generator-rules-12.2.js?v=14.3"));assert(html.includes("life143-power"))});
+test("Um único CSS de aplicação no index",()=>{const links=[...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)];assert.equal(links.length,1);assert(links[0][1].includes("life-app-14.3.css"))});
+test("Visual e layout responsivo presentes no CSS",()=>{for(const x of [".life143-main-hero",".life143-briefing",".life143-metrics",".life143-area-tile",".life143-bottom-grid","@media(max-width:560px)","@media(max-width:820px)","@media (min-width:1150px)"])assert(css.includes(x),x)});
+test("Imagens reais locais incluídas no pacote",()=>{for(const p of ["hero-mountain","fitness","estudos","alimentacao","financas","sono","evolucao","sidebar-mountain"]){assert(fs.existsSync(path.join(root,"assets/media/"+p+".webp")),p);assert(sw.includes("./assets/media/"+p+".webp"),p)}});
+test("SW e manifesto visual sincronizados",()=>{assert(sw.includes("life-os-14.3-power-premium-complete"));assert(sw.includes("./assets/css/life-app-14.3.css"));assert.equal(manifest.app,"assets/css/life-app-14.3.css");assert.equal(manifest.version,"14.3")});
+test("Ícones locais não dependem da fonte do Google",()=>{assert(app.includes("life143-sprite.svg#"));assert(fs.existsSync(path.join(root,"assets/icons/life143-sprite.svg")));assert(sw.includes("./assets/icons/life143-sprite.svg"))});
+test("Nenhum arquivo CSS consolidado antigo duplicado",()=>{assert(!fs.existsSync(path.join(root,"assets/css/life-app-14.2.css")))});
+console.log("PASS: "+count+" checks LIFE OS 14.3 (análise local, não integração remota)");

@@ -1,5 +1,5 @@
-LIFE OS 14.2.1 — Correção de carregamento
+LIFE OS 14.3 — POWER PREMIUM COMPLETO
 
-Extraia o ZIP e publique o conteúdo na raiz do projeto (index.html na raiz).
-Faça o deploy de teste sem substituir a versão atual.
-A correção não apaga dados locais. Se o problema persistir, envie o link da Vercel e a mensagem exibida.
+Extraia este ZIP e publique os arquivos (com index.html na raiz) na Vercel.
+Após entrar com sua conta, a Home exibirá o novo painel Power Premium, com controles reais e seus dados.
+Não use o protótipo 14.3 Visual; este pacote contém o aplicativo completo.
