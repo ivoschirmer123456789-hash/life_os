@@ -1,7 +1,7 @@
 {
-  "name": "LIFE OS 13.0",
+  "name": "LIFE OS 14.2.1",
   "short_name": "LIFE OS",
-  "description": "LIFE OS 13.0 — abas simples com recursos integrados",
+  "description": "LIFE OS — Graphite System com inicialização corrigida",
   "id": "./",
   "start_url": "./",
   "scope": "./",

@@ -1,4 +1,4 @@
-const LIFE_CACHE='life-os-14.2-graphite-system';
+const LIFE_CACHE='life-os-14.2.1-boot-repair';
 const SHELL=[
   './',
   './index.html',

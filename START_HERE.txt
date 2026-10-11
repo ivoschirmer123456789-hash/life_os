@@ -1,2 +1,5 @@
-LIFE OS 14.1 — Cinematic Signature
-Abra index.html em servidor estático ou publique a pasta raiz na Vercel. Preserve o seu deploy anterior como backup.
+LIFE OS 14.2.1 — Correção de carregamento
+
+Extraia o ZIP e publique o conteúdo na raiz do projeto (index.html na raiz).
+Faça o deploy de teste sem substituir a versão atual.
+A correção não apaga dados locais. Se o problema persistir, envie o link da Vercel e a mensagem exibida.

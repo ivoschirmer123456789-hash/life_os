@@ -1,17 +1,13 @@
-# LIFE OS 14.2 — Graphite System
+# LIFE OS 14.2.1 — correção de carregamento
 
-Versão baseada na 14.1, com **grafite predominante**, componentes de aspecto tecnológico e uma Home mais precisa e profissional. A estrutura e os nomes das abas são preservados.
+Correções:
+- React e ReactDOM carregados de forma sequencial, aguardando confirmação antes de iniciar o aplicativo.
+- Tentativas em três CDNs, sem corrida entre scripts.
+- Modo de recuperação visível com opção de atualizar os arquivos estáticos do site.
+- Recuperação limpa somente Cache Storage do próprio LIFE OS e registrações de service workers do escopo; NÃO apaga dados no localStorage nem IndexedDB.
+- Cache PWA atualizado para nova versão.
+- Abas, projetos, formularios, tema grafite, planos e banco de dados preservados.
 
-## O que foi alterado
-- Nova camada visual grafite / aço fosco, com acentos discretos em cobre e ciano
-- Hero, briefing, cartões, status, navegação, telas internas e login atualizados
-- Arte central substituída por instrumento geométrico leve
-- Correção do tema diurno: o estado React agora sincroniza a classe no elemento HTML
-- Cache da PWA e referências do CSS atualizados para 14.2
-- Mantido um único CSS principal e todo o código funcional herdado
+Se o site publicado continuar sem abrir, envie a URL pública e uma captura de tela com a mensagem exibida; sem acesso ao ambiente publicado não é possível afirmar que a causa no servidor foi corrigida.
 
-## O que NÃO mudou
-A sequência das abas, seus destinos, os formulários, dados e regras FREE/PRO/OWNER não foram substituídos. Pagamento e sincronização reais dependem de homologação na Vercel/Supabase.
-
-## Publicar
-Publique o conteúdo da pasta raiz do ZIP numa implantação de teste da Vercel; valide login, assinatura, sincronização e IA antes de substituir a versão pública.
+Publicação: envie o conteúdo do ZIP para a raiz do projeto no GitHub/Vercel, mantendo index.html na raiz.

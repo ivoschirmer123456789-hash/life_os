@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>LIFE OS 14.2 — Graphite System</title>
+  <title>LIFE OS 14.2.1 — Inicialização corrigida</title>
 
   <meta name="description" content="LIFE OS é um sistema pessoal para organizar rotina, tarefas, estudos, fitness, alimentação, finanças e contexto com LIFE AI." />
   <meta name="theme-color" content="#070A11" />
@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="application-name" content="LIFE OS" />
-  <meta name="life-build" content="14.2" />
+  <meta name="life-build" content="14.2.1" />
   <meta name="apple-mobile-web-app-title" content="LIFE OS" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="format-detection" content="telephone=no" />
@@ -30,7 +30,8 @@
     window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){
       try{
         var root=document.getElementById('life-v18-root'),fallback=document.getElementById('life-load-fallback');
-        if(!fallback||!root||root.childElementCount>0)return;
+        if(!fallback||!root||root.childElementCount>0||document.documentElement.dataset.lifeBoot==='failed')return;
+        if(window.lifeShowBootFailure){window.lifeShowBootFailure('arquivo');return;}
         var h=fallback.querySelector('h1'),p=fallback.querySelector('p');
         if(h)h.textContent='O LIFE não concluiu a inicialização.';
         if(p)p.textContent='Recarregue a página. Se continuar, confira a conexão e o diagnóstico técnico salvo nesta versão.';
@@ -49,10 +50,83 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,-25..0" rel="stylesheet">
   
 
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js'}else{this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js'}"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js'}else{this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js'}"></script>
+  <script>
+  // Carrega as bibliotecas na ordem certa. Alterar o src no onerror nao garante
+  // que o React esteja pronto quando o aplicativo for avaliado.
+  (function () {
+    'use strict';
+    const LIBRARIES = [
+      {label:'React',ready:()=>!!(window.React && typeof React.useState==='function'),urls:[
+        'https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js',
+        'https://unpkg.com/react@18.3.1/umd/react.production.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js'
+      ]},
+      {label:'ReactDOM',ready:()=>!!(window.ReactDOM && (typeof ReactDOM.createRoot==='function'||typeof ReactDOM.render==='function')),urls:[
+        'https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js',
+        'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js'
+      ]}
+    ];
+    window.lifeBootDependencyStatus={phase:'libraries',react:false,reactDOM:false};
+    function one(url,ready){
+      return new Promise((resolve,reject)=>{
+        const tag=document.createElement('script');let done=false;
+        const finish=(ok)=>{if(done)return;done=true;clearTimeout(timer);tag.onload=null;tag.onerror=null;if(!ok)tag.remove();ok?resolve():reject(new Error('external_script_unavailable'));};
+        const timer=setTimeout(()=>finish(false),4500);
+        tag.async=true;tag.src=url;
+        tag.onload=()=>finish(ready());tag.onerror=()=>finish(false);
+        document.head.appendChild(tag);
+      });
+    }
+    window.lifeReactReady=(async()=>{
+      for(const lib of LIBRARIES){
+        if(!lib.ready()){
+          let loaded=false;
+          for(const url of lib.urls){try{await one(url,lib.ready);loaded=true;break;}catch(_){}}
+          if(!loaded)throw new Error(lib.label+'_indisponivel');
+        }
+        if(lib.label==='React')window.lifeBootDependencyStatus.react=true;
+        if(lib.label==='ReactDOM')window.lifeBootDependencyStatus.reactDOM=true;
+      }
+      window.lifeBootDependencyStatus.phase='ready';
+    })();
+    // Impede unhandledrejection enquanto o HTML ainda esta carregando.
+    window.lifeReactReady.catch(()=>{});
+    window.lifeShowBootFailure=function(code){
+      const f=document.getElementById('life-load-fallback');
+      if(!f)return;
+      const title=f.querySelector('h1'),hint=f.querySelector('p'),retry=f.querySelector('button');
+      if(title)title.textContent='O LIFE não conseguiu iniciar.';
+      if(hint)hint.textContent=code==='biblioteca'?'Não foi possível carregar os componentes da interface. Verifique a conexão e tente novamente.':'Um arquivo essencial não carregou. Tente atualizar os arquivos do aplicativo, sem apagar seus dados.';
+      if(retry){retry.textContent='TENTAR NOVAMENTE';retry.onclick=()=>location.reload();}
+      if(!document.getElementById('life-repair-boot')){
+        const repair=document.createElement('button');repair.type='button';repair.id='life-repair-boot';
+        repair.textContent='ATUALIZAR ARQUIVOS DO SITE';
+        repair.style.cssText='margin:12px 0 0 8px;background:#202e38;border:1px solid #536776;color:#fff;padding:12px 14px;border-radius:12px;font-weight:800;cursor:pointer;';
+        repair.onclick=async()=>{
+          repair.disabled=true;repair.textContent='ATUALIZANDO...';
+          try{
+            if('serviceWorker' in navigator){
+              const regs=await navigator.serviceWorker.getRegistrations();
+              for(const reg of regs){if(reg.scope.startsWith(location.origin+new URL('./',location.href).pathname))await reg.unregister();}
+            }
+            if('caches' in window){
+              const keys=await caches.keys();
+              for(const key of keys){if(/^life-os-/.test(key))await caches.delete(key);}
+            }
+          }catch(_){}
+          // Não apaga localStorage, IndexedDB, cookies ou dados do usuário.
+          location.reload();
+        };
+        (retry?.parentElement||f.firstElementChild||f).appendChild(repair);
+      }
+      document.documentElement.dataset.lifeBoot='failed';
+      window.__lifeBoot&&window.__lifeBoot.errors.push({kind:'boot',message:String(code).slice(0,40)});
+    };
+  })();
+  </script>
 
-  <link rel="stylesheet" href="assets/css/life-app-14.2.css?v=14.2">
+  <link rel="stylesheet" href="assets/css/life-app-14.2.css?v=14.2.1">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
@@ -73,10 +147,10 @@
   <script src="assets/js/life-release-12.5.js?v=12.5"></script>
   <script src="assets/js/life-production-12.6.js?v=12.6"></script>
   <script src="assets/js/life-extras-13.0.js?v=13.0"></script>
-  <script src="assets/js/life-app-9.4.2.js?v=14.2" onerror="window.__lifeBoot&&window.__lifeBoot.errors.push({kind:'asset',message:'life-app-9.4.2.js não carregou'})"></script>
-  <script src="assets/js/context-help-9.4.2.js"></script>
-  <script src="assets/js/interaction-layer-9.4.2.js"></script>
-  <script src="assets/js/quality-guardrails-9.4.2.js"></script>
+  
+  
+  
+  
 
   <!-- ====================================================================
        LIFE OS — BANCO DE DADOS ATUALIZADO (ETAPA 5)
@@ -84,9 +158,9 @@
        ==================================================================== -->
   <!-- supabase-database-schema moved to database/schema-reference.sql -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2'"></script>
+<!-- Supabase JS é carregado pela sequência de inicialização para evitar corrida de scripts. -->
 
-<div id="life-auth"><div class="la-shell"><aside class="la-showcase"><div class="la-showcase-brand">LIFE <em>OS</em><span>14.2</span></div><div class="la-showcase-copy"><small>SEU SISTEMA PESSOAL</small><h2>Tudo importante.<br>Em um só lugar.</h2><p>Rotina, estudos, Fitness, finanças e LIFE AI com a mesma identidade, o mesmo histórico e o mesmo contexto.</p></div><div class="la-showcase-grid"><span><b>HOJE</b>Prioridades reais</span><span><b>ORGANIZAR</b>Projetos + tarefas</span><span><b>LIFE AI</b>Contexto do sistema</span></div><button id="la-theme-toggle" class="la-theme-toggle" type="button">ALTERNAR TEMA</button></aside><div class="la-box"><div class="la-logo">LIFE <em>OS</em></div><div id="la-main"><small class="la-eyebrow">CONTA LIFE</small><h1>Entrar.</h1><p>Continue de onde parou ou crie sua conta LIFE.</p><input id="la-email" class="la-input" type="email" autocomplete="email" inputmode="email" aria-label="E-mail" placeholder="E-mail"><div class="la-pass-wrap"><input id="la-password" class="la-input" type="password" autocomplete="current-password" aria-label="Senha" placeholder="Senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-password" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><button id="la-login" class="la-btn" type="button">ENTRAR →</button><button id="la-signup" class="la-btn la-alt" type="button">CRIAR CONTA</button><button id="la-forgot" class="la-link" type="button">ESQUECI MINHA SENHA</button><a class="la-link life-public-link" href="landing.html">CONHECER O LIFE OS</a></div><div id="la-signup-view" style="display:none"><small class="la-eyebrow">PRIMEIRO ACESSO</small><h1>Criar conta.</h1><p>Cadastre seu e-mail e crie uma senha para salvar e sincronizar seu LIFE.</p><input id="la-signup-email" class="la-input" type="email" autocomplete="email" inputmode="email" aria-label="E-mail para criar a conta" placeholder="E-mail"><div class="la-pass-wrap"><input id="la-signup-password" class="la-input" type="password" autocomplete="new-password" aria-label="Criar senha" placeholder="Senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-signup-password" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><div class="la-pass-wrap"><input id="la-signup-password2" class="la-input" type="password" autocomplete="new-password" aria-label="Confirmar senha" placeholder="Confirmar senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-signup-password2" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><button id="la-create-account" class="la-btn" type="button">CRIAR CONTA →</button><button id="la-signup-back" class="la-link la-back" type="button">JÁ TENHO CONTA</button></div><div id="la-session-confirm" class="la-session-confirm" style="display:none"><small class="la-eyebrow">SESSÃO ENCONTRADA</small><h1>Continuar nesta conta?</h1><p>Antes de abrir seu LIFE, confirme se esta é a conta que você quer usar agora.</p><div class="la-session-account"><span class="material-symbols-rounded">account_circle</span><div><small>CONTA ATUAL</small><b id="la-session-email">—</b></div><em id="la-session-plan">—</em></div><button id="la-session-continue" class="la-btn" type="button">CONTINUAR NESTA CONTA →</button><button id="la-session-switch" class="la-btn la-alt" type="button">TROCAR DE CONTA</button><span class="la-session-note">Você pode sair novamente a qualquer momento pelo ícone de porta no canto superior esquerdo.</span></div><div id="la-recovery" style="display:none"><small class="la-eyebrow">RECUPERAÇÃO</small><h1>Recuperar.</h1><p>Informe seu e-mail. Enviaremos a recuperação para você criar uma nova senha.</p><input id="la-recovery-email" class="la-input" type="email" autocomplete="email" inputmode="email" aria-label="E-mail para recuperação" placeholder="E-mail"><button id="la-send-recovery" class="la-btn" type="button">ENVIAR RECUPERAÇÃO</button><button id="la-back" class="la-link la-back" type="button">VOLTAR PARA ENTRAR</button></div><div id="la-new-password" style="display:none"><small class="la-eyebrow">SEGURANÇA</small><h1>Nova senha.</h1><p>Crie uma nova senha para sua conta LIFE.</p><div class="la-pass-wrap"><input id="la-new-pass" class="la-input" type="password" autocomplete="new-password" aria-label="Nova senha" placeholder="Nova senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-new-pass" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><div class="la-pass-wrap"><input id="la-new-pass2" class="la-input" type="password" autocomplete="new-password" aria-label="Confirmar nova senha" placeholder="Confirmar nova senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-new-pass2" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><button id="la-save-pass" class="la-btn" type="button">SALVAR NOVA SENHA</button></div><div id="la-msg" class="la-msg" role="status" aria-live="polite"></div><div class="la-trust">Seus dados pertencem à sua conta. Senhas nunca são exibidas dentro do LIFE.</div></div></div></div><div id="life-account-chip" class="life-account-chip"></div><button id="life-account-exit" class="life-account-exit" type="button" aria-label="Sair ou trocar de conta" aria-expanded="false" title="Sair ou trocar de conta"><span class="material-symbols-rounded">logout</span></button><div id="life-account-exit-menu" class="life-account-exit-menu" aria-hidden="true"><small>CONTA ATUAL</small><b id="life-exit-email">—</b><span id="life-exit-plan">—</span><button id="life-account-exit-confirm" type="button"><span class="material-symbols-rounded">logout</span> SAIR E TROCAR DE CONTA</button></div>
+<div id="life-auth"><div class="la-shell"><aside class="la-showcase"><div class="la-showcase-brand">LIFE <em>OS</em><span>14.2.1</span></div><div class="la-showcase-copy"><small>SEU SISTEMA PESSOAL</small><h2>Tudo importante.<br>Em um só lugar.</h2><p>Rotina, estudos, Fitness, finanças e LIFE AI com a mesma identidade, o mesmo histórico e o mesmo contexto.</p></div><div class="la-showcase-grid"><span><b>HOJE</b>Prioridades reais</span><span><b>ORGANIZAR</b>Projetos + tarefas</span><span><b>LIFE AI</b>Contexto do sistema</span></div><button id="la-theme-toggle" class="la-theme-toggle" type="button">ALTERNAR TEMA</button></aside><div class="la-box"><div class="la-logo">LIFE <em>OS</em></div><div id="la-main"><small class="la-eyebrow">CONTA LIFE</small><h1>Entrar.</h1><p>Continue de onde parou ou crie sua conta LIFE.</p><input id="la-email" class="la-input" type="email" autocomplete="email" inputmode="email" aria-label="E-mail" placeholder="E-mail"><div class="la-pass-wrap"><input id="la-password" class="la-input" type="password" autocomplete="current-password" aria-label="Senha" placeholder="Senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-password" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><button id="la-login" class="la-btn" type="button">ENTRAR →</button><button id="la-signup" class="la-btn la-alt" type="button">CRIAR CONTA</button><button id="la-forgot" class="la-link" type="button">ESQUECI MINHA SENHA</button><a class="la-link life-public-link" href="landing.html">CONHECER O LIFE OS</a></div><div id="la-signup-view" style="display:none"><small class="la-eyebrow">PRIMEIRO ACESSO</small><h1>Criar conta.</h1><p>Cadastre seu e-mail e crie uma senha para salvar e sincronizar seu LIFE.</p><input id="la-signup-email" class="la-input" type="email" autocomplete="email" inputmode="email" aria-label="E-mail para criar a conta" placeholder="E-mail"><div class="la-pass-wrap"><input id="la-signup-password" class="la-input" type="password" autocomplete="new-password" aria-label="Criar senha" placeholder="Senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-signup-password" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><div class="la-pass-wrap"><input id="la-signup-password2" class="la-input" type="password" autocomplete="new-password" aria-label="Confirmar senha" placeholder="Confirmar senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-signup-password2" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><button id="la-create-account" class="la-btn" type="button">CRIAR CONTA →</button><button id="la-signup-back" class="la-link la-back" type="button">JÁ TENHO CONTA</button></div><div id="la-session-confirm" class="la-session-confirm" style="display:none"><small class="la-eyebrow">SESSÃO ENCONTRADA</small><h1>Continuar nesta conta?</h1><p>Antes de abrir seu LIFE, confirme se esta é a conta que você quer usar agora.</p><div class="la-session-account"><span class="material-symbols-rounded">account_circle</span><div><small>CONTA ATUAL</small><b id="la-session-email">—</b></div><em id="la-session-plan">—</em></div><button id="la-session-continue" class="la-btn" type="button">CONTINUAR NESTA CONTA →</button><button id="la-session-switch" class="la-btn la-alt" type="button">TROCAR DE CONTA</button><span class="la-session-note">Você pode sair novamente a qualquer momento pelo ícone de porta no canto superior esquerdo.</span></div><div id="la-recovery" style="display:none"><small class="la-eyebrow">RECUPERAÇÃO</small><h1>Recuperar.</h1><p>Informe seu e-mail. Enviaremos a recuperação para você criar uma nova senha.</p><input id="la-recovery-email" class="la-input" type="email" autocomplete="email" inputmode="email" aria-label="E-mail para recuperação" placeholder="E-mail"><button id="la-send-recovery" class="la-btn" type="button">ENVIAR RECUPERAÇÃO</button><button id="la-back" class="la-link la-back" type="button">VOLTAR PARA ENTRAR</button></div><div id="la-new-password" style="display:none"><small class="la-eyebrow">SEGURANÇA</small><h1>Nova senha.</h1><p>Crie uma nova senha para sua conta LIFE.</p><div class="la-pass-wrap"><input id="la-new-pass" class="la-input" type="password" autocomplete="new-password" aria-label="Nova senha" placeholder="Nova senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-new-pass" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><div class="la-pass-wrap"><input id="la-new-pass2" class="la-input" type="password" autocomplete="new-password" aria-label="Confirmar nova senha" placeholder="Confirmar nova senha"><button class="la-pass-toggle" type="button" data-life-pass-toggle="la-new-pass2" aria-label="Mostrar ou ocultar senha" aria-pressed="false"><span class="material-symbols-rounded">visibility</span></button></div><button id="la-save-pass" class="la-btn" type="button">SALVAR NOVA SENHA</button></div><div id="la-msg" class="la-msg" role="status" aria-live="polite"></div><div class="la-trust">Seus dados pertencem à sua conta. Senhas nunca são exibidas dentro do LIFE.</div></div></div></div><div id="life-account-chip" class="life-account-chip"></div><button id="life-account-exit" class="life-account-exit" type="button" aria-label="Sair ou trocar de conta" aria-expanded="false" title="Sair ou trocar de conta"><span class="material-symbols-rounded">logout</span></button><div id="life-account-exit-menu" class="life-account-exit-menu" aria-hidden="true"><small>CONTA ATUAL</small><b id="life-exit-email">—</b><span id="life-exit-plan">—</span><button id="life-account-exit-confirm" type="button"><span class="material-symbols-rounded">logout</span> SAIR E TROCAR DE CONTA</button></div>
 <button id="life-owner-open" type="button" aria-label="Abrir LIFE Control">OWNER</button>
 <div id="life-owner-panel" aria-hidden="true">
  <div class="lov-wrap">
@@ -129,7 +203,6 @@
   </section>
  </div>
 </div>
-<script src="assets/js/supabase-auth-9.4.2.js" onerror="window.__lifeBoot&&window.__lifeBoot.errors.push({kind:'asset',message:'supabase-auth-9.4.2.js não carregou'})"></script>
 
 
 
@@ -140,6 +213,68 @@
 
 
 
-<script src="assets/js/runtime-9.4.2.js" onerror="window.__lifeBoot&&window.__lifeBoot.errors.push({kind:'asset',message:'runtime-9.4.2.js não carregou'})"></script>
+
+
+<script>
+(function(){
+  'use strict';
+  const chain=[
+    'assets/js/generator-rules-12.2.js?v=14.2.1',
+    'assets/js/life-app-9.4.2.js?v=14.2.1',
+    'assets/js/context-help-9.4.2.js?v=14.2.1',
+    'assets/js/interaction-layer-9.4.2.js?v=14.2.1',
+    'assets/js/quality-guardrails-9.4.2.js?v=14.2.1',
+    'assets/js/supabase-auth-9.4.2.js?v=14.2.1',
+    'assets/js/runtime-9.4.2.js?v=14.2.1'
+  ];
+  function load(path){
+    return new Promise((resolve,reject)=>{
+      const tag=document.createElement('script');let settled=false;
+      const finish=(err)=>{if(settled)return;settled=true;clearTimeout(timer);tag.onerror=null;tag.onload=null;err?reject(err):resolve();};
+      const timer=setTimeout(()=>finish(new Error('timeout:'+path)),18000);
+      tag.async=false;tag.src=path;
+      tag.onload=()=>finish();tag.onerror=()=>finish(new Error('file:'+path));
+      document.body.appendChild(tag);
+    });
+  }
+  (async()=>{
+    try{
+      await window.lifeReactReady;
+      if(!(window.React&&window.ReactDOM))throw new Error('libraries_not_ready');
+      for(const path of chain){
+        if(path.includes('supabase-auth-9.4.2.js')){
+          const ready=()=>!!(window.supabase&&typeof window.supabase.createClient==='function');
+          if(!ready()){
+            let ok=false;
+            const urls=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.10/dist/umd/supabase.js','https://unpkg.com/@supabase/supabase-js@2.49.10/dist/umd/supabase.js'];
+            for(const url of urls){
+              try{
+                await new Promise((resolve,reject)=>{
+                  const tag=document.createElement('script');let done=false;
+                  const finish=(good)=>{if(done)return;done=true;clearTimeout(timer);tag.onload=null;tag.onerror=null;if(!good)tag.remove();good?resolve():reject(new Error('supabase_unavailable'));};
+                  const timer=setTimeout(()=>finish(false),5500);
+                  tag.async=true;tag.src=url;
+                  tag.onload=()=>finish(ready());tag.onerror=()=>finish(false);
+                  document.head.appendChild(tag);
+                });
+                ok=true;break;
+              }catch(_){ }
+            }
+            if(!ok)throw new Error('supabase_unavailable');
+          }
+        }
+        await load(path);
+      }
+      // Se o React montar a interface mas o CSS ficar bloqueado, o fallback
+      // também pode ser removido com segurança após os scripts terminarem.
+      const f=document.getElementById('life-load-fallback');
+      if(f&&document.getElementById('life-v18-root')?.childElementCount)f.remove();
+    }catch(error){
+      const library=String(error?.message||'').includes('indisponivel')||String(error?.message||'').includes('libraries_not_ready')||String(error?.message||'').includes('supabase_unavailable');
+      window.lifeShowBootFailure?.(library?'biblioteca':'arquivo');
+    }
+  })();
+})();
+</script>
 </body>
 </html>
