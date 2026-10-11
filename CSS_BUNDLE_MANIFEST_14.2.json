@@ -1,0 +1,121 @@
+{
+  "app": "assets/css/life-app-14.2.css",
+  "sources": [
+    {
+      "file": "assets/css/life-bundle-9.4.2.css",
+      "sha256": "f8ff7d15ad63c1a09bf16da8f8ebcde43704d8c412fff79803069c09e98f1329",
+      "bytes": 824464
+    },
+    {
+      "file": "assets/css/signature-9.4.2.css",
+      "sha256": "566bd4e7fe54f8ddaf988adb85bfb13fbe45cdb511051c74cb2ad1095f01ca65",
+      "bytes": 32695
+    },
+    {
+      "file": "assets/css/apex-9.4.2.css",
+      "sha256": "a1f38118f53b1ab69ac4c48024db16e101cc8efe61d11b0298e53672fde2663f",
+      "bytes": 208572
+    },
+    {
+      "file": "assets/css/product-core-9.4.2.css",
+      "sha256": "0553283eef86a86fd4996689fa7ee43905ac08f82daf7207dca461a5f151bbdd",
+      "bytes": 29279
+    },
+    {
+      "file": "assets/css/design-system-9.4.2.css",
+      "sha256": "5924f3a02ea3691bace1d03c922e907fb5388d65e372c94c26960e64f021c242",
+      "bytes": 42793
+    },
+    {
+      "file": "assets/css/clarity-plus-9.4.2.css",
+      "sha256": "8ea8afe03433de62197cf7751117de15fcba1dff3d82f3b1eb6424b61934abfc",
+      "bytes": 4343
+    },
+    {
+      "file": "assets/css/review-polish-9.4.2.css",
+      "sha256": "2fa1561410a5e5df988a6843df4d2d64d82135f55a59263eea066c4c66e7187c",
+      "bytes": 5413
+    },
+    {
+      "file": "assets/css/focus-refinement-9.4.2.css",
+      "sha256": "3a6a9c1e6d45ebe04973835e30ab1d508c3583435dcfe8d7e7dfa11e21cc2459",
+      "bytes": 5460
+    },
+    {
+      "file": "assets/css/premium-performance-9.4.2.css",
+      "sha256": "fcfbaa8ca3532f0616fa8f8512606975d9f13cb9cd1cc47675a473687b4e743f",
+      "bytes": 8692
+    },
+    {
+      "file": "assets/css/visual-rebuild-10.2.css",
+      "sha256": "c934dc7e639436ff443bd19e2a6a794a09a85ec9310fd1fd5d462924f306b70a",
+      "bytes": 24225
+    },
+    {
+      "file": "assets/css/atelier-11.0.css",
+      "sha256": "a20890ca21ec3c320b0b57bb6bf6a7f5a0ab922fdbc7b977287025b4ccdf1c36",
+      "bytes": 35003
+    },
+    {
+      "file": "assets/css/atelier-11.1-refinement.css",
+      "sha256": "66daf6d9a8b14e2a4f6f51f3b39067dd3fb4be3ed76c39241424a3687bf5ce88",
+      "bytes": 14787
+    },
+    {
+      "file": "assets/css/editorial-11.2.css",
+      "sha256": "31b7475388cea1784e382d9482730f3560b6a8978c0ee81b222998f8bd78b4ab",
+      "bytes": 18550
+    },
+    {
+      "file": "assets/css/premium-panel-12.0.css",
+      "sha256": "e48a58a591d14535d13ed1b6ad93e1e6790ced877069a843a8843f87339ff04d",
+      "bytes": 21139
+    },
+    {
+      "file": "assets/css/functional-12.1.css",
+      "sha256": "28b4e24bdd20d81655746cdce4e455df4efa0c204ea3042c847028c0442d1d4d",
+      "bytes": 5663
+    },
+    {
+      "file": "assets/css/integrated-12.3.css",
+      "sha256": "d4b32e1461af1255a470147a13ff654672906eac30c24d822875249585346c2a",
+      "bytes": 2534
+    },
+    {
+      "file": "assets/css/reliability-12.4.css",
+      "sha256": "9d62671cf19e6212220fdd6bddde4d084313b9eb0718514165d55dcf7c5d7647",
+      "bytes": 6179
+    },
+    {
+      "file": "assets/css/release-12.5.css",
+      "sha256": "b2f97886e5e54de686d7d419a04ef6f73675e8810600e562a9ca8f0bd856d7b4",
+      "bytes": 1197
+    },
+    {
+      "file": "assets/css/release-12.6.css",
+      "sha256": "37a21348302e4d617b69267f5f142738c5560a587d940c8ba42e878aaa1dcc17",
+      "bytes": 1266
+    },
+    {
+      "file": "assets/css/life-extras-13.0.css",
+      "sha256": "c14332c240010506f32d9d8ed72d1fad26a9dc556228b9138f63adf6431a81ce",
+      "bytes": 4814
+    },
+    {
+      "file": "assets/css/visual-signature-13.1.css",
+      "sha256": "736d30aa4d096f897c2799f445908267d5c17df5da761892551391541907b0e7",
+      "bytes": 27902
+    }
+  ],
+  "tech_luxe_layer": {
+    "file": "inline final block of assets/css/life-app-13.2.css",
+    "sha256": "4f06ea7bfe9712d300eaea52df08023ee5941bab4755704be0dde3dd64def9ee",
+    "bytes": 33622,
+    "relationship": "append only after 13.1 consolidated styles, no nav or business logic change"
+  },
+  "bundle": "life-app-14.2.css",
+  "version": "14.2",
+  "version_note": "Graphite System, visual redesign and corrected theme sync",
+  "sha256": "fc0aae1d039de3b4a53d2016e2163f245267fb8b5fd81ddfff99ca6d365290af",
+  "relationship": "single consolidated application stylesheet; updated graphite overrides; original source list is archival"
+}

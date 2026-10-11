@@ -1,31 +1,17 @@
-LIFE OS 12.1 — REVISÃO FUNCIONAL
-=================================
+# LIFE OS 14.2 — Graphite System
 
-Versão derivada da 12.0, preservando o aplicativo, autenticação, perfis FREE/PRO/OWNER e as rotas existentes.
+Versão baseada na 14.1, com **grafite predominante**, componentes de aspecto tecnológico e uma Home mais precisa e profissional. A estrutura e os nomes das abas são preservados.
 
-Corrigido
-- Falha real de sintaxe JavaScript presente no JS da 12.0, que impedia o carregamento.
-- Service Worker de versão antiga (11.2) e exclusão do CSS 12.0 do cache offline.
-- Manifest, configuração e etiquetas da versão atualizados.
-- Query de cache renovada para scripts alterados.
+## O que foi alterado
+- Nova camada visual grafite / aço fosco, com acentos discretos em cobre e ciano
+- Hero, briefing, cartões, status, navegação, telas internas e login atualizados
+- Arte central substituída por instrumento geométrico leve
+- Correção do tema diurno: o estado React agora sincroniza a classe no elemento HTML
+- Cache da PWA e referências do CSS atualizados para 14.2
+- Mantido um único CSS principal e todo o código funcional herdado
 
-Novo
-- Registro opcional de carga (kg) e repetições por série, vinculado ao exercício real.
-- Histórico de séries com primeiro/último registro em Fitness e Evolução.
-- Conquistas entre áreas calculadas de registros já feitos.
-- Painel de atividade por área em 7 e 30 dias (sem dados fictícios).
-- Comandos rápidos reais na pesquisa universal.
-- Home personalizável: escolha que módulos mostrar/ocultar.
-- Função Supabase life-ai para resposta remota autenticada, condicionada à publicação no seu projeto e segredo OPENAI_API_KEY.
+## O que NÃO mudou
+A sequência das abas, seus destinos, os formulários, dados e regras FREE/PRO/OWNER não foram substituídos. Pagamento e sincronização reais dependem de homologação na Vercel/Supabase.
 
-Publicação
-1. Extraia o ZIP; envie os arquivos da pasta life_os_12_1_functional para o repositório que a Vercel publica.
-2. Não mude caminhos de assets, database ou supabase.
-3. Publique; atualize totalmente o navegador uma vez para ativar o Service Worker 12.1.
-4. Se quiser usar o modelo remoto, siga supabase/README_CONFIGURACAO.md.
-5. Teste login, logout, acesso FREE/PRO, confirmação de assinatura e IA no ambiente real.
-
-Limitações
-- Ferramentas de assinatura/webhook Mercado Pago não foram provisionadas ou modificadas automaticamente.
-- A implantação da Edge Function não ocorre ao publicar na Vercel.
-- Os testes neste pacote são estáticos; não substituem fluxos reais no navegador publicado.
+## Publicar
+Publique o conteúdo da pasta raiz do ZIP numa implantação de teste da Vercel; valide login, assinatura, sincronização e IA antes de substituir a versão pública.

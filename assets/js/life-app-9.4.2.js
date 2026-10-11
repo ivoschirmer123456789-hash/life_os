@@ -4788,6 +4788,13 @@ function LifeOSV18() {
     catch (e) {
         return 'night';
     } });
+    // Keep the document-level design tokens in sync with React's theme.
+    // 14.1 styled the document as dark even after switching this state to day.
+    React.useEffect(() => {
+        document.documentElement.classList.toggle('life-theme-day', lifeTheme === 'day');
+        document.documentElement.dataset.lifeTheme = lifeTheme;
+        return () => { document.documentElement.classList.remove('life-theme-day'); delete document.documentElement.dataset.lifeTheme; };
+    }, [lifeTheme]);
     const toggleLifeTheme = () => setLifeTheme(t => { const next = t === 'night' ? 'day' : 'night'; try {
         lifeRawStorageSet('life_theme', next);
     }
@@ -10147,7 +10154,7 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => openSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 13.0"),
+            React.createElement("span", { className: "v18-code" }, "OS / 14.2"),
             React.createElement('button',{type:'button',className:'life112-desktop-search',onClick:()=>setSpot(true),title:'Buscar em todo o LIFE', 'aria-label':'Abrir busca global'},
               React.createElement('span',{className:'material-symbols-rounded'},'search'),
               React.createElement('span',null,'Buscar no seu LIFE...'),
@@ -10503,15 +10510,16 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                     React.createElement('strong',null,'Pronto para o próximo passo?'),
                     React.createElement('p',null,lifeTodayOpen.length?`${lifeTodayOpen.length} ${lifeTodayOpen.length===1?'tarefa esperando':'tarefas esperando'} por você hoje.`:'Comece com uma prioridade e construa o restante no seu ritmo.'),
                     React.createElement('button',{type:'button',onClick:()=>v42Go('Tarefas')},'Abrir planejamento',React.createElement('span',{className:'material-symbols-rounded'},'arrow_outward'))),
-            hasV18Pro && React.createElement("section", { className: "life-premium-masthead", "aria-label": "Experiência premium LIFE" },
+            view !== 'Hoje' && view !== 'Configurações' && (!areaFocusMode || areaFocusMode==='__full__') && React.createElement("section", { className: "life-premium-masthead life131-masthead", "data-life-area": view, "aria-label": "Área " + lifePublicAreaName(view) },
+                React.createElement("span", { className: "life131-masthead-glyph material-symbols-rounded", "aria-hidden": "true" }, ({Fitness:'fitness_center',Estudos:'school',Finanças:'account_balance_wallet',Receitas:'restaurant_menu',IA:'auto_awesome',Evolução:'monitoring',Tarefas:'checklist','Meu LIFE':'grid_view',Perfil:'account_circle',Notas:'edit_note',Sono:'bedtime',Músicas:'music_note',Favoritos:'favorite',Biblioteca:'book',Rotina:'calendar_month'})[view] || 'dashboard'),
                 React.createElement("div", { className: "life-premium-masthead-copy" },
-                    React.createElement("small", null, realPlan === 'OWNER' ? 'OWNER / SIGNATURE ACCESS' : 'LIFE OS PRO / SIGNATURE'),
+                    React.createElement("small", null, realPlan === 'OWNER' ? 'OWNER / SIGNATURE ACCESS' : hasV18Pro ? 'LIFE OS PRO / SIGNATURE' : 'LIFE OS / SEU ESPAÇO'),
                     React.createElement("h1", null, lifePublicAreaName(view)),
                     React.createElement("p", null, lifePremiumTaglines[view] || 'Sua experiência LIFE completa, conectada e personalizada.')),
                 React.createElement("div", { className: "life-premium-masthead-meta" },
                     React.createElement("span", null, React.createElement("i", null), online ? 'ONLINE' : 'OFFLINE'),
                     React.createElement("span", null, cloudStatus === 'synced' ? 'SYNC OK' : cloudStatus === 'conflict' ? 'REVISAR SYNC' : 'LOCAL'),
-                    React.createElement("b", null, realPlan === 'OWNER' ? 'OWNER' : 'PRO'))),
+                    React.createElement("b", null, realPlan === 'OWNER' ? 'OWNER' : hasV18Pro ? 'PRO' : 'FREE'))),
             React.createElement("button", { type: "button", className: "life-how-entry", onClick: () => setHowItWorksArea(view) }, React.createElement("span", { className: "material-symbols-rounded" }, "help"), React.createElement("span", null, "Como funciona?")),
             !online && React.createElement("div", { className: "life-offline" },
                 React.createElement("div", null,
@@ -10532,12 +10540,27 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
   React.createElement('div',{className:'life11-headerline'},
     React.createElement('div',{className:'life11-location'},React.createElement('span',{className:'life11-live-dot'}), 'SEU ESPAÇO PESSOAL',React.createElement('span',{className:'life11-slash'},'/'), 'VISÃO GERAL'),
     React.createElement('div',{className:'life11-headerdate'},lifeTodayDateLabel,' ',React.createElement('span',null,'•'),' ',hh+':'+mm)),
+  React.createElement('section',{className:'life141-commandbar','aria-label':'Central de controle do seu dia'},
+    React.createElement('div',{className:'life141-commandbar-left'},
+      React.createElement('span',{className:'life141-commandbar-pulse','aria-hidden':true}),
+      React.createElement('div',null,React.createElement('strong',null,'PAINEL DE CONTROLE'),React.createElement('small',null,'LIFE / SEU ESPAÇO PESSOAL'))),
+    React.createElement('div',{className:'life141-commandbar-right'},
+      React.createElement('span',{className:'life141-commandbar-date'},lifeTodayDateLabel),
+      React.createElement('span',{className:'life141-commandbar-sync'},React.createElement('i',{className:'material-symbols-rounded'},cloudStatus==='synced'?'cloud_done':'cloud_off'),cloudStatus==='synced'?'Na nuvem':'Neste dispositivo'),
+      React.createElement('button',{type:'button',className:'life141-commandbar-search',onClick:()=>setSpot(true),'aria-label':'Abrir busca em todo o LIFE'},React.createElement('span',{className:'material-symbols-rounded'},'search'),' Buscar',React.createElement('kbd',null,'Ctrl K')))),
   React.createElement('div',{className:'life121-home-prefs'},
     React.createElement('span',null,'PAINEL PERSONALIZÁVEL'),
     React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x),'aria-expanded':lifeCustomizeHome},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',React.createElement('span',{className:'material-symbols-rounded'},'tune')),
     lifeCustomizeHome&&React.createElement('div',{className:'life121-home-pref-options'},[['capture','Captura rápida'],['metrics','Indicadores'],['agenda','Agenda e foco'],['areas','Áreas do LIFE'],['ai','LIFE AI']].map(([id,label])=>React.createElement('label',{key:id},React.createElement('input',{type:'checkbox',checked:lifeHomeShown(id),onChange:()=>lifeToggleHome(id)}),label)))),
-  React.createElement('section',{className:'life11-hero'},
+  React.createElement('section',{className:'life11-hero life141-hero'},
+    React.createElement('div',{className:'life142-orbit','aria-hidden':true},
+      React.createElement('div',{className:'life142-orbit-ring ring-one'}),
+      React.createElement('div',{className:'life142-orbit-ring ring-two'}),
+      React.createElement('div',{className:'life142-orbit-crosshair'}),
+      React.createElement('div',{className:'life142-orbit-node'},'L'),
+      React.createElement('span',{className:'life142-orbit-caption'},'LIFE / SYSTEM 14.2')),
     React.createElement('div',{className:'life11-hero-copy'},
+      React.createElement('div',{className:'life141-hero-edition'},React.createElement('span',null,'14.2'),React.createElement('span',null,'GRAPHITE SYSTEM'),'CENTRAL PESSOAL'),
       React.createElement('div',{className:'life11-eyebrow'},React.createElement('span',{className:'life11-mini-star'},'✦'),' LIFE OS · O SEU DIA, COM CLAREZA'),
       React.createElement('h1',null,greet.replace('.', '')+(v32Name?', '+v32Name:'')+'.',React.createElement('br'),React.createElement('em',null,lifeTodayOpen.length?'Tudo começa agora.':'Seu tempo é valioso.')),
       React.createElement('p',null,lifeTodayPlans.length?(lifeTodayOpen.length?'Você tem '+lifeTodayOpen.length+' prioridade'+(lifeTodayOpen.length===1?'':'s')+' para hoje. Escolha o que importa e deixe o resto com o LIFE.':'Seu planejamento de hoje está concluído. Aproveite para pensar no que vem depois.'):'Seu espaço para pensar, organizar e evoluir. Comece com uma prioridade e construa o restante no seu ritmo.'),
@@ -10567,6 +10590,13 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
       React.createElement('div',{className:'life112-briefing-top'},React.createElement('span',null,'01 / BRIEFING DO DIA'),React.createElement('span',{className:'life112-briefing-live'},React.createElement('i',null),online?'AGORA':'OFFLINE')),
       React.createElement('div',{className:'life112-briefing-time'},hh,React.createElement('em',null,':'),mm),
       React.createElement('div',{className:'life112-briefing-date'},lifeTodayDateLabel),
+      React.createElement('div',{className:'life141-briefing-insight'},
+        React.createElement('div',{className:'life141-radial',style:{'--life141-progress':Math.min(100,Math.max(0,Number(lifeTodayProgress)||0))+'%'}},
+          React.createElement('div',{className:'life141-radial-inner'},React.createElement('strong',null,lifeTodayProgress+'%'),React.createElement('small',null,'DO DIA'))),
+        React.createElement('div',{className:'life141-insight-copy'},
+          React.createElement('span',null,'SEU RITMO, SEU CONTROLE'),
+          React.createElement('strong',null,lifeTodayOpen.length?lifeTodayOpen.length+' '+(lifeTodayOpen.length===1?'prioridade':'prioridades')+' em aberto':'Tudo em ordem por aqui'),
+          React.createElement('small',null,lifeTodayDone+' concluídas  ·  '+lifeCommitmentsOpen.length+' compromissos'))),
       React.createElement('div',{className:'life112-briefing-rule'}),
       React.createElement('div',{className:'life112-briefing-nextlabel'},React.createElement('span',{className:'material-symbols-rounded'},'arrow_outward'),' PRÓXIMO MOVIMENTO'),
       React.createElement('strong',{className:'life112-briefing-next'},lifeTodayOpen.length?(lifeTodayOpen[0].text||lifeTodayOpen[0].title||'Sua próxima tarefa'):'Seu dia está em suas mãos'),

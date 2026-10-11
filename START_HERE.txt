@@ -1,6 +1,2 @@
-LIFE OS 11.2 — EDITORIAL
-
-Publique o CONTEÚDO da pasta LIFE_OS_11_0_ATELIER na raiz do repositório.
-O index.html precisa ficar na raiz, junto com a pasta assets.
-Não mova ou renomeie os diretórios assets, database e docs.
-Faça Deploy novamente na Vercel e atualize o cache do navegador.
+LIFE OS 14.1 — Cinematic Signature
+Abra index.html em servidor estático ou publique a pasta raiz na Vercel. Preserve o seu deploy anterior como backup.
