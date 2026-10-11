@@ -1,4 +1,4 @@
-const LIFE_CACHE='life-os-14.3-power-premium-complete';
+const LIFE_CACHE='life-os-14.4-premium-refinement';
 const SHELL=[
   './',
   './index.html',
@@ -9,6 +9,7 @@ const SHELL=[
   './offline.html',
   './manifest.webmanifest',
   './assets/css/life-app-14.3.css',
+  './assets/css/power-refinement-14.4.css',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',
   './assets/media/estudos.webp',

@@ -1,0 +1,31 @@
+{
+  "version": "14.4",
+  "based_on": "14.3",
+  "ui": "Power Premium Refinement",
+  "files": {
+    "index.html": {
+      "bytes": 22969,
+      "sha256": "048ac125aa2ec0cde425e2672312dcb71064bd58e51fe03c1319ded266635cfb"
+    },
+    "service-worker.js": {
+      "bytes": 5816,
+      "sha256": "9250ef02a6e0d75176fdda12ab797fcd233d0fa71cce9b3da0e58c022bf78a62"
+    },
+    "manifest.webmanifest": {
+      "bytes": 969,
+      "sha256": "505d419bb8a47a7c0b16bd03df9d9f20f2f6c176ab2188bc9308803e6d428ea7"
+    },
+    "assets/css/life-app-14.3.css": {
+      "bytes": 1426971,
+      "sha256": "2fd143e19d548f141cfd5093156155b26d6558a0a80fb8490efc50b2b005462f"
+    },
+    "assets/css/power-refinement-14.4.css": {
+      "bytes": 16785,
+      "sha256": "e3a38ce113f29c12f2463bfc8b5fc73534b789b1d25f51e3fc1d7169a024720d"
+    },
+    "assets/js/life-app-9.4.2.js": {
+      "bytes": 1837194,
+      "sha256": "d7c4a35597303d8fcf492749cc244896abbac1c8be35a2ef0eb034b3eff7c8a3"
+    }
+  }
+}

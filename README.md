@@ -1,24 +1,24 @@
-# LIFE OS 14.3 — Power Premium (app completo)
+# LIFE OS 14.4 — Power Premium Refinement
 
-Esta versão é o LIFE OS completo construído a partir do pacote funcional 14.2.1, **não** o protótipo visual com uma imagem só.
+Versão completa construída sobre o aplicativo 14.3 (derivado da 14.2.1), mantendo a navegação, seus arquivos de autenticação, geradores, integrações e regras FREE/PRO/OWNER. **Não é uma imagem usada como site.**
 
-## O que mudou
-- Home reconstruída com elementos HTML/React reais: painel panorâmico, status do dia, progresso, captura de tarefa, atalhos ilustrados, agenda, tarefas e central de áreas
-- Navegação existente preservada (mesmas áreas, ordem e regras FREE/PRO/OWNER) com ícones visuais mais fortes
-- Identidade Power Premium: preto profundo, botões laranja, luz cálida, painéis sólidos e toques ciano/dourado
-- Figuras decorativas recortadas do conceito visual aprovado, sem usar a screenshot como um botão falso
-- Cache PWA atualizado e boot loader da 14.2.1 mantido
-- CSS de aplicação mantido em apenas um arquivo consolidado
+## Mudanças visuais
 
-## Como publicar
-1. Extraia o ZIP. O arquivo `index.html` deve ficar na raiz do repositório.
-2. Faça uma implantação de teste na Vercel sem substituir seu domínio de produção.
-3. Entre com uma conta de teste e abra **Hoje**. O dashboard da imagem aparece após a autenticação, com dados reais da conta.
-4. Teste abas FREE e PRO, entrada de tarefa, progresso, formulários, assinatura e sincronização conforme seus serviços estejam configurados.
+1. Luz cinematográfica e maior profundidade dos painéis da Home.
+2. Botões com relevo, foco de teclado, hover e resposta ao toque.
+3. Gráficos com progresso diário real; categorias sem dados não mostram percentuais inventados.
+4. Hero mais imersivo, mantendo contraste e legibilidade do texto.
+5. Melhorias de dimensionamento e alvos de toque no mobile.
+6. LIFE AI com identidade azul-ciano, painel, chat e indicadores distintos.
 
-## Importante
-- O design é uma recriação interativa inspirada na imagem. Não é uma screenshot colada; detalhes variam com tela e dados.
-- Sem login, o site exibe a tela de autenticação como antes; não foi removida a proteção dos dados.
-- A validação local **não** aprova pagamentos reais, webhooks, LIFE AI remota ou Supabase sem implantação e credenciais.
-- O cartão visual Sono leva à área **Planejamento**, que reúne rotina e sono.
-- Mantenha a versão 14.2.1 como backup até confirmar a nova implantação.
+O estilo adicional foi isolado em `assets/css/power-refinement-14.4.css`, carregado depois do CSS da 14.3. A lógica principal permanece em `assets/js/life-app-9.4.2.js`; foram acrescentados apenas cálculos de progresso baseados nas tarefas para os novos indicadores.
+
+## Publicar
+
+Extraia o ZIP e envie todo o conteúdo para a raiz do repositório (com `index.html` na raiz). Publicar em ambiente de teste na Vercel antes de substituir produção. O service worker foi atualizado para forçar a nova revisão de assets. O projeto não depende de imagens hospedadas externamente para a Home: as decorações WebP e ícones SVG estão dentro do ZIP.
+
+## Limites de homologação
+
+Os testes locais verificam sintaxe, integridade, estrutura, lógicas isoladas e aparência ilustrativa, mas **não** comprovam login real, pagamentos, sincronização em dois aparelhos nem chamadas remotas da LIFE AI; isso exige testar a implantação configurada no servidor. A primeira carga das bibliotecas React pode requerer conexão à internet.
+
+Veja `QA_REPORT_14.4.md`.
