@@ -3,7 +3,7 @@
 */
 (function(){
   'use strict';
-  const VERSION='9.4.2';
+  const VERSION=document.querySelector('meta[name="life-build"]')?.content||'13.0';
   const root=document.documentElement;
   window.LIFE_BUILD={version:VERSION,name:'Premium Performance Edition'};
   window.LIFE_SINGLE_FILE=false;
@@ -66,7 +66,7 @@
     try{
       const parsed=(()=>{try{return JSON.parse(safeGet(errorKey,'[]'))}catch(_){return []}})();
       const list=Array.isArray(parsed)?parsed:[];
-      list.unshift({kind,message:String(value?.message||value||'Erro desconhecido').slice(0,320),at:new Date().toISOString(),path:location.pathname,build:VERSION});
+      list.unshift({kind,message:window.LifeRelease125?.redactError(value) || 'Falha não detalhada',at:new Date().toISOString(),path:location.pathname,build:VERSION});
       safeSet(errorKey,JSON.stringify(list.slice(0,20)));
     }catch(_){ }
   };

@@ -1,0 +1,11 @@
+/* LIFE OS 12.6 — readable status and accessible controls. */
+.life126-readiness {margin:20px 0 18px;padding:18px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(255,255,255,.035)}
+.life126-readiness-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.life126-readiness-grid>div{min-width:0;display:flex;align-items:center;gap:7px;padding:12px;border-radius:12px;background:rgba(255,255,255,.045);color:#f4f3ef;font-size:12px}
+.life126-readiness-grid>div span.material-symbols-rounded{font-size:18px;color:#f0b57f}
+.life126-readiness-grid>div b{margin-left:auto;font-size:10px;line-height:1.3;color:#adb8c7;text-align:right}
+.life126-readiness p{font-size:12px!important;color:#bdc6d3!important;line-height:1.5}
+@media(max-width:560px){.life126-readiness-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+:where(button,a,input,textarea,select,[role="button"]):focus-visible{outline:3px solid #ffca9a!important;outline-offset:3px!important}
+button[disabled],button[aria-busy="true"]{cursor:progress}

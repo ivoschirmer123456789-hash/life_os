@@ -1,0 +1,14 @@
+/* LIFE OS 12.3: connected evolution insights. Scoped, preserves existing layout. */
+.life123-insights{margin:22px 0;padding:26px;border:1px solid rgba(245,187,142,.17);border-radius:22px;background:linear-gradient(145deg,#131b26,#0d131d);color:#f2f5f9}
+.life123-insights header small{font:700 10px 'JetBrains Mono',monospace;color:#e8ae7d;letter-spacing:.17em}
+.life123-insights header h3{font-size:clamp(23px,2.5vw,35px);margin:8px 0;letter-spacing:-.04em;font-weight:800}
+.life123-insights header p{color:#b5c0cd;font-size:13px;line-height:1.55}
+.life123-insights-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:18px 0}
+.life123-insights-grid article{border:1px solid rgba(255,255,255,.07);border-radius:15px;padding:15px;background:rgba(255,255,255,.025);display:flex;flex-direction:column;gap:6px}
+.life123-insights-grid article span{font-size:11px;color:#c1cad5}.life123-insights-grid article strong{font-size:32px;line-height:1.1;letter-spacing:-.05em}.life123-insights-grid article small{font-size:10px;line-height:1.5;color:#9eacbc}
+.life123-next{display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:10px;align-items:stretch}.life123-next>div,.life123-next button{padding:15px;border-radius:15px;border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.03);text-align:left;color:inherit}
+.life123-next>div strong{font-size:17px}.life123-next p,.life123-next small{font-size:11px;line-height:1.55;color:#b1becd;display:block;margin-top:5px}
+.life123-next button{cursor:pointer;display:flex;flex-direction:column;gap:5px}.life123-next button:hover{border-color:rgba(240,180,130,.4)}.life123-next button b{font-size:12px}.life123-next button span{font-size:11px;color:#edbc95;margin-top:auto}
+html.life-theme-day .life123-insights{background:#fffaf4;color:#1f2937;border-color:#e7d6c5}html.life-theme-day .life123-insights-grid article,html.life-theme-day .life123-next>div,html.life-theme-day .life123-next button{background:#f5eee6;color:#233041;border-color:#e8d7c7}html.life-theme-day .life123-insights header p,html.life-theme-day .life123-insights-grid small,html.life-theme-day .life123-next p,html.life-theme-day .life123-next small{color:#556272}
+@media(max-width:1180px){.life123-insights-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.life123-next{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.life123-insights{padding:16px}.life123-insights-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.life123-next{grid-template-columns:1fr}}

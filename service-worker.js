@@ -1,9 +1,9 @@
-const LIFE_CACHE='life-os-12.1-functional';
+const LIFE_CACHE='life-os-13.0-simple-tabs';
 const SHELL=[
   './','./index.html','./landing.html','./privacy.html','./terms.html','./support.html','./offline.html',
   './manifest.webmanifest',
-  './assets/css/life-bundle-9.4.2.css','./assets/css/signature-9.4.2.css','./assets/css/apex-9.4.2.css','./assets/css/product-core-9.4.2.css','./assets/css/design-system-9.4.2.css','./assets/css/clarity-plus-9.4.2.css','./assets/css/review-polish-9.4.2.css','./assets/css/focus-refinement-9.4.2.css','./assets/css/premium-performance-9.4.2.css','./assets/css/visual-rebuild-10.2.css','./assets/css/atelier-11.0.css','./assets/css/atelier-11.1-refinement.css','./assets/css/editorial-11.2.css','./assets/css/premium-panel-12.0.css','./assets/css/functional-12.1.css','./assets/css/visual-marketing-10.2.css','./assets/css/apex-marketing-9.4.2.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
-  './assets/js/visual-rebuild-10.2.js','./assets/js/config-9.4.2.js','./assets/js/product-core-9.4.2.js','./assets/js/product-spacious-9.4.2.js','./assets/js/clarity-guardrails-9.4.2.js','./assets/js/life-app-9.4.2.js','./assets/js/context-help-9.4.2.js','./assets/js/supabase-auth-9.4.2.js','./assets/js/runtime-9.4.2.js','./assets/js/interaction-layer-9.4.2.js','./assets/js/quality-guardrails-9.4.2.js',
+  './assets/css/life-bundle-9.4.2.css','./assets/css/signature-9.4.2.css','./assets/css/apex-9.4.2.css','./assets/css/product-core-9.4.2.css','./assets/css/design-system-9.4.2.css','./assets/css/clarity-plus-9.4.2.css','./assets/css/review-polish-9.4.2.css','./assets/css/focus-refinement-9.4.2.css','./assets/css/premium-performance-9.4.2.css','./assets/css/visual-rebuild-10.2.css','./assets/css/atelier-11.0.css','./assets/css/atelier-11.1-refinement.css','./assets/css/editorial-11.2.css','./assets/css/premium-panel-12.0.css','./assets/css/functional-12.1.css','./assets/css/integrated-12.3.css','./assets/css/reliability-12.4.css','./assets/css/release-12.5.css','./assets/css/release-12.6.css','./assets/css/life-extras-13.0.css','./assets/css/visual-marketing-10.2.css','./assets/css/apex-marketing-9.4.2.css','./assets/css/marketing.css','./assets/css/marketing-v60.css',
+  './assets/js/visual-rebuild-10.2.js','./assets/js/generator-rules-12.2.js','./assets/js/life-integrity-12.3.js','./assets/js/life-quality-12.4.js','./assets/js/life-release-12.5.js','./assets/js/life-production-12.6.js','./assets/js/life-extras-13.0.js','./assets/js/config-9.4.2.js','./assets/js/product-core-9.4.2.js','./assets/js/product-spacious-9.4.2.js','./assets/js/clarity-guardrails-9.4.2.js','./assets/js/life-app-9.4.2.js','./assets/js/context-help-9.4.2.js','./assets/js/supabase-auth-9.4.2.js','./assets/js/runtime-9.4.2.js','./assets/js/interaction-layer-9.4.2.js','./assets/js/quality-guardrails-9.4.2.js',
   './assets/icons/icon.svg','./assets/icons/icon-192.png','./assets/icons/icon-512.png'
 ];
 const EXTERNAL_CACHE_HOSTS=new Set(['unpkg.com','cdn.jsdelivr.net','cdnjs.cloudflare.com','fonts.googleapis.com','fonts.gstatic.com']);
@@ -11,9 +11,13 @@ const EXTERNAL_CACHE_HOSTS=new Set(['unpkg.com','cdn.jsdelivr.net','cdnjs.cloudf
 self.addEventListener('install',event=>{
   event.waitUntil((async()=>{
     const cache=await caches.open(LIFE_CACHE);
-    // Save the home shell first; an optional asset failure must not stop installation.
-    await cache.add('./index.html');
-    await Promise.allSettled(SHELL.filter(item=>item!=='./index.html').map(item=>cache.add(item)));
+    // Atomic install: never activate an incomplete bundle over the last working version.
+    try {
+      await cache.addAll(SHELL);
+    } catch (e) {
+      await caches.delete(LIFE_CACHE);
+      throw e;
+    }
     await self.skipWaiting();
   })());
 });
@@ -36,10 +40,9 @@ self.addEventListener('fetch',event=>{
     event.respondWith((async()=>{
       try{
         const preload=await event.preloadResponse;
-        if(preload&&preload.ok){const c=await caches.open(LIFE_CACHE);c.put(req,preload.clone()).catch(()=>{});return preload;}
-        const res=await fetch(req,{cache:'no-store'});
-        if(res&&res.ok){const c=await caches.open(LIFE_CACHE);c.put(req,res.clone()).catch(()=>{});}
-        return res;
+        if(preload&&preload.ok)return preload;
+        // Don't persist checkout query parameters or account-specific navigations.
+        return await fetch(req,{cache:'no-store'});
       }catch(_){
         const exact=await caches.match(req,{ignoreSearch:true});
         if(exact)return exact;
@@ -62,7 +65,9 @@ self.addEventListener('fetch',event=>{
         return cached||(await fresh)||Response.error();
       })());
     }else{
-      event.respondWith(fetch(req).then(async res=>{if(res&&res.ok){const c=await caches.open(LIFE_CACHE);c.put(req,res.clone()).catch(()=>{});}return res;}).catch(()=>caches.match(req,{ignoreSearch:true})));
+      // Non-static routes and query strings may contain private or checkout information.
+      // Do not cache them, even on the same origin.
+      event.respondWith(fetch(req,{cache:'no-store'}));
     }
     return;
   }
@@ -81,14 +86,17 @@ self.addEventListener('fetch',event=>{
 self.addEventListener('push',event=>{
   let data={};
   try{data=event.data?event.data.json():{}}catch(e){data={body:event.data?event.data.text():''}}
-  const title=data.title||'LIFE';
-  const options={body:data.body||data.message||'Você tem uma atualização no LIFE.',icon:'./assets/icons/icon-192.png',badge:'./assets/icons/icon-192.png',tag:data.tag||data.reminderId||'life-update',data:{url:data.url||'./',...data},renotify:false};
+  const safe = (v,n)=>String(v||'').replace(/[\u0000-\u001f]/g,' ').slice(0,n);
+  const title=safe(data.title||'LIFE',80);
+  const options={body:safe(data.body||data.message||'Você tem uma atualização no LIFE.',220),icon:'./assets/icons/icon-192.png',badge:'./assets/icons/icon-192.png',tag:safe(data.tag||data.reminderId||'life-update',64),data:{url:safe(data.url||'./',350)},renotify:false};
   event.waitUntil(self.registration.showNotification(title,options));
 });
 
 self.addEventListener('notificationclick',event=>{
   event.notification.close();
-  const target=(event.notification.data&&event.notification.data.url)||'./';
+  const rawTarget=(event.notification.data&&event.notification.data.url)||'./';
+  let target='./';
+  try{const next=new URL(rawTarget,self.location.href);if(next.origin===self.location.origin&&['http:','https:'].includes(next.protocol))target=next.href;}catch(_){}
   event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{
     for(const client of list){if('focus' in client){client.navigate(target).catch(()=>{});return client.focus();}}
     return clients.openWindow?clients.openWindow(target):null;

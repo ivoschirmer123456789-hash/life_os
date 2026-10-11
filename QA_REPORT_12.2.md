@@ -1,0 +1,142 @@
+# LIFE OS 12.2 — Revisão das regras dos formulários
+
+**Verificações estruturais:** 134/134 aprovadas.
+
+- OK — JS syntax: clarity-guardrails-9.4.2.js
+- OK — JS syntax: config-9.4.2.js
+- OK — JS syntax: context-help-9.4.2.js
+- OK — JS syntax: generator-rules-12.2.js
+- OK — JS syntax: interaction-layer-9.4.2.js
+- OK — JS syntax: life-app-9.4.2.js
+- OK — JS syntax: product-core-9.4.2.js
+- OK — JS syntax: product-spacious-9.4.2.js
+- OK — JS syntax: quality-guardrails-9.4.2.js
+- OK — JS syntax: runtime-9.4.2.js
+- OK — JS syntax: supabase-auth-9.4.2.js
+- OK — JS syntax: visual-rebuild-10.2.js
+- OK — HTML parse: index.html
+- OK — index.html local ref assets/css/life-bundle-9.4.2.css
+- OK — index.html local ref assets/css/signature-9.4.2.css
+- OK — index.html local ref assets/css/apex-9.4.2.css
+- OK — index.html local ref assets/css/product-core-9.4.2.css
+- OK — index.html local ref assets/css/design-system-9.4.2.css
+- OK — index.html local ref assets/css/clarity-plus-9.4.2.css
+- OK — index.html local ref assets/css/review-polish-9.4.2.css
+- OK — index.html local ref assets/css/focus-refinement-9.4.2.css
+- OK — index.html local ref assets/css/premium-performance-9.4.2.css
+- OK — index.html local ref assets/css/visual-rebuild-10.2.css
+- OK — index.html local ref assets/css/atelier-11.0.css
+- OK — index.html local ref assets/css/atelier-11.1-refinement.css
+- OK — index.html local ref assets/css/editorial-11.2.css
+- OK — index.html local ref assets/css/premium-panel-12.0.css
+- OK — index.html local ref assets/css/functional-12.1.css
+- OK — index.html local ref manifest.webmanifest
+- OK — index.html local ref assets/icons/icon.svg
+- OK — index.html local ref assets/icons/icon-192.png
+- OK — index.html local ref assets/js/config-9.4.2.js
+- OK — index.html local ref assets/js/product-core-9.4.2.js
+- OK — index.html local ref assets/js/product-spacious-9.4.2.js
+- OK — index.html local ref assets/js/clarity-guardrails-9.4.2.js
+- OK — index.html local ref assets/js/life-app-9.4.2.js
+- OK — index.html local ref assets/js/context-help-9.4.2.js
+- OK — index.html local ref assets/js/interaction-layer-9.4.2.js
+- OK — index.html local ref assets/js/quality-guardrails-9.4.2.js
+- OK — index.html local ref landing.html
+- OK — index.html local ref assets/js/supabase-auth-9.4.2.js
+- OK — index.html local ref assets/js/runtime-9.4.2.js
+- OK — HTML parse: landing.html
+- OK — landing.html local ref assets/css/marketing-v60.css
+- OK — landing.html local ref assets/icons/icon.svg
+- OK — landing.html local ref assets/css/signature-9.4.2.css
+- OK — landing.html local ref assets/css/apex-marketing-9.4.2.css
+- OK — landing.html local ref assets/css/visual-marketing-10.2.css
+- OK — landing.html local ref index.html
+- OK — landing.html local ref index.html
+- OK — landing.html local ref index.html
+- OK — landing.html local ref index.html
+- OK — landing.html local ref index.html
+- OK — landing.html local ref privacy.html
+- OK — landing.html local ref terms.html
+- OK — landing.html local ref support.html
+- OK — HTML parse: offline.html
+- OK — offline.html local ref assets/css/marketing.css
+- OK — offline.html local ref assets/icons/icon.svg
+- OK — offline.html local ref assets/css/signature-9.4.2.css
+- OK — offline.html local ref index.html
+- OK — HTML parse: privacy.html
+- OK — privacy.html local ref assets/css/marketing.css
+- OK — privacy.html local ref assets/icons/icon.svg
+- OK — privacy.html local ref assets/css/signature-9.4.2.css
+- OK — privacy.html local ref landing.html
+- OK — HTML parse: support.html
+- OK — support.html local ref assets/css/marketing.css
+- OK — support.html local ref assets/icons/icon.svg
+- OK — support.html local ref assets/css/signature-9.4.2.css
+- OK — support.html local ref landing.html
+- OK — support.html local ref index.html
+- OK — support.html local ref index.html
+- OK — support.html local ref index.html
+- OK — support.html local ref index.html
+- OK — support.html local ref index.html
+- OK — support.html local ref privacy.html
+- OK — HTML parse: terms.html
+- OK — terms.html local ref assets/css/marketing.css
+- OK — terms.html local ref assets/icons/icon.svg
+- OK — terms.html local ref assets/css/signature-9.4.2.css
+- OK — terms.html local ref landing.html
+- OK — Service worker index.html
+- OK — Service worker landing.html
+- OK — Service worker privacy.html
+- OK — Service worker terms.html
+- OK — Service worker support.html
+- OK — Service worker offline.html
+- OK — Service worker manifest.webmanifest
+- OK — Service worker assets/css/life-bundle-9.4.2.css
+- OK — Service worker assets/css/signature-9.4.2.css
+- OK — Service worker assets/css/apex-9.4.2.css
+- OK — Service worker assets/css/product-core-9.4.2.css
+- OK — Service worker assets/css/design-system-9.4.2.css
+- OK — Service worker assets/css/clarity-plus-9.4.2.css
+- OK — Service worker assets/css/review-polish-9.4.2.css
+- OK — Service worker assets/css/focus-refinement-9.4.2.css
+- OK — Service worker assets/css/premium-performance-9.4.2.css
+- OK — Service worker assets/css/visual-rebuild-10.2.css
+- OK — Service worker assets/css/atelier-11.0.css
+- OK — Service worker assets/css/atelier-11.1-refinement.css
+- OK — Service worker assets/css/editorial-11.2.css
+- OK — Service worker assets/css/premium-panel-12.0.css
+- OK — Service worker assets/css/functional-12.1.css
+- OK — Service worker assets/css/visual-marketing-10.2.css
+- OK — Service worker assets/css/apex-marketing-9.4.2.css
+- OK — Service worker assets/css/marketing.css
+- OK — Service worker assets/css/marketing-v60.css
+- OK — Service worker assets/js/visual-rebuild-10.2.js
+- OK — Service worker assets/js/generator-rules-12.2.js
+- OK — Service worker assets/js/config-9.4.2.js
+- OK — Service worker assets/js/product-core-9.4.2.js
+- OK — Service worker assets/js/product-spacious-9.4.2.js
+- OK — Service worker assets/js/clarity-guardrails-9.4.2.js
+- OK — Service worker assets/js/life-app-9.4.2.js
+- OK — Service worker assets/js/context-help-9.4.2.js
+- OK — Service worker assets/js/supabase-auth-9.4.2.js
+- OK — Service worker assets/js/runtime-9.4.2.js
+- OK — Service worker assets/js/interaction-layer-9.4.2.js
+- OK — Service worker assets/js/quality-guardrails-9.4.2.js
+- OK — Service worker assets/icons/icon.svg
+- OK — Service worker assets/icons/icon-192.png
+- OK — Service worker assets/icons/icon-512.png
+- OK — Service worker index.html
+- OK — Service worker index.html
+- OK — Service worker index.html
+- OK — Service worker offline.html
+- OK — Service worker assets/icons/icon-192.png
+- OK — Service worker assets/icons/icon-192.png
+- OK — SW cache release
+- OK — new rules loaded before life app
+- OK — nutrition protected
+- OK — study frequency fixed
+- OK — workouts bound to compatible equipment
+
+**Testes de cenários:** executar `node tests-generators-12.2.cjs` (268 combinações/verificações no estado atual).
+
+**Limites da revisão:** não foram testados fluxos autenticados, pagamentos, backend nem navegação visual no site publicado; restrições alimentares graves exigem orientação profissional e confirmação de rótulos.
