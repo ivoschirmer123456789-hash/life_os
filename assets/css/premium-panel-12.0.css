@@ -1,0 +1,198 @@
+
+/* LIFE OS 12.0 — Premium Panel Rebuild */
+html:not(.life-theme-day){scrollbar-color:#2d3949 #071018;}
+html:not(.life-theme-day) body.tech-bg{
+  background:
+    radial-gradient(circle at 8% 8%, rgba(241,165,118,.10), transparent 24%),
+    radial-gradient(circle at 92% 6%, rgba(132,154,192,.10), transparent 25%),
+    radial-gradient(circle at 50% 45%, rgba(255,255,255,.02), transparent 32%),
+    linear-gradient(180deg, #04070c 0%, #050911 38%, #04070d 100%)!important;
+}
+html:not(.life-theme-day) body.tech-bg:before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 100% 54px, 54px 100%;
+  mask-image: radial-gradient(circle at center, black, transparent 82%);
+  opacity:.23;
+}
+html:not(.life-theme-day) .v18-top,
+html:not(.life-theme-day) .v18-shell,
+html:not(.life-theme-day) .v18-tabs{position:relative;z-index:1}
+html:not(.life-theme-day) .v18-tabs{
+  width:286px!important;max-width:286px!important;
+  padding:20px 16px 18px!important;
+  background:linear-gradient(180deg,#0d141d 0%,#09111a 62%,#081019 100%)!important;
+  border-right:1px solid rgba(243,223,207,.09)!important;
+  box-shadow:20px 0 60px rgba(0,0,0,.28)!important;
+}
+html:not(.life-theme-day) .v18-shell{margin-left:286px!important;padding:34px clamp(28px,3.4vw,76px) 120px!important;max-width:none!important}
+html:not(.life-theme-day) .v18-top{width:calc(100% - 286px)!important;margin-left:286px!important;height:78px!important;padding:14px 26px!important;background:rgba(8,12,19,.85)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)!important;box-shadow:0 10px 42px rgba(0,0,0,.18)!important}
+html:not(.life-theme-day) .v18-logo{font-size:15px!important;letter-spacing:.18em!important;color:#fbf5ef!important;opacity:.95}
+html:not(.life-theme-day) .v18-code{font:700 10px 'JetBrains Mono',monospace!important;letter-spacing:.18em!important;color:#9ea7b3!important;background:#101722!important;border:1px solid rgba(255,255,255,.06)!important;border-radius:999px!important;padding:8px 12px!important}
+html:not(.life-theme-day) .life112-desktop-search{
+  flex:1;max-width:560px!important;height:48px!important;border-radius:16px!important;
+  background:linear-gradient(180deg,#111824,#0d141d)!important;
+  border:1px solid rgba(245,233,220,.10)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 8px 24px rgba(0,0,0,.14)!important;
+}
+html:not(.life-theme-day) .life112-desktop-search span:last-child{font-size:13px!important;color:#b9c2ce!important}
+html:not(.life-theme-day) .life112-desktop-search kbd{background:#171f2b!important;border:1px solid rgba(255,255,255,.05)!important;color:#c1ccd8!important;border-radius:10px!important;padding:5px 8px!important}
+html:not(.life-theme-day) .v18-island,
+html:not(.life-theme-day) .life-theme-toggle,
+html:not(.life-theme-day) .life-pro-status,
+html:not(.life-theme-day) .life-free-status-v68,
+html:not(.life-theme-day) .life-settings-trigger,
+html:not(.life-theme-day) .life-notify-trigger,
+html:not(.life-theme-day) .life-privacy-toggle{
+  border-radius:14px!important;background:#101722!important;border:1px solid rgba(255,255,255,.06)!important;color:#e6edf5!important;height:46px!important;box-shadow:none!important;
+}
+html:not(.life-theme-day) .life11-sidebar-brand{padding:4px 6px 18px!important;margin-bottom:8px!important;border-bottom:1px solid rgba(255,255,255,.07)!important}
+html:not(.life-theme-day) .life11-brand-mark{width:46px!important;height:46px!important;border-radius:16px!important;background:linear-gradient(145deg,#f9d9b3,#b6734f)!important;color:#21150e!important;font-size:21px!important;box-shadow:0 10px 22px rgba(241,165,118,.16)!important}
+html:not(.life-theme-day) .life11-brand-mark span{display:none!important}
+html:not(.life-theme-day) .life11-brand-type strong{font-size:29px!important;letter-spacing:-.05em!important}
+html:not(.life-theme-day) .life11-brand-type small{font:700 10px 'JetBrains Mono',monospace!important;letter-spacing:.16em!important;color:#818d9e!important}
+html:not(.life-theme-day) .life-premium-nav-group{font:800 9px 'JetBrains Mono',monospace!important;letter-spacing:.24em!important;color:#6e7887!important;margin:18px 10px 8px!important}
+html:not(.life-theme-day) .v18-tabs button{
+  min-height:50px!important;padding:0 14px!important;margin:5px 0!important;border-radius:16px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.01))!important;
+  border:1px solid rgba(255,255,255,.055)!important;
+  color:#d8dee8!important;font-size:13px!important;font-weight:700!important;letter-spacing:.005em!important;
+}
+html:not(.life-theme-day) .v18-tabs button[data-life-icon]:before{
+  width:36px!important;height:36px!important;flex:0 0 36px!important;border-radius:12px!important;
+  background:rgba(255,255,255,.035)!important;color:#8e97a5!important;font-size:18px!important;
+}
+html:not(.life-theme-day) .v18-tabs button.on{
+  background:linear-gradient(90deg, rgba(243,186,143,.16), rgba(255,255,255,.025))!important;
+  border-color:rgba(244,185,140,.28)!important;box-shadow:inset 3px 0 0 #efb17f,0 10px 22px rgba(0,0,0,.16)!important;
+}
+html:not(.life-theme-day) .v18-tabs button.on[data-life-icon]:before{background:rgba(247,188,142,.13)!important;color:#f7c59b!important}
+html:not(.life-theme-day) .life112-sidebar-quick{
+  margin-top:18px!important;padding:18px 16px!important;border-radius:22px!important;
+  background:linear-gradient(160deg,rgba(244,184,140,.10),rgba(255,255,255,.02) 52%,rgba(115,136,170,.08))!important;
+  border:1px solid rgba(245,190,153,.14)!important;box-shadow:0 20px 38px rgba(0,0,0,.18)!important;
+}
+html:not(.life-theme-day) .life112-sidebar-quick button{height:42px!important;border-radius:14px!important;background:#f0b67e!important;color:#1d140e!important;border:0!important;font-weight:800!important}
+html:not(.life-theme-day) .life11-dashboard{max-width:1360px!important;margin:0 auto!important}
+html:not(.life-theme-day) .life11-headerline{padding:8px 2px 18px!important;border-bottom:1px solid rgba(255,255,255,.05)!important;margin-bottom:20px!important}
+html:not(.life-theme-day) .life11-location,.life11-headerdate{font:700 11px 'JetBrains Mono',monospace!important;letter-spacing:.16em!important;color:#97a3b3!important}
+html:not(.life-theme-day) .life11-hero{
+  min-height:448px!important;padding:36px 36px 32px!important;border-radius:30px!important;gap:22px!important;
+  grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr)!important;
+  background:linear-gradient(135deg,rgba(20,28,39,.97) 0%, rgba(14,20,31,.97) 54%, rgba(28,22,24,.95) 100%)!important;
+  border:1px solid rgba(245,233,221,.08)!important;box-shadow:0 28px 70px rgba(0,0,0,.32)!important;overflow:hidden!important;
+}
+html:not(.life-theme-day) .life11-hero:before{opacity:.85!important;background:
+  radial-gradient(circle at 0% 0%, rgba(244,173,123,.12), transparent 34%),
+  radial-gradient(circle at 100% 100%, rgba(111,131,165,.10), transparent 28%),
+  linear-gradient(90deg, transparent 0 95%, rgba(255,255,255,.02) 95% 100%)!important}
+html:not(.life-theme-day) .life11-eyebrow{font:800 10px 'JetBrains Mono',monospace!important;letter-spacing:.18em!important;color:#e0b38c!important}
+html:not(.life-theme-day) .life11-hero-copy h1{font-size:clamp(48px,4.5vw,78px)!important;max-width:11.5ch!important;margin:18px 0 18px!important}
+html:not(.life-theme-day) .life11-hero-copy p{font-size:15px!important;max-width:53ch!important;color:#bac3ce!important;line-height:1.72!important}
+html:not(.life-theme-day) .life11-hero-actions{margin-top:26px!important}
+html:not(.life-theme-day) .life11-btn{height:50px!important;border-radius:16px!important;padding:0 20px!important;font-size:13px!important}
+html:not(.life-theme-day) .life11-btn-primary{background:linear-gradient(135deg,#f5d2a2,#efaf6d)!important;color:#23170f!important;box-shadow:0 12px 30px rgba(239,175,109,.18)!important}
+html:not(.life-theme-day) .life11-btn-outline{background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.09)!important;color:#e6edf6!important}
+html:not(.life-theme-day) .life112-hero-footnote{margin-top:20px!important;font-size:11px!important;color:#95a1b1!important}
+html:not(.life-theme-day) .life12-hero-strip{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+html:not(.life-theme-day) .life12-strip-card{padding:14px 15px 15px;border-radius:18px;border:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.012));display:flex;flex-direction:column;gap:5px;min-height:96px}
+html:not(.life-theme-day) .life12-strip-card small{font:800 9px 'JetBrains Mono',monospace;letter-spacing:.2em;color:#8994a4}
+html:not(.life-theme-day) .life12-strip-card strong{font-size:22px;letter-spacing:-.05em;color:#f8f4ef}
+html:not(.life-theme-day) .life12-strip-card span{font-size:12px;line-height:1.45;color:#aab4c3}
+html:not(.life-theme-day) .life112-briefing{padding:24px 24px 20px!important;min-height:auto!important;border-radius:26px!important;background:linear-gradient(155deg,rgba(41,33,33,.48),rgba(16,22,31,.96))!important;border:1px solid rgba(245,233,220,.09)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)!important}
+html:not(.life-theme-day) .life112-briefing-time{font-size:88px!important;letter-spacing:-.11em!important;color:#f3d9c1!important}
+html:not(.life-theme-day) .life112-briefing-next{font-size:20px!important;line-height:1.18!important;margin-top:4px!important;color:#f6f2ee!important}
+html:not(.life-theme-day) .life112-briefing-caption{font-size:12px!important;line-height:1.6!important;color:#b9c4d1!important}
+html:not(.life-theme-day) .life112-briefing-action{height:44px!important;border-radius:14px!important;padding:0 14px!important;background:rgba(244,181,136,.12)!important;border:1px solid rgba(244,181,136,.16)!important;color:#f5c59e!important}
+html:not(.life-theme-day) .life112-capture{padding:18px 18px!important;border-radius:22px!important;background:linear-gradient(180deg,#0f161f,#0c121b)!important;border:1px solid rgba(255,255,255,.06)!important;box-shadow:0 18px 44px rgba(0,0,0,.18)!important;margin:16px 0 28px!important}
+html:not(.life-theme-day) .life112-capture-mark{width:48px!important;height:48px!important;display:grid!important;place-items:center!important;border-radius:16px!important;background:rgba(244,181,136,.08)!important;border:1px solid rgba(244,181,136,.12)!important;color:#f5bf92!important}
+html:not(.life-theme-day) .life112-capture input{height:48px!important;border-radius:15px!important;background:#121925!important;border:1px solid rgba(255,255,255,.06)!important;color:#edf3fa!important;padding:0 16px!important}
+html:not(.life-theme-day) .life112-capture button{height:48px!important;border-radius:15px!important;background:linear-gradient(135deg,#f3d0a1,#efb16f)!important;color:#24170e!important;border:0!important;padding:0 18px!important;font-weight:800!important}
+html:not(.life-theme-day) .life11-metrics{gap:12px!important;margin:0 0 26px!important}
+html:not(.life-theme-day) .life11-metric{min-height:108px!important;border-radius:22px!important;padding:18px 18px 16px!important;background:linear-gradient(160deg,#0f151f,#0b1119)!important;border:1px solid rgba(255,255,255,.055)!important;box-shadow:0 16px 34px rgba(0,0,0,.16)!important;display:flex!important;align-items:flex-start!important}
+html:not(.life-theme-day) .life11-metric-symbol{width:44px!important;height:44px!important;flex:0 0 44px!important;border-radius:14px!important;background:rgba(243,187,143,.08)!important;color:#f4bf90!important}
+html:not(.life-theme-day) .life11-metric small{font:800 10px 'JetBrains Mono',monospace!important;letter-spacing:.18em!important;color:#8792a1!important}
+html:not(.life-theme-day) .life11-metric strong{font-size:22px!important;letter-spacing:-.04em!important;color:#f6f3ef!important}
+html:not(.life-theme-day) .life11-metric strong em{font-size:18px!important;color:#a0abbb!important}
+html:not(.life-theme-day) .life11-section-heading{margin:10px 0 18px!important;align-items:end!important}
+html:not(.life-theme-day) .life11-section-heading h2{font-size:clamp(38px,3.4vw,54px)!important;letter-spacing:-.065em!important;line-height:1.03!important}
+html:not(.life-theme-day) .life11-section-heading p{font-size:14px!important;color:#aeb8c4!important;max-width:60ch!important}
+html:not(.life-theme-day) .life11-link{height:44px!important;border-radius:14px!important;padding:0 16px!important;background:#0f161f!important;border:1px solid rgba(255,255,255,.06)!important;color:#f1c89c!important}
+html:not(.life-theme-day) .life11-today-grid{grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr)!important;gap:16px!important}
+html:not(.life-theme-day) .life11-surface{border-radius:26px!important;padding:24px!important;background:linear-gradient(155deg,#101722,#0b1119)!important;border:1px solid rgba(255,255,255,.06)!important;box-shadow:0 18px 42px rgba(0,0,0,.17)!important}
+html:not(.life-theme-day) .life11-card-head small,
+html:not(.life-theme-day) .life11-surface small,
+html:not(.life-theme-day) .life11-kicker{font:800 10px 'JetBrains Mono',monospace!important;letter-spacing:.18em!important;color:#d8a882!important}
+html:not(.life-theme-day) .life11-card-head h3{font-size:36px!important;letter-spacing:-.05em!important}
+html:not(.life-theme-day) .life11-card-counter{height:32px!important;padding:0 12px!important;border-radius:999px!important;background:#101823!important;border:1px solid rgba(255,255,255,.06)!important;color:#98a3b5!important}
+html:not(.life-theme-day) .life11-task-row{padding:16px 12px!important;border-radius:18px!important;border:1px solid transparent!important}
+html:not(.life-theme-day) .life11-task-row:hover{background:rgba(255,255,255,.02)!important;border-color:rgba(255,255,255,.05)!important}
+html:not(.life-theme-day) .life11-task-number{width:40px!important;height:40px!important;border-radius:14px!important;background:#121925!important;border:1px solid rgba(255,255,255,.06)!important;color:#efb380!important;font-size:12px!important}
+html:not(.life-theme-day) .life11-task-main b{font-size:16px!important}
+html:not(.life-theme-day) .life11-task-main small{font-size:12px!important;color:#8f9aab!important}
+html:not(.life-theme-day) .life11-progress-track{height:6px!important;border-radius:999px!important;background:rgba(255,255,255,.06)!important}
+html:not(.life-theme-day) .life11-progress-track span{border-radius:999px!important;background:linear-gradient(90deg,#efae74,#f6d5ab)!important}
+html:not(.life-theme-day) .life11-side-stack{gap:16px!important}
+html:not(.life-theme-day) .life11-next-body h4{font-size:28px!important;line-height:1.04!important;letter-spacing:-.05em!important;max-width:11ch!important}
+html:not(.life-theme-day) .life11-next-body p{font-size:13px!important;color:#aeb8c4!important;line-height:1.65!important}
+html:not(.life-theme-day) .life11-inline-btn{height:44px!important;border-radius:14px!important;padding:0 15px!important;background:#0f161f!important;border:1px solid rgba(255,255,255,.06)!important;color:#f1c89c!important}
+html:not(.life-theme-day) .life11-appointment h4{font-size:24px!important;line-height:1.1!important;letter-spacing:-.04em!important}
+html:not(.life-theme-day) .life11-areas{gap:16px!important}
+html:not(.life-theme-day) .life11-area{min-height:248px!important;padding:24px!important;border-radius:26px!important;background:linear-gradient(145deg,#111824,#0f151f)!important;border:1px solid rgba(255,255,255,.06)!important;box-shadow:0 18px 42px rgba(0,0,0,.15)!important}
+html:not(.life-theme-day) .life11-area-content{margin-top:34px!important;max-width:220px!important}
+html:not(.life-theme-day) .life11-area-content h3{font-size:28px!important;letter-spacing:-.05em!important;margin:0 0 9px!important}
+html:not(.life-theme-day) .life11-area-content p{font-size:12px!important;line-height:1.7!important;color:#aab5c4!important}
+html:not(.life-theme-day) .life11-area-arrow{width:42px;height:42px;display:grid!important;place-items:center!important;border-radius:14px!important;background:rgba(255,255,255,.035)!important;right:20px!important;bottom:20px!important}
+html:not(.life-theme-day) .life11-ai-banner{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:20px!important;padding:28px 30px!important;border-radius:28px!important;background:linear-gradient(135deg,rgba(18,24,35,.98) 0%, rgba(23,20,22,.98) 100%)!important;border:1px solid rgba(255,255,255,.06)!important;box-shadow:0 20px 48px rgba(0,0,0,.2)!important}
+html:not(.life-theme-day) .life11-ai-copy h2{font-size:54px!important;line-height:1.04!important;letter-spacing:-.06em!important;max-width:12ch!important}
+html:not(.life-theme-day) .life11-ai-copy p{font-size:14px!important;color:#b5bfcc!important;max-width:58ch!important}
+html:not(.life-theme-day) .life12-ai-points{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+html:not(.life-theme-day) .life12-ai-points span{display:inline-flex;align-items:center;height:34px;padding:0 12px;border-radius:999px;background:#101722;border:1px solid rgba(255,255,255,.06);color:#c4ceda;font:700 11px 'JetBrains Mono',monospace;letter-spacing:.08em}
+html:not(.life-theme-day) .life11-ai-cta{height:50px!important;border-radius:16px!important;padding:0 18px!important;background:linear-gradient(135deg,#f4d4a9,#efb172)!important;color:#23170f!important;border:0!important;font-weight:800!important;box-shadow:0 12px 28px rgba(239,177,114,.18)!important}
+/* General premium polish across internal areas */
+html:not(.life-theme-day) .life-premium-masthead,
+html:not(.life-theme-day) .life-smart-hub,
+html:not(.life-theme-day) .life-area-tools,
+html:not(.life-theme-day) .v60-command,
+html:not(.life-theme-day) .life-free-upgrade-rail,
+html:not(.life-theme-day) .life-owner-console,
+html:not(.life-theme-day) .life-v60-panel,
+html:not(.life-theme-day) .life-context-help,
+html:not(.life-theme-day) .life-profile-surface,
+html:not(.life-theme-day) .life-pro-preview,
+html:not(.life-theme-day) .life-pro-surface,
+html:not(.life-theme-day) .life-card,
+html:not(.life-theme-day) .v18-card,
+html:not(.life-theme-day) .v42-card{
+  border-radius:24px!important;border:1px solid rgba(255,255,255,.06)!important;background:linear-gradient(160deg,#101722,#0b1119)!important;box-shadow:0 18px 42px rgba(0,0,0,.16)!important;
+}
+html:not(.life-theme-day) .life-premium-masthead{padding:26px 28px!important;background:linear-gradient(140deg,rgba(19,24,34,.97),rgba(22,19,22,.97))!important}
+html:not(.life-theme-day) .life-premium-masthead h1{font-size:46px!important;letter-spacing:-.06em!important}
+html:not(.life-theme-day) .life-premium-masthead p{font-size:14px!important;color:#b3bdca!important;max-width:60ch!important}
+html:not(.life-theme-day) .v60-command input{height:48px!important;border-radius:16px!important;background:#121925!important;border:1px solid rgba(255,255,255,.06)!important;color:#e9eff7!important}
+@media(max-width:1219px){
+  html:not(.life-theme-day) .v18-tabs{width:100%!important;max-width:none!important}
+  html:not(.life-theme-day) .v18-shell,html:not(.life-theme-day) .v18-top{margin-left:0!important;width:100%!important}
+  html:not(.life-theme-day) .life11-hero{grid-template-columns:1fr!important;padding:28px!important;min-height:0!important}
+  html:not(.life-theme-day) .life12-hero-strip{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  html:not(.life-theme-day) .life11-today-grid{grid-template-columns:1fr!important}
+  html:not(.life-theme-day) .life11-ai-banner{grid-template-columns:1fr!important}
+}
+@media(max-width:800px){
+  html:not(.life-theme-day) .v18-top{padding:10px 14px!important;height:auto!important;gap:8px!important;flex-wrap:wrap!important}
+  html:not(.life-theme-day) .life112-desktop-search{order:3;max-width:none!important;width:100%!important}
+  html:not(.life-theme-day) .life11-dashboard{max-width:none!important}
+  html:not(.life-theme-day) .life11-headerline{padding-bottom:14px!important;margin-bottom:14px!important}
+  html:not(.life-theme-day) .life11-hero{padding:24px 20px!important;border-radius:24px!important}
+  html:not(.life-theme-day) .life11-hero-copy h1{font-size:clamp(36px,10vw,52px)!important;max-width:100%!important}
+  html:not(.life-theme-day) .life12-hero-strip{grid-template-columns:1fr!important}
+  html:not(.life-theme-day) .life12-strip-card{min-height:unset!important}
+  html:not(.life-theme-day) .life112-briefing-time{font-size:68px!important}
+  html:not(.life-theme-day) .life11-section-heading h2{font-size:clamp(30px,8vw,42px)!important}
+  html:not(.life-theme-day) .life11-card-head h3{font-size:28px!important}
+  html:not(.life-theme-day) .life11-area{min-height:198px!important;padding:18px!important}
+  html:not(.life-theme-day) .life11-area-content h3{font-size:22px!important}
+  html:not(.life-theme-day) .life11-ai-copy h2{font-size:38px!important;max-width:none!important}
+}

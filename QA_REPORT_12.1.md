@@ -1,0 +1,108 @@
+# LIFE OS 12.1 — Auditoria técnica
+
+101/101 verificações estáticas passaram.
+
+- OK · HTML index.html
+- OK · HTML landing.html
+- OK · HTML offline.html
+- OK · HTML privacy.html
+- OK · HTML support.html
+- OK · HTML terms.html
+- OK · JS clarity-guardrails-9.4.2.js
+- OK · JS config-9.4.2.js
+- OK · JS context-help-9.4.2.js
+- OK · JS interaction-layer-9.4.2.js
+- OK · JS life-app-9.4.2.js
+- OK · JS product-core-9.4.2.js
+- OK · JS product-spacious-9.4.2.js
+- OK · JS quality-guardrails-9.4.2.js
+- OK · JS runtime-9.4.2.js
+- OK · JS supabase-auth-9.4.2.js
+- OK · JS visual-rebuild-10.2.js
+- OK · JS service-worker.js
+- OK · Manifest 12.1
+- OK · Link assets/css/life-bundle-9.4.2.css?v=9.4.2
+- OK · Link assets/css/signature-9.4.2.css?v=9.4.2
+- OK · Link assets/css/apex-9.4.2.css?v=9.4.2
+- OK · Link assets/css/product-core-9.4.2.css?v=9.4.2
+- OK · Link assets/css/design-system-9.4.2.css?v=9.4.2
+- OK · Link assets/css/clarity-plus-9.4.2.css?v=9.4.2
+- OK · Link assets/css/review-polish-9.4.2.css?v=9.4.2
+- OK · Link assets/css/focus-refinement-9.4.2.css?v=9.4.2
+- OK · Link assets/css/premium-performance-9.4.2.css?v=9.4.2
+- OK · Link assets/css/visual-rebuild-10.2.css?v=10.2
+- OK · Link assets/css/atelier-11.0.css?v=11.0
+- OK · Link assets/css/atelier-11.1-refinement.css?v=11.1
+- OK · Link assets/css/editorial-11.2.css?v=11.2
+- OK · Link assets/css/premium-panel-12.0.css?v=12.1
+- OK · Link assets/css/functional-12.1.css?v=12.1
+- OK · Link manifest.webmanifest
+- OK · Link assets/icons/icon.svg
+- OK · Link assets/icons/icon-192.png
+- OK · Link assets/js/config-9.4.2.js?v=12.1
+- OK · Link assets/js/product-core-9.4.2.js
+- OK · Link assets/js/product-spacious-9.4.2.js
+- OK · Link assets/js/clarity-guardrails-9.4.2.js
+- OK · Link assets/js/life-app-9.4.2.js?v=12.1
+- OK · Link assets/js/context-help-9.4.2.js
+- OK · Link assets/js/interaction-layer-9.4.2.js
+- OK · Link assets/js/quality-guardrails-9.4.2.js
+- OK · Link assets/js/supabase-auth-9.4.2.js
+- OK · Link assets/js/runtime-9.4.2.js
+- OK · SW build
+- OK · SW index.html
+- OK · SW landing.html
+- OK · SW privacy.html
+- OK · SW terms.html
+- OK · SW support.html
+- OK · SW offline.html
+- OK · SW manifest.webmanifest
+- OK · SW assets/css/life-bundle-9.4.2.css
+- OK · SW assets/css/signature-9.4.2.css
+- OK · SW assets/css/apex-9.4.2.css
+- OK · SW assets/css/product-core-9.4.2.css
+- OK · SW assets/css/design-system-9.4.2.css
+- OK · SW assets/css/clarity-plus-9.4.2.css
+- OK · SW assets/css/review-polish-9.4.2.css
+- OK · SW assets/css/focus-refinement-9.4.2.css
+- OK · SW assets/css/premium-performance-9.4.2.css
+- OK · SW assets/css/visual-rebuild-10.2.css
+- OK · SW assets/css/atelier-11.0.css
+- OK · SW assets/css/atelier-11.1-refinement.css
+- OK · SW assets/css/editorial-11.2.css
+- OK · SW assets/css/premium-panel-12.0.css
+- OK · SW assets/css/functional-12.1.css
+- OK · SW assets/css/visual-marketing-10.2.css
+- OK · SW assets/css/apex-marketing-9.4.2.css
+- OK · SW assets/css/marketing.css
+- OK · SW assets/css/marketing-v60.css
+- OK · SW assets/js/visual-rebuild-10.2.js
+- OK · SW assets/js/config-9.4.2.js
+- OK · SW assets/js/product-core-9.4.2.js
+- OK · SW assets/js/product-spacious-9.4.2.js
+- OK · SW assets/js/clarity-guardrails-9.4.2.js
+- OK · SW assets/js/life-app-9.4.2.js
+- OK · SW assets/js/context-help-9.4.2.js
+- OK · SW assets/js/supabase-auth-9.4.2.js
+- OK · SW assets/js/runtime-9.4.2.js
+- OK · SW assets/js/interaction-layer-9.4.2.js
+- OK · SW assets/js/quality-guardrails-9.4.2.js
+- OK · SW assets/icons/icon.svg
+- OK · SW assets/icons/icon-192.png
+- OK · SW assets/icons/icon-512.png
+- OK · SW includes assets/css/premium-panel-12.0.css
+- OK · SW includes assets/css/functional-12.1.css
+- OK · SW includes assets/js/life-app-9.4.2.js
+- OK · feature LifeTrainingProgressV121
+- OK · feature LifeAreaInsightsV121
+- OK · feature LifeMilestonesV121
+- OK · feature life_workout_sets_v121
+- OK · feature life_home_hidden_v121
+- OK · feature commandAction
+- OK · feature life121-set-entry
+- OK · AI edge function
+- OK · SW updated CSS
+- OK · Script version query
+
+## Restrições
+Sem ambiente autenticado, não foi possível validar browser, pagamentos, Supabase, Edge Function nem assinatura real. Esses fluxos requerem publicação e teste end-to-end.

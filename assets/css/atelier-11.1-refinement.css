@@ -1,0 +1,152 @@
+/* LIFE OS 11.1 / Signature Refinement
+   Layered above Atelier 11.0. Desktop priority; no new authentication or plan logic.
+   New actions use existing React flows. */
+:root{--life112-copper:#fac59f;--life112-bg:#080b12;--life112-focus:#ffb985;}
+html:not(.life-theme-day) body{
+ background:#090c12!important;
+ background-image:radial-gradient(ellipse 880px 660px at 97% -12%,rgba(221,130,81,.09),transparent 69%),radial-gradient(ellipse 700px 560px at 15% 92%,rgba(77,99,143,.075),transparent 75%)!important;
+}
+/* The entire workspace is arranged around hierarchy rather than repeating dark tiles. */
+html:not(.life-theme-day) .life11-dashboard{letter-spacing:-.012em;}
+html:not(.life-theme-day) .life11-headerline{font-size:11px!important;letter-spacing:.11em!important; padding-bottom:22px!important;}
+html:not(.life-theme-day) .life11-location{color:#b9c2cc!important;}
+html:not(.life-theme-day) .life11-hero{
+ border-radius:30px!important;
+ border-color:rgba(251,209,181,.19)!important;
+ background: radial-gradient(ellipse 340px 340px at 89% 44%,rgba(248,155,93,.17),transparent 72%),
+ radial-gradient(ellipse 340px 340px at 7% 8%,rgba(107,127,173,.12),transparent 77%),
+ linear-gradient(112deg,#222834 0%,#181d27 48%,#20191d 100%)!important;
+ box-shadow:0 35px 95px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.07)!important;
+}
+html:not(.life-theme-day) .life11-hero:before{background:radial-gradient(circle at 65% 40%,transparent 8%,rgba(255,255,255,.015) 58%,transparent 70%)!important;}
+html:not(.life-theme-day) .life11-hero-copy h1{font-weight:850!important;text-wrap:balance;}
+html:not(.life-theme-day) .life11-hero-copy p{max-width:51ch!important;color:#c1c7d1!important;font-size:14.5px!important;}
+html:not(.life-theme-day) .life11-hero-art{filter:drop-shadow(0 12px 36px rgba(255,181,131,.06));}
+html:not(.life-theme-day) .life11-orbit-one{border-color:rgba(255,213,172,.18)!important;}
+html:not(.life-theme-day) .life11-orbit-two{border-color:rgba(255,213,172,.43)!important;}
+html:not(.life-theme-day) .life11-orbit-core{font-weight:900!important;}
+html:not(.life-theme-day) .life11-hero-actions{margin-top:34px!important;}
+html:not(.life-theme-day) .life11-btn{min-height:49px!important;border-radius:14px!important;font-weight:800!important;font-size:13px!important;}
+html:not(.life-theme-day) .life112-hero-footnote{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:20px;color:#abb6c2;font-size:10.5px;letter-spacing:.005em;line-height:1.5;}
+html:not(.life-theme-day) .life112-live-indicator{display:inline-block;width:7px;height:7px;border-radius:50%;background:#8aceab;box-shadow:0 0 0 4px rgba(138,206,171,.09);}
+html:not(.life-theme-day) .life112-footnote-divider{color:#647080;}
+html:not(.life-theme-day) .life11-metric{background:linear-gradient(158deg,#181e29,#12161f)!important;border-radius:21px!important;padding:20px!important;border:1px solid rgba(223,231,242,.105)!important;}
+html:not(.life-theme-day) .life11-metric strong{font-size:28px!important;font-weight:850!important;}
+html:not(.life-theme-day) .life11-metric small{color:#a5afbf!important;}
+html:not(.life-theme-day) .life11-section-heading{margin-bottom:22px!important;}
+html:not(.life-theme-day) .life11-section-heading h2{font-weight:850!important;font-size:clamp(26px,2.4vw,38px)!important;}
+html:not(.life-theme-day) .life11-section-heading p{font-size:13px!important;}
+html:not(.life-theme-day) .life11-surface{border-color:rgba(222,230,241,.105)!important;border-radius:24px!important;}
+html:not(.life-theme-day) .life11-schedule{background:linear-gradient(150deg,#19202a 0%,#131822 75%)!important;}
+html:not(.life-theme-day) .life11-card-head h3{font-size:21px!important;}
+html:not(.life-theme-day) .life11-task-row{min-height:73px!important;padding-block:17px!important;}
+html:not(.life-theme-day) .life11-task-main b{font-size:13px!important;}
+html:not(.life-theme-day) .life11-task-main small{font-size:11.5px!important;}
+html:not(.life-theme-day) .life11-next{background:radial-gradient(ellipse at 98% 85%,rgba(242,155,116,.15),transparent 67%),linear-gradient(154deg,#24232d,#151923)!important;}
+html:not(.life-theme-day) .life11-next h4{font-size:16px!important;}
+html:not(.life-theme-day) .life11-appointment{background:linear-gradient(125deg,#161e27,#111921)!important;}
+html:not(.life-theme-day) .life11-areas{gap:16px!important;}
+html:not(.life-theme-day) .life11-area{min-height:236px!important;padding:24px!important;border-color:rgba(225,230,239,.11)!important;border-radius:24px!important;}
+html:not(.life-theme-day) .life11-area-content h3{font-size:18px!important;}
+html:not(.life-theme-day) .life11-area-content p{font-size:11.5px!important;color:#b0b9c5!important;}
+html:not(.life-theme-day) .life11-ai-banner{border-radius:26px!important;background:radial-gradient(circle at 86% 52%,rgba(255,164,112,.18),transparent 35%),linear-gradient(105deg,#211e29,#151c25 65%,#241c22)!important;}
+html:not(.life-theme-day) .life11-ai-copy h2{font-size:clamp(24px,2.3vw,35px)!important;}
+html:not(.life-theme-day) .life11-ai-copy p{font-size:12.5px!important;}
+html:not(.life-theme-day) .life11-ai-cta{min-height:47px;font-size:12px!important;}
+/* Genuine useful quick-access card in the real navigation tree. */
+html:not(.life-theme-day) .life112-sidebar-quick{
+ margin-top:auto;padding:19px 16px 16px;border:1px solid rgba(247,192,150,.19);
+ border-radius:20px;background:radial-gradient(circle at 105% -5%,rgba(251,152,90,.23),transparent 69%),linear-gradient(140deg,#23212a,#161b24);
+ display:flex;flex-direction:column;align-items:flex-start;gap:8px;flex:0 0 auto;
+}
+html:not(.life-theme-day) .life112-sidebar-quick .life112-quick-symbol{font-size:23px;color:#ffc493;line-height:1.3;}
+html:not(.life-theme-day) .life112-sidebar-quick small{font-size:9px;font-weight:850;letter-spacing:.14em;color:#e4aa82;}
+html:not(.life-theme-day) .life112-sidebar-quick strong{font-size:14px;font-weight:850;line-height:1.4;color:#fff3ea;}
+html:not(.life-theme-day) .life112-sidebar-quick p{font-size:11px;color:#b5bcc9;line-height:1.6;margin:0 0 5px;}
+html:not(.life-theme-day) .life112-sidebar-quick button{border:1px solid rgba(245,187,144,.22)!important;color:#251912!important;background:linear-gradient(110deg,#ffe1bf,#f4aa7e)!important;font-size:10.5px!important;font-weight:850!important;border-radius:11px!important;display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%!important;min-height:39px!important;padding:9px 11px!important;}
+html:not(.life-theme-day) .life112-sidebar-quick button .material-symbols-rounded{font-size:15px;}
+html:not(.life-theme-day) .life112-desktop-search{display:none;}
+html:not(.life-theme-day) :is(.life11-area,.life11-metric,.life11-surface,.life112-sidebar-quick){-webkit-tap-highlight-color:transparent;}
+@media(min-width:1220px){
+ html:not(.life-theme-day) .v18-tabs{
+  width:282px!important;max-width:282px!important;padding:12px 17px 20px!important;
+  box-shadow:8px 0 50px rgba(0,0,0,.18)!important;background:linear-gradient(170deg,#151923,#10141c 67%,#0d1119)!important;
+ }
+ html:not(.life-theme-day) .v18-shell{margin-left:282px!important;padding:28px clamp(27px,3vw,72px) 110px!important;}
+ html:not(.life-theme-day) .v18-top{margin-left:282px!important;width:calc(100% - 282px)!important;min-height:76px!important;height:76px!important;padding-inline:clamp(27px,3vw,72px)!important;background:rgba(12,16,23,.96)!important;}
+ html:not(.life-theme-day) .v18-code{letter-spacing:.12em!important;margin-right:0!important;}
+ html:not(.life-theme-day) .v18-tabs button{font-size:13px!important;min-height:46px!important;gap:12px!important;}
+ html:not(.life-theme-day) .v18-tabs button[data-life-icon]:before{width:33px!important;height:33px!important;flex-basis:33px!important;}
+ html:not(.life-theme-day) .life-premium-nav-group{font-size:9.5px!important;margin:18px 12px 6px!important;}
+ html:not(.life-theme-day) .life11-sidebar-brand{padding:16px 10px 18px!important;margin-bottom:8px!important;}
+ html:not(.life-theme-day) .life11-brand-mark{width:49px!important;height:49px!important;flex-basis:49px!important;border-radius:15px!important;}
+ html:not(.life-theme-day) .life11-brand-type strong{font-size:23px!important;}
+ html:not(.life-theme-day) .life112-desktop-search{margin:0 auto 0 12px!important;min-width:158px;max-width:340px;flex:1;min-height:41px;display:flex!important;align-items:center;gap:11px;padding:0 14px;border-radius:13px;border:1px solid rgba(226,229,240,.085);background:rgba(255,255,255,.04);color:#aeb8c6;text-align:left;cursor:pointer;font:600 12px 'Plus Jakarta Sans',system-ui,sans-serif;transition:border-color .2s,background .2s;}
+ html:not(.life-theme-day) .life112-desktop-search .material-symbols-rounded{font-size:19px;color:#b9c1cc;}
+ html:not(.life-theme-day) .life112-desktop-search kbd{margin-left:auto;font:700 10px 'JetBrains Mono',monospace;background:rgba(255,255,255,.055);color:#9eaabc;padding:5px 6px;border:1px solid rgba(255,255,255,.075);border-radius:6px;white-space:nowrap;}
+ html:not(.life-theme-day) .life112-desktop-search:hover{border-color:rgba(255,192,142,.32);background:rgba(255,255,255,.065);}
+ html:not(.life-theme-day) .v18-top .v18-btn.ghost{display:none!important;}
+ html:not(.life-theme-day) .life11-hero{min-height:420px!important;grid-template-columns:minmax(0,1fr) 36%!important;padding:55px clamp(34px,4.4vw,78px)!important;}
+ html:not(.life-theme-day) .life11-hero-copy h1{font-size:clamp(46px,4.5vw,74px)!important;}
+}
+@media(min-width:1220px) and (max-width:1520px){
+ html:not(.life-theme-day) .life112-desktop-search{max-width:235px;margin-left:6px!important;}
+ html:not(.life-theme-day) .life112-desktop-search kbd{display:none;}
+ html:not(.life-theme-day) .v18-top{gap:7px!important;}
+ html:not(.life-theme-day) .life11-hero{min-height:385px!important;padding:48px 38px!important;}
+ html:not(.life-theme-day) .life11-hero-copy h1{font-size:clamp(44px,3.9vw,62px)!important;}
+}
+@media(max-width:1219px){
+ html:not(.life-theme-day) .life112-sidebar-quick{display:none;}
+ html:not(.life-theme-day) .life112-desktop-search{display:none;}
+}
+@media(max-width:760px){
+ html:not(.life-theme-day) .v18-top{height:60px!important;min-height:60px!important;overflow:hidden!important;gap:8px!important;padding-inline:13px!important;}
+ html:not(.life-theme-day) .v18-top .v18-logo{font-size:21px!important;margin-right:auto!important;flex:0 0 auto!important;}
+ html:not(.life-theme-day) .v18-top .v18-code,
+ html:not(.life-theme-day) .v18-top .life-weather-chip,
+ html:not(.life-theme-day) .v18-top .v18-island,
+ html:not(.life-theme-day) .v18-top .life-privacy-toggle,
+ html:not(.life-theme-day) .v18-top .v18-btn.ghost{display:none!important;}
+ html:not(.life-theme-day) .v18-top .life-theme-label{display:none!important;}
+ html:not(.life-theme-day) .v18-top .life-theme-toggle{min-width:36px!important;max-width:36px!important;padding:7px!important;}
+ html:not(.life-theme-day) .v18-top .life-notify-trigger,
+ html:not(.life-theme-day) .v18-top .life-settings-trigger{min-width:35px!important;max-width:35px!important;padding:8px!important;}
+ html:not(.life-theme-day) .v18-top .life-settings-trigger em{display:none!important;}
+ html:not(.life-theme-day) .v18-top :is(.life-pro-status,.life-free-status-v68){font-size:9px!important;padding:7px 8px!important;white-space:nowrap!important;}
+ html:not(.life-theme-day) .life11-hero-copy p{font-size:13px!important;line-height:1.75!important;}
+ html:not(.life-theme-day) .life11-hero{border-radius:25px!important;padding:30px 25px!important;}
+ html:not(.life-theme-day) .life11-hero-copy h1{font-size:clamp(34px,8.6vw,48px)!important;}
+ html:not(.life-theme-day) .life11-hero-art{height:158px!important;min-height:158px!important;}
+ html:not(.life-theme-day) .life11-section-heading h2{font-size:clamp(22px,6vw,28px)!important;}
+ html:not(.life-theme-day) .life11-task-main b{font-size:12.5px!important;}
+ html:not(.life-theme-day) .life11-metric{padding:13px!important;min-height:90px!important;}
+ html:not(.life-theme-day) .life11-metric strong{font-size:24px!important;}
+ html:not(.life-theme-day) .life11-area{min-height:194px!important;padding:17px!important;}
+ html:not(.life-theme-day) .life11-area-content h3{font-size:15px!important;}
+ html:not(.life-theme-day) .life11-area-content p{font-size:10.5px!important;}
+ html:not(.life-theme-day) .life112-hero-footnote{font-size:9px!important;margin-top:17px!important;}
+}
+@media(max-width:395px){
+ html:not(.life-theme-day) .v18-top{gap:5px!important;padding-inline:8px!important;}
+ html:not(.life-theme-day) .v18-top .life-notify-trigger{display:none!important;}
+ html:not(.life-theme-day) .life11-hero{padding-inline:22px!important;}
+}
+@media(prefers-reduced-motion:reduce){html:not(.life-theme-day) .life112-desktop-search,html:not(.life-theme-day) .life11-dashboard *{transition:none!important;animation:none!important;}}
+/* Day-theme fallback: keep original day navigation; never leave dark-only extras unstyled. */
+html.life-theme-day .life112-sidebar-quick,html.life-theme-day .life112-desktop-search{display:none!important;}
+html.life-theme-day .life112-hero-footnote{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:11px;color:#65626b;margin-top:16px;}
+html.life-theme-day .life112-live-indicator{width:7px;height:7px;background:#3d9b74;border-radius:50%;}
+@media(max-width:760px){
+ /* Weather remains clickable instead of disappearing behind mobile overflow. */
+ html:not(.life-theme-day) .v18-top .life-weather-chip{display:grid!important;place-items:center!important;overflow:hidden!important;width:35px!important;max-width:35px!important;min-width:35px!important;height:35px!important;padding:0!important;font-size:0!important;white-space:nowrap!important;}
+ html:not(.life-theme-day) .v18-top .life-weather-chip::after{content:'☁';font-size:17px!important;color:#e9c3a4;line-height:1;}
+}
+@media(max-width:395px){html:not(.life-theme-day) .v18-top .life-weather-chip{display:none!important;}}
+/* Horizontal navigation must never render vertical group headings on phones/tablets. */
+@media(max-width:1219px){
+ html:not(.life-theme-day) .v18-tabs > .life-premium-nav-group{display:none!important;}
+ html:not(.life-theme-day) .v18-tabs{display:flex!important;align-items:center!important;flex-wrap:nowrap!important;min-height:57px!important;max-height:71px!important;overflow-x:auto!important;overflow-y:hidden!important;}
+ html:not(.life-theme-day) .v18-tabs > button{display:inline-flex!important;width:auto!important;min-width:max-content!important;max-width:none!important;min-height:39px!important;padding:9px 15px!important;white-space:nowrap!important;writing-mode:horizontal-tb!important;}
+ html:not(.life-theme-day) .v18-tabs > button[data-life-icon]:before{display:none!important;}
+}

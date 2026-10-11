@@ -1,9 +1,6 @@
-LIFE OS 10.2 — SIGNATURE REBUILD
+LIFE OS 11.2 — EDITORIAL
 
-1. Descompacte o ZIP.
-2. Envie TODOS os arquivos e pastas que ficam junto ao index.html para seu repositório do GitHub.
-3. Na Vercel, publique o repositório com Framework: Other e sem Build Command.
-4. Abra o link publicado. O service worker atualizado troca a versão do cache.
-5. Faça testes reais de login, PRO/OWNER e pagamento no ambiente publicado.
-
-Não publique somente o index.html: mantenha assets/, database/ e docs/.
+Publique o CONTEÚDO da pasta LIFE_OS_11_0_ATELIER na raiz do repositório.
+O index.html precisa ficar na raiz, junto com a pasta assets.
+Não mova ou renomeie os diretórios assets, database e docs.
+Faça Deploy novamente na Vercel e atualize o cache do navegador.

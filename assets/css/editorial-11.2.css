@@ -1,0 +1,153 @@
+/* Editorial Edition 11.2 — improved desktop identity, no fake dashboards or replacement routes. */
+:root{--e-pearl:#f8f4ef;--e-copper:#f0aa7a;--e-steel:#93a6b6;--e-navy:#0c1119}
+html:not(.life-theme-day) body{background:#080b10!important;background-image:radial-gradient(ellipse 900px 580px at 85% 3%,rgba(243,155,100,.075),transparent 66%),radial-gradient(ellipse 720px 530px at 10% 77%,rgba(64,80,112,.06),transparent 78%)!important}
+html:not(.life-theme-day) .v18{font-synthesis:none}
+html:not(.life-theme-day) .life11-dashboard{gap:0!important}
+html:not(.life-theme-day) .life11-headerline{border-bottom:1px solid rgba(255,255,255,.07);padding:4px 2px 18px!important;margin-bottom:22px;font-size:10px!important;}
+html:not(.life-theme-day) .life11-hero{
+  display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(290px,.8fr)!important;align-items:stretch;gap:20px;
+  padding:clamp(26px,3.2vw,48px)!important;min-height:442px!important;
+  background:linear-gradient(120deg,rgba(29,37,49,.98),rgba(17,22,30,.98) 48%,rgba(21,23,30,.98))!important;
+  border-radius:28px!important;box-shadow:0 35px 100px rgba(0,0,0,.31),inset 0 1px rgba(255,255,255,.045)!important;
+}
+html:not(.life-theme-day) .life11-hero:before{background:radial-gradient(circle at 10% 22%,rgba(242,164,113,.075),transparent 54%),repeating-linear-gradient(90deg,transparent 0 52px,rgba(255,255,255,.012) 53px 54px)!important;opacity:1}
+html:not(.life-theme-day) .life11-hero-copy{align-self:center;max-width:800px}
+html:not(.life-theme-day) .life11-eyebrow{color:#f8bf9a;font-size:10px!important;letter-spacing:.22em!important}
+html:not(.life-theme-day) .life11-hero-copy h1{font-size:clamp(42px,3.6vw,69px)!important;line-height:1.075!important;letter-spacing:-.068em!important;margin:22px 0 20px!important;max-width:12.7ch!important}
+html:not(.life-theme-day) .life11-hero-copy h1 em{background:linear-gradient(125deg,#ffe5c8,#e9a27d)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+html:not(.life-theme-day) .life11-hero-copy p{max-width:48ch!important;line-height:1.8!important;color:#bbc5d0!important}
+html:not(.life-theme-day) .life11-hero-actions{margin-top:29px!important}
+html:not(.life-theme-day) .life11-btn-primary{background:linear-gradient(120deg,#fce7d0,#f3af84)!important;box-shadow:0 11px 32px rgba(239,157,106,.13)!important}
+html:not(.life-theme-day) .life11-btn{border-radius:13px!important;min-height:48px!important}
+html:not(.life-theme-day) .life11-hero-bottom-label{left:clamp(26px,3.2vw,48px)!important;bottom:16px!important;font-size:8px!important;letter-spacing:.2em!important;color:#9b8d87!important;opacity:.48!important;}
+/* Contextual brief replaces old logo orbit and makes the hero useful. */
+html:not(.life-theme-day) .life112-briefing{position:relative;align-self:stretch;display:flex;flex-direction:column;overflow:hidden;min-width:0;padding:24px 25px 21px;background:radial-gradient(circle at 88% 2%,rgba(244,162,104,.16),transparent 53%),linear-gradient(150deg,rgba(38,37,44,.87),rgba(15,20,29,.86));border:1px solid rgba(251,215,181,.18);border-radius:22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 18px 36px rgba(0,0,0,.2);z-index:1}
+html:not(.life-theme-day) .life112-briefing:before{content:'';position:absolute;width:210px;height:210px;border:1px solid rgba(247,185,141,.11);border-radius:50%;right:-104px;top:-118px;pointer-events:none}
+html:not(.life-theme-day) .life112-briefing:after{content:'';position:absolute;width:150px;height:150px;border:1px solid rgba(247,185,141,.13);border-radius:50%;right:-75px;top:-88px;pointer-events:none}
+html:not(.life-theme-day) .life112-briefing-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font:800 9px 'JetBrains Mono',monospace;letter-spacing:.12em;color:#eec09f}
+html:not(.life-theme-day) .life112-briefing-live{color:#9cacb7;display:inline-flex;gap:6px;align-items:center;font-size:8px}
+html:not(.life-theme-day) .life112-briefing-live i{width:6px;height:6px;border-radius:100%;background:#9ccfb9;box-shadow:0 0 0 4px rgba(150,217,178,.08)}
+html:not(.life-theme-day) .life112-briefing-time{font:650 clamp(48px,4.6vw,86px) 'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-.095em;line-height:1.1;margin:28px 0 3px;color:#ffefe3;white-space:nowrap}
+html:not(.life-theme-day) .life112-briefing-time em{font-style:normal;color:#ad8068;padding:0 3px}
+html:not(.life-theme-day) .life112-briefing-date{text-transform:capitalize;color:#a5b2bf;font-size:12px;letter-spacing:.02em}
+html:not(.life-theme-day) .life112-briefing-rule{height:1px;background:linear-gradient(90deg,rgba(246,187,141,.36),rgba(255,255,255,.06));margin:24px 0 22px}
+html:not(.life-theme-day) .life112-briefing-nextlabel{display:flex;align-items:center;gap:6px;font:750 9px 'JetBrains Mono',monospace;letter-spacing:.11em;color:#f2b58d}
+html:not(.life-theme-day) .life112-briefing-nextlabel .material-symbols-rounded{font-size:15px}
+html:not(.life-theme-day) .life112-briefing-next{margin-top:11px;display:block;font-size:15px;line-height:1.4;color:#fcf7f2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html:not(.life-theme-day) .life112-briefing-caption{margin:4px 0 10px!important;font-size:10px!important;color:#8793a3!important;line-height:1.5!important}
+html:not(.life-theme-day) .life112-briefing-action{align-self:flex-start;display:flex;align-items:center;gap:6px;background:transparent!important;color:#efb68f!important;border:0!important;padding:7px 0!important;font-weight:800!important;font-size:11px!important;cursor:pointer}
+html:not(.life-theme-day) .life112-briefing-action .material-symbols-rounded{font-size:15px}
+html:not(.life-theme-day) .life112-briefing-footer{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-top:auto;padding-top:12px;color:#a7b1bd;font:700 9px 'JetBrains Mono',monospace}
+html:not(.life-theme-day) .life112-briefing-meter{grid-column:1/-1;height:4px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+html:not(.life-theme-day) .life112-briefing-meter i{display:block;height:100%;background:linear-gradient(90deg,#db976f,#ffe0b4);border-radius:99px;transition:width .3s}
+/* Quick capture is hooked to the existing createLifeTask function and state. */
+html:not(.life-theme-day) .life112-capture{display:grid;grid-template-columns:auto minmax(0,.82fr) minmax(190px,1fr) auto;align-items:center;gap:16px;background:#131921;border:1px solid rgba(227,229,234,.1);padding:16px 19px;border-radius:19px;margin:16px 0 27px;box-shadow:0 15px 36px rgba(0,0,0,.12)}
+html:not(.life-theme-day) .life112-capture-mark{color:#f9bd92;font-size:22px;border:1px solid rgba(247,182,130,.17);background:rgba(246,170,114,.075);border-radius:12px;padding:11px}
+html:not(.life-theme-day) .life112-capture label{display:flex;flex-direction:column;gap:4px;min-width:0}
+html:not(.life-theme-day) .life112-capture label b{font-size:12px;font-weight:800;color:#f4efea;white-space:nowrap}
+html:not(.life-theme-day) .life112-capture label span{font-size:10px;color:#9ca7b5;line-height:1.3}
+html:not(.life-theme-day) .life112-capture input{width:100%;min-width:0;border-radius:11px!important;min-height:43px!important;background:rgba(255,255,255,.04)!important;border:1px solid rgba(255,255,255,.095)!important;color:#f5f0ec!important;font-size:12px!important;padding:11px 14px!important}
+html:not(.life-theme-day) .life112-capture input:focus{outline:2px solid rgba(255,186,132,.5)!important;outline-offset:2px}
+html:not(.life-theme-day) .life112-capture button{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:43px!important;white-space:nowrap;padding:0 16px!important;border:1px solid rgba(255,207,169,.1)!important;border-radius:11px!important;background:linear-gradient(120deg,#ffe2bf,#f2ab80)!important;color:#241711!important;font-size:11px!important;font-weight:850!important;cursor:pointer}
+html:not(.life-theme-day) .life112-capture button:disabled{opacity:.45;cursor:not-allowed}
+html:not(.life-theme-day) .life112-capture button .material-symbols-rounded{font-size:17px}
+/* Less monotonous metrics with a calmer information hierarchy. */
+html:not(.life-theme-day) .life11-metrics{gap:11px!important;margin:0 0 46px!important}
+html:not(.life-theme-day) .life11-metric{background:transparent!important;border:0!important;border-right:1px solid rgba(233,233,236,.09)!important;border-radius:0!important;box-shadow:none!important;min-height:75px!important;padding:4px 20px!important}
+html:not(.life-theme-day) .life11-metric:first-child{padding-left:4px!important}
+html:not(.life-theme-day) .life11-metric:last-child{border-right:0!important}
+html:not(.life-theme-day) .life11-metric small{color:#83909d!important}
+html:not(.life-theme-day) .life11-metric-symbol{background:rgba(245,177,126,.065)!important;border-color:rgba(245,177,126,.12)!important}
+html:not(.life-theme-day) .life11-section-heading{margin-bottom:20px!important}
+html:not(.life-theme-day) .life11-section-heading h2{font-weight:850!important;font-size:clamp(26px,2.55vw,39px)!important;letter-spacing:-.055em!important}
+html:not(.life-theme-day) .life11-schedule{background:linear-gradient(153deg,#1b222d,#121821)!important;border-radius:24px!important}
+html:not(.life-theme-day) .life11-next{background:linear-gradient(155deg,#28252b,#171923)!important;border-radius:24px!important}
+html:not(.life-theme-day) .life11-appointment{border-radius:24px!important}
+html:not(.life-theme-day) .life11-areas{gap:12px!important}
+html:not(.life-theme-day) .life11-area{border-radius:22px!important;min-height:210px!important;background:linear-gradient(153deg,#181f2b,#121822)!important}
+html:not(.life-theme-day) .life11-area:after{content:'';position:absolute;width:115px;height:115px;border-radius:24px;right:-47px;bottom:42px;border:1px solid rgba(255,212,170,.11);transform:rotate(25deg);pointer-events:none}
+html:not(.life-theme-day) .life11-area-1{background:linear-gradient(146deg,#202630,#121920)!important}
+html:not(.life-theme-day) .life11-area-2{background:linear-gradient(146deg,#1e282a,#111b20)!important}
+html:not(.life-theme-day) .life11-area-3{background:linear-gradient(146deg,#28232a,#161720)!important}
+html:not(.life-theme-day) .life11-area-content h3{font-size:18px!important}
+html:not(.life-theme-day) .life11-ai-banner{min-height:198px!important;border-radius:24px!important;background:radial-gradient(circle at 91% 54%,rgba(249,157,99,.16),transparent 33%),linear-gradient(112deg,#1c222d,#171b23 65%,#2a2226)!important}
+html:not(.life-theme-day) .life11-ai-copy h2{font-size:clamp(28px,2.8vw,42px)!important}
+html:not(.life-theme-day) .life11-ai-cta{border-radius:14px!important}
+/* Desktop: visible but quiet navigation; content earns most of the width. */
+@media(min-width:1220px){
+ html:not(.life-theme-day) .v18-tabs{width:262px!important;max-width:262px!important;background:linear-gradient(180deg,#121822,#0b1017)!important;border-right-color:rgba(245,224,209,.08)!important;padding-inline:17px!important}
+ html:not(.life-theme-day) .v18-shell{margin-left:262px!important;padding:32px clamp(24px,3vw,70px) 120px!important}
+ html:not(.life-theme-day) .v18-top{width:calc(100% - 262px)!important;margin-left:262px!important;background:rgba(9,13,19,.96)!important}
+ html:not(.life-theme-day) .v18-tabs button{min-height:44px!important;font-weight:680!important;letter-spacing:.01em!important;font-size:12.5px!important}
+ html:not(.life-theme-day) .v18-tabs button.on{background:rgba(239,168,116,.12)!important;border-color:rgba(245,182,137,.23)!important;box-shadow:inset 3px 0 0 #eeb080!important}
+ html:not(.life-theme-day) .life11-sidebar-brand{padding-top:18px!important}
+ html:not(.life-theme-day) .life11-brand-mark{border-radius:13px!important;background:linear-gradient(145deg,#ffdfbb,#b97754)!important}
+ html:not(.life-theme-day) .life112-sidebar-quick{background:radial-gradient(circle at 100% 0%,rgba(238,165,122,.17),transparent 75%),#1a1f27!important;border-color:rgba(246,191,154,.14)!important}
+ html:not(.life-theme-day) .life112-desktop-search{background:#161b24!important}
+}
+@media(min-width:1220px) and (max-width:1480px){
+ html:not(.life-theme-day) .life11-hero{grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr)!important;min-height:425px!important;padding:30px!important;gap:16px!important}
+ html:not(.life-theme-day) .life11-hero-copy h1{font-size:clamp(40px,3.8vw,58px)!important}
+ html:not(.life-theme-day) .life112-briefing{padding:20px}
+ html:not(.life-theme-day) .life112-capture{grid-template-columns:auto minmax(0,.7fr) minmax(170px,1fr) auto;gap:10px}
+}
+@media(max-width:1219px){
+ html:not(.life-theme-day) .life11-hero{grid-template-columns:minmax(0,1fr) minmax(245px,.8fr)!important;min-height:380px!important}
+ html:not(.life-theme-day) .life112-capture{grid-template-columns:auto 1fr minmax(180px,1fr) auto}
+}
+@media(max-width:800px){
+ html:not(.life-theme-day) .life11-hero{grid-template-columns:1fr!important;gap:18px!important;min-height:0!important;padding:26px 23px 30px!important}
+ html:not(.life-theme-day) .life11-hero-copy h1{font-size:clamp(35px,8vw,51px)!important;max-width:100%!important}
+ html:not(.life-theme-day) .life112-briefing{padding:18px 20px;min-height:250px}
+ html:not(.life-theme-day) .life112-briefing-time{font-size:50px!important;margin:15px 0 2px!important}
+ html:not(.life-theme-day) .life112-briefing-rule{margin:14px 0 12px!important}
+ html:not(.life-theme-day) .life112-briefing-footer{margin-top:8px}
+ html:not(.life-theme-day) .life112-capture{grid-template-columns:auto 1fr;gap:12px;padding:15px}
+ html:not(.life-theme-day) .life112-capture label{grid-column:2}
+ html:not(.life-theme-day) .life112-capture input{grid-column:1/-1}
+ html:not(.life-theme-day) .life112-capture button{grid-column:1/-1;width:100%}
+ html:not(.life-theme-day) .life11-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin-bottom:28px!important;gap:12px!important}
+ html:not(.life-theme-day) .life11-metric{border:1px solid rgba(255,255,255,.065)!important;background:#131922!important;border-radius:16px!important;padding:15px!important;min-height:82px!important}
+ html:not(.life-theme-day) .life11-metric:first-child{padding-left:15px!important}
+ html:not(.life-theme-day) .life11-area{min-height:185px!important}
+}
+@media(max-width:420px){
+ html:not(.life-theme-day) .life112-briefing-top{font-size:8px!important}
+ html:not(.life-theme-day) .life112-capture label b{font-size:11px}
+ html:not(.life-theme-day) .life11-section-heading h2{font-size:25px!important}
+}
+@media(prefers-reduced-motion:reduce){html:not(.life-theme-day) .life112-briefing *,html:not(.life-theme-day) .life112-capture *{transition:none!important;animation:none!important}}
+/* Style new controls during the existing light/day mode too; don't leave them dark and unreadable. */
+html.life-theme-day .life112-briefing{background:linear-gradient(155deg,#f5ede4,#e9e7e5);border:1px solid #d9cec1;border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:10px;color:#242933}
+html.life-theme-day .life112-briefing-top{display:flex;align-items:center;justify-content:space-between;color:#755640;font:800 10px system-ui;letter-spacing:.1em}
+html.life-theme-day .life112-briefing-time{font-size:60px;font-weight:900;letter-spacing:-.08em;line-height:1;color:#252b35}
+html.life-theme-day .life112-briefing-time em{font-style:normal;color:#aa7452}
+html.life-theme-day .life112-briefing-date{font-size:12px;color:#5d6875;text-transform:capitalize}
+html.life-theme-day .life112-briefing-rule{height:1px;background:#d7c5b6;margin:12px 0}
+html.life-theme-day .life112-briefing-nextlabel{font-size:10px;color:#8d644d}
+html.life-theme-day .life112-briefing-next{font-size:17px;color:#232b37}
+html.life-theme-day .life112-briefing-caption{font-size:12px;color:#586474}
+html.life-theme-day .life112-briefing-action{align-self:start;color:#8e502c;background:transparent;border:0;padding:8px 0}
+html.life-theme-day .life112-briefing-footer{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:auto;color:#5b6470;font-size:10px}
+html.life-theme-day .life112-briefing-meter{grid-column:1/-1;border-radius:8px;height:5px;background:#ded2c7}
+html.life-theme-day .life112-briefing-meter i{display:block;height:100%;background:#b87d54;border-radius:8px}
+html.life-theme-day .life112-capture{display:flex;flex-wrap:wrap;gap:12px;align-items:center;background:#fffaf4;border:1px solid #e3d5c8;border-radius:20px;padding:18px;margin:15px 0 25px}
+html.life-theme-day .life112-capture label{display:flex;flex-direction:column;gap:3px;color:#282d33}
+html.life-theme-day .life112-capture label span{font-size:11px;color:#646c77}
+html.life-theme-day .life112-capture input{flex:1;min-width:190px;padding:11px;border:1px solid #ded5cd;border-radius:12px;background:white;color:#21262b}
+html.life-theme-day .life112-capture button{display:inline-flex;align-items:center;gap:5px;border:0;border-radius:12px;padding:12px 16px;background:#c89069;color:#20170f;font-weight:800}
+
+html:not(.life-theme-day) .life112-focus-card{background:radial-gradient(circle at 100% 100%,rgba(133,153,182,.14),transparent 65%),linear-gradient(155deg,#1e2530,#131922)!important}
+html:not(.life-theme-day) .life112-focus-card .life11-large-index{right:4px;top:18px;color:rgba(248,183,142,.055)!important;font-size:105px!important}
+html:not(.life-theme-day) .life112-focus-card h4{font-size:17px!important;max-width:310px}
+/* Responsive clarity: never clip synchronization labels or long task titles. */
+html:not(.life-theme-day) .life11-small-metric{font-size:clamp(11px,1.04vw,15px)!important;line-height:1.35!important;overflow-wrap:anywhere;white-space:normal!important;}
+html:not(.life-theme-day) .life11-metric>div{min-width:0!important}
+html:not(.life-theme-day) .life112-briefing-next{white-space:normal!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-clamp:2!important;overflow:hidden}
+@media(max-width:800px){
+ html:not(.life-theme-day) .life11-metric .life11-small-metric{font-size:11px!important;line-height:1.25!important}
+ html:not(.life-theme-day) .life11-metric{gap:9px!important}
+ html:not(.life-theme-day) .life11-metric-symbol{flex:0 0 31px!important;width:31px!important;height:31px!important;font-size:16px!important}
+ html:not(.life-theme-day) .life11-section-heading{flex-wrap:wrap!important;gap:7px!important}
+ html:not(.life-theme-day) .life11-section-heading .life11-link{margin:0 0 4px!important}
+}

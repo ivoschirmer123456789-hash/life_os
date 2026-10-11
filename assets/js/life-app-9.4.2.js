@@ -3504,6 +3504,65 @@ function LifeAutomationCenterV4({ tasks = [], projects = [], inbox = [], studyRe
 // =========================================================================
 // LIFE QUALITY UPDATE — evolução baseada somente em dados reais
 // =========================================================================
+/* LIFE 12.1 — Functional progression and cross-area achievements; derived from actual saved events. */
+function LifeTrainingProgressV121({ rows = [] }) {
+    const safeRows = (Array.isArray(rows) ? rows : []).filter(x => x && x.exercise && Number.isFinite(Number(x.reps)) && Number(x.reps)>0).slice(-1200);
+    const groups = new Map();
+    safeRows.forEach(x => {
+        const name=String(x.exercise || '').trim(); if (!name) return;
+        const key=lifeNormalizeText(name); if (!groups.has(key)) groups.set(key,[]);
+        groups.get(key).push(x);
+    });
+    const items=[...groups.values()].map(a=>{
+        const sorted=a.slice().sort((x,y)=>new Date(x.date)-new Date(y.date));
+        const weighted=sorted.filter(x=>Number.isFinite(Number(x.loadKg))&&Number(x.loadKg)>0);
+        const first=weighted[0],last=weighted[weighted.length-1];
+        return {name:sorted[0].exercise,sets:sorted.length,last,first,latest:sorted[sorted.length-1]};
+    }).sort((a,b)=>new Date(b.latest.date)-new Date(a.latest.date)).slice(0,8);
+    return React.createElement('section',{className:'life121-section','data-life-section':'workout-progression'},
+        React.createElement('header',null,React.createElement('div',null,
+          React.createElement('small',null,'FITNESS · REGISTROS VERIFICÁVEIS'),
+          React.createElement('h3',null,'Progressão por exercício'),
+          React.createElement('p',null,'Carga e repetições informadas por você em cada série. Não são metas, nem estimativas automáticas.')),
+          React.createElement('span',{className:'life121-count'},safeRows.length+' séries')),
+        items.length?React.createElement('div',{className:'life121-progress-list'},items.map((item,i)=>React.createElement('div',{key:i,className:'life121-progress-row'},
+           React.createElement('div',null,React.createElement('strong',null,item.name),React.createElement('small',null,item.sets+' série(s) registradas · última: '+Number(item.latest.reps)+' repetições')),
+           React.createElement('span',null,item.last ? Number(item.last.loadKg).toLocaleString('pt-BR',{maximumFractionDigits:2})+' kg'+(item.first && item.first!==item.last?' · início '+Number(item.first.loadKg).toLocaleString('pt-BR',{maximumFractionDigits:2})+' kg':''):'Sem carga registrada'))))
+         :React.createElement('p',{className:'life121-empty'},'Nenhuma série registrada ainda. Abra um treino e anote a carga e as repetições depois de cada série.'));
+}
+function LifeMilestonesV121({activity=[],tasks=[],notes=[],sets=[]}) {
+  const done=(Array.isArray(tasks)?tasks:[]).filter(t=>typeof taskIsDone==='function'?taskIsDone(t):!!t.done).length;
+  const acts=Array.isArray(activity)?activity:[];
+  const sessions=acts.filter(a=>/concluiu/i.test(String(a.title||''))&&/treino|fitness/i.test(String(a.title||'')+' '+String(a.type||''))).length;
+  const focus=acts.filter(a=>/foco/i.test(String(a.type||'')+' '+String(a.title||''))).length;
+  const types=new Set(acts.map(a=>String(a.type||'').toUpperCase()).filter(Boolean));
+  const list=[
+    ['Primeira prioridade',done,1,'task_alt'],['Organização consistente',done,10,'checklist'],
+    ['Primeiro treino',sessions,1,'fitness_center'],['Rotina em movimento',sessions,5,'directions_run'],
+    ['Foco protegido',focus,3,'timer'],['Ideias registradas',notes.length||0,5,'edit_note'],
+    ['Treino documentado',sets.length||0,10,'monitoring'],['LIFE integrado',types.size,3,'hub']
+  ];
+  const unlocked=list.filter(row=>row[1]>=row[2]).length;
+  const items=list.map(([name,count,goal,icon])=>{
+    const symbol=React.createElement('span',{className:'material-symbols-rounded'},icon);
+    const text=React.createElement('div',null,React.createElement('strong',null,name),React.createElement('small',null,Math.min(count,goal)+' / '+goal));
+    const meter=React.createElement('div',{className:'life121-mini-meter'},React.createElement('i',{style:{width:Math.min(100,100*count/goal)+'%'}}));
+    return React.createElement('article',{key:name,className:'life121-achievement '+(count>=goal?'unlocked':'')},symbol,text,meter);
+  });
+  const header=React.createElement('header',null,
+    React.createElement('div',null,React.createElement('small',null,'CONQUISTAS · TODAS AS ÁREAS'),React.createElement('h3',null,'Pequenas vitórias reais'),React.createElement('p',null,'Marcos baseados nos seus registros, sem comparações com outras pessoas.')),
+    React.createElement('span',{className:'life121-count'},unlocked+' / '+list.length+' desbloqueadas'));
+  return React.createElement('section',{className:'life121-section','data-life-section':'achievements'},header,React.createElement('div',{className:'life121-achievements'},items));
+}
+function LifeAreaInsightsV121({ activity = [], tasks = [], sets = [] }) {
+   const days=[7,30].map(n=>({days:n,cutoff:Date.now()-n*86400000}));
+   const areas=[['Estudos',/estud|revis|foco/i],['Fitness',/fitness|treino|exerc/i],['Finanças',/finan|entrada|saída|saida|gasto/i],['Organização',/tarefa|organiza|plano|nota/i]];
+   const cards=areas.map(([name,pattern])=>({name,counts:days.map(d=>activity.filter(a=>new Date(a.date).getTime()>=d.cutoff&&pattern.test((a.type||'')+' '+(a.title||''))).length)}));
+   return React.createElement('section',{className:'life121-section','data-life-section':'cross-area-insights'},
+     React.createElement('header',null,React.createElement('div',null,React.createElement('small',null,'LEITURA CONECTADA'),React.createElement('h3',null,'Seu ritmo entre áreas'),React.createElement('p',null,'Contagem de ações registradas nos últimos 7 e 30 dias. Um registro pode pertencer a mais de uma área.'))),
+     React.createElement('div',{className:'life121-area-grid'},cards.map(c=>React.createElement('article',{key:c.name},React.createElement('strong',null,c.name),React.createElement('b',null,c.counts[0]),React.createElement('small',null,'7 dias · '+c.counts[1]+' nos últimos 30')))));
+}
+
 function LifeEvolutionQuality({ activity = [], tasks = [], notes = [], workouts = [], finance = [] }) {
     const now = new Date();
     const localKey = (d) => {
@@ -4735,7 +4794,7 @@ function LifeOSV18() {
     const [cloudStatus, setCloudStatus] = React.useState('checking');
     const [cloudLastSync, setCloudLastSync] = React.useState(() => lifeRawStorageGet('life_cloud_synced_at') || '');
     const [lastArea, setLastArea] = React.useState(() => lifeRawStorageGet('life_last_area') || '');
-    const lifeSyncKeys = () => lifeStorageKeys().filter(k => /^(l18_|l32_|l33_|l35_|l42_|l49_|l60_|life_custom_workouts_v2$|life_free_custom_workout_v82$|life_theme$|life_last_area$|life_favorites_v4$|life_recents_v4$|life_pins_v4$|life_activity_v4$|life_ai_[a-z0-9_]+$|life_finance_[a-z0-9_]+$|life_food_[a-z0-9_]+$|life_capture_[a-z0-9_]+$|life_workout_[a-z0-9_]+$|life_goals_v1$|life_habits_v1$|lifeos_v5_tasks$|life_settings_v1$|life_notifications_v1$|life_reminders_v1$|life_notification_prefs_v1$|life_training_age$|life_study_[a-z0-9_]+$|life_org_[a-z0-9_]+$|life_weather_[a-z0-9_]+$|life_pantry_v4$|life_product_events_v1$|life_first_value_done$|life_local_dirty_at$|life_trash_v1$|life_system_errors_v9$|life_form_[a-z0-9_]+$)/.test(k));
+    const lifeSyncKeys = () => lifeStorageKeys().filter(k => /^(l18_|l32_|l33_|l35_|l42_|l49_|l60_|life_custom_workouts_v2$|life_free_custom_workout_v82$|life_theme$|life_last_area$|life_favorites_v4$|life_recents_v4$|life_pins_v4$|life_activity_v4$|life_ai_[a-z0-9_]+$|life_finance_[a-z0-9_]+$|life_food_[a-z0-9_]+$|life_capture_[a-z0-9_]+$|life_workout_[a-z0-9_]+$|life_goals_v1$|life_habits_v1$|lifeos_v5_tasks$|life_settings_v1$|life_notifications_v1$|life_reminders_v1$|life_notification_prefs_v1$|life_training_age$|life_study_[a-z0-9_]+$|life_org_[a-z0-9_]+$|life_weather_[a-z0-9_]+$|life_home_hidden_v121$|life_pantry_v4$|life_product_events_v1$|life_first_value_done$|life_local_dirty_at$|life_trash_v1$|life_system_errors_v9$|life_form_[a-z0-9_]+$)/.test(k));
     const collectLifeData = () => {
         const data = {};
         lifeSyncKeys().forEach(k => { try {
@@ -4747,7 +4806,7 @@ function LifeOSV18() {
     const applyLifeData = (bundle) => {
         const data = bundle?.data || {};
         Object.entries(data).forEach(([k, v]) => {
-            if (typeof v === 'string' && /^(l18_|l32_|l33_|l35_|l42_|l49_|l60_|life_custom_workouts_v2$|life_free_custom_workout_v82$|life_theme$|life_last_area$|life_favorites_v4$|life_recents_v4$|life_pins_v4$|life_activity_v4$|life_ai_[a-z0-9_]+$|life_finance_[a-z0-9_]+$|life_food_[a-z0-9_]+$|life_capture_[a-z0-9_]+$|life_workout_[a-z0-9_]+$|life_goals_v1$|life_habits_v1$|lifeos_v5_tasks$|life_settings_v1$|life_notifications_v1$|life_reminders_v1$|life_notification_prefs_v1$|life_training_age$|life_study_[a-z0-9_]+$|life_org_[a-z0-9_]+$|life_weather_[a-z0-9_]+$|life_pantry_v4$|life_product_events_v1$|life_first_value_done$|life_local_dirty_at$|life_trash_v1$|life_system_errors_v9$|life_form_[a-z0-9_]+$)/.test(k)) {
+            if (typeof v === 'string' && /^(l18_|l32_|l33_|l35_|l42_|l49_|l60_|life_custom_workouts_v2$|life_free_custom_workout_v82$|life_theme$|life_last_area$|life_favorites_v4$|life_recents_v4$|life_pins_v4$|life_activity_v4$|life_ai_[a-z0-9_]+$|life_finance_[a-z0-9_]+$|life_food_[a-z0-9_]+$|life_capture_[a-z0-9_]+$|life_workout_[a-z0-9_]+$|life_goals_v1$|life_habits_v1$|lifeos_v5_tasks$|life_settings_v1$|life_notifications_v1$|life_reminders_v1$|life_notification_prefs_v1$|life_training_age$|life_study_[a-z0-9_]+$|life_org_[a-z0-9_]+$|life_weather_[a-z0-9_]+$|life_home_hidden_v121$|life_pantry_v4$|life_product_events_v1$|life_first_value_done$|life_local_dirty_at$|life_trash_v1$|life_system_errors_v9$|life_form_[a-z0-9_]+$)/.test(k)) {
                 try {
                     lifeRawStorageSet(k, v);
                 }
@@ -5404,6 +5463,15 @@ function LifeOSV18() {
     const [savedMealPlans, setSavedMealPlans] = React.useState(() => load('life_food_plans_v1', []));
     const [mealPlanName, setMealPlanName] = React.useState('');
     const [shoppingList, setShoppingList] = React.useState(() => load('life_food_shopping_v1', []));
+    const [lifeWorkoutSets, setLifeWorkoutSets] = React.useState(() => load('life_workout_sets_v121', []));
+    const [lifeSetLoad, setLifeSetLoad] = React.useState('');
+    const [lifeSetReps, setLifeSetReps] = React.useState('');
+    React.useEffect(()=>{save('life_workout_sets_v121',lifeWorkoutSets.slice(-1200));},[lifeWorkoutSets]);
+    const [lifeHomeHidden, setLifeHomeHidden] = React.useState(() => load('life_home_hidden_v121', []));
+    const [lifeCustomizeHome, setLifeCustomizeHome] = React.useState(false);
+    React.useEffect(()=>{save('life_home_hidden_v121',lifeHomeHidden);},[lifeHomeHidden]);
+    const lifeHomeShown=(section)=>!lifeHomeHidden.includes(section);
+    const lifeToggleHome=(section)=>setLifeHomeHidden(prev=>prev.includes(section)?prev.filter(x=>x!==section):[...prev,section]);
     const [activeWorkout, setActiveWorkout] = React.useState(null);
     const [workoutExerciseIndex, setWorkoutExerciseIndex] = React.useState(0);
     const [workoutSetIndex, setWorkoutSetIndex] = React.useState(1);
@@ -6416,6 +6484,7 @@ function LifeOSV18() {
             return;
         }
         setActiveWorkout(normalized);
+        setLifeSetLoad('');setLifeSetReps('');
         setWorkoutExerciseIndex(0);
         setWorkoutSetIndex(1);
         setWorkoutRestSeconds(0);
@@ -6477,6 +6546,15 @@ function LifeOSV18() {
             return;
         const pres = activeWorkout.prescription?.[workoutExerciseIndex] || { sets: 3, reps: '8–12', rest: 90 };
         const targetSets = Math.max(1, Number(pres.sets) || 3), rest = Math.max(0, Number(pres.rest) || 90);
+        const repsText=String(lifeSetReps).trim(),loadText=String(lifeSetLoad).trim();
+        const reps=Number(repsText),loadKg=Number(loadText.replace(',','.'));
+        if(repsText && (!Number.isInteger(reps)||reps<1||reps>200)){setToast('REPETIÇÕES: INFORME UM INTEIRO ENTRE 1 E 200');return;}
+        if(loadText && (!Number.isFinite(loadKg)||loadKg<0||loadKg>1000)){setToast('CARGA: INFORME UM VALOR VÁLIDO EM KG');return;}
+        if(repsText){
+          const row={id:Date.now()+'-'+workoutExerciseIndex+'-'+workoutSetIndex,date:new Date().toISOString(),workoutId:String(activeWorkout.id||''),workout:String(activeWorkout.name||''),exercise:String(activeWorkout.moves?.[workoutExerciseIndex]||''),set:workoutSetIndex,reps,loadKg:loadText?loadKg:null};
+          setLifeWorkoutSets(prev=>[...prev,row].slice(-1200));
+        }
+        setLifeSetReps('');
         if (workoutSetIndex < targetSets) {
             setWorkoutSetIndex(x => x + 1);
             setWorkoutRestSeconds(rest);
@@ -6487,6 +6565,7 @@ function LifeOSV18() {
             const nextPres = activeWorkout.prescription?.[workoutExerciseIndex + 1] || { rest: 90 };
             setWorkoutExerciseIndex(x => x + 1);
             setWorkoutSetIndex(1);
+            setLifeSetLoad('');setLifeSetReps('');
             setWorkoutRestSeconds(Number(nextPres.rest) || 90);
             setWorkoutRestRunning(true);
         }
@@ -6510,6 +6589,7 @@ function LifeOSV18() {
         const max = (activeWorkout.moves || []).length - 1;
         setWorkoutExerciseIndex(i => Math.max(0, Math.min(max, i + delta)));
         setWorkoutSetIndex(1);
+        setLifeSetLoad('');setLifeSetReps('');
         setWorkoutRestRunning(false);
         setWorkoutRestSeconds(0);
     };
@@ -8095,8 +8175,10 @@ function LifeOSV18() {
         if (!term)
             return [];
         const r = [];
+        const actionShortcuts=[['Criar tarefa','criar tarefa nova prioridade adicionar tarefa', 'create-task'],['Captura rápida','anotar tarefa ideia', 'capture'],['Modo foco','iniciar foco concentração cronômetro', 'focus'],['Ver conquistas','conquistas medalhas metas evolução', 'achievements']];
         const push = x => { if (r.length < 45 && !r.some(y => y.type === x.type && String(y.id) === String(x.id)))
             r.push(x); };
+        actionShortcuts.forEach(([title,aliases,action])=>{if(lifeNormalizeText(title+' '+aliases).includes(term))push({type:'AÇÃO',text:title,id:action,commandAction:action});});
         const allAreas = ['Hoje', 'Tarefas', 'Notas', 'Biblioteca', 'Life', 'Estudos', 'Fitness', 'Receitas', 'Finanças', 'IA', 'Meu LIFE', 'Evolução', 'Archive', 'Perfil', 'Configurações', 'Tutorial'];
         allAreas.forEach(x => { const label = lifePublicAreaName(x); if (lifeNormalizeText(x + ' ' + label).includes(term))
             push({ type: 'ÁREA', text: label, go: x, id: x }); });
@@ -8139,6 +8221,14 @@ function LifeOSV18() {
         return r.slice(0, 8);
     })();
     const openUniversalResult = (r) => {
+        if(r.commandAction){
+          setV60Search('');setQ('');setSpot(false);
+          if(r.commandAction==='focus'){setFocus(true);return;}
+          if(r.commandAction==='achievements'){v42Go('Evolução');return;}
+          if(r.commandAction==='create-task'||r.commandAction==='capture'){
+            setLifeHomeHidden(prev=>prev.filter(id=>id!=='capture'));v42Go('Hoje');setTimeout(()=>document.getElementById('life112-capture-field')?.focus(),350);return;
+          }
+        }
         setV60Search('');
         setQ('');
         setSpot(false);
@@ -8928,7 +9018,7 @@ function LifeOSV18() {
                     React.createElement(LifeApp36Panel,{eyebrow:'CONFIANÇA',title:'Status do sistema.',text:'Uma leitura rápida antes de você mexer em conta ou dispositivo.'},React.createElement(LifeApp36List,{items:[
                         {id:'plan',icon:'01',title:'Plano '+(realPlan||'FREE'),meta:hasV18Pro?'Acesso avançado ativo.':'Você está na versão essencial.'},
                         {id:'cloud',icon:'02',title:cloudStatus==='synced'?'Nuvem sincronizada':'Dados precisam de atenção',meta:cloudLastSync?'Última sincronização: '+new Date(cloudLastSync).toLocaleString('pt-BR'):'Nenhuma sincronização registrada.'},
-                        {id:'ai',icon:'03',title:aiBackendReady?'LIFE AI conectada':'LIFE AI em modo local',meta:aiBackendReady?'Backend remoto respondeu nesta sessão.':'Fallback local continua disponível.'},
+                        {id:'ai',icon:'03',title:aiBackendReady?'LIFE AI conectada':'LIFE AI em modo local (sem modelo remoto)',meta:aiBackendReady?'Backend remoto respondeu nesta sessão.':'Fallback local continua disponível.'},
                         {id:'network',icon:'04',title:online?'Conexão ativa':'Sem internet',meta:online?'Serviços externos podem responder.':'O LIFE continua com dados locais.'}]}))));
         }
         return null;
@@ -9926,7 +10016,11 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
             React.createElement("button", { type: "button", className: "v18-logo", onClick: () => openSheet('status') },
                 "LIFE",
                 React.createElement("em", null, ".")),
-            React.createElement("span", { className: "v18-code" }, "OS / 9.4.2"),
+            React.createElement("span", { className: "v18-code" }, "OS / 12.1"),
+            React.createElement('button',{type:'button',className:'life112-desktop-search',onClick:()=>setSpot(true),title:'Buscar em todo o LIFE', 'aria-label':'Abrir busca global'},
+              React.createElement('span',{className:'material-symbols-rounded'},'search'),
+              React.createElement('span',null,'Buscar no seu LIFE...'),
+              React.createElement('kbd',null,'⌘ K')),
             React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => openSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
@@ -10263,11 +10357,21 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                     React.createElement("button", { type: "button", onClick: () => setDangerOpen(false) }, "CANCELAR"),
                     React.createElement("button", { type: "button", className: "danger", onClick: clearLifeLocalData }, "APAGAR DADOS LOCAIS")))),
         React.createElement("div", { className: "v18-shell" },
-            React.createElement("nav", { className: "v18-tabs", "aria-label": "\u00C1reas principais do LIFE" }, lifeNavItems.map((x, i) => React.createElement(React.Fragment, { key: x },
+            React.createElement("nav", { className: "v18-tabs", "aria-label": "\u00C1reas principais do LIFE" },
+                React.createElement('div',{className:'life11-sidebar-brand'},
+                    React.createElement('div',{className:'life11-brand-mark'},'L',React.createElement('span',null,'✦')),
+                    React.createElement('div',{className:'life11-brand-type'},React.createElement('strong',null,'LIFE ',React.createElement('em',null,'OS')),React.createElement('small',null,'YOUR PERSONAL SYSTEM'))),
+                lifeNavItems.map((x, i) => React.createElement(React.Fragment, { key: x },
                 hasV18Pro && (i === 0 || premiumNavGroups[x] !== premiumNavGroups[lifeNavItems[i - 1]]) && React.createElement("span", { className: "life-premium-nav-group" }, premiumNavGroups[x]),
                 React.createElement("button", { type: "button", "aria-current": view === x ? 'page' : undefined, className: view === x ? 'on' : '', onClick: () => v18Go(x) },
                     navLabel[x] || x,
                     v18ProOnly.has(x) && !hasV18Pro ? ' · PRO' : '')))),
+                React.createElement('div',{className:'life112-sidebar-quick'},
+                    React.createElement('div',{className:'life112-quick-symbol','aria-hidden':true},'✧'),
+                    React.createElement('small',null,'SEU ESPAÇO, SEU RITMO'),
+                    React.createElement('strong',null,'Pronto para o próximo passo?'),
+                    React.createElement('p',null,lifeTodayOpen.length?`${lifeTodayOpen.length} ${lifeTodayOpen.length===1?'tarefa esperando':'tarefas esperando'} por você hoje.`:'Comece com uma prioridade e construa o restante no seu ritmo.'),
+                    React.createElement('button',{type:'button',onClick:()=>v42Go('Tarefas')},'Abrir planejamento',React.createElement('span',{className:'material-symbols-rounded'},'arrow_outward'))),
             hasV18Pro && React.createElement("section", { className: "life-premium-masthead", "aria-label": "Experiência premium LIFE" },
                 React.createElement("div", { className: "life-premium-masthead-copy" },
                     React.createElement("small", null, realPlan === 'OWNER' ? 'OWNER / SIGNATURE ACCESS' : 'LIFE OS PRO / SIGNATURE'),
@@ -10293,43 +10397,94 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                 React.createElement("span", null, lifePublicAreaName(view)),
                 React.createElement("button", { type: "button", className: 'life-area-favorite-action-v82 ' + (isLifeFavorite('areas', view) ? 'on' : ''), onClick: () => toggleLifeFavorite('areas', { id: view, title: lifePublicAreaName(view), go: view, type: 'Área' }), 'aria-pressed':isLifeFavorite('areas',view)?'true':'false' }, React.createElement('span',{className:'material-symbols-rounded'},isLifeFavorite('areas',view)?'favorite':'favorite_border'), isLifeFavorite('areas', view) ? ' FAVORITADA' : ' FAVORITAR ÁREA'),
                 React.createElement("button", { type: "button", className: isLifePinned('Área', view) ? 'on' : '', onClick: () => toggleLifePin({ type: 'Área', id: view, title: lifePublicAreaName(view), go: view, subtitle: 'Área do LIFE' }) }, isLifePinned('Área', view) ? '✓ NO MEU LIFE' : '＋ FIXAR NO MEU LIFE')),
-            hasV18Pro && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement("main", { className: "life-pro-cockpit", "aria-label": "Cockpit LIFE PRO" },
-                React.createElement("section", { className: "life-pro-cockpit-hero" },
-                    React.createElement("div", { className: "life-pro-cockpit-copy" },
-                        React.createElement("small", null, realPlan === 'OWNER' ? 'OWNER / PRIVATE SYSTEM' : 'LIFE OS PRO / PRIVATE SYSTEM'),
-                        React.createElement("h1", null, greet.replace('.', '') + (v32Name ? ', ' + v32Name : '') + '.'),
-                        React.createElement("p", null, lifeTodayPlans.length ? (lifeTodayOpen.length ? 'Seu LIFE já organizou o que merece atenção agora.' : 'Seu dia está limpo. Use o espaço para continuar o que importa.') : 'Seu sistema está pronto. Adicione só o que realmente merece ocupar o seu dia.')),
-                    React.createElement("div", { className: "life-pro-cockpit-signal" },
-                        React.createElement("span", null, React.createElement("i", { className: "material-symbols-rounded" }, "schedule"), React.createElement("b", null, hh + ':' + mm), React.createElement("small", null, lifeTodayDateLabel)),
-                        React.createElement("span", null, React.createElement("i", { className: "material-symbols-rounded" }, lifeWeather?.current ? "partly_cloudy_day" : "cloud_off"), React.createElement("b", null, lifeWeather?.current ? Math.round(lifeWeather.current.temperature_2m) + '°' : '—'), React.createElement("small", null, lifeWeather?.current ? String(lifeWeather.label || 'Clima').split(' · ')[0] : 'Clima não conectado')),
-                        React.createElement("span", null, React.createElement("i", { className: "material-symbols-rounded" }, cloudStatus === 'synced' ? "cloud_done" : "cloud"), React.createElement("b", null, cloudStatus === 'synced' ? 'SYNC' : 'LOCAL'), React.createElement("small", null, realPlan === 'OWNER' ? 'OWNER' : 'PRO')))),
-                renderLifeDayConsoleV9(),
-                React.createElement("section", { className: "life-pro-cockpit-grid" },
-                    React.createElement("article", { className: "life-pro-now-card" },
-                        React.createElement("header", null, React.createElement("small", null, "AGORA"), React.createElement("span", null, lifeTodayOpen.length + ' pendente' + (lifeTodayOpen.length === 1 ? '' : 's'))),
-                        lifeTodayOpen.length ? React.createElement("button", { type: "button", onClick: () => { setSelectedTaskId(lifeTodayOpen[0].id); v42Go('Tarefas'); } },
-                            React.createElement("em", null, "PRÓXIMA AÇÃO"),
-                            React.createElement("b", null, lifeTodayOpen[0].text || lifeTodayOpen[0].title || 'Continuar o dia'),
-                            React.createElement("span", null, lifeTodayTime(lifeTodayOpen[0]) || 'Sem horário definido'),
-                            React.createElement("i", { className: "material-symbols-rounded" }, "arrow_outward")) : React.createElement("div", { className: "life-pro-empty-now" }, React.createElement("i", { className: "material-symbols-rounded" }, "check_circle"), React.createElement("b", null, "Nada urgente agora."), React.createElement("span", null, "Seu LIFE está livre para o próximo movimento."))),
-                    React.createElement("article", { className: "life-pro-commit-card" },
-                        React.createElement("header", null, React.createElement("small", null, "COMPROMISSOS"), React.createElement("button", { type: "button", onClick: () => setCommitmentsOpen(true) }, "ABRIR →")),
-                        lifeNextCommitment ? React.createElement("div", null, React.createElement("strong", null, lifeNextCommitment.t || 'Hoje'), React.createElement("b", null, lifeNextCommitment.n), React.createElement("span", null, lifeCommitmentsOpen.length + ' pendente' + (lifeCommitmentsOpen.length === 1 ? '' : 's') + ' hoje')) : React.createElement("div", null, React.createElement("strong", null, "LIVRE"), React.createElement("b", null, "Nenhum compromisso agora"), React.createElement("span", null, "Adicione um compromisso rápido quando precisar"))),
-                React.createElement("section", { className: "life-pro-command-grid" },
-                    [
-                        ['Estudos','school','STUDY OS', 'Retomar trilhas e domínio'],
-                        ['Fitness','fitness_center','FITNESS OS','Treino, biblioteca e progresso'],
-                        ['Finanças','account_balance_wallet','MONEY OS','Saldo, metas e análise'],
-                        ['IA','auto_awesome','LIFE AI','Planejar com contexto real']
-                    ].map(([go,icon,label,desc]) => React.createElement("button", { type: "button", key: go, className: "life-pro-command-card", onClick: () => v42Go(go) },
-                        React.createElement("i", { className: "material-symbols-rounded" }, icon),
-                        React.createElement("span", null, React.createElement("small", null, label), React.createElement("b", null, lifePublicAreaName(go)), React.createElement("em", null, desc)),
-                        React.createElement("strong", { className: "material-symbols-rounded" }, "arrow_forward")))),
-                React.createElement("section", { className: "life-pro-intelligence-row life-pro91-ai-only" },
-                    React.createElement("button", { type: "button", className: "life-pro-intelligence", onClick: () => { setAiOriginView('Hoje'); setAiQuickOpen(true); } },
-                        React.createElement("div", null, React.createElement("small", null, "LIFE AI / CONTEXTO"), React.createElement("h3", null, "Pergunte sobre o seu dia."), React.createElement("p", null, "Tarefas, compromissos e áreas do LIFE entram como contexto quando você quiser.")),
-                        React.createElement("span", null, "ABRIR LIFE AI", React.createElement("i", { className: "material-symbols-rounded" }, "north_east")))))),
-            !hasV18Pro && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement("main", { className: "life-today-minimal" },
+            (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement('main',{className:'life11-dashboard','aria-label':'Painel pessoal LIFE OS'},
+  React.createElement('div',{className:'life11-headerline'},
+    React.createElement('div',{className:'life11-location'},React.createElement('span',{className:'life11-live-dot'}), 'SEU ESPAÇO PESSOAL',React.createElement('span',{className:'life11-slash'},'/'), 'VISÃO GERAL'),
+    React.createElement('div',{className:'life11-headerdate'},lifeTodayDateLabel,' ',React.createElement('span',null,'•'),' ',hh+':'+mm)),
+  React.createElement('div',{className:'life121-home-prefs'},
+    React.createElement('span',null,'PAINEL PERSONALIZÁVEL'),
+    React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x),'aria-expanded':lifeCustomizeHome},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',React.createElement('span',{className:'material-symbols-rounded'},'tune')),
+    lifeCustomizeHome&&React.createElement('div',{className:'life121-home-pref-options'},[['capture','Captura rápida'],['metrics','Indicadores'],['agenda','Agenda e foco'],['areas','Áreas do LIFE'],['ai','LIFE AI']].map(([id,label])=>React.createElement('label',{key:id},React.createElement('input',{type:'checkbox',checked:lifeHomeShown(id),onChange:()=>lifeToggleHome(id)}),label)))),
+  React.createElement('section',{className:'life11-hero'},
+    React.createElement('div',{className:'life11-hero-copy'},
+      React.createElement('div',{className:'life11-eyebrow'},React.createElement('span',{className:'life11-mini-star'},'✦'),' LIFE OS · O SEU DIA, COM CLAREZA'),
+      React.createElement('h1',null,greet.replace('.', '')+(v32Name?', '+v32Name:'')+'.',React.createElement('br'),React.createElement('em',null,lifeTodayOpen.length?'Tudo começa agora.':'Seu tempo é valioso.')),
+      React.createElement('p',null,lifeTodayPlans.length?(lifeTodayOpen.length?'Você tem '+lifeTodayOpen.length+' prioridade'+(lifeTodayOpen.length===1?'':'s')+' para hoje. Escolha o que importa e deixe o resto com o LIFE.':'Seu planejamento de hoje está concluído. Aproveite para pensar no que vem depois.'):'Seu espaço para pensar, organizar e evoluir. Comece com uma prioridade e construa o restante no seu ritmo.'),
+      React.createElement('div',{className:'life11-hero-actions'},
+        React.createElement('button',{type:'button',className:'life11-btn life11-btn-primary',onClick:()=>v42Go('Tarefas')},'Organizar meu dia',React.createElement('span',{className:'material-symbols-rounded'},'arrow_outward')),
+        React.createElement('button',{type:'button',className:'life11-btn life11-btn-outline',onClick:()=>setFocus(true)},React.createElement('span',{className:'material-symbols-rounded'},'center_focus_strong'),' Modo foco')),
+      React.createElement('div',{className:'life112-hero-footnote'},
+        React.createElement('span',{className:'life112-live-indicator'}),
+        cloudStatus==='synced'?'Seu dia, atualizado e sincronizado':'Seu dia, salvo neste dispositivo',
+        React.createElement('span',{className:'life112-footnote-divider'},' / '),
+        `${Math.round(lifeTodayProgress)}% do planejamento concluído`),
+      React.createElement('div',{className:'life12-hero-strip','aria-label':'Resumo rápido do painel'},
+        React.createElement('div',{className:'life12-strip-card'},
+          React.createElement('small',null,'PRIORIDADES'),
+          React.createElement('strong',null,String(lifeTodayOpen.length).padStart(2,'0')),
+          React.createElement('span',null,lifeTodayOpen.length?(lifeTodayOpen.length===1?'tarefa em aberto':'tarefas em aberto'):'nenhuma em aberto')),
+        React.createElement('div',{className:'life12-strip-card'},
+          React.createElement('small',null,'PRÓXIMO COMPROMISSO'),
+          React.createElement('strong',null,lifeNextCommitment?(lifeNextCommitment.t||'A definir'):'Livre'),
+          React.createElement('span',null,lifeNextCommitment?(lifeNextCommitment.n||'Compromisso registrado'):'Sem agenda próxima')),
+        React.createElement('div',{className:'life12-strip-card'},
+          React.createElement('small',null,'SISTEMA'),
+          React.createElement('strong',null,cloudStatus==='synced'?'SYNC OK':'LOCAL'),
+          React.createElement('span',null,online?'online e pronto':'sem internet no momento')))),
+    React.createElement('aside',{className:'life112-briefing','aria-label':'Seu dia em um olhar'},
+      React.createElement('div',{className:'life112-briefing-top'},React.createElement('span',null,'01 / BRIEFING DO DIA'),React.createElement('span',{className:'life112-briefing-live'},React.createElement('i',null),online?'AGORA':'OFFLINE')),
+      React.createElement('div',{className:'life112-briefing-time'},hh,React.createElement('em',null,':'),mm),
+      React.createElement('div',{className:'life112-briefing-date'},lifeTodayDateLabel),
+      React.createElement('div',{className:'life112-briefing-rule'}),
+      React.createElement('div',{className:'life112-briefing-nextlabel'},React.createElement('span',{className:'material-symbols-rounded'},'arrow_outward'),' PRÓXIMO MOVIMENTO'),
+      React.createElement('strong',{className:'life112-briefing-next'},lifeTodayOpen.length?(lifeTodayOpen[0].text||lifeTodayOpen[0].title||'Sua próxima tarefa'):'Seu dia está em suas mãos'),
+      React.createElement('p',{className:'life112-briefing-caption'},lifeTodayOpen.length?(lifeTodayTime(lifeTodayOpen[0])||'Sem horário definido'):'Adicione uma prioridade quando quiser.'),
+      React.createElement('button',{type:'button',className:'life112-briefing-action',onClick:()=>{if(lifeTodayOpen.length)setSelectedTaskId(lifeTodayOpen[0].id);v42Go('Tarefas');}},lifeTodayOpen.length?'Abrir prioridade':'Planejar meu dia',React.createElement('span',{className:'material-symbols-rounded'},'arrow_forward')),
+      React.createElement('div',{className:'life112-briefing-footer'},React.createElement('span',null,lifeTodayDone+' / '+lifeTodayPlans.length+' concluídas'),React.createElement('span',null,lifeTodayProgress+'%'),React.createElement('div',{className:'life112-briefing-meter'},React.createElement('i',{style:{width:lifeTodayProgress+'%'}})))),
+    React.createElement('div',{className:'life11-hero-bottom-label'},'LIFE OS',React.createElement('span',null,' /  YOUR PERSONAL SYSTEM'))),
+  lifeHomeShown('capture') && React.createElement('form',{className:'life112-capture',onSubmit:e=>{e.preventDefault();addLifeTodayPlan();}},
+    React.createElement('span',{className:'life112-capture-mark material-symbols-rounded'},'add_task'),
+    React.createElement('label',{htmlFor:'life112-capture-field'},React.createElement('b',null,'Uma ideia? Um compromisso?'),React.createElement('span',null,'Coloque no seu dia sem perder o ritmo.')),
+    React.createElement('input',{id:'life112-capture-field',value:lifeTodayDraft,onChange:e=>setLifeTodayDraft(e.target.value),maxLength:220,placeholder:'O que precisa acontecer hoje?', 'aria-label':'Nova tarefa para hoje'}),
+    React.createElement('button',{type:'submit',disabled:!String(lifeTodayDraft||'').trim()},React.createElement('span',{className:'material-symbols-rounded'},'add'),' Adicionar')),
+  lifeHomeShown('metrics') && React.createElement('section',{className:'life11-metrics','aria-label':'Indicadores do dia'},
+    React.createElement('div',{className:'life11-metric'},React.createElement('span',{className:'life11-metric-symbol material-symbols-rounded'},'task_alt'),React.createElement('div',null,React.createElement('small',null,'CONCLUÍDAS'),React.createElement('strong',null,lifeTodayDone+' ',React.createElement('em',null,'/ '+lifeTodayPlans.length)))),
+    React.createElement('div',{className:'life11-metric'},React.createElement('span',{className:'life11-metric-symbol material-symbols-rounded'},'bolt'),React.createElement('div',null,React.createElement('small',null,'EM ABERTO'),React.createElement('strong',null,lifeTodayOpen.length))),
+    React.createElement('div',{className:'life11-metric'},React.createElement('span',{className:'life11-metric-symbol material-symbols-rounded'},'calendar_month'),React.createElement('div',null,React.createElement('small',null,'COMPROMISSOS'),React.createElement('strong',null,lifeCommitmentsOpen.length))),
+    React.createElement('div',{className:'life11-metric'},React.createElement('span',{className:'life11-metric-symbol material-symbols-rounded'},cloudStatus==='synced'?'cloud_done':'cloud_off'),React.createElement('div',null,React.createElement('small',null,'SEUS DADOS'),React.createElement('strong',{className:'life11-small-metric'},cloudStatus==='synced'?'Sincronizado':'Neste dispositivo')))),
+  lifeHomeShown('agenda') && React.createElement('div',{className:'life11-section-heading'},
+    React.createElement('div',null,React.createElement('span',{className:'life11-kicker'},'01 / O ESSENCIAL'),React.createElement('h2',null,'O que merece sua atenção',React.createElement('span',null,'.')),React.createElement('p',null,'Sua agenda sem ruído, com espaço para o que realmente importa.')),
+    React.createElement('button',{type:'button',className:'life11-link',onClick:()=>v42Go('Tarefas')},'Todas as tarefas ',React.createElement('span',{className:'material-symbols-rounded'},'arrow_forward'))),
+  lifeHomeShown('agenda') && React.createElement('section',{className:'life11-today-grid'},
+    React.createElement('article',{className:'life11-surface life11-schedule'},
+      React.createElement('div',{className:'life11-card-head'},React.createElement('div',null,React.createElement('small',null,'AGENDA / HOJE'),React.createElement('h3',null,'Seu roteiro de hoje')),React.createElement('span',{className:'life11-card-counter'},String(lifeTodayPlans.length).padStart(2,'0')+' itens')),
+      lifeTodayPlans.length ? React.createElement('div',{className:'life11-task-items'},lifeTodayPlans.slice(0,5).map((t,i)=>React.createElement('button',{type:'button',key:t.id||i,className:'life11-task-row '+(taskIsDone(t)?'is-done':''),onClick:()=>{setSelectedTaskId(t.id);v42Go('Tarefas');}},
+        React.createElement('span',{className:'life11-task-number'},String(i+1).padStart(2,'0')),
+        React.createElement('span',{className:'life11-task-main'},React.createElement('b',null,t.text||t.title||'Atividade'),React.createElement('small',null,lifeTodayTime(t)||(taskIsDone(t)?'Concluída':'Sem horário definido'))),
+        React.createElement('span',{className:'material-symbols-rounded life11-task-icon'},taskIsDone(t)?'check_circle':'north_east')))):
+        React.createElement('div',{className:'life11-empty'},React.createElement('div',{className:'life11-empty-art material-symbols-rounded'},'calendar_add_on'),React.createElement('h4',null,'Um dia em branco. Boas possibilidades.'),React.createElement('p',null,'Sem tarefas registradas para hoje. Adicione a primeira quando estiver pronto.'),React.createElement('button',{type:'button',className:'life11-inline-btn',onClick:()=>v42Go('Tarefas')},'Criar uma tarefa',React.createElement('span',{className:'material-symbols-rounded'},'arrow_outward'))),
+      React.createElement('div',{className:'life11-card-foot'},React.createElement('span',null,lifeTodayPlans.length?lifeTodayProgress+'% do planejamento concluído':'Seu dia começa por você'),React.createElement('div',{className:'life11-progress-track'},React.createElement('span',{style:{width:lifeTodayProgress+'%'}})))),
+    React.createElement('div',{className:'life11-side-stack'},
+      React.createElement('article',{className:'life11-surface life11-next life112-focus-card'},
+        React.createElement('div',{className:'life11-card-head'},React.createElement('div',null,React.createElement('small',null,'ESPAÇO DE CONCENTRAÇÃO'),React.createElement('h3',null,'Seu tempo, protegido.')),React.createElement('span',{className:'material-symbols-rounded'},'center_focus_strong')),
+        React.createElement('div',{className:'life11-next-body'},React.createElement('span',{className:'life11-large-index'},'✳'),React.createElement('h4',null,lifeTodayOpen.length?'Uma tarefa. Atenção total.':'Planeje seu próximo momento.'),React.createElement('p',null,lifeTodayOpen.length?'Separe alguns minutos para sua prioridade, sem alternar entre áreas.':'Seu dia está livre. Use o foco quando quiser.'),
+        React.createElement('button',{type:'button',className:'life11-inline-btn',onClick:()=>setFocus(true)},'Entrar no modo foco',React.createElement('span',{className:'material-symbols-rounded'},'arrow_outward')))),
+      React.createElement('article',{className:'life11-surface life11-appointment'},
+        React.createElement('div',null,React.createElement('small',null,'NA AGENDA'),React.createElement('h4',null,lifeNextCommitment?(lifeNextCommitment.n||'Próximo compromisso'):'Sem compromissos próximos'),React.createElement('p',null,lifeNextCommitment?(lifeNextCommitment.t||'Horário a definir'):'Mais espaço para você.')),
+        React.createElement('button',{type:'button','aria-label':'Abrir compromissos',onClick:()=>setCommitmentsOpen(true)},React.createElement('span',{className:'material-symbols-rounded'},'north_east'))))),
+  lifeHomeShown('areas') && React.createElement('div',{className:'life11-section-heading life11-area-heading'},
+    React.createElement('div',null,React.createElement('span',{className:'life11-kicker'},'02 / SEU ECOSSISTEMA'),React.createElement('h2',null,'Seu universo. Uma só direção',React.createElement('span',null,'.')),React.createElement('p',null,'Seu espaço de estudos, energia, finanças e alimentação — tudo no mesmo fluxo.')),
+    React.createElement('button',{type:'button',className:'life11-link',onClick:()=>v42Go('Meu LIFE')},'Explorar meu LIFE ',React.createElement('span',{className:'material-symbols-rounded'},'arrow_forward'))),
+  lifeHomeShown('areas') && React.createElement('section',{className:'life11-areas'},
+    [['Estudos','school','01','Estudos','Planeje, aprenda e mantenha o conhecimento em movimento.'],['Fitness','fitness_center','02','Fitness','Treinos, evolução e consistência no seu próprio ritmo.'],['Finanças','account_balance_wallet','03','Finanças','Seus registros, objetivos e decisões num só lugar.'],['Receitas','restaurant_menu','04','Alimentação','Descubra receitas e organize seu planejamento.']].map(([go,icon,n,title,description],i)=>React.createElement('button',{type:'button',key:go,className:'life11-area life11-area-'+i,onClick:()=>v42Go(go)},
+      React.createElement('div',{className:'life11-area-top'},React.createElement('span',{className:'life11-area-icon material-symbols-rounded'},icon),React.createElement('span',{className:'life11-area-number'},n+' / 04')),
+      React.createElement('div',{className:'life11-area-content'},React.createElement('h3',null,title),React.createElement('p',null,description)),
+      React.createElement('div',{className:'life11-area-arrow material-symbols-rounded'},'north_east')))),
+  lifeHomeShown('ai') && React.createElement('section',{className:'life11-ai-banner'},
+    React.createElement('div',{className:'life11-ai-emblem','aria-hidden':true},'✳'),
+    React.createElement('div',{className:'life11-ai-copy'},React.createElement('span',{className:'life11-kicker'},'03 / LIFE INTELLIGENCE'),React.createElement('h2',null,'Seu próximo passo, com mais clareza.'),React.createElement('p',null,'O LIFE AI utiliza o contexto disponível no aplicativo para ajudar a transformar dúvidas em próximos passos.'),React.createElement('div',{className:'life12-ai-points'},React.createElement('span',null,'Contexto do dia'),React.createElement('span',null,'Rotina + tarefas'),React.createElement('span',null,'Apoio com clareza'))),
+    React.createElement('button',{type:'button',className:'life11-ai-cta',onClick:()=>{setAiOriginView('Hoje');setAiQuickOpen(true);}},'Conversar com LIFE AI',React.createElement('span',{className:'material-symbols-rounded'},'arrow_outward')))),
+            false && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement("main", { className: "life-today-minimal" },
                 React.createElement("section", { className: "life-today-minimal-head" },
                     React.createElement("div", { className: "life-today-minimal-greeting" },
                         React.createElement("small", null, lifeTodayDateLabel),
@@ -11140,6 +11295,7 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                     ['Progresso','monitoring','PROGRESSO'],
                     ['Alimentação','restaurant','ALIMENTAÇÃO']
                 ].map(([tab, icon, label]) => React.createElement("button", { type: "button", key: tab, className: fitnessMainTab === tab ? 'on' : '', onClick: () => tab === 'Exercícios' ? openExerciseLibrary(exerciseLibraryGroup, exerciseLibrarySearch) : setFitnessMainTab(tab) }, React.createElement("span", { className: "material-symbols-rounded" }, icon), React.createElement("b", null, label)))),
+            hasV18Pro && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Fitness' && advancedArea === 'Fitness' && !fitnessFocusMode && fitnessMainTab === 'Treinos' && React.createElement(LifeTrainingProgressV121,{rows:lifeWorkoutSets}),
             hasV18Pro && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Fitness' && advancedArea === 'Fitness' && !fitnessFocusMode && React.createElement(React.Fragment, null,
                 fitnessMainTab === 'Hoje' && React.createElement(LifeFitnessUltraTodayV35, { completedActivity: fitnessCompletedActivity, weeklyGoal: fitnessWeeklyGoal, setWeeklyGoal: setFitnessWeeklyGoal, quickTime: fitnessQuickTime, setQuickTime: setFitnessQuickTime, quickEnergy: fitnessQuickEnergy, setQuickEnergy: setFitnessQuickEnergy, recommendedTitle: fitnessRecommendationTitle, recommendedMeta: fitnessRecommendationMeta, onStart: openFitnessRecommendation, onPrograms: () => setFitnessMainTab('Treinos'), onPersonal: () => { setFitnessMainTab('Treinos'); startPersonalTraining(false); }, onExercises: () => openExerciseLibrary('Todos'), onMyWorkouts: () => setFitnessMainTab('Treinos'), onProgress: () => setFitnessMainTab('Progresso'), onRecovery: () => setFitnessMainTab('Recuperação'), onAsk: (prompt) => { setAiOriginView('Fitness'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); }, savedCount: savedCustomWorkouts.length, exerciseCount: IRON_EXERCISE_LIBRARY.length }),
                 fitnessMainTab === 'Hoje' && React.createElement("section", { className: "pt-8" },
@@ -11669,6 +11825,9 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                         React.createElement("b", null, inbox.length),
                         React.createElement("span", null, "na caixa de entrada"))),
                 React.createElement(LifeEvolutionQuality, { activity: lifeActivity, tasks: tasks, notes: v49Notes, workouts: savedCustomWorkouts, finance: financeTransactions }),
+                React.createElement(LifeAreaInsightsV121,{activity:lifeActivity,tasks:tasks,sets:lifeWorkoutSets}),
+                React.createElement(LifeTrainingProgressV121,{rows:lifeWorkoutSets}),
+                React.createElement(LifeMilestonesV121,{activity:lifeActivity,tasks:tasks,notes:v49Notes,sets:lifeWorkoutSets}),
                 React.createElement("section", { className: "v72-evo-section" },
                     React.createElement("div", { className: "v18-micro" }, "CONTINUE EVOLUINDO"),
                     React.createElement("h2", null, "\u00C1reas da sua rotina."),
@@ -12334,6 +12493,11 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                             React.createElement("span", null,
                                 currentWorkoutPrescription?.reps || '8–12',
                                 " \u00B7 t\u00E9cnica confort\u00E1vel"))),
+                    activeWorkout.sessionType !== 'cardio' && React.createElement('div',{className:'life121-set-entry'},
+                        React.createElement('label',null,'CARGA (KG) · OPCIONAL',React.createElement('input',{type:'number',min:'0',max:'1000',step:'0.5',inputMode:'decimal',value:lifeSetLoad,onChange:e=>setLifeSetLoad(e.target.value),placeholder:'Ex.: 20'})),
+                        React.createElement('label',null,'REPETIÇÕES · PARA REGISTRAR',React.createElement('input',{type:'number',min:'1',max:'200',step:'1',inputMode:'numeric',value:lifeSetReps,onChange:e=>setLifeSetReps(e.target.value),placeholder:'Ex.: 10'})),
+                        React.createElement('p',null,'Preencha repetições para salvar esta série.')), 
+                    React.createElement('div',{className:'life121-last-set'},(()=>{const match=lifeWorkoutSets.filter(x=>lifeNormalizeText(x.exercise)===lifeNormalizeText(activeWorkout.moves?.[workoutExerciseIndex]||''));const last=match[match.length-1];return last?'Último registro: '+last.reps+' repetições'+(last.loadKg!==null?' · '+Number(last.loadKg).toLocaleString('pt-BR')+' kg':''):'Ainda não há séries registradas para este exercício.';})()),
                     React.createElement("div", { className: "life-workout-rest" },
                         React.createElement("small", null, "DESCANSO"),
                         React.createElement("b", null, fmt(workoutRestSeconds)),

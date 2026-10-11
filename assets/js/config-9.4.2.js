@@ -1,2 +1,2 @@
 window.LIFE_SINGLE_FILE=false;
-window.LIFE_BUILD={version:'9.4.2',name:'Premium Performance Edition'};
+window.LIFE_BUILD={version:'12.1',name:'Functional Upgrade'};

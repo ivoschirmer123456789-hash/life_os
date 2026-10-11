@@ -2,10 +2,11 @@
 (function () {
   'use strict';
   var glyphs = {
-    'Hoje':'◈','Tarefas':'☑','Organizar':'☰','Notas':'✎','Estudos':'▤',
-    'Fitness':'⌁','Receitas':'◉','Alimentação':'◉','Finanças':'▥',
-    'IA':'✦','LIFE AI':'✦','Life':'◇','Meu LIFE':'◇','Evolução':'↗',
-    'Favoritos':'♡','Perfil':'◯','Tutorial':'?','Archive':'▣','Configurações':'⚙'
+    'Hoje':'◈','Tarefas':'☑','Organizar':'≡','Notas':'✎','Estudos':'▤',
+    'Fitness':'✦','Receitas':'◉','Alimentação':'◉','Finanças':'▥',
+    'IA':'✧','LIFE AI':'✧','Life':'◇','Meu LIFE':'◇','Evolução':'↗',
+    'Favoritos':'♡','Perfil':'◯','Tutorial':'?','Archive':'▣','Configurações':'⚙',
+    'Biblioteca':'▤'
   };
   var nav = null;
   function decorate(){
