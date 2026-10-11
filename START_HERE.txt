@@ -1,6 +1,9 @@
-LIFE OS 9.4.2 — PREMIUM PERFORMANCE
+LIFE OS 10.2 — SIGNATURE REBUILD
 
-1. Substitua a versão anterior inteira por esta pasta.
-2. Publique index.html, service-worker.js, manifest.webmanifest e assets juntos.
-3. O cache desta versão é próprio: life-os-9.4.2-premium-performance.
-4. Não misture assets 9.4.1 com 9.4.2.
+1. Descompacte o ZIP.
+2. Envie TODOS os arquivos e pastas que ficam junto ao index.html para seu repositório do GitHub.
+3. Na Vercel, publique o repositório com Framework: Other e sem Build Command.
+4. Abra o link publicado. O service worker atualizado troca a versão do cache.
+5. Faça testes reais de login, PRO/OWNER e pagamento no ambiente publicado.
+
+Não publique somente o index.html: mantenha assets/, database/ e docs/.

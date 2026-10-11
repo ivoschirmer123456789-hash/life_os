@@ -1,14 +1,14 @@
 {
-  "name": "LIFE OS 10.0",
+  "name": "LIFE OS 10.2",
   "short_name": "LIFE OS",
-  "description": "LIFE OS 10.0 — Experience Edition",
+  "description": "LIFE OS 10.2 — Signature Rebuild, sistema pessoal completo",
   "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#04070a",
-  "theme_color": "#04070a",
+  "background_color": "#090b10",
+  "theme_color": "#090b10",
   "icons": [
     {
       "src": "assets/icons/icon-192.png",

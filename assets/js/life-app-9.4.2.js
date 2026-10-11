@@ -5202,15 +5202,6 @@ function LifeOSV18() {
         else
             lifeUiUpdate(commit);
     };
-    // LIFE OS 10.0: routes external command-center requests through the same guarded app navigation.
-    React.useEffect(() => {
-        const handler = event => {
-            const target = String(event?.detail?.target || '');
-            if (LIFE_VALID_AREAS.has(target)) v42Go(target);
-        };
-        window.addEventListener('life:navigate', handler);
-        return () => window.removeEventListener('life:navigate', handler);
-    });
     const openAdvancedArea = (area = view, setup = null, transitionLabel = null) => { const label = String(transitionLabel || ''); const freeAllowed = ['Perfil','Configurações','Tutorial'].includes(area); if (!hasV18Pro && !freeAllowed) { openLifePro('area_' + String(area || view).replace(/\s+/g,'_')); return; } advancedReturnScroll.current = Math.max(0, Number(window.scrollY) || 0); return runLifeTransition(transitionLabel || ('FERRAMENTAS · ' + lifePublicAreaName(area)), () => { setup && setup(); setAdvancedIntent(label); setAdvancedArea(area); requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })); }); };
     const closeAdvancedArea = () => { const returnToNutritionHub = view === 'Fitness' && /^ALIMENTAÇÃO ·/i.test(String(advancedIntent || '')); return runLifeTransition(returnToNutritionHub ? 'Alimentação' : lifePublicAreaName(view), () => { const returnY = Math.max(0, Number(advancedReturnScroll.current) || 0); setAdvancedArea(null); setAdvancedIntent(''); setFitnessFocusMode(null); setAreaFocusMode(null); setAreaFocusSearch(''); setFitnessFocusSearch(''); setFitnessFocusCategory('Todos'); setFitnessFocusLimit(6); if (returnToNutritionHub) { setView('Receitas'); setNutritionEntryTarget('Visão geral'); } requestAnimationFrame(() => window.scrollTo({ top: returnToNutritionHub ? 0 : returnY, left: 0, behavior: 'auto' })); }); };
     const lifeAdvancedIntentKey = lifeNormalizeText(advancedIntent || '');
@@ -7883,38 +7874,6 @@ function LifeOSV18() {
     const lifeTimelineDone = lifeTodayTimeline.filter(x=>x.done).length;
     const lifeTimelinePct = lifeTodayTimeline.length?Math.round(lifeTimelineDone/lifeTodayTimeline.length*100):0;
     const lifeFreeWindow = (()=>{ const timed=lifeTodayTimeline.filter(x=>!x.done&&x.time).map(x=>x.time).sort(); if(!timed.length)return 'Sem horários ocupados'; const first=timed[0]; return first>'09:00'?'Antes de '+first:'Próxima janela após '+timed[timed.length-1]; })();
-    // Public metrics are read on demand by the optional 10.0 daily signal panel.
-    // Do not create mock tasks, and do not expose private user information to a server.
-    React.useEffect(() => {
-        const respond = () => window.dispatchEvent(new CustomEvent('life:v10:metrics', { detail: {
-            tasksTotal: lifeTodayPlans.length,
-            tasksDone: lifeTodayDone,
-            tasksOpen: lifeTodayOpen.length,
-            progress: lifeTodayProgress,
-            eventsTotal: lifeTodayCommitments.length,
-            nextTask: String(lifeTodayNextTimeline?.title || '').slice(0, 120)
-        }}));
-        window.addEventListener('life:v10:metrics-request', respond);
-        return () => window.removeEventListener('life:v10:metrics-request', respond);
-    }, [lifeTodayPlans.length, lifeTodayDone, lifeTodayOpen.length, lifeTodayProgress, lifeTodayCommitments.length, lifeTodayNextTimeline?.title]);
-    const renderLifeExperienceBriefingV10 = () => React.createElement('section', {
-            className:'life-briefing-v10', 'aria-label':'Seu sinal do dia',
-            style:{'--lx-pct':String(lifeTodayProgress)+'%'}
-        },
-        React.createElement('div',{className:'life-briefing-v10-symbol'},React.createElement('span',{className:'material-symbols-rounded'},'auto_awesome')),
-        React.createElement('div',{className:'life-briefing-v10-copy'},
-            React.createElement('small',null,'LIFE SIGNAL / '+(now.getHours()<12?'MORNING':now.getHours()<18?'AFTERNOON':'EVENING')),
-            React.createElement('h2',null,lifeTodayOpen.length?'Próximo passo. Sem distrações.':lifeTodayPlans.length?'Seu planejamento está em dia.':'Faça deste dia o seu.'),
-            React.createElement('p',null,lifeTodayNextTimeline ?
-                (lifeTodayNextTimeline.time ? lifeTodayNextTimeline.time+' · ' : '')+lifeTodayNextTimeline.title :
-                'Seu espaço está livre para escolher uma prioridade.')),
-        React.createElement('div',{className:'life-briefing-v10-stats'},
-            React.createElement('div',{className:'life-briefing-v10-ring',role:'img','aria-label':lifeTodayProgress+'% das tarefas de hoje concluídas'},
-                React.createElement('span',null,lifeTodayProgress+'%')),
-            React.createElement('div',null,React.createElement('b',null,lifeTodayDone+'/'+lifeTodayPlans.length),React.createElement('small',null,'TAREFAS FEITAS'))),
-        React.createElement('div',{className:'life-briefing-v10-actions'},
-            React.createElement('button',{type:'button',onClick:()=>window.LIFEExperience10?.focus()},React.createElement('span',{className:'material-symbols-rounded'},'timer'),' INICIAR FOCO'),
-            React.createElement('button',{type:'button',onClick:()=>window.LIFEExperience10?.open()},React.createElement('span',{className:'material-symbols-rounded'},'manage_search'),' COMANDOS')));
     const addLifeTodayPlan = () => {
         const text = String(lifeTodayDraft || '').trim();
         if (!text) return;
@@ -7994,8 +7953,7 @@ function LifeOSV18() {
     }, [workoutRestRunning, workoutRestSeconds]);
     React.useEffect(() => { let f = e => { const tag=String(e.target?.tagName||'').toLowerCase(), typing=['input','textarea','select'].includes(tag)||e.target?.isContentEditable; if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        if (window.LIFEExperience10 && typeof window.LIFEExperience10.open === 'function') window.LIFEExperience10.open();
-        else setSpot(true);
+        setSpot(true);
     } else if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
         e.preventDefault(); setSpot(true);
     } if (e.key === 'Escape') {
@@ -10345,7 +10303,6 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                         React.createElement("span", null, React.createElement("i", { className: "material-symbols-rounded" }, "schedule"), React.createElement("b", null, hh + ':' + mm), React.createElement("small", null, lifeTodayDateLabel)),
                         React.createElement("span", null, React.createElement("i", { className: "material-symbols-rounded" }, lifeWeather?.current ? "partly_cloudy_day" : "cloud_off"), React.createElement("b", null, lifeWeather?.current ? Math.round(lifeWeather.current.temperature_2m) + '°' : '—'), React.createElement("small", null, lifeWeather?.current ? String(lifeWeather.label || 'Clima').split(' · ')[0] : 'Clima não conectado')),
                         React.createElement("span", null, React.createElement("i", { className: "material-symbols-rounded" }, cloudStatus === 'synced' ? "cloud_done" : "cloud"), React.createElement("b", null, cloudStatus === 'synced' ? 'SYNC' : 'LOCAL'), React.createElement("small", null, realPlan === 'OWNER' ? 'OWNER' : 'PRO')))),
-                renderLifeExperienceBriefingV10(),
                 renderLifeDayConsoleV9(),
                 React.createElement("section", { className: "life-pro-cockpit-grid" },
                     React.createElement("article", { className: "life-pro-now-card" },
@@ -10382,7 +10339,6 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                         React.createElement("span", null, React.createElement("i", { className: "material-symbols-rounded" }, "schedule"), hh + ':' + mm),
                         lifeWeather?.current && React.createElement("span", null, React.createElement("i", { className: "material-symbols-rounded" }, weatherIcon(lifeWeather.current.weather_code) === '☀' ? 'sunny' : 'cloud'), Math.round(lifeWeather.current.temperature_2m) + '°'),
                         React.createElement("span", { className: cloudStatus === 'synced' ? 'ok' : '' }, React.createElement("i", { className: "material-symbols-rounded" }, cloudStatus === 'synced' ? 'cloud_done' : 'cloud'), cloudStatus === 'synced' ? 'Salvo' : 'Local'))),
-                renderLifeExperienceBriefingV10(),
                 renderLifeDayConsoleV9(),
                 React.createElement("section", { className: "life-today-plan-card" },
                     React.createElement("div", { className: "life-today-plan-head" },
