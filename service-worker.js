@@ -1,4 +1,5 @@
-const LIFE_CACHE='life-os-14.4-premium-refinement';
+const LIFE_CACHE='life-os-14.5.3-stability';
+const ASSET_BUILD='14.5.3';
 const SHELL=[
   './',
   './index.html',
@@ -10,6 +11,8 @@ const SHELL=[
   './manifest.webmanifest',
   './assets/css/life-app-14.3.css',
   './assets/css/power-refinement-14.4.css',
+  './assets/css/mobile-repair-14.5.1.css',
+  './assets/css/section-rhythm-14.5.2.css',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',
   './assets/media/estudos.webp',
@@ -52,7 +55,10 @@ self.addEventListener('install',event=>{
     const cache=await caches.open(LIFE_CACHE);
     // Atomic install: never activate an incomplete bundle over the last working version.
     try {
-      await cache.addAll(SHELL);
+      // Mirror the page's release query for CSS/JS. Avoid duplicate downloads
+      // when installing the PWA just after the page has loaded them.
+      const urls=SHELL.map(p=>p.startsWith('./assets/')&&/\.(css|js)$/.test(p)?p+'?v='+ASSET_BUILD:p);
+      await cache.addAll(urls);
     } catch (e) {
       await caches.delete(LIFE_CACHE);
       throw e;
@@ -100,8 +106,12 @@ self.addEventListener('fetch',event=>{
       event.respondWith((async()=>{
         const cache=await caches.open(LIFE_CACHE);
         const cached=await cache.match(req,{ignoreSearch:true});
-        const fresh=fetch(req).then(res=>{if(res&&res.ok)cache.put(req,res.clone()).catch(()=>{});return res;}).catch(()=>null);
-        return cached||(await fresh)||Response.error();
+        if(cached)return cached; // Immutable, versioned app shell; no duplicate background requests.
+        try{
+          const fresh=await fetch(req);
+          if(fresh&&fresh.ok)cache.put(req,fresh.clone()).catch(()=>{});
+          return fresh;
+        }catch(_){return Response.error();}
       })());
     }else{
       // Non-static routes and query strings may contain private or checkout information.
@@ -116,8 +126,12 @@ self.addEventListener('fetch',event=>{
     event.respondWith((async()=>{
       const cache=await caches.open(LIFE_CACHE);
       const cached=await cache.match(req);
-      const fresh=fetch(req).then(res=>{if(res&&(res.ok||res.type==='opaque'))cache.put(req,res.clone()).catch(()=>{});return res;}).catch(()=>null);
-      return cached||(await fresh)||Response.error();
+      if(cached)return cached;
+      try{
+        const fresh=await fetch(req);
+        if(fresh&&(fresh.ok||fresh.type==='opaque'))cache.put(req,fresh.clone()).catch(()=>{});
+        return fresh;
+      }catch(_){return Response.error();}
     })());
   }
 });

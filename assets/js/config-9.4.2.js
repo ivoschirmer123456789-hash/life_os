@@ -1,2 +1,2 @@
 window.LIFE_SINGLE_FILE=false;
-window.LIFE_BUILD={version:'13.0',name:'Abas Simples e Recursos Integrados'};
+window.LIFE_BUILD={version:'14.5.3',name:'Power Premium · Estabilidade'};

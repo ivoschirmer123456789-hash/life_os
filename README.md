@@ -1,24 +1,17 @@
-# LIFE OS 14.4 — Power Premium Refinement
+# LIFE OS 14.5.3 — Power Premium · Revisão de estabilidade
 
-Versão completa construída sobre o aplicativo 14.3 (derivado da 14.2.1), mantendo a navegação, seus arquivos de autenticação, geradores, integrações e regras FREE/PRO/OWNER. **Não é uma imagem usada como site.**
+Esta é a versão **completa de publicação**, construída sobre o LIFE OS 14.5.2. Inclui 100% dos arquivos do site publicado em 14.5.2 (mesmas áreas, estilos, componentes, páginas e recursos) e corrige problemas concretos no carregamento e na autenticação.
 
-## Mudanças visuais
+## Melhorias
+- Tela de inicialização só é removida quando o React realmente produz a interface; erros de biblioteca/arquivo oferecem recuperação.
+- Validação de campos obrigatórios no login e bloqueio temporário contra cliques duplicados durante a solicitação.
+- Falhas de rede no login, cadastro, recuperação de senha e consultas de perfil agora apresentam mensagem e permitem tentar novamente.
+- Painel Owner mostra aviso quando a consulta falhar e não fica eternamente em "Carregando".
+- Cache PWA renovado para esta versão, preservando armazenamento do usuário.
+- Organização das áreas e visual Power Premium 14.5.2 preservados.
 
-1. Luz cinematográfica e maior profundidade dos painéis da Home.
-2. Botões com relevo, foco de teclado, hover e resposta ao toque.
-3. Gráficos com progresso diário real; categorias sem dados não mostram percentuais inventados.
-4. Hero mais imersivo, mantendo contraste e legibilidade do texto.
-5. Melhorias de dimensionamento e alvos de toque no mobile.
-6. LIFE AI com identidade azul-ciano, painel, chat e indicadores distintos.
+## Publicação pelo GitHub / Vercel
+Extraia o ZIP e envie **o conteúdo extraído** ao repositório, com `index.html` na raiz. No GitHub Web, confirme que as pastas `assets`, `database` e `supabase` ficaram no local certo. Depois aguarde o deployment na Vercel.
 
-O estilo adicional foi isolado em `assets/css/power-refinement-14.4.css`, carregado depois do CSS da 14.3. A lógica principal permanece em `assets/js/life-app-9.4.2.js`; foram acrescentados apenas cálculos de progresso baseados nas tarefas para os novos indicadores.
-
-## Publicar
-
-Extraia o ZIP e envie todo o conteúdo para a raiz do repositório (com `index.html` na raiz). Publicar em ambiente de teste na Vercel antes de substituir produção. O service worker foi atualizado para forçar a nova revisão de assets. O projeto não depende de imagens hospedadas externamente para a Home: as decorações WebP e ícones SVG estão dentro do ZIP.
-
-## Limites de homologação
-
-Os testes locais verificam sintaxe, integridade, estrutura, lógicas isoladas e aparência ilustrativa, mas **não** comprovam login real, pagamentos, sincronização em dois aparelhos nem chamadas remotas da LIFE AI; isso exige testar a implantação configurada no servidor. A primeira carga das bibliotecas React pode requerer conexão à internet.
-
-Veja `QA_REPORT_14.4.md`.
+## Limites dos testes
+Testes locais de sintaxe, integridade, regras CSS e fluxo simulado no navegador não provam que autenticação/checkout/IA/banco estão funcionando na Vercel. É indispensável conferir esses caminhos numa implantação de teste, com contas apropriadas e sem realizar cobrança de produção.
