@@ -1,18 +1,16 @@
-# LIFE OS 14.6.0 — Revisão de segurança e estabilidade
+# LIFE OS 14.6.1 — FREE Profissional / PRO Signature
 
-Projeto completo, baseado no LIFE OS 14.5.9, com os módulos FREE/PRO/OWNER, Fitness, Estudos, Receitas, Finanças e LIFE AI preservados.
+Release completa baseada na 14.6.0, sem remover módulos.
 
-## Correções verificadas
-- Uma entrada de sessão existente (`enterSavedLife`) agora bloqueia abertura de dados locais se o UID conectado não corresponder ao dono do navegador ou se houver dados antigos sem dono identificado.
-- Falha ao preparar o backup **não desbloqueia** a etapa de separar dados locais entre contas. O botão exige uma exportação iniciada com sucesso e uma confirmação manual de que o arquivo foi salvo.
-- Ao trocar de conta ou desconectar, estados temporários de PRO e do formulário de preferências são descartados.
-- O estado inicial `checking` obedece ao tema dia/noite; antes tinha sempre fundo preto.
-- Metadado LIFE_BUILD sincronizado com a versão da publicação; cache do Service Worker recebe novo nome/versão.
+## Correções
+- Corrigida a incompatibilidade entre `data-life-apex=9` e os estilos FREE anteriores que esperavam `8`.
+- Redesenhado o FREE para um produto sério, bem-acabado e responsivo, sem cenário na Home, com cards, controles, tipografia e navegação coerentes.
+- PRO e OWNER preservados: não recebem a nova folha FREE e mantêm suas funções/visual cinematográfico.
+- A visualização do PRO dentro da FREE continua identificada como prévia, e ações permanecem ligadas aos fluxos existentes.
+- Atualizado o cache da PWA e referências dos arquivos.
 
-## Publicação
-- Extrair e enviar **os arquivos internos** ao repositório, com `index.html` na raiz, não a pasta externa.
-- Não modificar DNS ou domínio (`www.uselifeos.com.br`).
-- Verifique FREE, PRO e OWNER com contas **de teste**; confirme banco e pagamentos em staging antes de produção.
+## Instalação
+Extraia e envie o conteúdo para a raiz do repositório GitHub; `index.html` precisa permanecer na raiz. Ao publicar na Vercel, teste com contas FREE e PRO distintas. Antes de testes em produção, mantenha backup.
 
-## Limites da validação
-Testes locais de sintaxe, regressões e componentes simulados NÃO equivalem a login, Supabase, checkout ou notificações reais. Não é possível garantir ausência total de erros em produção.
+## Limites
+Testes locais e prévios de estilo não comprovam login real, webhooks do Mercado Pago ou sincronização Supabase no site publicado.
