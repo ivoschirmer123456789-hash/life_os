@@ -4694,7 +4694,7 @@ function LifeOSV18() {
     });
     try { window.LIFE_FREE_LIMITS = LIFE_FREE_LIMITS; } catch (e) { }
     const LIFE_FREE_NAV_AREAS = Object.freeze(['Hoje','Tarefas','Estudos','Fitness','Finanças']);
-    const LIFE_FREE_ALLOWED_AREAS = new Set([...LIFE_FREE_NAV_AREAS,'Perfil','Configurações','Tutorial']);
+    const LIFE_FREE_ALLOWED_AREAS = new Set([...LIFE_FREE_NAV_AREAS,'Guia de Estudos','Perfil','Configurações','Tutorial']);
     const LIFE_PRO_LOCKED_AREAS = Object.freeze([
         ['Notas','edit_note','Segundo cérebro','Capture, conecte e transforme notas em ações.'],
         ['Receitas','restaurant','Kitchen OS','Biblioteca, cozinha, compras e favoritos completos.'],
@@ -10681,7 +10681,7 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                         React.createElement('form',{className:'life1458-free-add',onSubmit:e=>{e.preventDefault();addLifeTodayPlan();}},
                             React.createElement('input',{value:lifeTodayDraft,onChange:e=>setLifeTodayDraft(e.target.value),maxLength:220,placeholder:'Adicionar uma tarefa para hoje', 'aria-label':'Nova tarefa'}),
                             React.createElement('button',{type:'submit',disabled:!String(lifeTodayDraft||'').trim()},'Adicionar')),
-                        React.createElement('div',{className:'life1458-free-tasks'},lifeTodayPlans.length?lifeTodayPlans.slice(0,5).map((t,i)=>React.createElement('button',{key:t.id||i,type:'button',className:'life1458-free-task'+(taskIsDone(t)?' done':''),onClick:()=>toggleLifeTask(t.id)},React.createElement('span',{className:'life1458-free-check'},taskIsDone(t)?'✓':''),React.createElement('span',null,t.text||t.title||'Tarefa'))):React.createElement('p',{className:'life1458-free-empty'},'Seu dia está livre. Adicione a primeira tarefa acima.')),
+                        React.createElement('div',{className:'life1458-free-tasks'},lifeTodayPlans.length?lifeTodayPlans.slice(0,5).map((t,i)=>React.createElement('button',{key:t.id||i,type:'button',className:'life1458-free-task'+(taskIsDone(t)?' done':''),onClick:()=>{if(t.id!=null)toggleLifeTask(t.id);}},React.createElement('span',{className:'life1458-free-check'},taskIsDone(t)?'✓':''),React.createElement('span',null,t.text||t.title||'Tarefa'))):React.createElement('p',{className:'life1458-free-empty'},'Seu dia está livre. Adicione a primeira tarefa acima.')),
                         React.createElement('button',{type:'button',className:'life1458-text-link',onClick:()=>v42Go('Tarefas')},'Abrir todas as tarefas →')),
                     React.createElement('section',{className:'life1458-free-card life1458-free-shortcuts'},
                         React.createElement('div',{className:'life1458-free-card-head'},React.createElement('div',null,React.createElement('small',null,'SUAS ÁREAS'),React.createElement('h2',null,'Suas ferramentas'))),
@@ -10702,7 +10702,7 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                 React.createElement('p',{className:'life1461-free-footer'},'O essencial, bem feito. Para conhecer a experiência completa, explore a prévia do PRO.')),
             (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && hasV18Pro && React.createElement('main',{className:'life143-home', 'aria-label':'Painel pessoal LIFE OS PRO'},
   React.createElement('div',{className:'life143-command'},
-    React.createElement('div',{className:'life143-command-status'},React.createElement('span',{className:'life143-led'}),React.createElement('div',null,React.createElement('strong',null,'LIFE OS 14.5.9'),React.createElement('small',null,online?'SISTEMA ONLINE':'MODO OFFLINE'))),
+    React.createElement('div',{className:'life143-command-status'},React.createElement('span',{className:'life143-led'}),React.createElement('div',null,React.createElement('strong',null,'LIFE OS 14.6.2'),React.createElement('small',null,online?'SISTEMA ONLINE':'MODO OFFLINE'))),
     React.createElement('button',{type:'button',className:'life143-search',onClick:()=>setSpot(true)},life143Icon('search'),'Buscar no seu LIFE OS...',React.createElement('kbd',null,'Ctrl K')),
     React.createElement('div',{className:'life143-command-date'},React.createElement('strong',null,lifeTodayDateLabel),React.createElement('small',null,cloudStatus==='synced'?'Dados sincronizados':'Dados neste dispositivo'))),
   React.createElement('div',{className:'life143-main-hero'},
@@ -10808,7 +10808,7 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
         lifeTodayPlans.length?lifeTodayPlans.slice(0,4).map((t,i)=>React.createElement('button',{type:'button',key:t.id||i,className:'life143-mini-task',onClick:()=>toggleLifeTask(t.id)},React.createElement('span',{className:'life143-mini-check '+(taskIsDone(t)?'done':''),'aria-hidden':true},taskIsDone(t)?'✓':''),React.createElement('span',null,t.text||t.title||'Tarefa'))):React.createElement('p',{className:'life143-no-mini'},'Nenhuma tarefa registrada para hoje.')),
       React.createElement('section',{className:'life143-focus-card'},React.createElement('span',null,'ESPAÇO DE CONCENTRAÇÃO'),React.createElement('strong',null,'Seu tempo, protegido.'),React.createElement('button',{type:'button',onClick:()=>setFocus(true)},'Entrar no modo foco',life143Icon('arrow_forward'))),
       lifeHomeShown('ai') && React.createElement('button',{type:'button',className:'life143-ai-card',onClick:()=>{setAiOriginView('Hoje');setAiQuickOpen(true);}},React.createElement('span',{className:'life143-ai-icon'},life143Icon('psychology')),React.createElement('span',null,React.createElement('strong',null,'LIFE AI'),React.createElement('small',null,'Seu parceiro de evolução.')),life143Icon('arrow_forward')))),
-  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 14.5.9 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
+  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 14.6.2 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
     lifeCustomizeHome && React.createElement('div',{className:'life121-home-pref-options'},[['capture','Captura rápida'],['metrics','Indicadores'],['agenda','Agenda e foco'],['areas','Áreas do LIFE'],['ai','LIFE AI']].map(([id,label])=>React.createElement('label',{key:id},React.createElement('input',{type:'checkbox',checked:lifeHomeShown(id),onChange:()=>lifeToggleHome(id)}),label))))),
             false && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement("main", { className: "life-today-minimal" },
                 React.createElement("section", { className: "life-today-minimal-head" },

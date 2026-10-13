@@ -56,7 +56,7 @@ async function profile(user){
     const detail={user,plan:'FREE',rawPlan:'FREE',proUntil:null,subscriptionStatus:null,profileError:true};
     window.lifeLastSupabaseProfile=detail;
     window.dispatchEvent(new CustomEvent('life:supabase-profile',{detail}));
-    if(sessionGatePending&&!sessionConfirmed){showSessionGate(user,plan);}else if(forcedAuthView){auth.classList.remove('hidden');authView(forcedAuthView);}else{auth.classList.add('hidden');document.documentElement.dataset.lifeSessionPending='false';}
+    if(forcedAuthView==='new'){sessionGatePending=false;auth.classList.remove('hidden');authView('new');document.documentElement.dataset.lifeSessionPending='true';}else if(sessionGatePending&&!sessionConfirmed){showSessionGate(user,plan);}else if(forcedAuthView){auth.classList.remove('hidden');authView(forcedAuthView);}else{auth.classList.add('hidden');document.documentElement.dataset.lifeSessionPending='false';}
     say('');
     return;
   }
@@ -74,7 +74,13 @@ async function profile(user){
   window.lifeLastSupabaseProfile=detail;
   window.dispatchEvent(new CustomEvent('life:supabase-profile',{detail}));
 
-  if(sessionGatePending&&!sessionConfirmed){
+  if(forcedAuthView==='new'){
+    // A sessão temporária da recuperação de senha não é um login normal.
+    sessionGatePending=false;
+    auth.classList.remove('hidden');
+    authView('new');
+    document.documentElement.dataset.lifeSessionPending='true';
+  }else if(sessionGatePending&&!sessionConfirmed){
     showSessionGate(user,plan);
   }else if(forcedAuthView){
     auth.classList.remove('hidden');
@@ -85,12 +91,12 @@ async function profile(user){
   }
 }
 document.getElementById('la-login').onclick=()=>lifeAuthAction('la-login',async()=>{
-  window.lifeExplicitAuth=true;sessionConfirmed=true;sessionGatePending=false;
   if(!email.value.trim()||!pass.value){say('Informe seu e-mail e senha.');return;}
   say('Entrando…');
   const {data,error}=await db.auth.signInWithPassword({email:email.value.trim(),password:pass.value});
   if(error){say(friendly(error,'login'));return;}
   if(!data?.user){say('Não foi possível confirmar o acesso. Tente novamente.');return;}
+  window.lifeExplicitAuth=true;sessionConfirmed=true;sessionGatePending=false;
   pass.value='';say('');forcedAuthView=null;
   window.lifeProductEvent&&window.lifeProductEvent('login_success',{});
   await profile(data.user);
@@ -98,7 +104,7 @@ document.getElementById('la-login').onclick=()=>lifeAuthAction('la-login',async(
 document.getElementById('la-signup').onclick=async()=>{document.getElementById('la-signup-email').value=email.value.trim();await window.lifeOpenAuth('signup')};
 document.getElementById('la-signup-back').onclick=()=>authView('main');
 document.getElementById('la-create-account').onclick=()=>lifeAuthAction('la-create-account',async()=>{window.lifeExplicitAuth=false;const se=document.getElementById('la-signup-email').value.trim(),sp=document.getElementById('la-signup-password').value,sp2=document.getElementById('la-signup-password2').value;if(!se){say('Digite seu e-mail.');return}if(sp.length<8){say('A senha precisa ter pelo menos 8 caracteres.');return}if(sp!==sp2){say('As senhas não são iguais.');return}say('Criando conta…');const {data:{session:existingSession}}=await db.auth.getSession();if(existingSession)await db.auth.signOut();forcedAuthView='signup';const {data,error}=await db.auth.signUp({email:se,password:sp});if(error){say(friendly(error,'signup'));return}document.getElementById('la-signup-password').value='';document.getElementById('la-signup-password2').value='';const needsConfirmation=!data.session;if(data.session){await db.auth.signOut();}window.lifeProductEvent&&window.lifeProductEvent('account_created',{});say(needsConfirmation?'Conta criada. Confira seu e-mail para confirmar o cadastro e depois entre normalmente.':'Conta criada com sucesso. Entre normalmente com seu e-mail e senha.');});
-document.getElementById('la-forgot').onclick=()=>{document.getElementById('la-recovery-email').value=email.value.trim();authView('recovery')};document.getElementById('la-back').onclick=()=>authView('main');document.getElementById('la-send-recovery').onclick=()=>lifeAuthAction('la-send-recovery',async()=>{const re=document.getElementById('la-recovery-email').value.trim();if(!re){say('Digite seu e-mail.');return}say('Enviando…');const {error}=await db.auth.resetPasswordForEmail(re,{redirectTo:location.origin+location.pathname});if(error){say(friendly(error));return}say('Enviamos a recuperação para seu e-mail. Abra a mensagem do LIFE e siga a confirmação.');});document.getElementById('la-save-pass').onclick=()=>lifeAuthAction('la-save-pass',async()=>{const a=document.getElementById('la-new-pass').value,b=document.getElementById('la-new-pass2').value;if(a.length<8){say('A nova senha precisa ter pelo menos 8 caracteres.');return}if(a!==b){say('As senhas não são iguais.');return}say('Salvando…');const {error}=await db.auth.updateUser({password:a});if(error){say(friendly(error));return}say('Senha alterada com sucesso.');setTimeout(()=>authView('main'),900);});db.auth.onAuthStateChange((event,s)=>{if(event==='PASSWORD_RECOVERY'){auth.classList.remove('hidden');authView('new')}});
+document.getElementById('la-forgot').onclick=()=>{document.getElementById('la-recovery-email').value=email.value.trim();authView('recovery')};document.getElementById('la-back').onclick=()=>authView('main');document.getElementById('la-send-recovery').onclick=()=>lifeAuthAction('la-send-recovery',async()=>{const re=document.getElementById('la-recovery-email').value.trim();if(!re){say('Digite seu e-mail.');return}say('Enviando…');const {error}=await db.auth.resetPasswordForEmail(re,{redirectTo:location.origin+location.pathname});if(error){say(friendly(error));return}say('Enviamos a recuperação para seu e-mail. Abra a mensagem do LIFE e siga a confirmação.');});document.getElementById('la-save-pass').onclick=()=>lifeAuthAction('la-save-pass',async()=>{const a=document.getElementById('la-new-pass').value,b=document.getElementById('la-new-pass2').value;if(a.length<8){say('A nova senha precisa ter pelo menos 8 caracteres.');return}if(a!==b){say('As senhas não são iguais.');return}say('Salvando…');const {error}=await db.auth.updateUser({password:a});if(error){say(friendly(error));return}say('Senha alterada com sucesso.');setTimeout(()=>authView('main'),900);});db.auth.onAuthStateChange((event,s)=>{if(event==='PASSWORD_RECOVERY'){forcedAuthView='new';sessionConfirmed=false;sessionGatePending=false;window.lifeExplicitAuth=false;auth.classList.remove('hidden');authView('new');document.documentElement.dataset.lifeSessionPending='true';}});
 const sessionContinue=document.getElementById('la-session-continue'),sessionSwitch=document.getElementById('la-session-switch');
 if(sessionContinue)sessionContinue.onclick=async()=>{sessionConfirmed=true;sessionGatePending=false;forcedAuthView=null;document.documentElement.dataset.lifeSessionPending='false';auth.classList.add('hidden');window.lifeProductEvent&&window.lifeProductEvent('session_confirmed',{plan});await profile(me);};
 if(sessionSwitch)sessionSwitch.onclick=async()=>{sessionConfirmed=false;sessionGatePending=false;forcedAuthView='main';window.lifeExplicitAuth=true;document.documentElement.dataset.lifeSessionPending='false';await db.auth.signOut();email.value='';pass.value='';auth.classList.remove('hidden');authView('main');setTimeout(()=>email.focus(),40);};
@@ -123,7 +129,7 @@ try{
   initialSession=response?.data?.session||null;
   sessionCheckFailed=!!response?.error;
 }catch(_){sessionCheckFailed=true;}
-if(initialSession?.user){sessionGatePending=true;sessionConfirmed=false;await profile(initialSession.user);}
+if(initialSession?.user){sessionGatePending=forcedAuthView!=='new';sessionConfirmed=false;await profile(initialSession.user);}
 else{await profile(null);if(sessionCheckFailed)lifeAuthNetworkError();}
 db.auth.onAuthStateChange((event,s)=>setTimeout(()=>{if(event==='SIGNED_OUT'){sessionConfirmed=false;sessionGatePending=false;profile(null);return;}if(event==='SIGNED_IN'&&window.lifeExplicitAuth){sessionConfirmed=true;sessionGatePending=false;profile(s&&s.user);return;}if((event==='TOKEN_REFRESHED'||event==='USER_UPDATED')&&sessionConfirmed){profile(s&&s.user);}},0));
 const panel=document.getElementById('life-owner-panel'),close=document.getElementById('life-owner-close');window.lifeOpenOwnerControl=async()=>{if(plan!=='OWNER')return;panel.classList.add('open');panel.setAttribute('aria-hidden','false');await ownerData()};owner.onclick=window.lifeOpenOwnerControl;close.onclick=()=>{panel.classList.remove('open');panel.setAttribute('aria-hidden','true')};
