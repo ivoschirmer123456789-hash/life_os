@@ -1,12 +1,18 @@
-# LIFE OS 14.5.7 — Aurora Premium revisado
+# LIFE OS 14.6.0 — Revisão de segurança e estabilidade
 
-Projeto completo da versão 14.5.6, com revisão visual e de contraste no modo dia.
+Projeto completo, baseado no LIFE OS 14.5.9, com os módulos FREE/PRO/OWNER, Fitness, Estudos, Receitas, Finanças e LIFE AI preservados.
 
-- Corrige a tela de carregamento clara (antes: fundo preto e título escuro ilegível).
-- Melhora os controles do login e as telas intermediárias.
-- Corrige painéis sobrepostos (busca, prévia PRO, assinatura, notificações, ajuda e menu de conta) que misturavam modo noite com modo dia.
-- Modo noite e lógica do aplicativo permanecem inalterados.
-- CSS novo separado em `assets/css/aurora-review-14.5.7.css`, carregado apenas no tema diurno; atualização do cache.
-- `index.html` na raiz; mantenha a estrutura das subpastas durante envio ao GitHub.
+## Correções verificadas
+- Uma entrada de sessão existente (`enterSavedLife`) agora bloqueia abertura de dados locais se o UID conectado não corresponder ao dono do navegador ou se houver dados antigos sem dono identificado.
+- Falha ao preparar o backup **não desbloqueia** a etapa de separar dados locais entre contas. O botão exige uma exportação iniciada com sucesso e uma confirmação manual de que o arquivo foi salvo.
+- Ao trocar de conta ou desconectar, estados temporários de PRO e do formulário de preferências são descartados.
+- O estado inicial `checking` obedece ao tema dia/noite; antes tinha sempre fundo preto.
+- Metadado LIFE_BUILD sincronizado com a versão da publicação; cache do Service Worker recebe novo nome/versão.
 
-**Limitação:** testes visuais isolados não substituem autenticação/checkout reais no domínio publicado. Faça deploy em ambiente de teste e valide login, navegação, SUPABASE e pagamentos antes de comercializar.
+## Publicação
+- Extrair e enviar **os arquivos internos** ao repositório, com `index.html` na raiz, não a pasta externa.
+- Não modificar DNS ou domínio (`www.uselifeos.com.br`).
+- Verifique FREE, PRO e OWNER com contas **de teste**; confirme banco e pagamentos em staging antes de produção.
+
+## Limites da validação
+Testes locais de sintaxe, regressões e componentes simulados NÃO equivalem a login, Supabase, checkout ou notificações reais. Não é possível garantir ausência total de erros em produção.

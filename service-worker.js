@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-14.5.7-aurora-review';
-const ASSET_BUILD='14.5.7';
+const LIFE_CACHE='life-os-14.6.0-auditoria-estabilidade';
+const ASSET_BUILD='14.6.0';
 const SHELL=[
   './',
   './index.html',
@@ -17,6 +17,8 @@ const SHELL=[
   './assets/css/content-repair-14.5.5.css',
   './assets/css/aurora-day-14.5.6.css',
   './assets/css/aurora-review-14.5.7.css',
+  './assets/css/free-pro-experience-14.5.8.css',
+  './assets/css/pro-understands-you-14.5.9.css',
   './assets/media/hero-daylight.webp',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',
