@@ -1,0 +1,140 @@
+/* LIFE OS 14.5.7 — audit fixes for Aurora light theme.
+   All visual changes are STRICTLY scoped to day mode; dark mode is untouched. */
+html.life14-ultra.life-theme-day {
+  --aurora-lifted: #fffdfa;
+  --aurora-inset: #fff5e9;
+  --aurora-active: #df6d24;
+  --aurora-deep: #25313c;
+}
+/* The original loader was still dark, while broad "day h1" rules made the
+   loading title dark too — an unreadable combination when refreshing. */
+html.life14-ultra.life-theme-day #life-load-fallback {
+  background:radial-gradient(circle at 80% 12%,rgba(253,184,113,.22),transparent 36%),
+    linear-gradient(155deg,#fffaf3,#f5ede4)!important;
+  color:#27333d!important;
+}
+html.life14-ultra.life-theme-day #life-load-fallback h1,
+html.life14-ultra.life-theme-day #life-load-fallback b{color:#222e38!important}
+html.life14-ultra.life-theme-day #life-load-fallback p{color:#586671!important}
+html.life14-ultra.life-theme-day #life-load-fallback button{
+  color:#2a170b!important;
+  border:1px solid rgba(203,95,26,.45)!important;
+  background:linear-gradient(145deg,#ffac55,#f58230)!important;
+  border-radius:12px!important;
+  box-shadow:0 12px 28px rgba(215,111,34,.18)!important;
+}
+/* The standalone account login is mounted outside the React app, and has
+   its own nested controls not covered by the original theme selectors. */
+html.life14-ultra.life-theme-day #life-auth .la-btn.la-alt,
+html.life14-ultra.life-theme-day #life-auth .la-link,
+html.life14-ultra.life-theme-day #life-auth .la-theme-toggle,
+html.life14-ultra.life-theme-day #life-auth .la-pass-toggle {
+  background:#fff8ef!important;
+  border-color:rgba(172,119,70,.24)!important;
+  color:#88461e!important;
+  text-shadow:none!important;
+}
+html.life14-ultra.life-theme-day #life-auth .la-theme-toggle:hover,
+html.life14-ultra.life-theme-day #life-auth .la-btn.la-alt:hover,
+html.life14-ultra.life-theme-day #life-auth .la-link:hover {
+  background:#ffedda!important;
+  color:#b85515!important;
+}
+html.life14-ultra.life-theme-day #life-auth .la-session-account,
+html.life14-ultra.life-theme-day #life-auth .la-showcase-grid span {
+  background:rgba(255,252,246,.8)!important;
+  color:#38434b!important;
+  border-color:rgba(160,116,72,.16)!important;
+}
+html.life14-ultra.life-theme-day #life-auth .la-session-account :is(b,strong,small,em),
+html.life14-ultra.life-theme-day #life-auth .la-showcase-grid span :is(b,strong,small) {
+  color:#38434b!important;
+}
+html.life14-ultra.life-theme-day #life-auth .la-trust,
+html.life14-ultra.life-theme-day #life-auth .la-session-note{color:#687780!important}
+/* Offboarding/account popup exists directly under body, outside .v18-shell. */
+html.life14-ultra.life-theme-day .life-account-exit-menu {
+  background:linear-gradient(155deg,#fffefa,#fff6eb)!important;
+  border:1px solid rgba(151,105,66,.2)!important;
+  box-shadow:0 22px 60px rgba(97,64,30,.17)!important;
+  color:#2a343f!important;
+}
+html.life14-ultra.life-theme-day .life-account-exit-menu :is(b,small,span){color:#36424c!important}
+html.life14-ultra.life-theme-day .life-account-exit-menu button{
+  background:#ffecda!important;color:#8b431c!important;border-color:rgba(190,100,42,.22)!important;
+}
+/* Modal surfaces inherit apex's high-specificity dark gradients even in day. */
+html.life14-ultra.life-theme-day[data-life-apex="8"] :is(
+ .v18-modal,.life-ai-quick,.life-notification-panel,.life-how-panel,
+ .life-pro-preview-card,.life-pro-paywall-card) {
+  background:linear-gradient(145deg,#fffefa,#fff6ed)!important;
+  color:#28333e!important;
+  border:1px solid rgba(154,112,70,.22)!important;
+  box-shadow:0 24px 82px rgba(101,68,35,.19)!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="8"] :is(
+ .v18-modal,.life-ai-quick,.life-notification-panel,.life-how-panel,
+ .life-pro-preview-card,.life-pro-paywall-card) :is(h1,h2,h3,h4,b,strong) {
+  color:#27323e!important;
+  text-shadow:none!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="8"] :is(
+ .v18-modal,.life-ai-quick,.life-notification-panel,.life-how-panel,
+ .life-pro-preview-card,.life-pro-paywall-card) :is(p,small,li) {
+  color:#606f78!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="8"] .v18-result {
+  color:#34414d!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="8"] .v18-result:hover,
+html.life14-ultra.life-theme-day[data-life-apex="8"] .v18-result:focus-visible {
+  background:#fff0df!important;color:#a5501d!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="8"] .v18-command {
+  color:#27323c!important;background:#fffefa!important;
+  border-bottom:1px solid rgba(140,105,70,.15)!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="8"] .v18-command::placeholder{color:#78828b!important}
+html.life14-ultra.life-theme-day[data-life-apex="8"] .life-pro-paywall-grid article,
+html.life14-ultra.life-theme-day[data-life-apex="8"] .life-pro-demo-window {
+  background:#fff9f1!important;border:1px solid rgba(158,112,66,.2)!important;
+  color:#293640!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="8"] .life-pro-paywall-grid article.pro {
+  background:linear-gradient(150deg,#fff4e6,#ffead2)!important;
+  border-color:rgba(237,131,53,.38)!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="8"] .life-pro-paywall-grid article :is(b,strong,h3),
+html.life14-ultra.life-theme-day[data-life-apex="8"] .life-pro-paywall-grid article.pro :is(b,strong,h3) {color:#24313e!important}
+html.life14-ultra.life-theme-day[data-life-apex="8"] .life-pro-paywall-grid article :is(p,small,li){color:#5f6e79!important}
+html.life14-ultra.life-theme-day[data-life-apex="8"] :is(
+ .life-pro-paywall-close,.life-pro-preview-close) {
+  background:#fff1e3!important;color:#a75018!important;
+  border:1px solid rgba(178,112,57,.24)!important;
+}
+/* Intermediate screens, including first-use gate, shouldn't revert to navy. */
+html.life14-ultra.life-theme-day .life-entry-gate {
+  color:#27313a!important;
+  background:radial-gradient(circle at 77% 24%,rgba(250,181,113,.21),transparent 32%),
+     linear-gradient(160deg,#fffbf4,#f7efe6)!important;
+}
+html.life14-ultra.life-theme-day .life-entry-card {
+  background:linear-gradient(145deg,#fffefa,#fff5ea)!important;
+  border:1px solid rgba(155,110,70,.2)!important;
+  color:#29343d!important;
+  box-shadow:0 24px 70px rgba(122,75,32,.15)!important;
+}
+html.life14-ultra.life-theme-day .life-entry-card :is(h1,h2,h3,strong,b){color:#26323d!important}
+html.life14-ultra.life-theme-day .life-entry-card :is(p,small,label){color:#606e77!important}
+html.life14-ultra.life-theme-day .life-entry-card input{
+  background:#fff!important;color:#27313a!important;border-color:rgba(156,110,65,.24)!important;
+}
+/* Visible keyboard navigation in dialogs/auth, but only for keyboard focus. */
+html.life14-ultra.life-theme-day :is(#life-auth,.v18-modal,.life-pro-paywall-card,.life-pro-preview-card) :is(button,a,input):focus-visible {
+  outline:2px solid #dc732c!important;outline-offset:3px!important;
+}
+@media (prefers-reduced-motion:reduce){
+ html.life14-ultra.life-theme-day :is(#life-auth,.v18-modal,.life-pro-paywall-card,.life-pro-preview-card) *{
+  animation:none!important;transition:none!important;
+ }
+}

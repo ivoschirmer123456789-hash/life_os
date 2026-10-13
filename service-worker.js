@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-14.5.5-content-audit';
-const ASSET_BUILD='14.5.5';
+const LIFE_CACHE='life-os-14.5.7-aurora-review';
+const ASSET_BUILD='14.5.7';
 const SHELL=[
   './',
   './index.html',
@@ -15,6 +15,9 @@ const SHELL=[
   './assets/css/section-rhythm-14.5.2.css',
   './assets/css/fitness-content-14.5.4.css',
   './assets/css/content-repair-14.5.5.css',
+  './assets/css/aurora-day-14.5.6.css',
+  './assets/css/aurora-review-14.5.7.css',
+  './assets/media/hero-daylight.webp',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',
   './assets/media/estudos.webp',

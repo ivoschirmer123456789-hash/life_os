@@ -4794,6 +4794,8 @@ function LifeOSV18() {
     React.useEffect(() => {
         document.documentElement.classList.toggle('life-theme-day', lifeTheme === 'day');
         document.documentElement.dataset.lifeTheme = lifeTheme;
+        const themeMeta = document.querySelector('meta[name=\"theme-color\"]');
+        if (themeMeta) themeMeta.setAttribute('content', lifeTheme === 'day' ? '#f7f2ec' : '#07080c');
         return () => { document.documentElement.classList.remove('life-theme-day'); delete document.documentElement.dataset.lifeTheme; };
     }, [lifeTheme]);
     const toggleLifeTheme = () => setLifeTheme(t => { const next = t === 'night' ? 'day' : 'night'; try {
@@ -5310,7 +5312,7 @@ function LifeOSV18() {
             setAdvancedArea(null);
             setAdvancedIntent('');
             setFitnessFocusMode(null);
-            setAreaFocusMode(null); // 14.5.4: o foco de outra aba não pode ocultar os catálogos do Fitness.
+            setAreaFocusMode(null); // 14.5.6: o foco de outra aba não pode ocultar os catálogos do Fitness.
             setAreaFocusSearch('');
             setFitnessFocusSearch('');
             setFitnessFocusCategory('Todos');
@@ -10577,7 +10579,7 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                 React.createElement("button", { type: "button", className: isLifePinned('Área', view) ? 'on' : '', onClick: () => toggleLifePin({ type: 'Área', id: view, title: lifePublicAreaName(view), go: view, subtitle: 'Área do LIFE' }) }, isLifePinned('Área', view) ? '✓ NO MEU LIFE' : '＋ FIXAR NO MEU LIFE')),
             (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement('main',{className:'life143-home', 'aria-label':'Painel pessoal LIFE OS'},
   React.createElement('div',{className:'life143-command'},
-    React.createElement('div',{className:'life143-command-status'},React.createElement('span',{className:'life143-led'}),React.createElement('div',null,React.createElement('strong',null,'LIFE OS 14.5.4'),React.createElement('small',null,online?'SISTEMA ONLINE':'MODO OFFLINE'))),
+    React.createElement('div',{className:'life143-command-status'},React.createElement('span',{className:'life143-led'}),React.createElement('div',null,React.createElement('strong',null,'LIFE OS 14.5.6'),React.createElement('small',null,online?'SISTEMA ONLINE':'MODO OFFLINE'))),
     React.createElement('button',{type:'button',className:'life143-search',onClick:()=>setSpot(true)},life143Icon('search'),'Buscar no seu LIFE OS...',React.createElement('kbd',null,'Ctrl K')),
     React.createElement('div',{className:'life143-command-date'},React.createElement('strong',null,lifeTodayDateLabel),React.createElement('small',null,cloudStatus==='synced'?'Dados sincronizados':'Dados neste dispositivo'))),
   React.createElement('div',{className:'life143-main-hero'},
@@ -10634,7 +10636,7 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
         lifeTodayPlans.length?lifeTodayPlans.slice(0,4).map((t,i)=>React.createElement('button',{type:'button',key:t.id||i,className:'life143-mini-task',onClick:()=>toggleLifeTask(t.id)},React.createElement('span',{className:'life143-mini-check '+(taskIsDone(t)?'done':''),'aria-hidden':true},taskIsDone(t)?'✓':''),React.createElement('span',null,t.text||t.title||'Tarefa'))):React.createElement('p',{className:'life143-no-mini'},'Nenhuma tarefa registrada para hoje.')),
       React.createElement('section',{className:'life143-focus-card'},React.createElement('span',null,'ESPAÇO DE CONCENTRAÇÃO'),React.createElement('strong',null,'Seu tempo, protegido.'),React.createElement('button',{type:'button',onClick:()=>setFocus(true)},'Entrar no modo foco',life143Icon('arrow_forward'))),
       lifeHomeShown('ai') && React.createElement('button',{type:'button',className:'life143-ai-card',onClick:()=>{setAiOriginView('Hoje');setAiQuickOpen(true);}},React.createElement('span',{className:'life143-ai-icon'},life143Icon('psychology')),React.createElement('span',null,React.createElement('strong',null,'LIFE AI'),React.createElement('small',null,'Seu parceiro de evolução.')),life143Icon('arrow_forward')))),
-  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 14.5.4 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
+  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 14.5.6 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
     lifeCustomizeHome && React.createElement('div',{className:'life121-home-pref-options'},[['capture','Captura rápida'],['metrics','Indicadores'],['agenda','Agenda e foco'],['areas','Áreas do LIFE'],['ai','LIFE AI']].map(([id,label])=>React.createElement('label',{key:id},React.createElement('input',{type:'checkbox',checked:lifeHomeShown(id),onChange:()=>lifeToggleHome(id)}),label))))),
             false && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement("main", { className: "life-today-minimal" },
                 React.createElement("section", { className: "life-today-minimal-head" },

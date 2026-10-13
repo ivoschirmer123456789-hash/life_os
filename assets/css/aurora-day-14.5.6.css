@@ -1,0 +1,448 @@
+/* LIFE OS 14.5.6 — Aurora Premium: real daytime theme; night untouched.
+   Scoped to the document-level theme class managed by the React app. */
+html.life14-ultra.life-theme-day {
+  --aurora-page:#f4f0eb;
+  --aurora-paper:#fffdfa;
+  --aurora-card:#fffdf9;
+  --aurora-ink:#1f252c;
+  --aurora-muted:#6e767d;
+  --aurora-line:rgba(113,82,50,.12);
+  --aurora-accent:#e96b20;
+  --aurora-accent-light:#fff0df;
+  --aurora-shadow:0 12px 34px rgba(87,62,38,.095),0 2px 9px rgba(87,62,38,.035);
+  --life14-muted:#67727b;
+  color-scheme:light;
+}
+html.life14-ultra.life-theme-day body.tech-bg,
+html.life14-ultra.life-theme-day .v18,
+html.life14-ultra.life-theme-day #life-v18-root {
+  color:var(--aurora-ink)!important;
+}
+html.life14-ultra.life-theme-day body.tech-bg {
+  background:#f7f2ec!important;
+  background-image:radial-gradient(ellipse 870px 550px at 97% 2%,rgba(249,168,98,.17),transparent 75%),
+  radial-gradient(ellipse 650px 520px at 4% 58%,rgba(245,217,181,.20),transparent 75%),
+  linear-gradient(152deg,#fdfaf5 0%,#f6f0e9 54%,#f1eee9 100%)!important;
+}
+html.life14-ultra.life-theme-day body.tech-bg:before {
+  background-image:linear-gradient(rgba(113,92,72,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(113,92,72,.017) 1px,transparent 1px)!important;
+  background-size:72px 72px!important;
+  opacity:.48!important;
+}
+html.life14-ultra.life-theme-day body.tech-bg:after {
+  background:radial-gradient(ellipse at 80% 14%,rgba(255,174,88,.13),transparent 53%)!important;
+  opacity:.8!important;
+}
+html.life14-ultra.life-theme-day .v18-shell {color:var(--aurora-ink)!important;}
+/* Sidebar and the fixed application top bar */
+html.life14-ultra.life-theme-day .v18-tabs {
+  background:linear-gradient(178deg,rgba(255,254,251,.985),rgba(254,249,243,.965))!important;
+  border:1px solid rgba(142,111,77,.14)!important;
+  box-shadow:8px 0 38px rgba(86,63,42,.065),inset -1px 0 rgba(255,255,255,.8)!important;
+  backdrop-filter:blur(22px) saturate(135%)!important;
+}
+html.life14-ultra.life-theme-day .v18-tabs button {
+  color:#68717a!important;
+  text-shadow:none!important;
+  border-radius:11px!important;
+}
+html.life14-ultra.life-theme-day .v18-tabs button.on,
+html.life14-ultra.life-theme-day .v18-tabs button[aria-current="page"] {
+  color:#be4d0f!important;
+  background:linear-gradient(110deg,#fff1e3,#ffe8d2)!important;
+  border-color:rgba(233,111,35,.22)!important;
+  box-shadow:inset 3px 0 #f48133,0 4px 14px rgba(196,94,27,.06)!important;
+}
+html.life14-ultra.life-theme-day .v18-tabs button:hover:not(.on){
+  background:rgba(239,150,70,.085)!important;color:#b65c28!important;
+}
+html.life14-ultra.life-theme-day .life143-nav-icon{
+  background:rgba(235,227,216,.38)!important;
+  color:#7a6e65!important;border:1px solid rgba(116,92,67,.08)!important;
+}
+html.life14-ultra.life-theme-day .v18-tabs button.on .life143-nav-icon{
+  background:linear-gradient(145deg,rgba(250,155,75,.20),rgba(255,211,172,.25))!important;
+  color:#e76920!important;border-color:rgba(233,111,35,.11)!important;
+}
+html.life14-ultra.life-theme-day :is(.life11-sidebar-brand,.life11-brand-type strong,.life11-brand-type small,.v18-logo){color:#1e2730!important}
+html.life14-ultra.life-theme-day .life11-brand-type em{color:var(--aurora-accent)!important}
+html.life14-ultra.life-theme-day .v18-top {
+  background:rgba(255,251,245,.91)!important;
+  border-bottom:1px solid rgba(151,112,75,.11)!important;
+  box-shadow:0 5px 18px rgba(90,64,38,.055)!important;
+  backdrop-filter:blur(24px)!important;
+}
+html.life14-ultra.life-theme-day :is(.v18-island,.life-theme-toggle,.life-settings-trigger,.life-how-entry){
+  background:rgba(255,252,248,.95)!important;
+  border:1px solid var(--aurora-line)!important;
+  color:#394049!important;
+  box-shadow:0 4px 18px rgba(75,56,35,.05)!important;
+}
+html.life14-ultra.life-theme-day :is(.life-theme-toggle,.life-settings-trigger,.life-how-entry):hover{
+  color:#bd5521!important;border-color:rgba(243,135,55,.42)!important;
+}
+/* Main panel: bright, warm, structural spacing matching the approved concept. */
+html.life14-ultra.life-theme-day .life143-home{gap:17px!important;color:var(--aurora-ink)!important}
+html.life14-ultra.life-theme-day .life143-command{
+  background:rgba(255,253,250,.96)!important;
+  border:1px solid var(--aurora-line)!important;
+  border-radius:19px!important;
+  min-height:70px!important;
+  padding:12px 17px!important;
+  box-shadow:var(--aurora-shadow)!important;
+}
+html.life14-ultra.life-theme-day .life143-command-status strong,
+html.life14-ultra.life-theme-day .life143-command-date strong{color:#26313b!important}
+html.life14-ultra.life-theme-day .life143-command-status small,
+html.life14-ultra.life-theme-day .life143-command-date small{color:#807b75!important}
+html.life14-ultra.life-theme-day .life143-search{
+  background:linear-gradient(180deg,#fff,#fffaf4)!important;
+  border:1px solid rgba(127,99,65,.16)!important;
+  color:#656d75!important;
+  box-shadow:0 5px 15px rgba(121,85,46,.045)!important;
+  border-radius:40px!important;
+  min-height:42px!important;
+}
+html.life14-ultra.life-theme-day .life143-search kbd{background:#f5f0ea!important;border-color:rgba(113,82,50,.12)!important;color:#817a70!important}
+html.life14-ultra.life-theme-day .life143-main-hero {gap:16px!important}
+html.life14-ultra.life-theme-day .life143-welcome{
+  min-height:290px!important;
+  border:1px solid rgba(255,172,109,.48)!important;
+  border-radius:25px!important;
+  background:#fff0e0!important;
+  box-shadow:0 18px 48px rgba(116,75,37,.14),0 3px 10px rgba(116,75,37,.045)!important;
+}
+html.life14-ultra.life-theme-day .life143-welcome:before {
+  content:""!important;position:absolute!important;inset:0!important;
+  background:linear-gradient(94deg,#fff9f1 0%,rgba(255,249,241,.97) 22%,rgba(255,246,231,.78) 46%,rgba(255,241,224,.14) 82%),
+  url('../media/hero-daylight.webp') center right / cover no-repeat!important;
+  filter:saturate(1.07) brightness(1.1)!important;
+  transform:none!important;
+}
+html.life14-ultra.life-theme-day .life143-welcome:after{
+  background:linear-gradient(0deg,rgba(249,227,202,.25),transparent 39%)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.85),inset 0 -2px rgba(222,139,78,.17)!important;
+}
+html.life14-ultra.life-theme-day .life143-welcome-text{padding:32px clamp(24px,3vw,48px)!important;max-width:700px!important}
+html.life14-ultra.life-theme-day .life143-overline,
+html.life14-ultra.life-theme-day .life143-meta{color:#b26234!important;text-shadow:none!important}
+html.life14-ultra.life-theme-day .life143-welcome h1 {
+  color:#171f27!important;
+  -webkit-text-fill-color:#171f27!important;
+  text-shadow:none!important;
+  font-weight:950!important;
+}
+html.life14-ultra.life-theme-day .life143-welcome h1 em{
+  color:#ec741f!important;-webkit-text-fill-color:#ec741f!important;text-shadow:none!important;
+}
+html.life14-ultra.life-theme-day .life143-welcome h2{color:#34333a!important;text-shadow:none!important}
+html.life14-ultra.life-theme-day .life143-welcome p{color:#5b6062!important;text-shadow:none!important;max-width:420px!important}
+html.life14-ultra.life-theme-day .life143-welcome .life143-primary,
+html.life14-ultra.life-theme-day :is(.v18-btn.hot,.v28-primary,.life-workout-primary,.life-cta,button.primary){
+  background:linear-gradient(165deg,#ffa54b,#f5802b 56%,#e96316)!important;
+  color:#2d160a!important;
+  border:1px solid rgba(230,96,28,.36)!important;
+  box-shadow:0 3px 0 rgba(153,69,29,.19),0 11px 21px rgba(217,104,27,.17),inset 0 1px rgba(255,255,255,.46)!important;
+  font-weight:850!important;
+}
+html.life14-ultra.life-theme-day .life143-outline{
+  background:rgba(255,253,249,.84)!important;border:1px solid rgba(199,105,46,.29)!important;
+  color:#974614!important;box-shadow:0 6px 18px rgba(90,54,23,.06)!important;
+}
+/* Briefing, counters, progress: dark ink on cream surfaces. */
+html.life14-ultra.life-theme-day :is(.life143-briefing,.life143-metrics,.life143-capture,.life143-panel){
+  background:linear-gradient(155deg,rgba(255,255,255,.985),rgba(255,250,245,.97))!important;
+  border:1px solid var(--aurora-line)!important;
+  box-shadow:var(--aurora-shadow)!important;
+  border-radius:21px!important;
+  color:var(--aurora-ink)!important;
+}
+html.life14-ultra.life-theme-day .life143-brief-top small{color:#c87534!important}
+html.life14-ultra.life-theme-day .life143-brief-top>span{color:#756a61!important;background:#f7f1eb!important;border-color:rgba(115,80,46,.13)!important}
+html.life14-ultra.life-theme-day .life143-time,
+html.life14-ultra.life-theme-day .life143-time em {color:#222935!important;text-shadow:none!important}
+html.life14-ultra.life-theme-day .life143-brief-main p{color:#77726e!important}
+html.life14-ultra.life-theme-day .life143-ring{
+  background:conic-gradient(from -90deg,#f47e2e var(--p),#eae4db var(--p),#eae4db 100%)!important;
+  box-shadow:0 0 0 1px rgba(216,120,55,.10),0 8px 22px rgba(123,76,39,.08)!important;
+  filter:none!important;
+}
+html.life14-ultra.life-theme-day .life143-ring>div{
+  background:#fffcf8!important;border-color:rgba(119,84,51,.1)!important;
+}
+html.life14-ultra.life-theme-day .life143-ring strong{color:#1f2932!important}
+html.life14-ultra.life-theme-day .life143-ring small{color:#9e7660!important}
+html.life14-ultra.life-theme-day .life143-brief-bottom{
+  background:linear-gradient(120deg,#fff5eb,#fffaf6)!important;
+  border:1px solid rgba(222,138,67,.19)!important;
+}
+html.life14-ultra.life-theme-day .life143-brief-bottom :is(strong,small,b){color:#4c4946!important}
+html.life14-ultra.life-theme-day .life143-meter{background:#f0e8de!important}
+html.life14-ultra.life-theme-day .life143-meter span{background:linear-gradient(90deg,#f6a04d,#e66f21)!important}
+html.life14-ultra.life-theme-day .life143-metrics{padding:11px!important;gap:11px!important}
+html.life14-ultra.life-theme-day .life143-metric{
+  background:linear-gradient(155deg,#fffefd,#faf6f0)!important;
+  color:#313b45!important;
+  border:1px solid rgba(119,92,62,.12)!important;
+  border-radius:14px!important;
+  box-shadow:inset 0 1px white,0 5px 14px rgba(108,74,40,.04)!important;
+}
+html.life14-ultra.life-theme-day .life143-metric:hover{border-color:rgba(240,126,45,.47)!important;box-shadow:0 10px 25px rgba(169,98,47,.13)!important}
+html.life14-ultra.life-theme-day .life143-metric :is(b,strong){color:#26303a!important}
+html.life14-ultra.life-theme-day .life143-metric :is(small,em){color:#746e67!important}
+html.life14-ultra.life-theme-day .life143-metric-icon{color:#e47b31!important;background:#fff0df!important;border-radius:12px!important}
+html.life14-ultra.life-theme-day .life143-capture-spark{
+  color:#e77a29!important;background:#ffeddb!important;border-color:rgba(227,128,55,.18)!important;box-shadow:none!important;
+}
+html.life14-ultra.life-theme-day .life143-capture :is(strong,b){color:#24303b!important}
+html.life14-ultra.life-theme-day .life143-capture small{color:#777674!important}
+html.life14-ultra.life-theme-day .life143-capture input,
+html.life14-ultra.life-theme-day .life143-capture textarea{
+  background:#fffdfa!important;border-color:rgba(126,93,59,.19)!important;color:#29353d!important;
+}
+/* Area launchers, agenda, linked tools */
+html.life14-ultra.life-theme-day .life143-area-tiles{gap:14px!important}
+html.life14-ultra.life-theme-day .life143-area-tile{
+  border-radius:18px!important;background:linear-gradient(160deg,#fffdfa,#f9f2ea)!important;
+  border:1px solid rgba(117,83,49,.16)!important;
+  box-shadow:0 10px 27px rgba(110,74,42,.11),inset 0 1px white!important;
+  color:#242b32!important;
+}
+html.life14-ultra.life-theme-day .life143-area-tile:hover{
+  border-color:rgba(236,114,29,.65)!important;box-shadow:0 15px 36px rgba(186,104,45,.16)!important;
+}
+html.life14-ultra.life-theme-day .life143-area-tile :is(strong,b){color:#28313a!important}
+html.life14-ultra.life-theme-day .life143-area-tile :is(small,em,span){color:#766c63!important}
+html.life14-ultra.life-theme-day .life143-area-tile:after{height:3px!important;box-shadow:none!important}
+html.life14-ultra.life-theme-day .life143-panel{padding:clamp(15px,1.7vw,23px)!important}
+html.life14-ultra.life-theme-day .life143-panel header h2{color:#252e38!important}
+html.life14-ultra.life-theme-day .life143-panel header small{color:#c6743b!important}
+html.life14-ultra.life-theme-day .life143-panel header button,
+html.life14-ultra.life-theme-day .life143-footerline>button{
+  color:#a6511c!important;background:#fff3e7!important;border-color:rgba(217,122,56,.22)!important;
+}
+html.life14-ultra.life-theme-day .life143-agenda-list,
+html.life14-ultra.life-theme-day .life143-ecosystem-disc{
+  background:#fbf7f1!important;border-color:rgba(135,95,53,.12)!important;
+}
+html.life14-ultra.life-theme-day .life143-agenda-row{border-bottom-color:rgba(136,104,77,.12)!important}
+html.life14-ultra.life-theme-day .life143-agenda-hour{color:#8b7160!important}
+html.life14-ultra.life-theme-day .life143-agenda-desc b{color:#29343d!important}
+html.life14-ultra.life-theme-day .life143-agenda-desc small{color:#74716d!important}
+html.life14-ultra.life-theme-day .life143-mini-task{color:#484c50!important;border-bottom:1px solid rgba(149,115,76,.095)!important}
+html.life14-ultra.life-theme-day .life143-mini-check{background:#fff7ed!important;border-color:#de9d6a!important;color:#cc6426!important}
+html.life14-ultra.life-theme-day .life143-mini-check.done{background:#f58c3b!important;color:white!important}
+html.life14-ultra.life-theme-day .life143-eco-center{
+  background:linear-gradient(135deg,#ffedd7,#f4d9b9)!important;
+  box-shadow:0 8px 30px rgba(210,133,70,.19)!important;
+}
+html.life14-ultra.life-theme-day .life143-eco-node{
+  color:#34404a!important;background:linear-gradient(145deg,#fffdfa,#f5e9da)!important;
+  border:1px solid rgba(151,108,64,.17)!important;
+  box-shadow:0 6px 19px rgba(93,65,38,.10)!important;
+}
+html.life14-ultra.life-theme-day .life143-focus-card{
+  background:linear-gradient(90deg,rgba(255,246,232,.96),rgba(255,233,206,.75)),url('../media/sidebar-mountain.webp') center/cover!important;
+  border-color:rgba(215,125,53,.27)!important;
+  box-shadow:0 9px 27px rgba(133,81,33,.10)!important;
+}
+html.life14-ultra.life-theme-day .life143-focus-card span{color:#b35a27!important}
+html.life14-ultra.life-theme-day .life143-focus-card strong{color:#33313a!important}
+html.life14-ultra.life-theme-day .life143-focus-card button{background:#ef842f!important;color:#2d1606!important;border-color:rgba(195,102,39,.26)!important}
+html.life14-ultra.life-theme-day .life143-ai-card{
+  background:linear-gradient(130deg,#fffefe,#eefaff)!important;
+  border:1px solid rgba(48,151,182,.23)!important;
+  color:#273942!important;
+  box-shadow:0 8px 22px rgba(45,114,146,.085)!important;
+}
+html.life14-ultra.life-theme-day .life143-ai-card strong{color:#117d9e!important}
+html.life14-ultra.life-theme-day .life143-ai-card small{color:#667e88!important}
+html.life14-ultra.life-theme-day .life143-footerline{color:#8f8275!important}
+/* Other pages: shared luxury light surfaces, readable controls, consistent spacing. */
+html.life14-ultra.life-theme-day .life-premium-masthead.life131-masthead,
+html.life14-ultra.life-theme-day .v43-page-head,
+html.life14-ultra.life-theme-day .v68-hero{
+  background:radial-gradient(ellipse at 93% 14%,rgba(250,167,87,.17),transparent 44%),linear-gradient(122deg,#fffdf9,#f9efe4)!important;
+  color:#283039!important;
+  border:1px solid rgba(161,110,65,.18)!important;
+  border-radius:24px!important;
+  box-shadow:var(--aurora-shadow)!important;
+}
+html.life14-ultra.life-theme-day .life-premium-masthead.life131-masthead:before{background:linear-gradient(#f2a45e,#e76c27)!important}
+html.life14-ultra.life-theme-day .life-premium-masthead-copy h1,
+html.life14-ultra.life-theme-day .v43-page-head h1,
+html.life14-ultra.life-theme-day .v68-hero h2{color:#242c35!important;text-shadow:none!important}
+html.life14-ultra.life-theme-day .life-premium-masthead-copy p,
+html.life14-ultra.life-theme-day .v43-page-head p,
+html.life14-ultra.life-theme-day .v68-hero p{color:#6a716e!important;text-shadow:none!important}
+html.life14-ultra.life-theme-day .life-premium-masthead-meta :is(span,b){background:#fff5e9!important;border-color:rgba(195,135,73,.14)!important;color:#725d4d!important}
+html.life14-ultra.life-theme-day :is(.v38-section,.v18-sec,.v46-section,.life-finance-page>section,.life-notes-page>section,.life-tasks-page>section,.life-archive-page>section,.v72-evo>section,.life-study-architect,.life-study-mastery,.life-knowledge-map-v4,.life-graph-panel,.v46-card,.v49-card,.v60-card,.v72-evo-grid>div,.v18-sheet,.v33-box,.v38-card,.v32-card,.v48-workout,.v45-rec,.life-task-section,.life-task-create,.life-finance-card,.life-food-saved,.life-shopping,.life-archive-list,.life-workout-player-card,.life-function-card,.life-folder-row,.life-evolution-panel,.life-ai-simple-compose,.life-ai-simple-bubble,.life-offline,.life-app36-panel,.life-app36-metric,.life-app36-action,.life-v50-section,.life-study-topic-v6,.life-connected-v72,.life-area-bridge-v72,.life-ai36-top,.life-ai36-side,.life-ai36-context){
+  background:linear-gradient(145deg,rgba(255,255,255,.985),rgba(255,250,245,.97))!important;
+  color:#263039!important;
+  border:1px solid var(--aurora-line)!important;
+  border-radius:18px!important;
+  box-shadow:var(--aurora-shadow)!important;
+}
+html.life14-ultra.life-theme-day :is(.life-app36-panel,.life-app36-metric,.life-app36-action,.life-v50-section,.life-study-topic-v6,.life-finance-card,.life-connected-v72,.life-area-bridge-v72) :is(b,strong,h1,h2,h3,h4){color:#263039!important;text-shadow:none!important}
+html.life14-ultra.life-theme-day :is(.life143-home,.v18-shell,.life-premium-masthead,.life-v50-section,.life-finance-page,.life-notes-page,.life-tasks-page,.life-study-universe-v6,.life-ai36-shell,.life-ai-workspace,.life-connected-v72) :is(label,p,li){color:#5f686e!important}
+html.life14-ultra.life-theme-day :is(.life143-home,.v18-shell,.life-finance-page,.life-notes-page,.life-tasks-page,.life-v50-section,.life-study-universe-v6,.life-ai36-shell,.life-connected-v72) :is(h1,h2,h3,h4,b,strong){color:#25303a!important;text-shadow:none!important}
+/* Restores the emphasis colors after generic readability rules. */
+html.life14-ultra.life-theme-day .life143-welcome h1 em{color:#e76e22!important;-webkit-text-fill-color:#e76e22!important}
+html.life14-ultra.life-theme-day .life143-ai-card strong{color:#1289a5!important}
+html.life14-ultra.life-theme-day .life143-primary :is(b,strong){color:#2a1408!important}
+html.life14-ultra.life-theme-day :is(.v18-input,.v18-node,input:not([type="checkbox"]):not([type="radio"]),select,textarea){
+  color:#252f37!important;
+}
+html.life14-ultra.life-theme-day .v18-shell :is(input:not([type="checkbox"]):not([type="radio"]),select,textarea){
+  background:#fffdfa!important;border:1px solid rgba(120,93,64,.19)!important;
+  color:#2c343c!important;box-shadow:inset 0 1px rgba(255,255,255,.7)!important;
+}
+html.life14-ultra.life-theme-day .v18-shell :is(input,textarea)::placeholder{color:#95918d!important}
+html.life14-ultra.life-theme-day .v18-shell :is(button,a,select,input,textarea):focus-visible{
+  outline:2px solid #ea822d!important;outline-offset:3px!important;
+}
+html.life14-ultra.life-theme-day .v18-shell button:disabled{opacity:.55!important;filter:saturate(.5)!important}
+/* Per-area badges, reusable buttons, filters, bottom navigation. */
+html.life14-ultra.life-theme-day :is(.v18-btn,.v27-back,.life-area-tools button,.life-card-tools button,.life-note-actions button,.life-account-actions button,.life-detail-actions button,.life-workout-player-actions button,.life-area-bridge-v72 button,.life-area-focus-toggle-v920 button,.life143-eco-node,.life143-panel header button){
+  background:#fff7ee!important;border:1px solid rgba(187,124,70,.20)!important;color:#a45724!important;
+  box-shadow:0 3px 10px rgba(113,77,42,.045)!important;
+}
+html.life14-ultra.life-theme-day .life-design-mobile-nav,
+html.life14-ultra.life-theme-day .v18-dock{
+  background:rgba(255,252,248,.97)!important;border:1px solid rgba(130,92,54,.19)!important;
+  box-shadow:0 15px 42px rgba(100,70,42,.17)!important;
+  backdrop-filter:blur(18px)!important;
+}
+html.life14-ultra.life-theme-day .life-design-mobile-nav button,
+html.life14-ultra.life-theme-day .v18-dock button{color:#666e71!important}
+html.life14-ultra.life-theme-day .life-design-mobile-nav button.on,
+html.life14-ultra.life-theme-day .v18-dock button.on{color:#db692a!important;background:#ffebdb!important}
+html.life14-ultra.life-theme-day .v18-dock .material-symbols-rounded{color:inherit!important}
+html.life14-ultra.life-theme-day .v18-fab,
+html.life14-ultra.life-theme-day .life-design-fab{
+  background:linear-gradient(160deg,#ffa443,#ed7521)!important;color:#2b1606!important;
+  border:1px solid rgba(201,88,34,.29)!important;
+  box-shadow:0 13px 32px rgba(198,104,34,.29)!important;
+}
+/* Auth forms visible before session state loads. Night mode does not match these rules. */
+html.life14-ultra.life-theme-day #life-auth :is(.la-showcase,.la-box,.la-shell){
+  background:linear-gradient(155deg,#fffcf7,#f6eee6)!important;
+  color:#25303a!important;
+  border-color:rgba(115,83,52,.15)!important;
+  box-shadow:var(--aurora-shadow)!important;
+}
+html.life14-ultra.life-theme-day #life-auth :is(h1,h2,h3,strong,b){color:#28313a!important}
+html.life14-ultra.life-theme-day #life-auth :is(p,small,label){color:#6e6e6c!important}
+html.life14-ultra.life-theme-day #life-auth .la-input{background:white!important;color:#28323c!important;border-color:rgba(123,91,65,.19)!important}
+html.life14-ultra.life-theme-day #life-auth .la-btn{background:linear-gradient(165deg,#ffaa55,#ea7829)!important;color:#2b1505!important}
+/* Reduced motion and balanced responsiveness. */
+@media (hover:hover) and (pointer:fine){
+  html.life14-ultra.life-theme-day :is(.life143-area-tile,.life143-metric,.life143-panel header button,.life143-ai-card):hover{
+    transform:translateY(-2px)!important;transition:transform .22s ease,box-shadow .22s ease!important;
+  }
+}
+@media (max-width:1100px){
+  html.life14-ultra.life-theme-day .life143-welcome:before{
+    background:linear-gradient(90deg,rgba(255,249,242,.99) 0%,rgba(255,249,242,.93) 28%,rgba(255,245,228,.39) 76%),
+    url('../media/hero-daylight.webp') center/cover no-repeat!important;
+  }
+}
+@media (max-width:700px){
+  html.life14-ultra.life-theme-day .v18-shell{padding-left:13px!important;padding-right:13px!important}
+  html.life14-ultra.life-theme-day .life143-home{gap:12px!important}
+  html.life14-ultra.life-theme-day .life143-command{padding:11px 12px!important;min-height:54px!important}
+  html.life14-ultra.life-theme-day .life143-welcome{min-height:260px!important;border-radius:20px!important}
+  html.life14-ultra.life-theme-day .life143-welcome:before{
+    background:linear-gradient(91deg,rgba(255,249,241,.99) 0%,rgba(255,249,241,.91) 50%,rgba(255,242,221,.50) 100%),
+    url('../media/hero-daylight.webp') 62% center/cover no-repeat!important;
+  }
+  html.life14-ultra.life-theme-day .life143-welcome-text{padding:23px 20px!important}
+  html.life14-ultra.life-theme-day .life143-welcome h1{font-size:clamp(29px,8vw,42px)!important}
+  html.life14-ultra.life-theme-day .life143-welcome h2{font-size:18px!important}
+  html.life14-ultra.life-theme-day .life143-main-hero{gap:12px!important}
+  html.life14-ultra.life-theme-day .life143-metrics{gap:7px!important;padding:8px!important}
+  html.life14-ultra.life-theme-day .life143-metric{padding:10px!important}
+  html.life14-ultra.life-theme-day .life143-area-tiles{gap:10px!important}
+  html.life14-ultra.life-theme-day .life143-panel{padding:15px!important}
+  html.life14-ultra.life-theme-day .v18-dock,
+  html.life14-ultra.life-theme-day .life-design-mobile-nav{bottom:max(10px,env(safe-area-inset-bottom))!important}
+}
+@media (prefers-reduced-motion:reduce){
+  html.life14-ultra.life-theme-day .v18 *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+
+/* Desktop: reproduce the approved elegant left sidebar rather than a strip of tabs. */
+@media (min-width:1150px){
+  html.life14-ultra.life-theme-day .v18-tabs{
+    position:fixed!important;z-index:920!important;
+    left:0!important;top:0!important;bottom:0!important;
+    width:246px!important;min-width:246px!important;max-width:246px!important;
+    height:100dvh!important;margin:0!important;
+    padding:22px 13px 27px!important;
+    display:flex!important;flex-direction:column!important;align-items:stretch!important;
+    gap:3px!important;overflow-y:auto!important;overflow-x:hidden!important;
+    border-radius:0!important;
+  }
+  html.life14-ultra.life-theme-day .v18-shell{
+    margin-left:246px!important;
+    width:calc(100% - 246px)!important;
+    max-width:none!important;
+    padding:20px clamp(17px,2.4vw,40px) 115px!important;
+  }
+  html.life14-ultra.life-theme-day .v18-top{
+    width:calc(100% - 246px)!important;margin-left:246px!important;
+    padding-left:clamp(18px,2vw,32px)!important;padding-right:clamp(18px,2vw,32px)!important;
+  }
+  html.life14-ultra.life-theme-day .life11-sidebar-brand{
+    display:flex!important;align-items:center!important;gap:11px!important;
+    margin:1px 6px 24px!important;padding:0 1px 20px!important;
+    border-bottom:1px solid rgba(130,94,58,.12)!important;
+  }
+  html.life14-ultra.life-theme-day .life11-brand-mark{
+    width:47px!important;height:47px!important;display:grid!important;place-items:center!important;
+    background:linear-gradient(140deg,#ffbe7d,#f18032)!important;
+    color:#fff!important;border-radius:15px!important;
+    box-shadow:0 9px 26px rgba(226,128,49,.22)!important;
+  }
+  html.life14-ultra.life-theme-day .life11-brand-mark span{display:none!important}
+  html.life14-ultra.life-theme-day .life11-brand-type strong{
+    color:#242831!important;font-size:23px!important;font-weight:900!important;
+    letter-spacing:-.045em!important;
+  }
+  html.life14-ultra.life-theme-day .life11-brand-type strong em{color:#e36b21!important}
+  html.life14-ultra.life-theme-day .life11-brand-type small{color:#a29487!important;font-size:8px!important;letter-spacing:.07em!important}
+  html.life14-ultra.life-theme-day .v18-tabs button{
+    display:flex!important;align-items:center!important;gap:12px!important;
+    min-height:43px!important;width:100%!important;flex:0 0 auto!important;
+    margin:2px 0!important;padding:5px 10px!important;
+    font-size:12px!important;letter-spacing:0!important;text-align:left!important;
+    border:1px solid transparent!important;box-shadow:none!important;
+  }
+  html.life14-ultra.life-theme-day .v18-tabs button.on{
+    border-color:rgba(234,135,63,.18)!important;
+    box-shadow:inset 3px 0 #f58030,0 5px 12px rgba(180,96,34,.08)!important;
+  }
+  html.life14-ultra.life-theme-day .life143-nav-icon{
+    width:30px!important;height:30px!important;flex:0 0 30px!important;
+  }
+  html.life14-ultra.life-theme-day .life-premium-nav-group{color:#b58b68!important;font-size:9px!important;margin:14px 7px 5px!important}
+  html.life14-ultra.life-theme-day .life112-sidebar-quick{
+    display:none!important;
+  }
+}
+@media (min-width:701px) and (max-width:1149px){
+  html.life14-ultra.life-theme-day .v18-tabs{
+    display:flex!important;flex-direction:row!important;position:relative!important;
+    top:auto!important;width:100%!important;max-width:100%!important;
+    min-width:0!important;height:auto!important;overflow-x:auto!important;
+    padding:7px!important;gap:5px!important;margin:0 0 18px!important;
+  }
+  html.life14-ultra.life-theme-day .v18-tabs .life11-sidebar-brand{display:none!important}
+  html.life14-ultra.life-theme-day .v18-shell{margin-left:0!important;width:100%!important;}
+  html.life14-ultra.life-theme-day .v18-top{margin-left:0!important;width:100%!important;}
+}
+@media (max-width:700px){
+  html.life14-ultra.life-theme-day .v18-tabs{display:none!important}
+  html.life14-ultra.life-theme-day .v18-shell{margin-left:0!important;width:100%!important}
+  html.life14-ultra.life-theme-day .v18-top{margin-left:0!important;width:100%!important}
+}

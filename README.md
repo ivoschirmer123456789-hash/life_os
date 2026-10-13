@@ -1,16 +1,12 @@
-# LIFE OS 14.5.5 — Revisão de conteúdo e estabilidade
+# LIFE OS 14.5.7 — Aurora Premium revisado
 
-Versão completa baseada na 14.5.4, com o mesmo design Power Premium, autenticação, conteúdo de Fitness e demais áreas preservados.
+Projeto completo da versão 14.5.6, com revisão visual e de contraste no modo dia.
 
-## Correções
-- Biblioteca de receitas: agora mostra mais de 12 receitas com contagem, paginação e opção de limpar buscas vazias.
-- Catálogo de treinos PRO: permite mostrar mais de 18 treinos por categoria, em blocos progressivos.
-- Biblioteca de exercícios: ao abrir por atalhos, limpa filtros antigos de equipamento, dificuldade e favoritos que podiam esconder resultados.
-- Formulários de treino e receitas: rascunhos locais com índices inválidos deixam de derrubar a interface.
-- Cache PWA versionado para 14.5.5 e stylesheet de acabamento adicionado.
+- Corrige a tela de carregamento clara (antes: fundo preto e título escuro ilegível).
+- Melhora os controles do login e as telas intermediárias.
+- Corrige painéis sobrepostos (busca, prévia PRO, assinatura, notificações, ajuda e menu de conta) que misturavam modo noite com modo dia.
+- Modo noite e lógica do aplicativo permanecem inalterados.
+- CSS novo separado em `assets/css/aurora-review-14.5.7.css`, carregado apenas no tema diurno; atualização do cache.
+- `index.html` na raiz; mantenha a estrutura das subpastas durante envio ao GitHub.
 
-## Publicação
-Extraia o ZIP e envie os arquivos e pastas internos para a raiz do repositório GitHub; `index.html` precisa ficar na raiz. Aguarde o deploy Vercel. Não sobrescreva dados de usuário nem coloque segredos no frontend.
-
-## Limites da auditoria
-Testes locais de integridade, sintaxe e lógica não substituem login e navegação reais na Vercel. Supabase, cobrança, OWNER, IA e sincronização requerem verificações com conta de teste e serviços publicados.
+**Limitação:** testes visuais isolados não substituem autenticação/checkout reais no domínio publicado. Faça deploy em ambiente de teste e valide login, navegação, SUPABASE e pagamentos antes de comercializar.
