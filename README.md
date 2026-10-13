@@ -1,17 +1,16 @@
-# LIFE OS 14.5.3 — Power Premium · Revisão de estabilidade
+# LIFE OS 14.5.5 — Revisão de conteúdo e estabilidade
 
-Esta é a versão **completa de publicação**, construída sobre o LIFE OS 14.5.2. Inclui 100% dos arquivos do site publicado em 14.5.2 (mesmas áreas, estilos, componentes, páginas e recursos) e corrige problemas concretos no carregamento e na autenticação.
+Versão completa baseada na 14.5.4, com o mesmo design Power Premium, autenticação, conteúdo de Fitness e demais áreas preservados.
 
-## Melhorias
-- Tela de inicialização só é removida quando o React realmente produz a interface; erros de biblioteca/arquivo oferecem recuperação.
-- Validação de campos obrigatórios no login e bloqueio temporário contra cliques duplicados durante a solicitação.
-- Falhas de rede no login, cadastro, recuperação de senha e consultas de perfil agora apresentam mensagem e permitem tentar novamente.
-- Painel Owner mostra aviso quando a consulta falhar e não fica eternamente em "Carregando".
-- Cache PWA renovado para esta versão, preservando armazenamento do usuário.
-- Organização das áreas e visual Power Premium 14.5.2 preservados.
+## Correções
+- Biblioteca de receitas: agora mostra mais de 12 receitas com contagem, paginação e opção de limpar buscas vazias.
+- Catálogo de treinos PRO: permite mostrar mais de 18 treinos por categoria, em blocos progressivos.
+- Biblioteca de exercícios: ao abrir por atalhos, limpa filtros antigos de equipamento, dificuldade e favoritos que podiam esconder resultados.
+- Formulários de treino e receitas: rascunhos locais com índices inválidos deixam de derrubar a interface.
+- Cache PWA versionado para 14.5.5 e stylesheet de acabamento adicionado.
 
-## Publicação pelo GitHub / Vercel
-Extraia o ZIP e envie **o conteúdo extraído** ao repositório, com `index.html` na raiz. No GitHub Web, confirme que as pastas `assets`, `database` e `supabase` ficaram no local certo. Depois aguarde o deployment na Vercel.
+## Publicação
+Extraia o ZIP e envie os arquivos e pastas internos para a raiz do repositório GitHub; `index.html` precisa ficar na raiz. Aguarde o deploy Vercel. Não sobrescreva dados de usuário nem coloque segredos no frontend.
 
-## Limites dos testes
-Testes locais de sintaxe, integridade, regras CSS e fluxo simulado no navegador não provam que autenticação/checkout/IA/banco estão funcionando na Vercel. É indispensável conferir esses caminhos numa implantação de teste, com contas apropriadas e sem realizar cobrança de produção.
+## Limites da auditoria
+Testes locais de integridade, sintaxe e lógica não substituem login e navegação reais na Vercel. Supabase, cobrança, OWNER, IA e sincronização requerem verificações com conta de teste e serviços publicados.

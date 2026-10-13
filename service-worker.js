@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-14.5.3-stability';
-const ASSET_BUILD='14.5.3';
+const LIFE_CACHE='life-os-14.5.5-content-audit';
+const ASSET_BUILD='14.5.5';
 const SHELL=[
   './',
   './index.html',
@@ -13,6 +13,8 @@ const SHELL=[
   './assets/css/power-refinement-14.4.css',
   './assets/css/mobile-repair-14.5.1.css',
   './assets/css/section-rhythm-14.5.2.css',
+  './assets/css/fitness-content-14.5.4.css',
+  './assets/css/content-repair-14.5.5.css',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',
   './assets/media/estudos.webp',
