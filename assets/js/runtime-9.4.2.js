@@ -57,7 +57,15 @@
       proSweepTimer=setTimeout(()=>root.classList.remove('life-pro-sweep-active'),1350);
     }catch(_){ }
   };
-  const isVisible=el=>{if(!el)return false;const s=getComputedStyle(el);return s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0'&&el.getClientRects().length>0};
+  // Do not count hidden, detached or off-screen dialogs as active modals.
+  // A false positive leaves body.life-modal-open enabled and blocks the desktop mouse wheel.
+  const isVisible=el=>{
+    if(!el||!el.isConnected||el.closest('[hidden],[inert],[aria-hidden="true"]'))return false;
+    const s=getComputedStyle(el);
+    if(s.display==='none'||s.visibility==='hidden'||Number(s.opacity)===0||!el.getClientRects().length)return false;
+    const b=el.getBoundingClientRect();
+    return b.width>0&&b.height>0&&b.bottom>0&&b.right>0&&b.top<innerHeight&&b.left<innerWidth;
+  };
   try{if(!window.CSS)window.CSS={};if(typeof window.CSS.escape!=='function')window.CSS.escape=value=>String(value??'').replace(/[^a-zA-Z0-9_-]/g,ch=>'\\'+ch.codePointAt(0).toString(16)+' ')}catch(_){ }
 
   /* Diagnostics: keep only small technical messages, never content typed by the user. */
@@ -226,6 +234,7 @@
     const list=modalCandidates();
     const top=list[list.length-1]||null;
     document.body.classList.toggle('life-modal-open',!!top);
+    root.classList.toggle('life-modal-active',!!top);
     if(top){
       if(!top.hasAttribute('role'))top.setAttribute('role','dialog');
       top.setAttribute('aria-modal','true');
@@ -244,6 +253,33 @@
       if(restore&&document.contains(restore)&&typeof restore.focus==='function')setTimeout(()=>{try{restore.focus({preventScroll:true})}catch(_){ }},30);
     }
   }
+  // Desktop wheel reliability: recover a stale scroll lock and allow the fixed sidebar/topbar
+  // to pass vertical wheel movement to the document at their own scroll boundary.
+  // Never intercept a real dialog, form zoom, or a vertically scrollable nested panel.
+  document.addEventListener('wheel',e=>{
+    if(e.ctrlKey||e.metaKey||e.shiftKey||!e.deltaY||!matchMedia('(min-width: 900px)').matches)return;
+    if(document.body.classList.contains('life-modal-open')){
+      if(modalCandidates().length)return;
+      document.body.classList.remove('life-modal-open');
+      root.classList.remove('life-modal-active');
+    }
+    const fixedArea=e.target?.closest?.('.v18-tabs,.v18-top');
+    if(!fixedArea)return;
+    const dy=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?innerHeight:1);
+    let el=e.target;
+    while(el&&el!==document.body&&el!==document.documentElement){
+      if(el.scrollHeight>el.clientHeight+3){
+        const sy=getComputedStyle(el).overflowY;
+        if((sy==='auto'||sy==='scroll')&&((dy>0&&el.scrollTop<el.scrollHeight-el.clientHeight-2)||(dy<0&&el.scrollTop>2)))return;
+      }
+      el=el.parentElement;
+    }
+    const page=document.scrollingElement||document.documentElement;
+    if(page.scrollHeight<=page.clientHeight+3||!e.cancelable)return;
+    e.preventDefault();
+    window.scrollBy(0,dy);
+  },{passive:false,capture:true});
+
   let controlsQueue=[];
   const observer=new MutationObserver(records=>{
     for(const r of records){

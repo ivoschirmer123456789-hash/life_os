@@ -1,9 +1,11 @@
-# LIFE OS 14.6.5 — Guia inteligente integrado
+# LIFE OS 14.6.5 — Scroll desktop e conexão de cidade
 
-Versão completa baseada no LIFE OS 14.6.4; preserva a identidade FREE profissional e PRO Signature.
+Versão completa baseada na 14.6.4 (motor inteligente, projeções, modos FREE/PRO) com ajustes focados em:
 
-**Mudanças:** seletor de cidade no Clima sem GPS automático; tratamento do gesto de atualizar ao puxar de cima; guias PRO por área; recomendações educativas de livros e buscas de vídeo por assunto e etapa.
+- Roda do mouse em desktop, inclusive ao apontar o menu lateral quando ele está no limite de rolagem.
+- Detecção de janelas ocultas sem bloquear indevidamente a rolagem da página.
+- Painel de clima com busca e conexão da cidade no topo, antes dos detalhes meteorológicos.
+- Cache atualizado.
 
-**Para publicar:** extraia e envie todos os arquivos ao GitHub; mantenha `index.html` na raiz. O domínio www.uselifeos.com.br continua configurado na Vercel. Atualizações da função `supabase/functions/life-ai/index.ts` precisam de implantação separada; esta release não alterou esse arquivo.
-
-**Importante:** o aplicativo oferece apoio e conteúdos de orientação; não representa serviços licenciados de médico, psicólogo, nutricionista, personal trainer ou consultor financeiro. Veja o arquivo `QA_REPORT_14.6.5.md`.
+## Publicação
+Extraia os arquivos do ZIP para a raiz do repositório (index.html na raiz), envie ao GitHub e confirme o novo deploy na Vercel. Mantenha a versão antiga como backup até verificar os dois pontos no site publicado. As melhorias da Edge Function life-ai continuam dependendo de publicação separada no Supabase.

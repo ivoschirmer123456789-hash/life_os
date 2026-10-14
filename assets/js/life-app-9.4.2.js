@@ -1771,20 +1771,18 @@ const lifeBuildStudyPlan = (answers) => {
         const detail = i === 0 ? 'Construa a base e descubra lacunas antes de acelerar.' : i === stages.length - 1 ? 'Consolide o conteúdo e prove que consegue usar sem consulta.' : 'Aprenda, pratique, corrija e só depois avance.';
         const method = studyActionsFor(title, i);
         const practical = lifeStudyStageExtras(topic, title, i, stages.length, answers);
-        const sources = window.LifeAdvisors1465?.study(topic.title,title,answers);
-        return { sources: sources?{books:sources.books.slice(0,2),videos:sources.videos.slice(0,2)}:null, index: i + 1, title, when, detail, ...method, ...practical, sessionMinutes, cadence: `${daysPerWeek} dias/sem · ${sessionMinutes} min por sessão`, review: 'Revisão curta em 1, 3 e 7 dias após concluir a etapa.' };
+        return { index: i + 1, title, when, detail, ...method, ...practical, sessionMinutes, cadence: `${daysPerWeek} dias/sem · ${sessionMinutes} min por sessão`, review: 'Revisão curta em 1, 3 e 7 dias após concluir a etapa.' };
     });
     const blocker = LIFE_STUDY_BLOCKER_DATA[answers.blocker] || LIFE_STUDY_BLOCKER_DATA['Não sei por onde começar'];
     const riskNote = [topic.riskNote || '',feasibleSchedule.warning].filter(Boolean).join(' ');
-    const curatedLearning = window.LifeAdvisors1465?.study(topic.title, stages[0] || topic.title, answers) || null;
-    const bookList = curatedLearning?.books?.length ? curatedLearning.books : (topic.books || []).slice(0, 3);
+    const bookList = (topic.books || []).slice(0, 3);
     const reading = (bookList.length ? bookList : ['Material introdutório confiável']).map((book, index) => ({
         kind: index === 0 && answers.reading === 'Não leio hoje' ? 'LEITURA / COMEÇO LEVE' : 'LIVRO / REFERÊNCIA',
         title: book,
         text: index === 0 && answers.reading === 'Não leio hoje' ? 'Comece com uma seção curta e pare para explicar o que entendeu antes de avançar.' : 'Use como referência para aprofundar a etapa atual e transforme cada seção em perguntas próprias.'
     }));
     if (answers.reading === 'Não leio hoje') reading.push({ kind: 'HÁBITO', title: 'Leitura mínima consistente', text: 'Comece pequeno e aumente apenas quando a rotina já estiver estável.' });
-    const channels = curatedLearning?.videos?.length ? curatedLearning.videos : (topic.channels || []).slice(0, 4).map(name => ({ kind: 'VÍDEO / CANAL', title: name, text: 'Busca por canal e tópico no YouTube; confira a fonte e a data da aula.', url: 'https://www.youtube.com/results?search_query=' + encodeURIComponent(name + ' ' + topic.title) }));
+    const channels = (topic.channels || []).slice(0, 4).map(name => ({ kind: 'VÍDEO / CANAL', title: name, text: 'Referência em vídeo para complementar a etapa atual. Abra a busca do canal no YouTube e escolha uma aula diretamente ligada ao tópico da semana.', url: 'https://www.youtube.com/results?search_query=' + encodeURIComponent(name + ' ' + topic.title) }));
     const videoDiscovery = [
         { kind: 'VÍDEOS RELACIONADOS', title: 'Aulas sobre ' + topic.title, text: 'Busca pronta no YouTube para encontrar explicações e aulas relacionadas ao assunto. Compare mais de uma fonte quando o tema exigir precisão.', url: 'https://www.youtube.com/results?search_query=' + encodeURIComponent(topic.title + ' aula completa') },
         { kind: 'PRÁTICA GUIADA', title: 'Exercícios e revisão de ' + topic.title, text: 'Use esta busca para encontrar resolução de exercícios, revisões e exemplos aplicados ao tópico.', url: 'https://www.youtube.com/results?search_query=' + encodeURIComponent(topic.title + ' exercícios revisão') }
@@ -4307,7 +4305,6 @@ function LifeOSV18() {
     const [lifeWeatherCity, setLifeWeatherCity] = React.useState(() => load('life_weather_city_v85', load('life_weather_city_v82', '')));
     const [lifeWeatherQuery, setLifeWeatherQuery] = React.useState(() => load('life_weather_query_v85', load('life_weather_city_v82', '')));
     const [lifeWeatherPlaces, setLifeWeatherPlaces] = React.useState([]);
-    const [lifeWeatherDetailsOpen, setLifeWeatherDetailsOpen] = React.useState(false);
     const [lifeWeatherNetworkNote, setLifeWeatherNetworkNote] = React.useState('');
     const lifeWeatherRequestRef = React.useRef(0);
     const lifeWeatherLocateRef = React.useRef(0);
@@ -4387,7 +4384,6 @@ function LifeOSV18() {
             setLifeWeather(payload);
             setLifeWeatherCity(cleanLabel);
             setLifeWeatherStatus('ready');
-            setLifeWeatherDetailsOpen(true);
             setLifeWeatherError('');
             setLifeWeatherNetworkNote('Previsão atualizada.');
             save('life_weather_v85', payload);
@@ -4419,26 +4415,8 @@ function LifeOSV18() {
             if (requestId === lifeWeatherRequestRef.current) lifeWeatherBusyRef.current = false;
         }
     };
-    const openLifeWeatherPicker = () => {
-        // A fast, local first screen. Never access GPS or the network just by opening.
-        ++lifeWeatherLocateRef.current;
-        ++lifeWeatherRequestRef.current;
-        setLifeWeatherDetailsOpen(false);
-        setLifeWeatherPlaces([]);
-        setLifeWeatherError('');
-        setLifeWeatherNetworkNote('Escolha uma cidade. O GPS é opcional.');
-        setLifeWeatherStatus(lifeWeather?.current ? 'cached' : 'idle');
-        openSheet('weather');
-    };
-    const closeLifeWeatherPicker = () => {
-        ++lifeWeatherLocateRef.current;
-        ++lifeWeatherRequestRef.current;
-        setLifeWeatherDetailsOpen(false);
-        setSheet(null);
-    };
     const chooseLifeWeatherPlace = (place) => {
         if (!place) return;
-        ++lifeWeatherLocateRef.current;
         const label = [place.name, place.admin1, place.country].filter(Boolean).join(' · ');
         const raw = [place.name, place.admin1 || place.country_code].filter(Boolean).join(', ');
         setLifeWeatherPlaces([]);
@@ -4453,8 +4431,6 @@ function LifeOSV18() {
             setLifeWeatherError('Digite uma cidade para buscar.');
             return;
         }
-        ++lifeWeatherLocateRef.current;
-        setLifeWeatherDetailsOpen(false);
         const requestId = ++lifeWeatherRequestRef.current;
         const term = raw.replace(/\s*[·|]\s*/g, ', ').replace(/\s{2,}/g, ' ').trim();
         setLifeWeatherStatus('searching');
@@ -4491,7 +4467,6 @@ function LifeOSV18() {
     const useLifeWeatherLocation = () => {
         setLifeWeatherError('');
         setLifeWeatherPlaces([]);
-        setLifeWeatherDetailsOpen(false);
         if (!navigator.geolocation) {
             setLifeWeatherStatus('idle');
             setLifeWeatherError('Este navegador não oferece localização. Digite sua cidade no campo acima.');
@@ -4539,7 +4514,6 @@ function LifeOSV18() {
         }
     };
     const refreshLifeWeather = () => {
-        setLifeWeatherDetailsOpen(true);
         const c = lifeWeather?.coords;
         if (c?.lat != null && c?.lon != null) { setTimeout(() => fetchLifeWeather(c.lat, c.lon, lifeWeather.label), 0); return; }
         const q = String(lifeWeatherQuery || '').trim();
@@ -6124,11 +6098,6 @@ function LifeOSV18() {
             return { text: '' };
         if (lifeIsSimpleGreeting(text))
             return { text: `Olá! 👋 Como posso ajudar? Posso montar um treino, explicar um exercício, organizar seu dia, estudos, alimentação ou explicar qualquer parte do próprio LIFE OS.` };
-        // Specific book/video guidance and general wellness safety before the broad contextual matcher.
-        if (hasV18Pro && window.LifeAdvisors1465) {
-            const practical=window.LifeAdvisors1465.answer(text,{priority:life1459Profile?.priority||'',barrier:life1459Profile?.barrier||''});
-            if(practical)return practical;
-        }
         if (hasV18Pro && window.LifeBrain1463) {
             const contextual=window.LifeBrain1463.answer(text,lifeBrainBrief || window.LifeBrain1463.analyze({context:buildAIContext()}));
             if(contextual)return contextual;
@@ -6391,7 +6360,7 @@ function LifeOSV18() {
         setAiBusy(true);
         try {
             const validatedCommand = hasV18Pro ? window.LifeIntegrity123?.localCommand(prompt) : null;
-            const deterministic = !!validatedCommand || (hasV18Pro && window.LifeAdvisors1465 && !!window.LifeAdvisors1465.answer(prompt,{priority:life1459Profile?.priority||''})) || (hasV18Pro && window.LifeBrain1463 && !!window.LifeBrain1463.answer(prompt,lifeBrainBrief)) || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
+            const deterministic = !!validatedCommand || (hasV18Pro && window.LifeBrain1463 && !!window.LifeBrain1463.answer(prompt,lifeBrainBrief)) || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
             let result = validatedCommand ? {text:'Preparei uma ação. Revise e confirme antes de salvar no LIFE.',action:validatedCommand} : deterministic ? (hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt)) : await callLifeAIBackend(prompt);
             if (!result)
                 result = hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt);
@@ -10341,7 +10310,7 @@ function LifeOSV18() {
               React.createElement('span',{className:'material-symbols-rounded'},'search'),
               React.createElement('span',null,'Buscar no seu LIFE...'),
               React.createElement('kbd',null,'⌘ K')),
-            React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: openLifeWeatherPicker, 'aria-label': 'Escolher cidade e consultar clima' }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
+            React.createElement("button", { type: "button", className: "v18-chip life-weather-chip", title: lifeWeather ? 'Previsão atualizada em ' + new Date(lifeWeather.fetchedAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Conectar clima e previsão', onClick: () => openSheet('weather') }, lifeWeather?.current ? weatherIcon(lifeWeather.current.weather_code) + ' ' + Math.round(lifeWeather.current.temperature_2m) + '° · ' + String(lifeWeather.label || 'CLIMA').split(' · ')[0].toUpperCase() : 'CLIMA · CONECTAR'),
             React.createElement("button", { type: "button", className: "v18-island", title: focus ? "Voltar ao foco atual" : "Ir para Hoje", "aria-label": focus ? "Voltar ao foco atual" : "Ir para a tela Hoje", onClick: () => focus ? setFocus(true) : v42Go('Hoje') },
                 React.createElement("i", { className: "v18-dot" }),
                 React.createElement("span", null, "AGORA"),
@@ -10846,16 +10815,6 @@ function LifeOSV18() {
         React.createElement('p',null,lifeBrainBrief.projection?.missing||'Informe suas tarefas e tempo disponível para simular blocos.',' Sem inventar números.'),
       React.createElement('button',{type:'button',onClick:()=>v42Go('Tarefas')},'Revisar durações e tarefas',life143Icon('arrow_forward'))),
     React.createElement('div',{className:'life1463-brain-foot'},'Motor local baseado em regras verificáveis · Nada é alterado automaticamente · ',React.createElement('button',{type:'button',onClick:()=>{aiOpen(true);setAiContextPanel(true)}},'Revisar permissões da IA'))),
-  lifeBrainBrief && life1459Profile && React.createElement('section',{className:'life1465-specialties','aria-label':'Apoio inteligente por áreas'},
-    React.createElement('div',{className:'life1465-specialties-header'},React.createElement('small',null,'LIFE · GUIAS CONECTADOS'),React.createElement('h2',null,'Uma central, várias áreas da sua vida.'),React.createElement('p',null,'Treino, alimentação, aprendizado, planejamento financeiro e bem-estar com orientações educativas baseadas nas suas escolhas. Não substitui atendimento especializado.')),
-    React.createElement('div',{className:'life1465-specialties-grid'},[
-      ['Fitness','Organizar atividade física com segurança.','Ajude a organizar atividades e exercícios para minha semana, começando com perguntas e respeitando descanso.'],
-      ['Alimentação','Ideias de refeições flexíveis.','Sugira refeições variadas usando minhas preferências e ingredientes disponíveis, sem dietas restritivas.'],
-      ['Estudos','Livros e aulas para minha etapa.','Recomende livros e canais de vídeo para o assunto que estou estudando, explicando a escolha.'],
-      ['Rotina','Próximos passos realistas.','Cruze minha rotina e tarefas para sugerir prioridades explicando os dados usados.'],
-      ['Bem-estar','Escuta e organização cotidiana.','Ajude a organizar meu dia para reduzir estresse sem fazer diagnóstico.'],
-      ['Finanças','Decisões baseadas em registros.','Ajude a organizar meu orçamento com base nos dados financeiros que autorizei.']
-    ].map(([title,note,prompt])=>React.createElement('button',{type:'button',key:title,onClick:()=>aiQuickPrompt(prompt)},React.createElement('strong',null,title,' ↗'),React.createElement('small',null,note))))),
   lifeHomeShown('metrics') && React.createElement('section',{className:'life143-metrics','aria-label':'Indicadores do dia'},
     [['checklist','TAREFAS',String(lifeTodayDone).padStart(2,'0')+' / '+String(lifeTodayPlans.length).padStart(2,'0'),'Concluídas hoje'],
      ['calendar_month','AGENDA',String(lifeCommitmentsOpen.length).padStart(2,'0'),'Compromissos pendentes'],
@@ -12715,14 +12674,29 @@ function LifeOSV18() {
                         React.createElement("div", { className: "flex flex-wrap gap-2 mt-6" }, ['TAREFA', 'EVENTO', 'PROJETO', 'ESTUDO', 'NOTA', 'ARQUIVAR'].map(k => React.createElement("button", { type: "button", className: "v18-btn", onClick: () => routeInboxItem(inbox[0], k), key: k }, k)))) : React.createElement("div", { className: "text-center py-12" },
                         React.createElement("div", { className: "v18-micro" }, "CAIXA ORGANIZADA"),
                         React.createElement("h3", { className: "v18-title mt-5" }, "Tudo organizado.")))),
-            sheet === 'weather' && React.createElement("div", { className: "v18-sheetwrap life-weather-wrap", onClick: closeLifeWeatherPicker },
+            sheet === 'weather' && React.createElement("div", { className: "v18-sheetwrap life-weather-wrap", onClick: () => setSheet(null) },
                 React.createElement("div", { className: "v18-sheet life-weather-sheet", onClick: e => e.stopPropagation() },
+                    React.createElement("section", { className: "life1465-city-priority", "aria-label": "Conectar cidade ao clima" },
+                        React.createElement("div", { className: "life1465-city-heading" },
+                            React.createElement("small", null, "01 / CONFIGURAR CLIMA"),
+                            React.createElement("strong", null, "Conectar sua cidade"),
+                            React.createElement("p", null, "Busque sua cidade e selecione o resultado correto. Se preferir, autorize sua localiza\u00E7\u00E3o. A previs\u00E3o aparece logo abaixo.")),
+                        React.createElement("div", { className: "life-weather-connect" },
+                            React.createElement("input", { className: "v18-input", value: lifeWeatherQuery, onChange: e => { setLifeWeatherQuery(e.target.value); setLifeWeatherPlaces([]); }, onKeyDown: e => e.key === 'Enter' && searchLifeWeatherCity(), placeholder: "Ex.: Campo Grande, MS" }),
+                            React.createElement("button", { type: "button", className: "v18-btn hot", onClick: () => searchLifeWeatherCity(), disabled: ['loading', 'searching', 'locating'].includes(lifeWeatherStatus), "aria-busy": lifeWeatherStatus === 'searching' ? "true" : "false" }, lifeWeatherStatus === 'searching' ? "BUSCANDO…" : "BUSCAR CIDADE"),
+                            React.createElement("button", { type: "button", className: "v18-btn", onClick: useLifeWeatherLocation, disabled: ['loading', 'searching', 'locating'].includes(lifeWeatherStatus), "aria-busy": lifeWeatherStatus === 'locating' ? "true" : "false" }, lifeWeatherStatus === 'locating' ? "CONECTANDO…" : "CONECTAR LOCALIZAÇÃO"),
+                            lifeWeather && React.createElement("button", { type: "button", className: "v18-btn ghost", onClick: refreshLifeWeather, disabled: ['loading', 'searching', 'locating'].includes(lifeWeatherStatus) }, "ATUALIZAR")),
+                        lifeWeatherPlaces.length > 0 && React.createElement("div", { className: "life-weather-places" }, lifeWeatherPlaces.map((p, i) => React.createElement("button", { type: "button", key: (p.id || p.latitude + '_' + p.longitude) + '_' + i, onClick: () => chooseLifeWeatherPlace(p) },
+                            React.createElement("span", null,
+                                React.createElement("b", null, p.name),
+                                React.createElement("small", null, [p.admin1, p.admin2, p.country].filter(Boolean).join(' · '))),
+                            React.createElement("em", null, "USAR ESTA \u2192"))))),
                     React.createElement("div", { className: "life-weather-head" },
                         React.createElement("div", null,
-                            React.createElement("div", { className: "v18-micro" }, "CLIMA / LOCALIZAÇÃO"),
+                            React.createElement("div", { className: "v18-micro" }, "CLIMA / PREVIS\u00C3O"),
                             React.createElement("div", { className: "v18-title mt-3" }, lifeWeather?.label || 'Escolha sua cidade.'),
-                            React.createElement("p", { className: "v18-muted text-[10px] mt-2" }, "Digite sua cidade e escolha o resultado correto. O GPS é opcional e nunca é ativado ao abrir esta tela.")),
-                        React.createElement("button", { type: "button", className: "v18-btn ghost", onClick: closeLifeWeatherPicker }, "FECHAR")),
+                            React.createElement("p", { className: "v18-muted text-[10px] mt-2" }, "A previs\u00E3o \u00E9 carregada sob demanda. A localiza\u00E7\u00E3o do navegador s\u00F3 \u00E9 usada quando voc\u00EA toca em \u201Cusar minha localiza\u00E7\u00E3o\u201D.")),
+                        React.createElement("button", { type: "button", className: "v18-btn ghost", onClick: () => setSheet(null) }, "FECHAR")),
                     React.createElement("div", { className: "life-weather-statusbar" },
                         React.createElement("span", { className: lifeWeatherStatus === 'ready' ? 'ok' : lifeWeatherStatus === 'cached' ? 'warn' : '' }, lifeWeatherStatus === 'ready' ? '● ATUALIZADO' : lifeWeatherStatus === 'cached' ? '● DADOS SALVOS' : ['loading', 'searching', 'locating'].includes(lifeWeatherStatus) ? '● CONECTANDO' : '○ AGUARDANDO'),
                         React.createElement("span", null, navigator.onLine === false ? 'OFFLINE' : 'INTERNET OK'),
@@ -12732,25 +12706,13 @@ function LifeOSV18() {
                         lifeWeather?.timezone && React.createElement("span", null,
                             "FUSO \u00B7 ",
                             lifeWeather.timezone)),
-                    React.createElement("div",{className:"life1465-location-help"},"ONDE VOCÊ ESTÁ? · A busca manual não pede acesso à sua localização."),
-                    React.createElement("div", { className: "life-weather-connect" },
-                        React.createElement("input", { className: "v18-input", value: lifeWeatherQuery, onChange: e => { setLifeWeatherQuery(e.target.value); setLifeWeatherPlaces([]); }, onKeyDown: e => e.key === 'Enter' && searchLifeWeatherCity(), placeholder: "Ex.: Campo Grande, MS" }),
-                        React.createElement("button", { type: "button", className: "v18-btn hot", onClick: () => searchLifeWeatherCity(), disabled: ['loading', 'searching', 'locating'].includes(lifeWeatherStatus), "aria-busy": lifeWeatherStatus === 'searching' ? "true" : "false" }, lifeWeatherStatus === 'searching' ? "BUSCANDO…" : "BUSCAR CIDADE"),
-                        React.createElement("button", { type: "button", className: "v18-btn", onClick: useLifeWeatherLocation, disabled: ['loading', 'searching', 'locating'].includes(lifeWeatherStatus), "aria-busy": lifeWeatherStatus === 'locating' ? "true" : "false" }, lifeWeatherStatus === 'locating' ? "CONECTANDO…" : "CONECTAR LOCALIZAÇÃO"),
-                        lifeWeather && React.createElement("button", { type: "button", className: "v18-btn ghost", onClick: refreshLifeWeather, disabled: ['loading', 'searching', 'locating'].includes(lifeWeatherStatus) }, "ATUALIZAR")),
-                    lifeWeatherPlaces.length > 0 && React.createElement("div", { className: "life-weather-places" }, lifeWeatherPlaces.map((p, i) => React.createElement("button", { type: "button", key: (p.id || p.latitude + '_' + p.longitude) + '_' + i, onClick: () => chooseLifeWeatherPlace(p) },
-                        React.createElement("span", null,
-                            React.createElement("b", null, p.name),
-                            React.createElement("small", null, [p.admin1, p.admin2, p.country].filter(Boolean).join(' · '))),
-                        React.createElement("em", null, "USAR ESTA \u2192")))),
                     lifeWeatherError && React.createElement("div", { className: "life-weather-error" }, lifeWeatherError),
                     lifeWeatherNetworkNote && React.createElement("div", { className: "life-weather-cache" }, lifeWeatherNetworkNote),
                     ['loading', 'searching', 'locating'].includes(lifeWeatherStatus) && React.createElement("div", { className: "life-weather-loading" }, lifeWeatherStatus === 'searching' ? 'PROCURANDO CIDADE…' : lifeWeatherStatus === 'locating' ? 'OBTENDO LOCALIZAÇÃO…' : 'CARREGANDO PREVISÃO…'),
                     location.protocol === 'file:' && React.createElement("div", { className: "life-weather-diagnostic" },
                         React.createElement("b", null, "TESTE LOCAL:"),
                         " ao abrir o arquivo diretamente no computador, alguns navegadores bloqueiam localiza\u00E7\u00E3o ou conex\u00F5es externas. Para validar o clima real, prefira a vers\u00E3o publicada em HTTPS."),
-                    lifeWeather?.current && !lifeWeatherDetailsOpen && React.createElement('button',{type:'button',className:'life1465-show-forecast',onClick:()=>setLifeWeatherDetailsOpen(true)},'VER PREVISÃO SALVA · ',String(lifeWeather.label||'Cidade'),' →'),
-                    lifeWeather?.current && lifeWeatherDetailsOpen && React.createElement(React.Fragment, null,
+                    lifeWeather?.current && React.createElement(React.Fragment, null,
                         React.createElement("div", { className: 'life-weather-current ' + (['loading', 'searching', 'locating'].includes(lifeWeatherStatus) ? 'life-weather-refreshing' : '') },
                             React.createElement("div", null,
                                 React.createElement("span", null, weatherIcon(lifeWeather.current.weather_code)),
