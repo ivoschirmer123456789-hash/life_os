@@ -4600,7 +4600,9 @@ function LifeOSV18() {
     const LIFE1459_PRIORITIES = ['Estudos','Fitness','Finanças','Rotina'];
     const LIFE1459_BARRIERS = ['Falta de foco','Pouco tempo','Não sei por onde começar','Manter consistência'];
     const LIFE1459_TIMES = ['10','20','30'];
-    const LIFE1459_EMPTY = {priority:'',barrier:'',minutes:''};
+    const LIFE1463_CONNECTIONS = ['Deixar o LIFE sugerir','Agenda e tarefas','Estudos','Fitness','Alimentação','Finanças'];
+    const LIFE1463_STYLES = ['Passo a passo','Direto ao ponto','Com explicação'];
+    const LIFE1459_EMPTY = {priority:'',barrier:'',minutes:'',connection:'Deixar o LIFE sugerir',style:'Passo a passo'};
     const [life1459Profile,setLife1459Profile] = React.useState(null);
     const [life1459Draft,setLife1459Draft] = React.useState(LIFE1459_EMPTY);
     const [life1459Edit,setLife1459Edit] = React.useState(false);
@@ -4620,7 +4622,7 @@ function LifeOSV18() {
             LIFE1459_PRIORITIES.includes(raw.priority) &&
             LIFE1459_BARRIERS.includes(raw.barrier) &&
             LIFE1459_TIMES.includes(String(raw.minutes));
-        const entry=valid ? {priority:raw.priority,barrier:raw.barrier,minutes:String(raw.minutes)} : null;
+        const entry=valid ? {priority:raw.priority,barrier:raw.barrier,minutes:String(raw.minutes),connection:LIFE1463_CONNECTIONS.includes(raw.connection)?raw.connection:'Deixar o LIFE sugerir',style:LIFE1463_STYLES.includes(raw.style)?raw.style:'Passo a passo'} : null;
         setLife1459Scope(scope);
         setLife1459Profile(entry);
         setLife1459Draft(entry || LIFE1459_EMPTY);
@@ -4632,7 +4634,7 @@ function LifeOSV18() {
            !LIFE1459_BARRIERS.includes(data.barrier)||!LIFE1459_TIMES.includes(String(data.minutes))){
             setToast('ESCOLHA AS TRÊS RESPOSTAS');return;
         }
-        const next={priority:data.priority,barrier:data.barrier,minutes:String(data.minutes)};
+        const next={priority:data.priority,barrier:data.barrier,minutes:String(data.minutes),connection:LIFE1463_CONNECTIONS.includes(data.connection)?data.connection:'Deixar o LIFE sugerir',style:LIFE1463_STYLES.includes(data.style)?data.style:'Passo a passo'};
         try{
             const ok=lifeRawStorageSet(life1459Scope,JSON.stringify(next));
             if(!ok)throw new Error('storage');
@@ -4640,7 +4642,7 @@ function LifeOSV18() {
         }catch(e){setToast('NÃO FOI POSSÍVEL SALVAR NESTE NAVEGADOR');}
     };
     const life1459Forget = () => {
-        if(!window.confirm('Apagar as três preferências personalizadas salvas neste dispositivo?'))return;
+        if(!window.confirm('Apagar suas preferências personalizadas salvas neste dispositivo?'))return;
         if(life1459Scope)lifeRawStorageRemove(life1459Scope);
         setLife1459Profile(null);setLife1459Draft(LIFE1459_EMPTY);setLife1459Edit(false);
         setToast('PREFERÊNCIAS APAGADAS');
@@ -5848,7 +5850,7 @@ function LifeOSV18() {
     const aiTodayActivity = () => lifeActivity.filter(a => new Date(a.date).toLocaleDateString('pt-BR') === aiTodayKey());
     const aiSafeText = (x, n = 180) => String(x || '').replace(/\s+/g, ' ').trim().slice(0, n);
     const lifeAIProductInstructions = `Você é o LIFE AI, assistente pessoal e guia de produto do LIFE OS. Você conhece as áreas, o que cada uma faz e como direcionar o usuário. A Biblioteca é a busca central do produto e reúne guias, recursos de estudo, exercícios, treinos e receitas em um único lugar. Responda em português natural, claro, útil e conversacional. Se o usuário perguntar como funciona uma área, explique para que serve, como começar, dê exemplos concretos e indique a rota correta no LIFE.  Se o usuário apenas cumprimentar (oi, olá, opa, bom dia etc.), cumprimente de volta e pergunte como pode ajudar — nunca diga que não entendeu. Raciocine antes de responder, faça perguntas quando faltar contexto importante e não invente dados do usuário. Use o contexto recebido somente quando ele for relevante. Diferencie fatos registrados, inferências e sugestões. Quando uma ação alterar dados do LIFE, proponha a ação e espere confirmação. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog e o navigation_index. Quando o usuário pedir onde encontrar algo, direcione para a área correta do LIFE em vez de responder de forma vaga. Se houver study_plan no contexto, use a etapa atual da trilha como referência. Antes de responder sobre estudos, organização, notas, rotina, alimentação, receitas, finanças, evolução, arquivo ou perfil, consulte o knowledge_catalog quando ele estiver presente e use os guias mais relevantes como base prática; não responda com frases genéricas se houver um guia específico. Em fitness, quando o usuário pedir um treino por grupo muscular (ex.: costas e bíceps, pernas, panturrilha, antebraço), respeite exatamente os grupos pedidos e monte uma sessão usando o exercise_catalog recebido; não troque a solicitação por um plano semanal genérico. Mostre exercícios, séries, repetições e descanso de forma simples. No LIFE, Alimentação/Dieta fica dentro de Fitness > Alimentação. Quando o usuário pedir dieta, plano alimentar, refeições, intolerâncias ou suplementos, direcione para essa subárea e use nutrition_profile e mealPlans quando existirem. Respeite o plano da conta recebido no contexto: no FREE, não entregue como se estivesse desbloqueado um treino semanal personalizado, plano alimentar personalizado, memória persistente, planejador avançado, mapa de domínio de estudos ou análise financeira avançada. No FREE, ofereça orientação geral e recursos gratuitos e direcione de forma transparente ao fluxo PRO quando o pedido depender desses recursos. Nunca finja que um recurso PRO está disponível no FREE. Faça perguntas antes de personalizar quando faltarem idade, rotina, preferências, alergias/intolerâncias ou contexto de treino. Nunca invente necessidade ou dose de suplemento. Em fitness e alimentação, adapte o nível de cautela à idade; para menores de 18 anos, evite rotinas extremas, metas corporais, restrição alimentar, déficit/superávit calculado, metas de peso e alto volume automático. Se houver lesão, condição médica ou dúvida de segurança, não prescreva um plano agressivo: peça orientação de responsável/profissional. Em receitas, forneça quantidades, utensílios, tempo, temperatura quando aplicável, ponto de preparo e passos completos. No treino, diferencie hipertrofia, força, condicionamento e híbrido; híbrido deve combinar musculação e cardio de forma coerente com recuperação e experiência. Seja conversacional, contextual e capaz de explicar o porquê das sugestões, sem fingir que uma única rotina é a melhor para todo mundo. Funcione como o sistema operacional do LIFE: quando a intenção estiver clara, direcione para a tela, filtro ou fluxo correto; quando o pedido envolver várias áreas, cruze agenda, tarefas, trilha de estudos, clima, treino, alimentação e finanças apenas quando forem relevantes. Não repita perguntas já respondidas no contexto. Use a hierarquia Objetivo → Projeto → Etapa → Tarefa quando isso ajudar a organizar, e consulte life_graph.links antes de supor relações. Para planejamento do dia, proponha blocos com duração e peça confirmação única antes de aplicar. Antes de criar, mover, excluir, vincular ou marcar algo como concluído, peça confirmação.`;
-    const buildAIContext = () => {
+    const buildAIContext = (includeBrain = true) => {
         const ctx = { area: lifePublicAreaName(aiContextArea), area_id: aiContextArea, specialist: aiSpecialist, plan: realPlan };
         ctx.navigation_index = LIFE_ROUTE_INDEX.map(x => ({ area: x.area, title: x.title, keywords: x.keywords }));
         try {
@@ -5858,7 +5860,7 @@ function LifeOSV18() {
         }
         catch (e) { }
         if (aiContextFlags.tasks)
-            ctx.tasks = aiPendingTasks().slice(0, 14).map(t => ({ id: t.id, text: aiSafeText(t.text || t.title, 100), done: taskIsDone(t), category: t.category || 'Tarefa', priority: t.priority || 'Normal', duration: t.duration || 30, projectId: t.projectId || null, waiting: !!t.waiting, waitingFor: t.waitingFor || '', dueAt: t.dueAt || null, tags: t.tags || [] }));
+            ctx.tasks = aiPendingTasks().slice(0, 14).map(t => ({ id: t.id, text: aiSafeText(t.text || t.title, 100), done: taskIsDone(t), category: t.category || 'Tarefa', priority: t.priority || 'Normal', duration: Number.isFinite(Number(t.duration)) && Number(t.duration) >= 1 && Number(t.duration) <= 480 ? Number(t.duration) : null, projectId: t.projectId || null, waiting: !!t.waiting, waitingFor: t.waitingFor || '', dueAt: t.dueAt || null, tags: t.tags || [] }));
         if (aiContextFlags.notes)
             ctx.notes = v49Notes.slice(0, 8).map(n => ({ id: n.id, text: aiSafeText(n.text, 120), date: n.date }));
         if (aiContextFlags.projects)
@@ -5897,6 +5899,12 @@ function LifeOSV18() {
         if (aiContextFlags.projects || aiContextFlags.tasks || aiContextFlags.plans || aiContextFlags.goals) ctx.life_graph = { projects: projects.length, pending_tasks: aiPendingTasks().length, goals: lifeGoals.filter(g => !g.done).map(g => ({ id: g.id, title: aiSafeText(g.title, 80) })).slice(0, 8), habits: lifeHabits.length, workouts: savedCustomWorkouts.length, meal_plans: savedMealPlans.length, links: [...lifeGraphLinks, ...derivedGraphLinks].slice(0, 60) };
         if (aiContextFlags.area) ctx.organization_profile = { focusArea: v33Profile.focusArea || null, friction: v33Profile.friction || null, availableTime: v33Profile.availableTime || null, mainObjective: v33Profile.mainObjective || null };
         if (aiContextFlags.tasks) ctx.events = events.slice(0, 8).map(e => ({ time: e.t || '', title: aiSafeText(e.n, 100) }));
+        // Brain receives only those categories explicitly included in context above.
+        // Answer preferences are NOT sent to the remote model unless 'memory' is allowed.
+        if (includeBrain && hasV18Pro && window.LifeBrain1463) {
+            const b=window.LifeBrain1463.analyze({profile:aiContextFlags.memory && life1459Scope===('life_pro_understands_14_5_9_'+String(lifeRawStorageGet('life_data_owner_uid_v123')||''))?life1459Profile:null,context:ctx});
+            ctx.brain={suggestions:b.suggestions.map(x=>({title:x.title,description:x.description,route:x.route,evidence:x.evidence})).slice(0,4),note:b.note,profileUsed:b.profileUsed};
+        }
         return ctx;
     };
     const aiPushMessage = (role, text, extra = {}) => {
@@ -6090,6 +6098,10 @@ function LifeOSV18() {
             return { text: '' };
         if (lifeIsSimpleGreeting(text))
             return { text: `Olá! 👋 Como posso ajudar? Posso montar um treino, explicar um exercício, organizar seu dia, estudos, alimentação ou explicar qualquer parte do próprio LIFE OS.` };
+        if (hasV18Pro && window.LifeBrain1463) {
+            const contextual=window.LifeBrain1463.answer(text,lifeBrainBrief || window.LifeBrain1463.analyze({context:buildAIContext()}));
+            if(contextual)return contextual;
+        }
         const helpArea = lifeHowAreaFromText(text);
         if (helpArea && /(como funciona|como usar|pra que serve|para que serve|o que significa|me explica|me explique|onde fica|o que faz)/i.test(low)) {
             const info = lifeHowInfo(helpArea), label = lifePublicAreaName(helpArea);
@@ -6346,16 +6358,21 @@ function LifeOSV18() {
         setAiInput('');
         aiPushMessage('user', prompt, { context: aiContextArea });
         setAiBusy(true);
-        const validatedCommand = hasV18Pro ? window.LifeIntegrity123?.localCommand(prompt) : null;
-        const deterministic = !!validatedCommand || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
-        let result = validatedCommand ? {text:'Preparei uma ação. Revise e confirme antes de salvar no LIFE.',action:validatedCommand} : deterministic ? (hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt)) : await callLifeAIBackend(prompt);
-        if (!result)
-            result = hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt);
-        if (result.text)
-            aiPushMessage('assistant', result.text, { cards: result.cards || [], remote: !!result.remote, specialist: aiSpecialist });
-        if (result.action)
-            queueAIAction(result.action);
-        setAiBusy(false);
+        try {
+            const validatedCommand = hasV18Pro ? window.LifeIntegrity123?.localCommand(prompt) : null;
+            const deterministic = !!validatedCommand || (hasV18Pro && window.LifeBrain1463 && !!window.LifeBrain1463.answer(prompt,lifeBrainBrief)) || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
+            let result = validatedCommand ? {text:'Preparei uma ação. Revise e confirme antes de salvar no LIFE.',action:validatedCommand} : deterministic ? (hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt)) : await callLifeAIBackend(prompt);
+            if (!result)
+                result = hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt);
+            if (result.text)
+                aiPushMessage('assistant', result.text, { cards: result.cards || [], remote: !!result.remote, specialist: aiSpecialist });
+            if (result.action)
+                queueAIAction(result.action);
+        } catch (_) {
+            aiPushMessage('assistant','Não consegui concluir esta resposta. Sua pergunta continua no histórico; confira a conexão e tente enviá-la novamente.',{ specialist: aiSpecialist });
+        } finally {
+            setAiBusy(false);
+        }
     };
     const aiQuickPrompt = (text) => { setAiInput(''); submitLifeAI(text); };
     const aiAddMemory = () => { const t = aiMemoryDraft.trim(); if (!t)
@@ -10032,7 +10049,10 @@ function LifeOSV18() {
             React.createElement('footer',{className:'life-area-focus-footer-v920'},secondary(mode.startsWith('nutrition_')?'VER MAIS OPÇÕES':'MAIS OPÇÕES',openFull)));
     };
 
-return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v65 ' + (hasV18Pro ? 'life-pro-active' : 'life-free-active') + ' life-theme-' + lifeTheme + ' life-area-' + String(view || 'Hoje').toLowerCase().replace(/[^a-z0-9áéíóúãõç]+/gi,'-') + (lifeSettings.motion === false ? ' life-motion-off' : '') + (lifeSettings.descriptions === false ? ' life-hide-descriptions' : '') + (lifeSettings.highContrast ? ' life-high-contrast' : '') + (lifeSettings.largeText ? ' life-large-text' : ''), 'data-life-view': view, 'data-fitness-tab': view === 'Fitness' ? fitnessMainTab : undefined, 'data-fitness-focus': view === 'Fitness' && fitnessFocusMode ? fitnessFocusMode : undefined, 'data-area-focus': areaFocusMode || undefined, style: { '--ep': Math.max(10, pct) + 'vh', fontSize: density === 'Compact' ? '14px' : density === 'Comfortable' ? '17px' : '16px' } },
+// Calculate only after all state/derived data has initialized in this render.
+    const lifeBrainBrief = hasV18Pro && life1459Profile && life1459Scope && life1459Scope===('life_pro_understands_14_5_9_'+String(lifeRawStorageGet('life_data_owner_uid_v123')||'')) && window.LifeBrain1463
+      ? window.LifeBrain1463.analyze({profile:life1459Profile,context:buildAIContext(false)}) : null;
+    return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v65 ' + (hasV18Pro ? 'life-pro-active' : 'life-free-active') + ' life-theme-' + lifeTheme + ' life-area-' + String(view || 'Hoje').toLowerCase().replace(/[^a-z0-9áéíóúãõç]+/gi,'-') + (lifeSettings.motion === false ? ' life-motion-off' : '') + (lifeSettings.descriptions === false ? ' life-hide-descriptions' : '') + (lifeSettings.highContrast ? ' life-high-contrast' : '') + (lifeSettings.largeText ? ' life-large-text' : ''), 'data-life-view': view, 'data-fitness-tab': view === 'Fitness' ? fitnessMainTab : undefined, 'data-fitness-focus': view === 'Fitness' && fitnessFocusMode ? fitnessFocusMode : undefined, 'data-area-focus': areaFocusMode || undefined, style: { '--ep': Math.max(10, pct) + 'vh', fontSize: density === 'Compact' ? '14px' : density === 'Comfortable' ? '17px' : '16px' } },
         pageTransition && React.createElement("div", { className: 'life-page-transition ' + (pageTransition.phase || 'in'), "aria-hidden": "true" },
             React.createElement("div", { className: "life-page-transition-inner" },
                 React.createElement("span", { className: "life-page-transition-mark" }),
@@ -10702,7 +10722,7 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
                 React.createElement('p',{className:'life1461-free-footer'},'O essencial, bem feito. Para conhecer a experiência completa, explore a prévia do PRO.')),
             (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && hasV18Pro && React.createElement('main',{className:'life143-home', 'aria-label':'Painel pessoal LIFE OS PRO'},
   React.createElement('div',{className:'life143-command'},
-    React.createElement('div',{className:'life143-command-status'},React.createElement('span',{className:'life143-led'}),React.createElement('div',null,React.createElement('strong',null,'LIFE OS 14.6.2'),React.createElement('small',null,online?'SISTEMA ONLINE':'MODO OFFLINE'))),
+    React.createElement('div',{className:'life143-command-status'},React.createElement('span',{className:'life143-led'}),React.createElement('div',null,React.createElement('strong',null,'LIFE OS 14.6.4'),React.createElement('small',null,online?'SISTEMA ONLINE':'MODO OFFLINE'))),
     React.createElement('button',{type:'button',className:'life143-search',onClick:()=>setSpot(true)},life143Icon('search'),'Buscar no seu LIFE OS...',React.createElement('kbd',null,'Ctrl K')),
     React.createElement('div',{className:'life143-command-date'},React.createElement('strong',null,lifeTodayDateLabel),React.createElement('small',null,cloudStatus==='synced'?'Dados sincronizados':'Dados neste dispositivo'))),
   React.createElement('div',{className:'life143-main-hero'},
@@ -10731,8 +10751,8 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
         React.createElement('small',null,'LIFE OS PRO  /  SUA DIREÇÃO'),
         React.createElement('h2',null,life1459Profile?'Agora eu te entendo melhor.':'Antes de sugerir, quero te ouvir.'),
         React.createElement('p',null,life1459Profile?
-           'Este caminho foi montado a partir das respostas que você escolheu.':
-           'Me diga o que importa para você agora. O PRO começa escutando, não adivinhando.')),
+           'Sua direção é construída a partir de respostas e registros que você permitiu conectar.':
+           'Diga o que importa e como prefere ser orientado. O PRO conecta dados que você autorizou.')),
       React.createElement('span',{className:'life1459-pro-trust'},'SEU RITMO · SUAS ESCOLHAS')),
     life1459Profile && !life1459Edit && React.createElement('div',{className:'life1459-pro-insight'},
         React.createElement('div',{className:'life1459-pro-insight-copy'},
@@ -10753,13 +10773,15 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
            life1459Profile.barrier==='Falta de foco' && React.createElement('button',{type:'button',className:'life1459-pro-secondary',onClick:()=>setFocus(true)},'Ativar modo foco'),
            React.createElement('button',{type:'button',className:'life1459-pro-link',onClick:()=>setLife1459Edit(true)},'Ajustar minhas respostas'))),
     !life1459Profile && !life1459Edit && React.createElement('div',{className:'life1459-pro-cta'},
-        React.createElement('div',null,React.createElement('strong',null,'3 escolhas rápidas, uma direção sua.'),React.createElement('span',null,'Se preferir, você pode continuar sem preencher.')),
+        React.createElement('div',null,React.createElement('strong',null,'Suas respostas, orientações com sentido.'),React.createElement('span',null,'Se preferir, você pode continuar sem preencher.')),
         React.createElement('button',{type:'button',className:'life1459-pro-primary',onClick:()=>setLife1459Edit(true)},'Quero personalizar',life143Icon('arrow_forward'))),
     life1459Edit && React.createElement('div',{className:'life1459-pro-form'},
        [
          ['priority','1 · O que é prioridade para você agora?',LIFE1459_PRIORITIES],
          ['barrier','2 · O que mais dificulta avançar?',LIFE1459_BARRIERS],
-         ['minutes','3 · Quanto tempo quer dedicar ao primeiro passo?',LIFE1459_TIMES]
+         ['minutes','3 · Quanto tempo quer dedicar ao primeiro passo?',LIFE1459_TIMES],
+         ['connection','4 · Que parte do LIFE quer conectar ao seu objetivo?',LIFE1463_CONNECTIONS],
+         ['style','5 · Como prefere receber orientações?',LIFE1463_STYLES]
        ].map(([key,label,choices])=>React.createElement('div',{className:'life1459-pro-question',key},
            React.createElement('h3',null,label),
            React.createElement('div',{className:'life1459-pro-options'},choices.map(value=>React.createElement('button',{
@@ -10771,8 +10793,28 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
          React.createElement('button',{type:'button',className:'life1459-pro-primary',disabled:!life1459Draft.priority||!life1459Draft.barrier||!life1459Draft.minutes,onClick:life1459Save},'Salvar minha direção',life143Icon('check')),
          React.createElement('button',{type:'button',className:'life1459-pro-link',onClick:()=>{setLife1459Edit(false);setLife1459Draft(life1459Profile||LIFE1459_EMPTY)}},'Agora não'))),
     React.createElement('footer',{className:'life1459-pro-footer'},
-      React.createElement('span',null,'Personalização baseada somente nas suas escolhas e nas tarefas de hoje. Preferências guardadas neste dispositivo; não enviadas automaticamente à LIFE AI.'),
+      React.createElement('span',null,'Conexões calculadas localmente com dados autorizados. Preferências guardadas neste dispositivo; só entram na IA remota se você permitir Memória no contexto da LIFE AI.'),
       life1459Profile && React.createElement('button',{type:'button',onClick:life1459Forget},'Apagar minhas escolhas'))),
+  lifeBrainBrief && life1459Profile && React.createElement('section',{className:'life1463-brain', 'aria-label':'Conexões inteligentes LIFE OS PRO'},
+    React.createElement('div',{className:'life1463-brain-heading'},
+      React.createElement('div',null,React.createElement('small',null,'LIFE INTELLIGENCE · MOTOR CONTEXTUAL'),React.createElement('h2',null,'O que faz sentido conectar agora?'),React.createElement('p',null,'Sugestões baseadas nas suas escolhas e nos registros das áreas autorizadas.')),
+      React.createElement('div',{className:'life1463-brain-tools'},React.createElement('button',{type:'button',className:'life1463-brain-plan',onClick:()=>{buildAIWorkspace('day');aiOpen(true)}},'Gerar plano editável',life143Icon('edit_calendar')),React.createElement('button',{type:'button',className:'life1463-brain-ask',onClick:()=>aiQuickPrompt('Conecte minhas prioridades e meus registros. Qual é o próximo passo mais útil e por quê?')},'Conversar com a LIFE AI ',life143Icon('arrow_forward')))),
+    React.createElement('div',{className:'life1463-brain-grid'},lifeBrainBrief.suggestions.slice(0,3).map((item,i)=>React.createElement('article',{className:'life1463-brain-card',key:item.id},
+      React.createElement('div',{className:'life1463-brain-card-top'},React.createElement('span',null,String(i+1).padStart(2,'0')),React.createElement('small',null,item.source.toUpperCase())),
+      React.createElement('h3',null,item.title),React.createElement('p',null,item.description),
+      React.createElement('details',null,React.createElement('summary',null,'Por que essa sugestão?'),React.createElement('ul',null,item.evidence.map((row,j)=>React.createElement('li',{key:j},row)))),
+      React.createElement('button',{type:'button',onClick:()=>v42Go(item.route)},item.cta,life143Icon('arrow_forward'))))),
+    React.createElement('section',{className:'life1464-projection','aria-label':'Projeção de tempo do LIFE'},
+      React.createElement('div',{className:'life1464-projection-label'},life143Icon('schedule'),'SIMULAÇÃO DE TEMPO · PRO'),
+      lifeBrainBrief.projection?.available ? React.createElement(React.Fragment,null,
+        React.createElement('div',{className:'life1464-projection-numbers'},
+          React.createElement('strong',null,lifeBrainBrief.projection.blocks,' blocos'),
+          React.createElement('span',null,'de até ',lifeBrainBrief.projection.minutesPerBlock,' min · ',lifeBrainBrief.projection.estimatedMinutes,' min estimados')),
+        React.createElement('small',{className:'life1464-projection-caution'},'Cenário estimado · Não representa tarefas concluídas'),
+        React.createElement('p',null,'Calculado com ',lifeBrainBrief.projection.taskCount,' tarefa(s) com duração informada.',lifeBrainBrief.projection.unestimatedTasks?' '+lifeBrainBrief.projection.unestimatedTasks+' tarefa(s) sem duração ficaram de fora.':'',' Não considera imprevistos e não prevê conclusão.')) :
+        React.createElement('p',null,lifeBrainBrief.projection?.missing||'Informe suas tarefas e tempo disponível para simular blocos.',' Sem inventar números.'),
+      React.createElement('button',{type:'button',onClick:()=>v42Go('Tarefas')},'Revisar durações e tarefas',life143Icon('arrow_forward'))),
+    React.createElement('div',{className:'life1463-brain-foot'},'Motor local baseado em regras verificáveis · Nada é alterado automaticamente · ',React.createElement('button',{type:'button',onClick:()=>{aiOpen(true);setAiContextPanel(true)}},'Revisar permissões da IA'))),
   lifeHomeShown('metrics') && React.createElement('section',{className:'life143-metrics','aria-label':'Indicadores do dia'},
     [['checklist','TAREFAS',String(lifeTodayDone).padStart(2,'0')+' / '+String(lifeTodayPlans.length).padStart(2,'0'),'Concluídas hoje'],
      ['calendar_month','AGENDA',String(lifeCommitmentsOpen.length).padStart(2,'0'),'Compromissos pendentes'],
@@ -10808,7 +10850,7 @@ return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v6
         lifeTodayPlans.length?lifeTodayPlans.slice(0,4).map((t,i)=>React.createElement('button',{type:'button',key:t.id||i,className:'life143-mini-task',onClick:()=>toggleLifeTask(t.id)},React.createElement('span',{className:'life143-mini-check '+(taskIsDone(t)?'done':''),'aria-hidden':true},taskIsDone(t)?'✓':''),React.createElement('span',null,t.text||t.title||'Tarefa'))):React.createElement('p',{className:'life143-no-mini'},'Nenhuma tarefa registrada para hoje.')),
       React.createElement('section',{className:'life143-focus-card'},React.createElement('span',null,'ESPAÇO DE CONCENTRAÇÃO'),React.createElement('strong',null,'Seu tempo, protegido.'),React.createElement('button',{type:'button',onClick:()=>setFocus(true)},'Entrar no modo foco',life143Icon('arrow_forward'))),
       lifeHomeShown('ai') && React.createElement('button',{type:'button',className:'life143-ai-card',onClick:()=>{setAiOriginView('Hoje');setAiQuickOpen(true);}},React.createElement('span',{className:'life143-ai-icon'},life143Icon('psychology')),React.createElement('span',null,React.createElement('strong',null,'LIFE AI'),React.createElement('small',null,'Seu parceiro de evolução.')),life143Icon('arrow_forward')))),
-  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 14.6.2 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
+  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 14.6.4 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
     lifeCustomizeHome && React.createElement('div',{className:'life121-home-pref-options'},[['capture','Captura rápida'],['metrics','Indicadores'],['agenda','Agenda e foco'],['areas','Áreas do LIFE'],['ai','LIFE AI']].map(([id,label])=>React.createElement('label',{key:id},React.createElement('input',{type:'checkbox',checked:lifeHomeShown(id),onChange:()=>lifeToggleHome(id)}),label))))),
             false && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement("main", { className: "life-today-minimal" },
                 React.createElement("section", { className: "life-today-minimal-head" },

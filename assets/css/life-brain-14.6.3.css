@@ -1,0 +1,60 @@
+/* LIFE OS 14.6.3 — PRO intelligence only. No changes to FREE styling. */
+.life-pro-active .life1463-brain{
+  position:relative;display:grid;gap:19px;isolation:isolate;min-width:0;
+  margin:24px 0 28px;padding:27px 28px 24px;border-radius:25px;
+  border:1px solid rgba(255,155,70,.28);color:#f8f9fb;
+  background:radial-gradient(circle at 97% -10%,rgba(255,129,34,.17),transparent 38%),linear-gradient(145deg,#171a20 0%,#0d1117 70%,#11151b 100%);
+  box-shadow:0 18px 62px rgba(0,0,0,.27),inset 0 1px 0 rgba(255,255,255,.09);
+}
+.life1463-brain-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.life1463-brain-heading>div{min-width:0;flex:1 1 320px}
+.life1463-brain-heading small{color:#ffa661;letter-spacing:.11em;font-weight:850;font-size:10px}
+.life1463-brain-heading h2{margin:8px 0;color:#fff;font-size:clamp(20px,2vw,28px);font-weight:850;line-height:1.15;letter-spacing:-.025em}
+.life1463-brain-heading p{font-size:13px;color:#b8c0cd;margin:0;line-height:1.55}
+.life-pro-active .life1463-brain button{cursor:pointer}
+.life1463-brain-ask{display:inline-flex;gap:9px;align-items:center;justify-content:center;padding:12px 16px;border:1px solid rgba(255,147,55,.5);border-radius:13px;background:linear-gradient(150deg,#ffad55,#fa8728);color:#22150b;font-size:12px;font-weight:850;min-height:43px;box-shadow:0 8px 26px rgba(255,118,20,.2)}
+.life1463-brain-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.life1463-brain-card{min-width:0;display:flex;flex-direction:column;gap:10px;padding:18px;border:1px solid rgba(255,255,255,.11);border-radius:17px;background:linear-gradient(156deg,rgba(255,255,255,.055),rgba(255,255,255,.018));box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.life1463-brain-card-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:850;color:#ffab60}
+.life1463-brain-card-top span{font:700 17px/1 'JetBrains Mono',monospace}
+.life1463-brain-card-top small{font-size:9px;letter-spacing:.08em;color:#bcc4d0}
+.life1463-brain-card h3{margin:1px 0 0;color:#fff;font-size:16px;font-weight:850;line-height:1.3}
+.life1463-brain-card p{color:#b9c2ce;font-size:12px;line-height:1.6;margin:0;flex-grow:1}
+.life1463-brain-card details{border-top:1px solid rgba(255,255,255,.095);padding-top:10px;color:#c9d2dd;font-size:11px}
+.life1463-brain-card summary{cursor:pointer;font-weight:750;color:#f5be8d;list-style-position:inside}
+.life1463-brain-card ul{padding:0 0 0 18px;margin:9px 0 0;line-height:1.6}
+.life1463-brain-card>button{border:1px solid rgba(255,155,70,.24);background:rgba(255,146,43,.13);color:#ffd0a5;border-radius:11px;font-weight:800;font-size:12px;min-height:41px;display:flex;gap:8px;align-items:center;justify-content:space-between;padding:9px 13px;margin-top:3px}
+.life1463-brain-card>button:hover,.life1463-brain-card>button:focus-visible{background:#ff9b42;color:#1b130e;border-color:#ff9b42}
+.life1463-brain-foot{display:flex;align-items:center;flex-wrap:wrap;gap:5px;color:#a2adbc;font-size:11px;line-height:1.5;border-top:1px solid rgba(255,255,255,.075);padding-top:13px}
+.life1463-brain-foot button{background:transparent;color:#ffc18d;border:0;text-decoration:underline;font-size:11px;font-weight:750;padding:2px}
+.life1463-brain :is(button,summary):focus-visible{outline:3px solid #ffb579;outline-offset:3px}
+/* Aurora: preserve its warm clean paper surfaces, not a black patch in day mode. */
+html.life-theme-day .life-pro-active .life1463-brain{
+  color:#262428;border-color:#efd6bd;background:linear-gradient(140deg,#fffaf4 0%,#fff 62%,#f9f3ec 100%);box-shadow:0 16px 46px rgba(77,59,39,.11),inset 0 1px 0 #fff;
+}
+html.life-theme-day .life1463-brain-heading h2,html.life-theme-day .life1463-brain-card h3{color:#28242a}
+html.life-theme-day .life1463-brain-heading p,html.life-theme-day .life1463-brain-card p{color:#605d62}
+html.life-theme-day .life1463-brain-heading small{color:#aa571a}
+html.life-theme-day .life1463-brain-card{background:#fff;border-color:#eaded1;box-shadow:0 8px 22px rgba(43,33,21,.055)}
+html.life-theme-day .life1463-brain-card-top small,html.life-theme-day .life1463-brain-foot{color:#665e59}
+html.life-theme-day .life1463-brain-card details{color:#514b47;border-color:#f0e5d8}
+html.life-theme-day .life1463-brain-card summary{color:#98521f}
+html.life-theme-day .life1463-brain-card>button{background:#fff2e6;color:#a64e14;border-color:#f4ceb0}
+html.life-theme-day .life1463-brain-card>button:hover,html.life-theme-day .life1463-brain-card>button:focus-visible{background:#ed832f;color:#fff}
+html.life-theme-day .life1463-brain-foot{border-color:#ecdcc9}
+html.life-theme-day .life1463-brain-foot button{color:#9e4c13}
+@media(max-width:1100px){.life1463-brain-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){
+.life-pro-active .life1463-brain{padding:18px 16px;margin:18px 0 25px;border-radius:20px;gap:16px}
+.life1463-brain-heading{display:grid;gap:15px}
+.life1463-brain-heading h2{font-size:21px}
+.life1463-brain-ask{width:100%}
+.life1463-brain-grid{grid-template-columns:minmax(0,1fr);gap:11px}
+.life1463-brain-card{padding:16px}
+}
+@media(prefers-reduced-motion:reduce){.life1463-brain *{animation:none!important;transition:none!important}}
+
+.life1463-brain-tools{display:flex;gap:9px;flex-wrap:wrap}
+.life1463-brain-plan{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 15px;min-height:43px;border-radius:13px;background:#262b33;border:1px solid rgba(255,255,255,.19);color:#f5f5f5;font-size:12px;font-weight:750}
+html.life-theme-day .life1463-brain-plan{background:#fff;border-color:#e8cdb3;color:#8b471e}
+@media(max-width:720px){.life1463-brain-tools{display:grid;grid-template-columns:minmax(0,1fr)}.life1463-brain-plan{width:100%}}
