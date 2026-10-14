@@ -1,25 +1,9 @@
-# LIFE OS 14.6.4 — Power Premium · Inteligência revisada
+# LIFE OS 14.6.5 — Guia inteligente integrado
 
-Projeto completo para GitHub/Vercel, baseado na versão 14.6.3.
+Versão completa baseada no LIFE OS 14.6.4; preserva a identidade FREE profissional e PRO Signature.
 
-### Principais melhorias
-- Tratamento de registros incompletos sem bloquear o painel PRO.
-- LIFE AI libera o botão de envio depois de erro inesperado e informa a falha.
-- Projeção **estimada** de blocos de tempo a partir de tarefas com duração registrada e preferência do usuário, sem prometer conclusão.
-- Prazos de tarefas sem hora comparados corretamente por dia.
-- Melhor empacotamento JSON do contexto para a IA remota, que deve ser implantada separadamente no Supabase.
-- Versão e Service Worker atualizados.
+**Mudanças:** seletor de cidade no Clima sem GPS automático; tratamento do gesto de atualizar ao puxar de cima; guias PRO por área; recomendações educativas de livros e buscas de vídeo por assunto e etapa.
 
-### Design e conteúdo
-- FREE Profissional e PRO Signature permanecem visualmente iguais à versão aprovada.
-- O novo bloco de projeção existe **somente na Home PRO**. Não desbloqueia funcionalidades pagas para contas FREE.
-- Nenhuma compra, alteração de banco ou edição de tarefas é executada automaticamente pelo cérebro.
+**Para publicar:** extraia e envie todos os arquivos ao GitHub; mantenha `index.html` na raiz. O domínio www.uselifeos.com.br continua configurado na Vercel. Atualizações da função `supabase/functions/life-ai/index.ts` precisam de implantação separada; esta release não alterou esse arquivo.
 
-### Como publicar
-1. Faça backup do repositório GitHub.
-2. Extraia este ZIP e envie **os arquivos internos**, sem a pasta contenedora. `index.html` deve ficar na raiz.
-3. Aguarde o deploy da Vercel e teste com contas FREE e PRO/OWNER em `www.uselifeos.com.br`.
-4. Para atualizar a LIFE AI **remota**, trate `supabase/functions/life-ai/index.ts` como uma etapa **separada** e valide segredos e origens autorizadas. Publicar o ZIP não implanta o Supabase.
-
-### Testes e limitações
-Leia `QA_REPORT_14.6.4.md`. Os testes fornecidos são locais e de componentes. Não foram realizados testes end-to-end autenticados, compras reais, ou sincronização entre dispositivos.
+**Importante:** o aplicativo oferece apoio e conteúdos de orientação; não representa serviços licenciados de médico, psicólogo, nutricionista, personal trainer ou consultor financeiro. Veja o arquivo `QA_REPORT_14.6.5.md`.

@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-14.6.4-projection-stable';
-const ASSET_BUILD='14.6.4';
+const LIFE_CACHE='life-os-14.6.5-cerebro-clima-scroll';
+const ASSET_BUILD='14.6.5';
 const SHELL=[
   './',
   './index.html',
@@ -22,6 +22,7 @@ const SHELL=[
   './assets/css/pro-understands-you-14.5.9.css',
   './assets/css/life-brain-14.6.3.css',
   './assets/css/life-brain-projection-14.6.4.css',
+  './assets/css/life-advisors-14.6.5.css',
   './assets/media/hero-daylight.webp',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',
@@ -40,6 +41,7 @@ const SHELL=[
   './assets/js/generator-rules-12.2.js',
   './assets/js/life-integrity-12.3.js',
   './assets/js/life-brain-14.6.4.js',
+  './assets/js/life-advisors-14.6.5.js',
   './assets/js/life-quality-12.4.js',
   './assets/js/life-release-12.5.js',
   './assets/js/life-production-12.6.js',

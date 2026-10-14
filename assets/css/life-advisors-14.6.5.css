@@ -1,0 +1,33 @@
+/* LIFE OS 14.6.5 · stable climate picker and app scrolling */
+html,body{overscroll-behavior-y:none!important;}
+html{scroll-behavior:auto;}
+.life-weather-wrap{overscroll-behavior:contain!important;}
+.life-weather-sheet{overscroll-behavior:contain!important;overflow-y:auto!important;overflow-x:hidden!important;max-height:min(88dvh,820px)!important;touch-action:pan-y!important;contain:none!important;}
+.life1465-location-help{margin:13px 0 9px;font-size:11px;letter-spacing:.02em;color:#e6ad80;line-height:1.5}
+.life1465-show-forecast{display:block;width:100%;border:1px solid rgba(255,141,74,.32);border-radius:14px;background:rgba(255,137,64,.12);color:#ffbf91;text-align:left;padding:15px 16px;min-height:48px;font-size:12px;font-weight:800;margin:15px 0;cursor:pointer}
+.life-weather-connect input{min-width:0!important;flex:1 1 190px!important;min-height:46px}
+.life-weather-connect{display:flex;flex-wrap:wrap;gap:9px!important}
+.life-weather-connect button{flex:0 1 auto;min-height:44px;white-space:normal;line-height:1.35}
+html.life-theme-day .life1465-location-help{color:#8d4a27}
+html.life-theme-day .life1465-show-forecast{background:#fff5e9;border-color:#d6a37d;color:#713812}
+@media(max-width:700px){.life-weather-sheet{max-height:calc(100dvh - env(safe-area-inset-top,0px) - 18px)!important;min-height:0!important;padding-bottom:max(22px,env(safe-area-inset-bottom,0px))!important}.life-weather-connect{display:grid!important;grid-template-columns:minmax(0,1fr)!important}.life-weather-connect input,.life-weather-connect button{width:100%;max-width:100%;min-width:0!important}.life-weather-head{gap:10px}.life-weather-head .v18-title{font-size:clamp(20px,5.6vw,27px)!important}}
+/* PRO educational guidance, below the contextual recommendations */
+.life1465-specialties{margin:22px 0 28px;padding:23px;border:1px solid rgba(243,160,95,.20);background:linear-gradient(120deg,rgba(255,145,79,.065),rgba(22,27,34,.55));border-radius:23px}
+.life1465-specialties-header small{color:#ffa968;font-size:10px;font-weight:800;letter-spacing:.1em}
+.life1465-specialties-header h2{font-size:clamp(21px,2.3vw,31px);line-height:1.2;margin:10px 0;color:#f4f3f1}
+.life1465-specialties-header p{color:#b8bdc4;font-size:12px;line-height:1.65;max-width:730px}
+.life1465-specialties-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-top:17px}
+.life1465-specialties-grid button{text-align:left;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(17,22,28,.83);padding:17px;min-height:104px;color:#f3eee9;cursor:pointer;transition:border-color .15s, transform .15s}
+.life1465-specialties-grid button:hover,.life1465-specialties-grid button:focus-visible{border-color:rgba(255,155,90,.52);transform:translateY(-2px)}
+.life1465-specialties-grid strong{display:block;font-size:14px;margin-bottom:8px}
+.life1465-specialties-grid small{display:block;color:#a5aeb9;font-size:11px;line-height:1.55}
+html.life-theme-day .life1465-specialties{background:linear-gradient(120deg,#fffaf5,#f6f0e9);border-color:#e5c4a8}
+html.life-theme-day .life1465-specialties-header h2{color:#222a35}
+html.life-theme-day .life1465-specialties-header p{color:#4b5666}
+html.life-theme-day .life1465-specialties-grid button{background:#fff;border-color:#e6d8cc;color:#232d38}
+html.life-theme-day .life1465-specialties-grid small{color:#596473}
+@media(max-width:850px){.life1465-specialties-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.life1465-specialties{padding:18px 14px}.life1465-specialties-grid{grid-template-columns:1fr}.life1465-specialties-grid button{min-height:79px;padding:14px}}
+.life-weather-head{align-items:flex-start!important}
+.life-weather-head>.v18-btn{align-self:flex-start!important;min-height:42px;max-height:48px;flex:0 0 auto!important;padding:11px 12px!important}
+@media(max-width:390px){.life-weather-head>.v18-btn{font-size:10px!important;min-width:62px!important}}
