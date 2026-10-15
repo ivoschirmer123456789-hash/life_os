@@ -980,15 +980,33 @@ const lifePlanMealGlyph = (label) => {
     if (/noite|jantar|ceia/.test(low)) return '☾';
     return '◆';
 };
-const lifeResolveWorkoutExercise = (move, session) => {
-    if (!move) return null;
-    const sessionLabel = String(session?.t || session?.d || '');
-    const targets = lifeExtractMuscleTargets(sessionLabel);
-    for (const group of targets) {
-        const found = lifeFindExercise(move, group);
-        if (found) return found;
-    }
-    return lifeFindExercise(move, targets[0]) || IRON_EXERCISE_LIBRARY.find(ex => lifeNormalizeText(ex.name).includes(lifeNormalizeText(move))) || null;
+const lifePlanMatchExerciseV1493 = (move) => {
+    const wanted = lifeNormalizeText(move).replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+    if(!wanted) return null;
+    const normalized = ex => lifeNormalizeText(ex.name).replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+    const exact=IRON_EXERCISE_LIBRARY.find(ex=>normalized(ex)===wanted);
+    if(exact) return {exercise:exact,exact:true};
+    // Só liga a um exercício de referência quando o nome realmente identifica a mesma família.
+    const aliases = {
+        'supino':'supino reto com barra', 'supino com halteres':'supino reto com halteres',
+        'supino inclinado':'supino inclinado com halteres',
+        'puxada':'puxada alta lat pulldown', 'puxada alta':'puxada alta lat pulldown',
+        'agachamento':'agachamento livre', 'remada unilateral':'remada unilateral com halter',
+        'remada baixa':'remada baixa na polia', 'elevacao lateral':'elevacao lateral com halteres',
+        'rosca':'rosca direta com halteres', 'rosca martelo':'rosca martelo',
+        'desenvolvimento':'desenvolvimento com halteres', 'prancha':'prancha abdominal isometrica',
+        'triceps na polia':'triceps corda na polia','leg press':'leg press 45'
+    };
+    const alias = aliases[wanted];
+    const close = alias ? IRON_EXERCISE_LIBRARY.find(ex=>normalized(ex)===alias || normalized(ex).startsWith(alias+' ')) : null;
+    return close ? {exercise:close,exact:false} : null;
+};
+const lifeResolveWorkoutExercise = (move) => lifePlanMatchExerciseV1493(move)?.exercise || null;
+const lifePlanVideoSearchV1493 = name => 'https://www.youtube.com/results?search_query='+encodeURIComponent(String(name||'exercício')+' execução correta passo a passo');
+const lifePlanOpenVideoV1493 = (move, onOpenExercise) => {
+    const match=lifePlanMatchExerciseV1493(move);
+    if(match?.exercise && onOpenExercise) return onOpenExercise(match.exercise);
+    if(typeof window!=='undefined' && typeof window.open==='function') window.open(lifePlanVideoSearchV1493(move),'_blank','noopener,noreferrer');
 };
 // Independente do contexto de React: o motor de apresentação não depende de funções locais da tela.
 const lifePlanSessionKindV149 = (day) => {
@@ -1011,39 +1029,44 @@ const lifeWorkoutSessionStats = (workout) => {
     ];
 };
 const lifeRenderWorkoutExerciseCards = (session, onOpenExercise) => {
-    const rows = Array.isArray(session?.prescription) && session.prescription.length
-        ? session.prescription.map((pr, i) => ({ move: pr.move || session.moves?.[i] || ('Exercício ' + (i + 1)), prescription: pr }))
-        : (Array.isArray(session?.moves) ? session.moves.map((move, i) => ({ move, prescription: null })) : []);
-    if (!rows.length) return null;
-    return React.createElement('div', { className: 'life-plan-ex-grid-v149' }, rows.map((row, i) => {
-        const ex = lifeResolveWorkoutExercise(row.move, session);
-        const group = ex ? lifeExerciseGroup(ex) : (lifePlanSessionKindV149(session) === 'cardio' ? 'Cardio' : lifePlanSessionKindV149(session) === 'mobility' ? 'Mobilidade' : 'Geral');
-        const visual = LIFE_PLAN_VISUALS_V149[group] || LIFE_PLAN_VISUALS_V149.Geral;
-        const vi = ex ? lifeExerciseVideoInfo(ex) : { id: null, exact: false, label: '' };
-        const videoIsExact = !!(ex && vi?.id && vi.exact && lifeNormalizeText(ex.name) === lifeNormalizeText(row.move));
-        const videoSearchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(row.move + ' execução correta exercício');
-        const meta = ex ? lifeExerciseMeta(ex) : null;
-        const pres = row.prescription || {};
-        return React.createElement('article', { className: 'life-plan-ex-card-v149', key: (session.k || 's') + '_' + i },
-            React.createElement('div', { className: 'life-plan-ex-thumb-v149 ' + (videoIsExact ? 'has-video' : 'fallback'), onClick: () => ex && onOpenExercise && onOpenExercise(ex) },
-                videoIsExact
-                    ? React.createElement('img', { src: 'https://i.ytimg.com/vi/' + vi.id + '/hqdefault.jpg', alt: 'Prévia do exercício ' + row.move, loading: 'lazy' })
-                    : React.createElement(React.Fragment, null,
-                        React.createElement('span', { className: 'material-symbols-rounded' }, visual.icon),
-                        React.createElement('em', null, visual.emoji))),
-            React.createElement('div', { className: 'life-plan-ex-content-v149' },
-                React.createElement('div', { className: 'life-plan-ex-top-v149' },
-                    React.createElement('small', null, group.toUpperCase()),
-                    React.createElement('b', null, row.move)),
-                React.createElement('div', { className: 'life-plan-ex-chips-v149' },
-                    React.createElement('span', null, (pres.sets || 3) + ' séries'),
-                    React.createElement('span', null, pres.reps || (lifePlanSessionKindV149(session) === 'cardio' ? 'tempo guiado' : '8–12 reps')),
-                    React.createElement('span', null, pres.rest ? pres.rest + 's pausa' : (lifePlanSessionKindV149(session) === 'cardio' ? 'ritmo confortável' : 'técnica primeiro')),
-                    meta?.equipment && React.createElement('span', null, meta.equipment)),
-                React.createElement('p', { className: 'life-plan-ex-note-v149' }, videoIsExact ? 'Demonstração deste exercício disponível dentro do LIFE.' : ex ? 'Confira a técnica e procure uma demonstração específica antes de executar.' : 'Sem correspondência confirmada na biblioteca; confira a execução antes de treinar.'),
-                React.createElement('div', { className: 'life-plan-ex-actions-v149' },
-                    React.createElement('button', { type: 'button', onClick: () => ex && onOpenExercise && onOpenExercise(ex), disabled: !ex }, 'COMO FAZER'),
-                    React.createElement('button', { type: 'button', className: videoIsExact ? 'hot' : '', onClick: () => videoIsExact ? (ex && onOpenExercise && onOpenExercise(ex)) : window.open(videoSearchUrl, '_blank', 'noopener,noreferrer') }, videoIsExact ? 'VER VÍDEO' : 'PROCURAR VÍDEO'))));
+    const prs = Array.isArray(session?.prescription) ? session.prescription : [];
+    const moves = Array.isArray(session?.moves) && session.moves.length
+        ? session.moves.map(x=>typeof x==='string'?x:String(x?.name||x?.move||''))
+        : prs.map(x=>String(x?.move||''));
+    const rows = moves.filter(Boolean).map((move,i)=>({move,prescription:prs[i]||{}}));
+    if(!rows.length) return null;
+    return React.createElement('div',{className:'life-plan-ex-grid-v149 life-plan-ex-grid-v1493'},rows.map((row,i)=>{
+      const match=lifePlanMatchExerciseV1493(row.move),ex=match?.exercise||null;
+      const group=ex?lifeExerciseGroup(ex):(lifePlanSessionKindV149(session)==='cardio'?'Cardio':lifePlanSessionKindV149(session)==='mobility'?'Mobilidade':'Geral');
+      const info=ex?lifeExerciseVideoInfo(ex):null;
+      const exactVideo=!!(match?.exact&&info?.exact&&info?.id);
+      const referenceVideo=!!(!exactVideo&&info?.id);
+      const visuals=LIFE_PLAN_VISUALS_V149[group]||LIFE_PLAN_VISUALS_V149.Geral;
+      const pr=row.prescription,cardTitle=row.move;
+      const rest=Number(pr.rest),sets=Number(pr.sets);
+      const kind=lifePlanSessionKindV149(session);
+      const videoAction=()=>lifePlanOpenVideoV1493(cardTitle,onOpenExercise);
+      return React.createElement('article',{className:'life-plan-ex-card-v149 life-ex-card-1493',key:String(session?.k||'s')+'-'+i},
+        React.createElement('button',{type:'button',className:'life-plan-ex-thumb-v149 life-ex-image-1493'+(info?.id?' has-video':' fallback'),onClick:videoAction,'aria-label':'Ver demonstração de '+cardTitle},
+          info?.id?React.createElement(React.Fragment,null,
+            React.createElement('img',{src:'https://i.ytimg.com/vi/'+info.id+'/hqdefault.jpg',loading:'lazy',alt:(exactVideo?'Vídeo do exercício ':'Referência ilustrativa de movimento para ')+cardTitle,onError:e=>{if(e?.currentTarget)e.currentTarget.style.display='none';}}),
+            React.createElement('span',{className:'life-ex-playbadge-1493','aria-hidden':true},'▶'),
+            React.createElement('span',{className:'life-ex-photo-label-1493'},exactVideo?'DEMONSTRAÇÃO':'VÍDEO DE REFERÊNCIA')):
+            React.createElement('span',{className:'material-symbols-rounded'},visuals.icon)),
+        React.createElement('div',{className:'life-plan-ex-content-v149'},
+          React.createElement('div',{className:'life-plan-ex-top-v149'},
+            React.createElement('small',null,('0'+(i+1)).slice(-2)+' / '+group.toUpperCase()),
+            React.createElement('b',null,cardTitle)),
+          React.createElement('div',{className:'life-plan-ex-chips-v149'},
+            kind==='strength'&&React.createElement('span',null,(sets>=1&&sets<=8?sets:3)+' séries'),
+            React.createElement('span',null,pr.reps|| (kind==='strength'?'8–12 repetições':'ritmo confortável')),
+            rest>0&&React.createElement('span',null,rest+'s descanso'),
+            ex&&React.createElement('span',null,lifeExerciseMeta(ex).equipment)),
+          React.createElement('p',{className:'life-plan-ex-note-v149'},exactVideo?'Vídeo correspondente ao movimento.':referenceVideo?'Referência do padrão de movimento; confira a variação.':'Procure um tutorial específico deste exercício.'),
+          React.createElement('div',{className:'life-plan-ex-actions-v149'},
+            React.createElement('button',{type:'button',className:'hot',onClick:videoAction},info?.id?'▶ VER VÍDEO':'▶ ENCONTRAR VÍDEO'),
+            React.createElement('button',{type:'button',onClick:()=>{if(typeof window!=='undefined'&&window.open)window.open(lifePlanVideoSearchV1493(cardTitle),'_blank','noopener,noreferrer');}},'BUSCAR EXATO'),
+            ex&&React.createElement('button',{type:'button',onClick:()=>onOpenExercise&&onOpenExercise(ex)},'TÉCNICA'))));
     }));
 };
 const lifeRenderNutritionBlocksV149 = (items = []) => React.createElement('div', { className: 'life-meal-grid-v149' }, (items || []).map((x, i) => {
@@ -6881,7 +6904,7 @@ function LifeOSV18() {
             addLifeRecent({ type: 'Treino híbrido', id: w.id, title: w.name || 'Treino híbrido', go: 'Fitness', subtitle: (completeHybrid.strengthDays || 0) + ' musculação · ' + (completeHybrid.cardioDays || 0) + ' corrida/cardio', workout: completeHybrid });
             return;
         }
-        startWorkoutPlayer(w);
+        setSelectedReadyWorkout(w);
     };
     const finishWorkoutSet = () => {
         if (!activeWorkout)
@@ -7276,6 +7299,7 @@ function LifeOSV18() {
     const [pfPlanName, setPfPlanName] = React.useState('');
     const [savedCustomWorkouts, setSavedCustomWorkouts] = React.useState(() => load('life_custom_workouts_v2', []));
     const [selectedCustomWorkout, setSelectedCustomWorkout] = React.useState(null);
+    const [selectedReadyWorkout, setSelectedReadyWorkout] = React.useState(null);
     const [editingCustomId, setEditingCustomId] = React.useState(null);
     const [editingCustomName, setEditingCustomName] = React.useState('');
     const workoutFinderDraft = load('life_form_workout_finder_v9', null);
@@ -7858,12 +7882,13 @@ function LifeOSV18() {
                 answers:{...a}, report:life149TrainingReport,
                 methodNote: (age > 0 && age < 18 ? 'Modo jovem: técnica, progressão gradual e recuperação têm prioridade. ' : '') + 'O plano usa as respostas do questionário, considerando frequência, experiência, ambiente, recuperação e preferências. '+(life149TrainingReport?.note||'')+' '+(life149TrainingReport?.nextMeasure||'')
             };
+            const refinedPlan=window.LifeIntelligence149?.refineTrainingPlan(generatedTrainingPlan,a)||generatedTrainingPlan;
             setPfPlanName(generatedPlanName);
-            setPfPlan(generatedTrainingPlan);
+            setPfPlan(refinedPlan);
             if (!hasV18Pro) {
                 try {
                     lifeRawStorageSet('life_free_custom_workout_v82', JSON.stringify({
-                        id: 'free_draft_v82', name: generatedPlanName, plan: generatedTrainingPlan,
+                        id: 'free_draft_v82', name: generatedPlanName, plan: refinedPlan,
                         answers: { ...pfAnswers }, createdAt: new Date().toISOString()
                     }));
                 } catch (e) {}
@@ -8846,7 +8871,7 @@ function LifeOSV18() {
     ].filter(Boolean).slice(0, 3);
     const days = [];
     const currentWorkoutPrescription = activeWorkout ? (activeWorkout.prescription?.[workoutExerciseIndex] || { sets: 3, reps: '8–12', rest: 90 }) : null;
-    const currentWorkoutExercise = activeWorkout ? IRON_EXERCISE_LIBRARY.find(ex => lifeNormalizeText(ex.name) === lifeNormalizeText(activeWorkout.moves?.[workoutExerciseIndex] || '')) : null;
+    const currentWorkoutExercise = activeWorkout ? lifeResolveWorkoutExercise(activeWorkout.moves?.[workoutExerciseIndex] || '') : null;
     if (lifeAccess === 'checking') {
         return React.createElement("div", { style: { minHeight: '100vh', background: lifeTheme === 'day' ? '#f8f1e9' : '#050505', display: 'grid', placeItems: 'center', color: lifeTheme === 'day' ? '#292f39' : '#fff', fontFamily: 'Inter, sans-serif' } },
             React.createElement("div", { style: { fontSize: 12, letterSpacing: 3, opacity: .55 } }, "LIFE."));
@@ -13089,6 +13114,7 @@ function LifeOSV18() {
                     React.createElement("div", { className: "life-workout-current" },
                         React.createElement("small", null, "EXERC\u00CDCIO ATUAL"),
                         React.createElement("h3", null, activeWorkout.moves?.[workoutExerciseIndex]),
+                        lifeRenderWorkoutExerciseCards({k:'EM EXECUÇÃO',t:activeWorkout.name,moves:[activeWorkout.moves?.[workoutExerciseIndex]],prescription:[currentWorkoutPrescription],sessionType:activeWorkout.sessionType||'strength'},openExerciseDetail),
                         currentWorkoutExercise && React.createElement("div", { className: "life-fit35-session-tools" },
                             React.createElement("button", { type: "button", className: "life-fit34-technique", onClick: () => openExerciseDetail(currentWorkoutExercise) }, React.createElement("span", { className: "material-symbols-rounded" }, "play_circle"), "TÉCNICA + VÍDEO"),
                             React.createElement("button", { type: "button", onClick: swapCurrentWorkoutExercise }, React.createElement("span", { className: "material-symbols-rounded" }, "swap_horiz"), "TROCAR"),
@@ -13324,15 +13350,45 @@ function LifeOSV18() {
                                     guide.good[i] && React.createElement("div", { className: "good" },
                                         "\u2713 ",
                                         guide.good[i])))))); })()))),
+            selectedReadyWorkout && React.createElement('div',{className:'v27-modal life-ready-modal-1493',onClick:e=>{if(e.target===e.currentTarget)setSelectedReadyWorkout(null)}},
+               React.createElement('article',{className:'v27-sheet vfit-detail-sheet life-workout-sheet-1493',role:'dialog','aria-modal':true,'aria-label':'Ficha de treino '+String(selectedReadyWorkout.name||'')},
+                 React.createElement('div',{className:'life-plan-hero-1493'},
+                   React.createElement('div',null,
+                     React.createElement('small',null,'LIFE OS / FICHA DE TREINO PRONTO'),
+                     React.createElement('h2',null,selectedReadyWorkout.name||'Treino pronto'),
+                     React.createElement('p',null,'Veja cada movimento e sua demonstração antes de iniciar.')),
+                   React.createElement('button',{type:'button',onClick:()=>setSelectedReadyWorkout(null),'aria-label':'Fechar ficha de treino'},'×')),
+                 React.createElement('div',{className:'life-plan-stats-1493'},
+                   [['NÍVEL',selectedReadyWorkout.level||'Adaptável'],['SESSÕES / SEMANA',String(selectedReadyWorkout.days||1)],['DURAÇÃO',selectedReadyWorkout.duration||'Flexível'],['EXERCÍCIOS',String(selectedReadyWorkout.weeklyItems?.length?selectedReadyWorkout.weeklyItems.reduce((n,d)=>n+(Array.isArray(d.moves)?d.moves.length:0),0):(selectedReadyWorkout.moves||selectedReadyWorkout.items||[]).length)]].map(([label,value])=>React.createElement('div',{key:label},React.createElement('small',null,label),React.createElement('b',null,value)))),
+                 React.createElement('div',{className:'life-plan-intel-1493'},
+                   React.createElement('span',{className:'material-symbols-rounded'},'psychology'),
+                   React.createElement('div',null,React.createElement('b',null,'Por que este plano?'),
+                     React.createElement('p',null,(window.LifeIntelligence149?.analyzeWorkoutPlan(selectedReadyWorkout,{age:trainingAge})?.summary)||'Modelo pronto. Ajuste à experiência, técnica e recuperação antes de executar.'))),
+                 React.createElement('div',{className:'life-plan-sections-1493'},
+                    (Array.isArray(selectedReadyWorkout.weeklyItems)&&selectedReadyWorkout.weeklyItems.length?selectedReadyWorkout.weeklyItems:[{
+                      k:'SESSÃO',t:selectedReadyWorkout.name||'Treino',moves:selectedReadyWorkout.moves||selectedReadyWorkout.items||[],prescription:selectedReadyWorkout.prescription||[],sessionType:selectedReadyWorkout.sessionType||'strength'}]).map((day,i)=>
+                      React.createElement('section',{className:'life-day-card-v149 life-plan-day-1493',key:i},
+                        React.createElement('div',{className:'life-plan-day-head-1493'},React.createElement('div',null,React.createElement('small',null,day.k||'SESSÃO '+(i+1)),React.createElement('h3',null,day.t||selectedReadyWorkout.name)),React.createElement('span',null,(day.moves||[]).length+' movimentos')),
+                        lifeRenderWorkoutExerciseCards(day,openExerciseDetail),
+                        React.createElement('button',{type:'button',className:'life-plan-start-1493',onClick:()=>{
+                          const normalizedMoves=Array.isArray(day.moves)?day.moves:[];
+                          startWorkoutPlayer({ ...selectedReadyWorkout,id:String(selectedReadyWorkout.id||'ready')+'_'+i,
+                            name:(selectedReadyWorkout.name||'Treino')+(selectedReadyWorkout.weeklyItems?.length?' · '+(day.t||'Dia '+(i+1)):''),
+                            moves:normalizedMoves.length?normalizedMoves:(selectedReadyWorkout.moves||selectedReadyWorkout.items||[]),
+                            prescription:day.prescription||selectedReadyWorkout.prescription||[],sessionType:day.sessionType||'strength'});
+                          setSelectedReadyWorkout(null);
+                        }},'INICIAR ESTA SESSÃO →')))),
+                 React.createElement('p',{className:'life-plan-disclaimer-1493'},'Ajuste o treino à sua experiência e recuperação. Confira a demonstração correspondente, respeite seus limites e interrompa movimentos dolorosos.'))),
             selectedCustomWorkout && React.createElement("div", { className: "v27-modal", onClick: e => { if (e.target === e.currentTarget)
                     setSelectedCustomWorkout(null); } },
-                React.createElement("div", { className: "v27-sheet vfit-detail-sheet" },
+                React.createElement("div", { className: "v27-sheet vfit-detail-sheet life-workout-sheet-1493" },
                     React.createElement("div", { className: "flex items-center justify-between" },
                         React.createElement("div", { className: "micro" }, "MINHA PASTA / TREINO PERSONALIZADO"),
                         React.createElement("button", { type: "button", onClick: () => setSelectedCustomWorkout(null), className: "iconbtn" }, "\u00D7")),
                     React.createElement("div", { className: "v27-q" }, selectedCustomWorkout.name),
                     React.createElement("div", { className: "v27-help" }, selectedCustomWorkout.temporary ? 'Estrutura sugerida pelo filtro. Revise a semana inteira antes de salvar.' : 'Plano salvo no seu LIFE. Abra qualquer dia para iniciar a sessão correspondente.'),
                     selectedCustomWorkout.type === 'Híbrido' && React.createElement("div", { className: "v27-help" }, "SEMANA HÍBRIDA · ", (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).filter(day => workoutSessionKind(day) === 'strength').length, " MUSCULAÇÃO · ", (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).filter(day => workoutSessionKind(day) === 'cardio').length, " CORRIDA/CARDIO"),
+                    React.createElement('div',{className:'life-plan-intel-1493'},React.createElement('span',{className:'material-symbols-rounded'},'psychology'),React.createElement('div',null,React.createElement('b',null,'LEITURA INTELIGENTE DO TREINO'),React.createElement('p',null,(window.LifeIntelligence149?.analyzeWorkoutPlan(selectedCustomWorkout,selectedCustomWorkout.answers||{})?.summary)||'O plano considera sua semana, técnica e recuperação.'))),
                     React.createElement("div", { className: "life-clean-summary-v149 life-workout-summary-v149" }, lifeWorkoutSessionStats(selectedCustomWorkout).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))),
                     React.createElement("div", { className: "v27-plan v64-week-plan life-week-plan-v149" }, (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).map((x, i) => React.createElement("div", { className: "v27-day v64-session-" + workoutSessionKind(x) + ' life-day-card-v149', key: i },
                         React.createElement("small", null, x.k, " · ", workoutSessionKind(x) === 'cardio' ? 'CORRIDA/CARDIO' : workoutSessionKind(x) === 'mobility' ? 'MOBILIDADE' : 'MUSCULAÇÃO'),

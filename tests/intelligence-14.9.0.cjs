@@ -4,7 +4,7 @@ const root=path.join(__dirname,'..'),load=p=>fs.readFileSync(path.join(root,p),'
 let passed=0;function check(desc,fn){fn();passed++;console.log('PASS',desc)}
 const ctx={window:{}};vm.runInNewContext(load('assets/js/life-intelligence-14.9.0.js'),ctx,{timeout:2000});
 const api=ctx.window.LifeIntelligence149;
-check('API inicializa isolada sem browser/server',()=>assert.equal(api.version,'14.9.0'));
+check('API inicializa isolada sem browser/server',()=>assert.equal(api.version,'14.9.3'));
 check('Ignora perguntas vazias',()=>assert.equal(api.answer(''),null));
 check('Sem planos não inventa diagnóstico',()=>assert.match(api.answer('Meu relatório',{})?.text||'',/abra Estudos/i));
 check('Livro de matemática é específico',()=>assert.ok(api.recommendBooks({title:'Matemática',domain:'Exatas'},{goal:'ENEM / vestibular'}).some(b=>b.title==='Pré-Cálculo')));

@@ -121,6 +121,65 @@
    note:'Questionário '+completeness+'% preenchido. Não é avaliação médica, não prevê ganho muscular ou transformação corporal.',
    nextMeasure:'Após 2 semanas, registre se as sessões foram confortáveis, qualidade do movimento, disposição e recuperação; ajuste antes de progredir.'};
  }
+
+ const readAnswers = (a,i)=>a?.[i]??a?.[String(i)];
+ function analyzeWorkoutPlan(plan,answers={}){
+   const days=Array.isArray(plan?.items)&&plan.items.some(x=>x&&typeof x==='object')?plan.items:Array.isArray(plan?.weeklyItems)?plan.weeklyItems:[];
+   const allMoves=days.length?days.flatMap(d=>Array.isArray(d.moves)?d.moves:[]):Array.isArray(plan?.moves)?plan.moves:[];
+   const count=allMoves.length;
+   const age=num(answers?.age??readAnswers(answers,0),13,90);
+   const level=clean(readAnswers(answers,3)||plan?.level||'não informado');
+   const recovery=clean(readAnswers(answers,12)||'não informada');
+   const sleep=clean(readAnswers(answers,18)||'não informado');
+   const time=clean(readAnswers(answers,10)||plan?.duration||'não informado');
+   const alerts=[];
+   if(!count) alerts.push('Faltam exercícios descritos para conferir o conteúdo do plano.');
+   if(age!==null&&age<18) alerts.push('Adolescente: respeitar supervisão, técnica e descanso; não buscar cargas máximas.');
+   if(/pouco tempo|dormido pouco|voltando ap[oó]s/i.test([recovery,sleep,readAnswers(answers,16)].join(' '))) alerts.push('Recuperação limitada: priorize sessão moderada, pausas e reavaliação.');
+   const normalizeName=s=>normalize(typeof s==='string'?s:s?.name||s?.move||'');
+   const duplicateDays=[];
+   for(let i=0;i<days.length;i++){
+     const seen=new Set();for(const m of days[i].moves||[]){const key=normalizeName(m);if(!key)continue;if(seen.has(key))duplicateDays.push(i+1);seen.add(key)}
+   }
+   if(duplicateDays.length) alerts.push('Exercícios repetidos na mesma sessão: '+[...new Set(duplicateDays)].join(', ')+'.');
+   const supported=days.length?days.length:(Number(plan?.days)||1);
+   const summary=(days.length?days.length+' sessões organizadas; ':supported+' sessão(ões) previstas; ')+count+' exercícios listados'+(level&&level!=='não informado'?'; nível '+level.toLowerCase():'')+'. '+
+      (alerts.length?alerts[0]:'Confira os vídeos, ajuste a técnica e revise a recuperação após as primeiras sessões.');
+   return {version:'14.9.3',days:supported,moves:count,time,alerts,summary,
+     reasons:['Estrutura baseada em movimentos presentes no plano','Intensidade deve acompanhar recuperação e domínio técnico','Acompanhamento depende de registros reais, não de previsões corporais'],
+     nextMeasure:'Depois de duas sessões, registre conforto, técnica, recuperação e quais movimentos precisam de ajuste.'};
+ }
+ function refineTrainingPlan(plan,answers={}){
+   if(!plan||plan.blocked||!Array.isArray(plan.items)) return plan;
+   const age=num(readAnswers(answers,0),13,90);
+   const recovery=clean(readAnswers(answers,12));
+   const sleep=clean(readAnswers(answers,18));
+   const comeback=clean(readAnswers(answers,16));
+   const cautious=(age!==null&&age<18)||/pouco tempo|dormido pouco|voltando ap[oó]s/i.test([recovery,sleep,comeback].join(' '));
+   const reduced=/pouco tempo|dormido pouco|voltando ap[oó]s/i.test([recovery,sleep,comeback].join(' '));
+   const items=plan.items.map(day=>{
+     const copy={...day};
+     const strength=(day.sessionType||'strength')==='strength';
+     if(!strength)return {...copy,moves:Array.isArray(day.moves)?day.moves.slice():[],prescription:Array.isArray(day.prescription)?day.prescription.map(p=>({...p})):[]};
+     const moves=Array.isArray(day.moves)?day.moves.slice():[];
+     const prescriptions=Array.isArray(day.prescription)?day.prescription:[];
+     copy.moves=moves;
+     copy.prescription=moves.map((_,i)=>{
+       const p={...(prescriptions[i]||{})};
+       const raw=Number(p.sets);
+       const sets=Number.isFinite(raw)&&raw>0?Math.min(8,Math.max(1,Math.round(raw))):3;
+       p.sets=reduced?Math.min(sets,2):cautious?Math.min(sets,3):sets;
+       if(!p.reps) p.reps='8–12';
+       if(!Number.isFinite(Number(p.rest))||Number(p.rest)<45) p.rest=60;
+       return p;
+     });
+     return copy;
+   });
+   const result={...plan,items};
+   const report=analyzeWorkoutPlan(result,answers);
+   return {...result,planAudit:report,methodNote:String(plan.methodNote||'')+' '+(reduced?'Séries moderadas enquanto a recuperação estiver limitada. ':'')+'Confira nomes e demonstrações antes de executar.',
+      adjustments:[...(Array.isArray(plan.adjustments)?plan.adjustments:[]),...(reduced?['Séries moderadas conforme o sono/retorno declarado.']:[])].filter((v,i,a)=>a.indexOf(v)===i)};
+ }
  function answer(prompt,ctx={}){
   const q=normalize(prompt);
   if(!q || !/(relatorio|diagnostico|avaliac|analis|livr|bibliograf|leitura|aprend|estud|trein|exercic)/.test(q))return null;
@@ -135,10 +194,11 @@
   }
   if(trainAsked && training){
    const r=trainingReport(training.answers||{});
-   return {text:'RELATÓRIO DE TREINO\n'+r.note+'\nDADOS DECLARADOS: '+r.facts.join('; ')+'\nAJUSTES JUSTIFICADOS: '+r.adjustments.join(' ')+'\nSEGURANÇA: '+r.clarification+'\nPRÓXIMA VERIFICAÇÃO: '+r.nextMeasure+'\nCampos ausentes: '+(r.missing.length?r.missing.join(', '):'nenhum no formulário.')};
+   const planDetails=training.items?analyzeWorkoutPlan(training,training.answers||{}):null;
+   return {text:'RELATÓRIO DE TREINO\n'+r.note+'\nDADOS DECLARADOS: '+r.facts.join('; ')+'\nAJUSTES JUSTIFICADOS: '+r.adjustments.join(' ')+(planDetails?'\nANÁLISE DO PLANO: '+planDetails.summary+'\nPONTOS A CONFERIR: '+(planDetails.alerts.join(' ')||'Verificar execução real e recuperação.'):'')+'\nSEGURANÇA: '+r.clarification+'\nPRÓXIMA VERIFICAÇÃO: '+r.nextMeasure+'\nCampos ausentes: '+(r.missing.length?r.missing.join(', '):'nenhum no formulário.')};
   }
   if(/relatorio|diagnostico|livr/.test(q))return {text:'Para gerar um relatório específico, abra Estudos e conclua o questionário de aprendizagem ou Fitness e conclua o questionário de treino. O LIFE mostrará apenas dados informados, justificativas, fontes selecionadas e o que ainda precisa medir. Não inventarei resultados.'};
   return null;
  }
- root.LifeIntelligence149=Object.freeze({recommendBooks,studyReport,trainingReport,answer,version:'14.9.0'});
+ root.LifeIntelligence149=Object.freeze({recommendBooks,studyReport,trainingReport,analyzeWorkoutPlan,refineTrainingPlan,answer,version:'14.9.3'});
 })(typeof window!=='undefined'?window:globalThis);

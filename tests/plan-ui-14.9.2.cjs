@@ -20,11 +20,11 @@ const direct=api.exerciseCards({k:'SEG',t:'Peito',moves:[exercise.name],prescrip
 check('nome aparece na ficha',()=>assert(words(direct).includes(exercise.name)));
 check('séries e repetições visíveis',()=>assert(/3 séries/.test(words(direct))&&/8–12/.test(words(direct))));
 check('imagem usada somente quando vídeo exatamente correspondente',()=>assert(flat(direct).some(x=>x.tag==='img'&&x.props.alt.includes(exercise.name))));
-check('botão exato abre técnica dentro do LIFE',()=>{const b=flat(direct).find(x=>x.tag==='button'&&words(x)==='VER VÍDEO');assert(b);b.props.onClick();assert.equal(selected.at(-1).id,exercise.id)});
+check('botão exato abre técnica dentro do LIFE',()=>{const b=flat(direct).find(x=>x.tag==='button'&&words(x)==='▶ VER VÍDEO');assert(b);b.props.onClick();assert.equal(selected.at(-1).id,exercise.id)});
 const loose=api.exerciseCards({k:'TER',t:'Bíceps',moves:['Rosca martelo no banco']},x=>selected.push(x));
 check('exercício sem correspondência não finge ter thumbnail',()=>assert(!flat(loose).some(x=>x.tag==='img')));
-check('exercício sem correspondência permite busca identificada',()=>{const b=flat(loose).find(x=>x.tag==='button'&&words(x)==='PROCURAR VÍDEO');assert(b);b.props.onClick();assert(opened.at(-1).url.includes('youtube.com/results?search_query='));assert.equal(opened.at(-1).target,'_blank');});
-check('sem correspondência não apresenta técnica falsa',()=>{const buttons=flat(loose).filter(x=>x.tag==='button');assert(buttons.some(x=>x.props.disabled===true));});
+check('exercício sem correspondência permite busca identificada',()=>{const b=flat(loose).find(x=>x.tag==='button'&&words(x)==='▶ ENCONTRAR VÍDEO');assert(b);b.props.onClick();assert(opened.at(-1).url.includes('youtube.com/results?search_query='));assert.equal(opened.at(-1).target,'_blank');});
+check('sem correspondência não apresenta técnica falsa',()=>{const buttons=flat(loose).filter(x=>x.tag==='button');assert(!buttons.some(x=>words(x)==='TÉCNICA'));assert(buttons.some(x=>words(x)==='BUSCAR EXATO'));});
 const meals=api.mealCards([{k:'CAFÉ DA MANHÃ',t:'Pão, fruta e ovos',d:'Adapte ao seu apetite.'},{k:'ALMOÇO',t:'Prato caseiro',d:'Varie acompanhamentos.'}]);
 check('plano alimentar mantém nome e explicação de cada refeição',()=>assert(words(meals).includes('Prato caseiro')&&words(meals).includes('Varie acompanhamentos.')));
 check('alimentação não inventa restrições',()=>assert(!/calorias por dia|peso ideal|meta de déficit/i.test(words(meals))));

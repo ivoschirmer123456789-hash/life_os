@@ -1,3 +1,9 @@
+# LIFE OS 14.9.3 — Fichas de treino e raciocínio de planos
+
+Base 14.9.2, até 100 arquivos, sem alteração da navegação principal. Treinos prontos, personalizados e player oferecem cartões com séries, execução e vídeo ou busca de vídeo específico. O motor local revê recuperação e apresenta limitações. Ver `QA_REPORT_14.9.3.md`.
+
+---
+
 # LIFE OS 14.9.0 — Cérebro mais inteligente
 
 O projeto preserva o design 14.8.1. Adiciona perguntas diagnósticas, relatórios explicáveis, bibliografia curada, personalização de treinos e contexto remoto consentido. Ver `QA_REPORT_14.9.0.md` para escopo, testes e limites. A função Supabase remota requer implantação separada.
