@@ -191,6 +191,7 @@ const save = (key, value) => {
         if (!ok || !dirtyOk) throw new Error(window.lifeLastStorageError || 'storage_write_failed');
         document.documentElement.dataset.storage = 'ok';
         window.lifeLastStorageOk = true;
+        try { window.LifeLogicEngine148?.notify(key); } catch (_) {}
     }
     catch (e) {
         document.documentElement.dataset.storage = 'error';
@@ -5895,17 +5896,39 @@ function LifeOSV18() {
             ctx.food_system = { pantry: rawPantry.slice(0, 30).map(x => typeof x === 'string' ? { name: x, expiry: '' } : { name: x?.name || '', expiry: x?.expiry || '' }).filter(x => x.name), preferences: lifeSafeJSONParse(lifeRawStorageGet('life_food_prefs_v4') || lifeRawStorageGet('life_food_prefs_v3'), {}), shopping: lifeSafeJSONParse(lifeRawStorageGet('life_food_shopping_v4') || lifeRawStorageGet('life_food_shopping_v3'), []).filter(x => !x.done).slice(0, 30) };
         }
         catch (e) { }
-        const derivedGraphLinks = [...projects.filter(p => p.goalId).map(p => ({ from: 'project:' + (p.id || p.n), to: 'goal:' + p.goalId, relation: 'contribui para', auto: true })), ...aiPendingTasks().filter(t => t.projectId).map(t => ({ from: 'task:' + t.id, to: 'project:' + t.projectId, relation: 'faz parte de', auto: true }))];
-        if (aiContextFlags.projects || aiContextFlags.tasks || aiContextFlags.plans || aiContextFlags.goals) ctx.life_graph = { projects: projects.length, pending_tasks: aiPendingTasks().length, goals: lifeGoals.filter(g => !g.done).map(g => ({ id: g.id, title: aiSafeText(g.title, 80) })).slice(0, 8), habits: lifeHabits.length, workouts: savedCustomWorkouts.length, meal_plans: savedMealPlans.length, links: [...lifeGraphLinks, ...derivedGraphLinks].slice(0, 60) };
+        const derivedGraphLinks = [
+            ...(aiContextFlags.projects && aiContextFlags.goals ? projects.filter(p => p.goalId).map(p => ({ from: 'project:' + (p.id || p.n), to: 'goal:' + p.goalId, relation: 'contribui para', auto: true })) : []),
+            ...(aiContextFlags.tasks && aiContextFlags.projects ? aiPendingTasks().filter(t => t.projectId).map(t => ({ from: 'task:' + t.id, to: 'project:' + t.projectId, relation: 'faz parte de', auto: true })) : [])
+        ];
+        if (aiContextFlags.projects || aiContextFlags.tasks || aiContextFlags.plans || aiContextFlags.goals) {
+            const allowedTypes=new Set([...(aiContextFlags.projects?['project']:[]),...(aiContextFlags.tasks?['task']:[]),...(aiContextFlags.goals?['goal','habit']:[]),...(aiContextFlags.plans?['workout','meal','mealplan']:[])]);
+            const allowedLink=link=>{
+                if(!link||typeof link.from!=='string'||typeof link.to!=='string')return false;
+                return [link.from,link.to].every(ref=>allowedTypes.has(ref.split(':',1)[0]));
+            };
+            ctx.life_graph = { projects:aiContextFlags.projects?projects.length:0, pending_tasks:aiContextFlags.tasks?aiPendingTasks().length:0,
+                goals:aiContextFlags.goals?lifeGoals.filter(g=>!g.done).map(g=>({id:g.id,title:aiSafeText(g.title,80)})).slice(0,8):[],
+                habits:aiContextFlags.goals?lifeHabits.length:0, workouts:aiContextFlags.plans?savedCustomWorkouts.length:0,
+                meal_plans:aiContextFlags.plans?savedMealPlans.length:0,
+                links:[...lifeGraphLinks,...derivedGraphLinks].filter(allowedLink).slice(0,60) };
+        }
         if (aiContextFlags.area) ctx.organization_profile = { focusArea: v33Profile.focusArea || null, friction: v33Profile.friction || null, availableTime: v33Profile.availableTime || null, mainObjective: v33Profile.mainObjective || null };
-        if (aiContextFlags.tasks) ctx.events = events.slice(0, 8).map(e => ({ time: e.t || '', title: aiSafeText(e.n, 100) }));
+        if (aiContextFlags.tasks) ctx.events = events.filter(e=>!(e.d||e.done)).slice(0, 8).map(e => ({ id:e.id, date:e.date||null, time:e.t||'', title:aiSafeText(e.n,100), duration:Number(e.duration)||null }));
         // Brain receives only those categories explicitly included in context above.
         // Answer preferences are NOT sent to the remote model unless 'memory' is allowed.
         if (includeBrain && hasV18Pro && window.LifeBrain1463) {
-            const b=window.LifeBrain1463.analyze({profile:aiContextFlags.memory && life1459Scope===('life_pro_understands_14_5_9_'+String(lifeRawStorageGet('life_data_owner_uid_v123')||''))?life1459Profile:null,context:ctx});
+            const allowedUid=aiContextFlags.memory && life1459Scope===('life_pro_understands_14_5_9_'+String(lifeRawStorageGet('life_data_owner_uid_v123')||''))?String(lifeRawStorageGet('life_data_owner_uid_v123')||''):null;
+            const b=window.LifeBrain1463.analyze({profile:allowedUid?life1459Profile:null,context:ctx,userId:allowedUid});
             ctx.brain={suggestions:b.suggestions.map(x=>({title:x.title,description:x.description,route:x.route,evidence:x.evidence})).slice(0,4),note:b.note,profileUsed:b.profileUsed};
+            if (b.logic) ctx.brain.logic={conflicts:b.logic.conflicts.slice(0,3).map(x=>({title:x.title,reason:x.reason,area:x.area})),coverage:b.logic.coverage.level,plan:b.logic.plan.available?{minutes:b.logic.plan.totalMinutes,blocks:b.logic.plan.scenarios.slice(0,2)}:null,limitations:'Cálculos de planejamento, não previsões garantidas; nenhuma alteração foi executada.'};
         }
         return ctx;
+    };
+    const lifeBrainForAI=()=>{
+        if(!hasV18Pro||!window.LifeBrain1463)return null;
+        const uid=String(lifeRawStorageGet('life_data_owner_uid_v123')||'');
+        const allowMemory=!!(aiContextFlags.memory&&uid&&life1459Scope===('life_pro_understands_14_5_9_'+uid));
+        return window.LifeBrain1463.analyze({profile:allowMemory?life1459Profile:null,context:buildAIContext(false),userId:allowMemory?uid:null});
     };
     const aiPushMessage = (role, text, extra = {}) => {
         const msg = { id: Date.now() + Math.random(), role, text, date: new Date().toISOString(), ...extra };
@@ -5932,12 +5955,17 @@ function LifeOSV18() {
     const aiRecordAction = (action, undo = null) => {
         const row = { id: Date.now() + Math.random(), type: action.type, label: action.label || action.type, date: new Date().toISOString(), undo };
         setAiActionHistory(prev => [row, ...prev].slice(0, 60));
+        if (['add-note','add-task','add-memory','workspace-tasks','apply-day-plan'].includes(action.type)) {
+            try { window.LifeLogicEngine148?.recordApproved(String(lifeRawStorageGet('life_data_owner_uid_v123')||''),{id:row.id,type:action.type,approved:true}); } catch (_) {}
+        }
         logLifeActivity('LIFE AI', action.label || action.type, action.go || 'IA');
         return row;
     };
     const executeAIAction = (rawAction) => {
         const action = window.LifeIntegrity123?.sanitizeAction(rawAction);
         if (!action) { setToast('AÇÃO BLOQUEADA: PROPOSTA INVÁLIDA'); return; }
+        const logicCheck=window.LifeLogicEngine148?.safeAction(action,{approved:true,plan:hasV18Pro?'pro':'free',context:{tasks:aiPendingTasks()}});
+        if (logicCheck && !logicCheck.allowed) { aiPushMessage('assistant',logicCheck.reason||'Ação não autorizada.',{kind:'system'}); return; }
         if (action.type === 'upgrade') {
             openLifePro(action.source || 'ai_pro');
             return;
@@ -6001,6 +6029,7 @@ function LifeOSV18() {
         }
     };
     const undoAIAction = (row) => {
+        if (row?.undone) return;
         const u = row?.undo;
         if (!u)
             return;
@@ -6016,12 +6045,15 @@ function LifeOSV18() {
         if (u.type === 'remove-events')
             setEvents(prev => prev.filter(x => !u.ids.includes(x.id)));
         setAiActionHistory(prev => prev.map(x => x.id === row.id ? { ...x, undone: true } : x));
+        try { window.LifeLogicEngine148?.markUndone(String(lifeRawStorageGet('life_data_owner_uid_v123')||''),row.id); } catch (_) {}
         setToast('AÇÃO DESFEITA');
         setTimeout(() => setToast(''), 1400);
     };
     const queueAIAction = (rawAction) => {
         const action = window.LifeIntegrity123?.sanitizeAction(rawAction);
         if (!action) { aiPushMessage('assistant','Não consegui validar essa ação. Nenhum dado foi alterado.',{kind:'system'}); return; }
+        const logicCheck=window.LifeLogicEngine148?.safeAction(action,{approved:false,plan:hasV18Pro?'pro':'free',context:{tasks:aiPendingTasks()}});
+        if (logicCheck && !logicCheck.allowed && !logicCheck.requiresConfirmation) { aiPushMessage('assistant',logicCheck.reason||'Ação não autorizada.',{kind:'system'}); return; }
         if (aiAutonomy === 'chat') {
             aiPushMessage('assistant', 'Posso sugerir essa ação, mas seu modo atual é “Só conversar”. Mude para “Sugerir ações” se quiser confirmar alterações.', { kind: 'system' });
             return;
@@ -6099,7 +6131,7 @@ function LifeOSV18() {
         if (lifeIsSimpleGreeting(text))
             return { text: `Olá! 👋 Como posso ajudar? Posso montar um treino, explicar um exercício, organizar seu dia, estudos, alimentação ou explicar qualquer parte do próprio LIFE OS.` };
         if (hasV18Pro && window.LifeBrain1463) {
-            const contextual=window.LifeBrain1463.answer(text,lifeBrainBrief || window.LifeBrain1463.analyze({context:buildAIContext()}));
+            const contextual=window.LifeBrain1463.answer(text,lifeBrainForAI());
             if(contextual)return contextual;
         }
         const helpArea = lifeHowAreaFromText(text);
@@ -6360,7 +6392,7 @@ function LifeOSV18() {
         setAiBusy(true);
         try {
             const validatedCommand = hasV18Pro ? window.LifeIntegrity123?.localCommand(prompt) : null;
-            const deterministic = !!validatedCommand || (hasV18Pro && window.LifeBrain1463 && !!window.LifeBrain1463.answer(prompt,lifeBrainBrief)) || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
+            const deterministic = !!validatedCommand || (hasV18Pro && window.LifeBrain1463 && !!window.LifeBrain1463.answer(prompt,lifeBrainForAI())) || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
             let result = validatedCommand ? {text:'Preparei uma ação. Revise e confirme antes de salvar no LIFE.',action:validatedCommand} : deterministic ? (hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt)) : await callLifeAIBackend(prompt);
             if (!result)
                 result = hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt);
@@ -10051,7 +10083,7 @@ function LifeOSV18() {
 
 // Calculate only after all state/derived data has initialized in this render.
     const lifeBrainBrief = hasV18Pro && life1459Profile && life1459Scope && life1459Scope===('life_pro_understands_14_5_9_'+String(lifeRawStorageGet('life_data_owner_uid_v123')||'')) && window.LifeBrain1463
-      ? window.LifeBrain1463.analyze({profile:life1459Profile,context:buildAIContext(false)}) : null;
+      ? window.LifeBrain1463.analyze({profile:life1459Profile,context:buildAIContext(false),userId:aiContextFlags.memory?String(lifeRawStorageGet('life_data_owner_uid_v123')||''):null}) : null;
     return React.createElement("div", { className: 'v18 life-suite-v64 life-suite-v65 ' + (hasV18Pro ? 'life-pro-active' : 'life-free-active') + ' life-theme-' + lifeTheme + ' life-area-' + String(view || 'Hoje').toLowerCase().replace(/[^a-z0-9áéíóúãõç]+/gi,'-') + (lifeSettings.motion === false ? ' life-motion-off' : '') + (lifeSettings.descriptions === false ? ' life-hide-descriptions' : '') + (lifeSettings.highContrast ? ' life-high-contrast' : '') + (lifeSettings.largeText ? ' life-large-text' : ''), 'data-life-view': view, 'data-fitness-tab': view === 'Fitness' ? fitnessMainTab : undefined, 'data-fitness-focus': view === 'Fitness' && fitnessFocusMode ? fitnessFocusMode : undefined, 'data-area-focus': areaFocusMode || undefined, style: { '--ep': Math.max(10, pct) + 'vh', fontSize: density === 'Compact' ? '14px' : density === 'Comfortable' ? '17px' : '16px' } },
         pageTransition && React.createElement("div", { className: 'life-page-transition ' + (pageTransition.phase || 'in'), "aria-hidden": "true" },
             React.createElement("div", { className: "life-page-transition-inner" },
@@ -12855,7 +12887,7 @@ function LifeOSV18() {
                     aiPendingAction.text && React.createElement("div", { className: "life-ai-confirm-preview" }, aiPendingAction.text),
                     React.createElement("div", { className: "life-ai-confirm-actions" },
                         React.createElement("button", { type: "button", onClick: () => setAiPendingAction(null) }, "CANCELAR"),
-                        React.createElement("button", { type: "button", className: "primary", onClick: () => { const valid=window.LifeIntegrity123?.sanitizeAction(aiPendingAction); if(!valid){setToast('AÇÃO REJEITADA');return;} executeAIAction(valid); setAiPendingAction(null); setToast('AÇÃO CONFIRMADA PELO USUÁRIO'); setTimeout(() => setToast(''), 1500); } }, "CONFIRMAR \u2192")))),
+                        React.createElement("button", { type: "button", className: "primary", onClick: () => { const valid=window.LifeIntegrity123?.sanitizeAction(aiPendingAction); if(!valid){setToast('AÇÃO REJEITADA');return;} const review=window.LifeLogicEngine148?.safeAction(valid,{approved:true,plan:hasV18Pro?'pro':'free',context:{tasks:aiPendingTasks()}}); if(review&&!review.allowed){setToast('AÇÃO BLOQUEADA');aiPushMessage('assistant',review.reason,{kind:'system'});setAiPendingAction(null);return;} executeAIAction(valid); setAiPendingAction(null); setToast('AÇÃO CONFIRMADA PELO USUÁRIO'); setTimeout(() => setToast(''), 1500); } }, "CONFIRMAR \u2192")))),
             archivePosterOpen && React.createElement("div", { className: "life-poster-overlay", onClick: e => { if (e.target === e.currentTarget)
                     setArchivePosterOpen(false); } },
                 React.createElement("div", { className: "life-poster-card" },

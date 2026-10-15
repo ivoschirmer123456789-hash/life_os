@@ -1,3 +1,9 @@
+# LIFE OS 14.7.2 — Revisão de confiabilidade do Cérebro
+
+Esta atualização mantém a estrutura FREE/PRO e corrige prioridades, datas, isolamento de preferências por usuário e vazamentos de contexto de áreas desligadas na LIFE AI. Consulte `QA_REPORT_14.7.2.md` para testes e limitações.
+
+---
+
 # LIFE OS 14.6.5 — Scroll desktop e conexão de cidade
 
 Versão completa baseada na 14.6.4 (motor inteligente, projeções, modos FREE/PRO) com ajustes focados em:

@@ -1,0 +1,55 @@
+/* LIFE OS 14.8.1 — containment only. No changes to the underlying layout or forms. */
+/* The global routing card is a sibling of .v18-shell, whose z-index is 2.
+   The previous z-index:65 made the card paint ABOVE modal forms inside the shell. */
+.life-smart-hub {
+  z-index: 1 !important;
+  width: auto;
+  min-width: 0;
+  max-width: min(1540px, 100%) !important;
+  box-sizing: border-box;
+}
+.life-smart-hub *, .life-smart-hub *::before, .life-smart-hub *::after {
+  box-sizing: border-box;
+}
+.life-smart-hub-top, .life-smart-search, .life-smart-search-row,
+.life-smart-hub-copy, .life-smart-quick {
+  min-width: 0;
+  max-width: 100%;
+}
+.life-smart-hub-copy b { overflow-wrap: anywhere; }
+.life-smart-hub-current {
+  max-width: 42%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.life-smart-search-row { grid-template-columns: minmax(0,1fr) auto; }
+.life-smart-search-row input { min-width: 0 !important; max-width: 100%; }
+/* Suggestions now consume space INSIDE the card instead of floating over
+   questionnaires and fields below. Scrolling is limited to the results. */
+.life-smart-suggest {
+  position: static !important;
+  inset: auto !important;
+  z-index: auto !important;
+  margin-top: 8px;
+  max-height: min(320px, 38dvh);
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+.life-smart-suggest button {
+  min-width: 0;
+  grid-template-columns: minmax(54px,72px) minmax(0,1fr) auto;
+}
+.life-smart-suggest button > span, .life-smart-suggest button > span > b {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 620px) {
+  .life-smart-hub-top { flex-wrap: wrap; }
+  .life-smart-hub-copy { flex: 1 1 150px; }
+  .life-smart-hub-current { max-width: 100%; margin-left: 0; }
+  .life-smart-search-row { grid-template-columns: minmax(0,1fr) !important; }
+  .life-smart-search-row > button { width: 100%; }
+  .life-smart-suggest button { grid-template-columns: minmax(48px,64px) minmax(0,1fr); }
+  .life-smart-suggest em { grid-column: 2; justify-self: end; }
+}
