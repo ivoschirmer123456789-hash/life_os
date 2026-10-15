@@ -1,0 +1,164 @@
+.life-clean-grid-v149{
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+}
+.life-clean-card-v149{
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(18,20,28,.92),rgba(10,12,18,.96));
+  box-shadow:0 16px 40px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.life-clean-card-v149 h3{margin-bottom:8px}
+.life-clean-card-v149 p{color:rgba(235,240,255,.78);line-height:1.55}
+.life-clean-summary-v149{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:12px;
+  margin:0 0 16px;
+}
+.life-clean-summary-v149>div{
+  padding:14px 14px 13px;
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,149,0,.12),rgba(255,149,0,.05));
+  border:1px solid rgba(255,149,0,.18);
+}
+.life-clean-summary-v149 small{display:block;color:rgba(255,197,120,.9);font-size:10px;letter-spacing:.12em}
+.life-clean-summary-v149 b{display:block;margin-top:6px;font-size:14px;color:#fff}
+.life-workout-summary-v149{margin-top:12px}
+.life-week-plan-v149,.v27-plan .life-day-card-v149{display:grid;gap:14px}
+.life-day-card-v149{
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(14,16,24,.92),rgba(9,11,16,.98));
+  padding:16px;
+}
+.life-plan-ex-grid-v149{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(235px,1fr));
+  gap:12px;
+  margin-top:12px;
+}
+.life-plan-ex-card-v149{
+  display:grid;
+  grid-template-columns:92px 1fr;
+  gap:12px;
+  padding:10px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.07);
+  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+  align-items:start;
+}
+.life-plan-ex-thumb-v149{
+  position:relative;
+  height:92px;
+  border-radius:14px;
+  overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,149,0,.22),rgba(255,255,255,.06));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  border:1px solid rgba(255,149,0,.16);
+}
+.life-plan-ex-thumb-v149 img{width:100%;height:100%;object-fit:cover;display:block}
+.life-plan-ex-thumb-v149.fallback span{font-size:32px;color:#fff}
+.life-plan-ex-thumb-v149.fallback em{position:absolute;right:8px;bottom:6px;font-style:normal;font-size:18px}
+.life-plan-ex-content-v149{display:grid;gap:8px}
+.life-plan-ex-top-v149 small{display:block;color:rgba(255,190,110,.92);font-size:10px;letter-spacing:.12em}
+.life-plan-ex-top-v149 b{display:block;color:#fff;font-size:14px;line-height:1.35}
+.life-plan-ex-chips-v149{display:flex;flex-wrap:wrap;gap:7px}
+.life-plan-ex-chips-v149 span{
+  padding:6px 8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.07);
+  color:rgba(238,241,248,.84);
+  font-size:11px;
+}
+.life-plan-ex-note-v149{margin:0;color:rgba(224,229,241,.7);font-size:11px;line-height:1.45}
+.life-plan-ex-actions-v149{display:flex;gap:8px;flex-wrap:wrap}
+.life-plan-ex-actions-v149 button{
+  border:none;
+  border-radius:12px;
+  padding:10px 12px;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-weight:800;
+  font-size:11px;
+  cursor:pointer;
+}
+.life-plan-ex-actions-v149 button.hot{background:linear-gradient(135deg,#ff8a00,#ffb347);color:#1a1207}
+.life-plan-ex-actions-v149 button:disabled{opacity:.45;cursor:not-allowed}
+.life-meal-grid-v149{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:12px;
+  margin-top:12px;
+}
+.life-meal-card-v149{
+  display:grid;
+  grid-template-columns:54px 1fr;
+  gap:12px;
+  align-items:start;
+  padding:14px;
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015));
+  border:1px solid rgba(255,255,255,.08);
+}
+.life-meal-icon-v149{
+  width:54px;
+  height:54px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,rgba(255,149,0,.24),rgba(255,149,0,.08));
+  border:1px solid rgba(255,149,0,.18);
+  color:#fff;
+  font-size:22px;
+  font-weight:800;
+}
+.life-meal-content-v149 small{display:block;color:rgba(255,190,110,.92);font-size:10px;letter-spacing:.12em}
+.life-meal-content-v149 b{display:block;color:#fff;font-size:14px;margin-top:4px}
+.life-meal-content-v149 p{margin:6px 0 0;color:rgba(230,235,244,.78);font-size:12px;line-height:1.55}
+.life-nut-shopping-v149 ul{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px 16px;padding-left:18px}
+.life-nut-saved-grid-v149{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+  margin-top:14px;
+}
+.life-nut-saved-card-v149{
+  padding:16px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(14,16,24,.92),rgba(9,11,16,.98));
+}
+.life-nut-saved-card-v149 small{display:block;color:rgba(255,190,110,.92);font-size:10px;letter-spacing:.12em}
+.life-nut-saved-card-v149 b{display:block;margin:8px 0 6px;color:#fff;font-size:15px}
+.life-nut-saved-card-v149 p{margin:0 0 12px;color:rgba(230,235,244,.76);line-height:1.5}
+@media (max-width:640px){
+  .life-plan-ex-card-v149,.life-meal-card-v149{grid-template-columns:1fr}
+  .life-plan-ex-thumb-v149{height:132px}
+  .life-meal-icon-v149{width:50px;height:50px}
+}
+
+/* LIFE 14.9.2: preserve the existing day-mode visual contract. */
+html.life-theme-day :is(.life-clean-card-v149,.life-day-card-v149,.life-nut-saved-card-v149){
+ background:linear-gradient(180deg,#ffffff,#f7f2ec);border-color:rgba(81,65,49,.16);box-shadow:0 9px 30px rgba(72,54,34,.08)
+}
+html.life-theme-day :is(.life-clean-card-v149,.life-day-card-v149,.life-nut-saved-card-v149) :is(h3,b,h4){color:#222831}
+html.life-theme-day :is(.life-clean-card-v149,.life-day-card-v149,.life-nut-saved-card-v149) p{color:#455161}
+html.life-theme-day .life-clean-summary-v149>div{background:rgba(250,142,31,.085);border-color:rgba(185,100,28,.19)}
+html.life-theme-day .life-clean-summary-v149 b{color:#28323d}
+html.life-theme-day .life-clean-summary-v149 small{color:#a25720}
+html.life-theme-day :is(.life-plan-ex-card-v149,.life-meal-card-v149){background:#fff;border-color:rgba(65,72,80,.13)}
+html.life-theme-day :is(.life-plan-ex-top-v149 b,.life-meal-content-v149 b){color:#28323d}
+html.life-theme-day :is(.life-plan-ex-note-v149,.life-meal-content-v149 p){color:#4d5968}
+html.life-theme-day .life-plan-ex-chips-v149 span{color:#405064;background:#f5eee5;border-color:#e6dcd1}
+html.life-theme-day .life-plan-ex-actions-v149 button:not(.hot){background:#efe8df;color:#273341}
+html.life-theme-day .life-plan-ex-thumb-v149.fallback span{color:#a65d1f}
+html.life-theme-day .life-meal-icon-v149{color:#92521c}
+@media (max-width:640px){
+ .life-clean-grid-v149,.life-meal-grid-v149,.life-plan-ex-grid-v149,.life-nut-saved-grid-v149{grid-template-columns:minmax(0,1fr)}
+ .life-plan-ex-content-v149,.life-meal-content-v149{min-width:0;overflow-wrap:anywhere}
+}

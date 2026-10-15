@@ -954,6 +954,116 @@ const lifeBuildMuscleWorkout = (raw, age = 18) => {
     const ageNote = safeAge < 18 ? ' Mantive um volume moderado e sem séries máximas; técnica e supervisão adequada vêm primeiro.' : '';
     return { targets, text: `${title}\n\n${lines}\n\nDescanso: cerca de 60–90s entre séries.${ageNote} Se quiser, abra o treino e toque em cada exercício na biblioteca para ver execução, vídeo e erros comuns.`, data: { id: 'ai_muscle_' + targets.map(x => lifeNormalizeText(x)).join('_'), name: title, type: 'Hipertrofia', level: 'Intermediário', days: 1, moves, items: moves, prescription, exerciseRefs: chosen.map(x => x.ex.id) } };
 };
+
+const LIFE_PLAN_VISUALS_V149 = {
+    Peito: { icon: 'favorite', emoji: '🔥' },
+    Costas: { icon: 'arrow_back', emoji: '🛡️' },
+    Bíceps: { icon: 'fitness_center', emoji: '💪' },
+    Tríceps: { icon: 'radio_button_checked', emoji: '⚡' },
+    Ombros: { icon: 'accessibility_new', emoji: '🏹' },
+    Trapézio: { icon: 'expand_less', emoji: '⛰️' },
+    Antebraço: { icon: 'front_hand', emoji: '✊' },
+    Pernas: { icon: 'directions_run', emoji: '🦵' },
+    Panturrilha: { icon: 'sprint', emoji: '🧱' },
+    Abdômen: { icon: 'center_focus_strong', emoji: '🛡️' },
+    Cardio: { icon: 'monitor_heart', emoji: '❤️' },
+    Mobilidade: { icon: 'self_improvement', emoji: '🧘' },
+    Geral: { icon: 'exercise', emoji: '◇' }
+};
+const lifePlanMealGlyph = (label) => {
+    const low = lifeNormalizeText(label || '');
+    if (/manha|cafe/.test(low)) return '☀';
+    if (/intervalo|lanche/.test(low)) return '◔';
+    if (/almoco|almoço/.test(low)) return '◉';
+    if (/pre/.test(low)) return '↗';
+    if (/pos|p[oó]s/.test(low)) return '↘';
+    if (/noite|jantar|ceia/.test(low)) return '☾';
+    return '◆';
+};
+const lifeResolveWorkoutExercise = (move, session) => {
+    if (!move) return null;
+    const sessionLabel = String(session?.t || session?.d || '');
+    const targets = lifeExtractMuscleTargets(sessionLabel);
+    for (const group of targets) {
+        const found = lifeFindExercise(move, group);
+        if (found) return found;
+    }
+    return lifeFindExercise(move, targets[0]) || IRON_EXERCISE_LIBRARY.find(ex => lifeNormalizeText(ex.name).includes(lifeNormalizeText(move))) || null;
+};
+// Independente do contexto de React: o motor de apresentação não depende de funções locais da tela.
+const lifePlanSessionKindV149 = (day) => {
+    const moves = Array.isArray(day?.moves) ? day.moves : [];
+    const text = lifeNormalizeText([day?.t, day?.d, ...moves].filter(Boolean).join(' '));
+    if (day?.sessionType === 'cardio' || /corrida|cardio|caminhada|bike|aerob/.test(text)) return 'cardio';
+    if (day?.sessionType === 'mobility' || /mobilidade|alongamento/.test(text)) return 'mobility';
+    return 'strength';
+};
+const lifeWorkoutSessionStats = (workout) => {
+    const items = Array.isArray(workout?.items) ? workout.items : [];
+    const strength = items.filter(day => lifePlanSessionKindV149(day) === 'strength').length;
+    const cardio = items.filter(day => lifePlanSessionKindV149(day) === 'cardio').length;
+    const mobility = items.filter(day => lifePlanSessionKindV149(day) === 'mobility').length;
+    return [
+        ['Sessões', String(items.length || 0)],
+        ['Musculação', String(strength)],
+        ['Cardio', String(cardio)],
+        ['Mobilidade', String(mobility)]
+    ];
+};
+const lifeRenderWorkoutExerciseCards = (session, onOpenExercise) => {
+    const rows = Array.isArray(session?.prescription) && session.prescription.length
+        ? session.prescription.map((pr, i) => ({ move: pr.move || session.moves?.[i] || ('Exercício ' + (i + 1)), prescription: pr }))
+        : (Array.isArray(session?.moves) ? session.moves.map((move, i) => ({ move, prescription: null })) : []);
+    if (!rows.length) return null;
+    return React.createElement('div', { className: 'life-plan-ex-grid-v149' }, rows.map((row, i) => {
+        const ex = lifeResolveWorkoutExercise(row.move, session);
+        const group = ex ? lifeExerciseGroup(ex) : (lifePlanSessionKindV149(session) === 'cardio' ? 'Cardio' : lifePlanSessionKindV149(session) === 'mobility' ? 'Mobilidade' : 'Geral');
+        const visual = LIFE_PLAN_VISUALS_V149[group] || LIFE_PLAN_VISUALS_V149.Geral;
+        const vi = ex ? lifeExerciseVideoInfo(ex) : { id: null, exact: false, label: '' };
+        const videoIsExact = !!(ex && vi?.id && vi.exact && lifeNormalizeText(ex.name) === lifeNormalizeText(row.move));
+        const videoSearchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(row.move + ' execução correta exercício');
+        const meta = ex ? lifeExerciseMeta(ex) : null;
+        const pres = row.prescription || {};
+        return React.createElement('article', { className: 'life-plan-ex-card-v149', key: (session.k || 's') + '_' + i },
+            React.createElement('div', { className: 'life-plan-ex-thumb-v149 ' + (videoIsExact ? 'has-video' : 'fallback'), onClick: () => ex && onOpenExercise && onOpenExercise(ex) },
+                videoIsExact
+                    ? React.createElement('img', { src: 'https://i.ytimg.com/vi/' + vi.id + '/hqdefault.jpg', alt: 'Prévia do exercício ' + row.move, loading: 'lazy' })
+                    : React.createElement(React.Fragment, null,
+                        React.createElement('span', { className: 'material-symbols-rounded' }, visual.icon),
+                        React.createElement('em', null, visual.emoji))),
+            React.createElement('div', { className: 'life-plan-ex-content-v149' },
+                React.createElement('div', { className: 'life-plan-ex-top-v149' },
+                    React.createElement('small', null, group.toUpperCase()),
+                    React.createElement('b', null, row.move)),
+                React.createElement('div', { className: 'life-plan-ex-chips-v149' },
+                    React.createElement('span', null, (pres.sets || 3) + ' séries'),
+                    React.createElement('span', null, pres.reps || (lifePlanSessionKindV149(session) === 'cardio' ? 'tempo guiado' : '8–12 reps')),
+                    React.createElement('span', null, pres.rest ? pres.rest + 's pausa' : (lifePlanSessionKindV149(session) === 'cardio' ? 'ritmo confortável' : 'técnica primeiro')),
+                    meta?.equipment && React.createElement('span', null, meta.equipment)),
+                React.createElement('p', { className: 'life-plan-ex-note-v149' }, videoIsExact ? 'Demonstração deste exercício disponível dentro do LIFE.' : ex ? 'Confira a técnica e procure uma demonstração específica antes de executar.' : 'Sem correspondência confirmada na biblioteca; confira a execução antes de treinar.'),
+                React.createElement('div', { className: 'life-plan-ex-actions-v149' },
+                    React.createElement('button', { type: 'button', onClick: () => ex && onOpenExercise && onOpenExercise(ex), disabled: !ex }, 'COMO FAZER'),
+                    React.createElement('button', { type: 'button', className: videoIsExact ? 'hot' : '', onClick: () => videoIsExact ? (ex && onOpenExercise && onOpenExercise(ex)) : window.open(videoSearchUrl, '_blank', 'noopener,noreferrer') }, videoIsExact ? 'VER VÍDEO' : 'PROCURAR VÍDEO'))));
+    }));
+};
+const lifeRenderNutritionBlocksV149 = (items = []) => React.createElement('div', { className: 'life-meal-grid-v149' }, (items || []).map((x, i) => {
+    const keyLabel = x.k || x[0] || 'BLOCO';
+    const title = x.t || x[1] || 'Refeição';
+    const desc = x.d || x[2] || '';
+    return React.createElement('article', { className: 'life-meal-card-v149', key: keyLabel + '_' + i },
+        React.createElement('div', { className: 'life-meal-icon-v149' }, lifePlanMealGlyph(keyLabel)),
+        React.createElement('div', { className: 'life-meal-content-v149' },
+            React.createElement('small', null, keyLabel),
+            React.createElement('b', null, title),
+            React.createElement('p', null, desc)));
+}));
+const lifeNutritionProfileSummaryV149 = (plan) => ([
+    ['Objetivo', plan?.profile?.goal || plan?.answers?.goal || 'Organização'],
+    ['Rotina', plan?.profile?.routine || plan?.answers?.routine || 'Flexível'],
+    ['Estilo', plan?.profile?.style || plan?.answers?.style || 'Variado'],
+    ['Faixa', Number(plan?.profile?.age || plan?.answers?.age || 0) > 0 ? (Number(plan?.profile?.age || plan?.answers?.age || 0) < 18 ? 'Modo jovem' : 'Adulto') : 'Geral']
+]);
+
 const lifeIsSimpleGreeting = (text) => /^(oi+|ol[aá]+|opa+|e\s*a[ií]+|eae+|fala+|salve+|bom\s+dia|boa\s+tarde|boa\s+noite)[!,.? ]*$/i.test(String(text || '').trim());
 const IRON_GOALS = ['Hipertrofia', 'Força', 'Condicionamento', 'Resistência muscular', 'Saúde e performance'];
 const IRON_LEVELS = ['Iniciante', 'Intermediário', 'Avançado', 'Retorno gradual', 'Experiência mista'];
@@ -1729,7 +1839,7 @@ const lifeUpgradeStudyPlanV66 = (plan) => {
 const lifeBuildStudyPlan = (answers) => {
     const topic = LIFE_STUDY_TOPICS.find(t => t.title === answers.topic) || lifeStudySearch(answers.topic)[0] || { title: answers.topic || 'Tema escolhido', domain: 'Personalizado', stages: ['Fundamentos e vocabulário', 'Conceitos essenciais', 'Exemplos guiados', 'Prática ativa', 'Aplicações', 'Revisão e projeto final'], channels: ['Khan Academy'], books: ['Material introdutório confiável do tema'] };
     const deadlineWeeks = { '2 semanas': 2, '1 mês': 4, '3 meses': 12, '6 meses': 24, 'Sem prazo definido': 8 }[answers.deadline] || 8;
-    const levelOffset = answers.level === 'Avançado' ? 2 : answers.level === 'Intermediário' ? 1 : 0;
+    const levelOffset = answers.baseline==='Errei a maioria das questões'||answers.baseline==='Ainda não testei o que sei'?0:(answers.level === 'Avançado' ? 2 : answers.level === 'Intermediário' ? 1 : 0);
     const stages = (topic.stages || []).slice(levelOffset);
     const sessionMinutes = Number(String(answers.session || '30').match(/\d+/)?.[0] || 30);
     const daysPerWeek = window.LifeGeneratorRules122.studyFrequency(answers.frequency);
@@ -1763,7 +1873,9 @@ const lifeBuildStudyPlan = (answers) => {
         const estimatedSessions = Math.max(2, Math.min(daysPerWeek * 2 + goalDepth, finalStage ? 4 + goalDepth : 5 + goalDepth));
         const output = isQuant ? `Lista corrigida + resumo de erros de “${title}”.` : isLanguage ? `Produção curta revisada usando “${title}”.` : isHealth ? `Mapa/diagrama + explicação própria de “${title}”.` : `Resumo ativo + perguntas respondidas sobre “${title}”.`;
         const goalInstruction = answers.goal === 'ENEM / vestibular' ? 'Inclua questões de prova e revisão de erros nesta etapa.' : answers.goal === 'Escola / prova' ? 'Feche a etapa com questões do nível da avaliação.' : answers.goal === 'Projeto pessoal' ? 'Conecte a etapa a uma pequena entrega do projeto.' : answers.goal === 'Aprofundar muito' ? 'Compare fontes, explique exceções e produza uma síntese mais profunda.' : answers.goal === 'Base para faculdade' ? 'Dê atenção especial a conceitos e pré-requisitos que serão reutilizados depois.' : 'Priorize compreensão e prática antes de acelerar.';
-        return { learn, practice:[...practice, goalInstruction], proof, output, estimatedSessions };
+        const preferred = answers.practice==='Criar um projeto' ? 'Crie uma entrega pequena e verificável.' : answers.practice==='Explicar com minhas palavras' ? 'Explique a etapa sem consultar e compare com a fonte.' : answers.practice==='Praticar conversação ou escrita' ? 'Produza uma pequena fala ou texto usando a etapa.' : answers.practice==='Resolver questões e simulados' ? 'Resolva questões novas e registre o motivo dos erros.' : 'Faça uma atividade curta para diagnosticar a aprendizagem.';
+        const baselinePractice = answers.baseline==='Errei a maioria das questões' ? 'Retome pré-requisitos antes de aumentar a complexidade.' : answers.baseline==='Acertei a maioria com segurança' ? 'Misture problemas novos para verificar transferência.' : 'Comece com um diagnóstico honesto do que consegue fazer sem consulta.';
+        return { learn, practice:[...practice, goalInstruction,preferred,baselinePractice], proof, output, estimatedSessions };
     };
     const studySessions = stages.map((title,i)=>studyActionsFor(title,i).estimatedSessions);
     const feasibleSchedule = window.LifeGeneratorRules122.studyTimeline(stages, studySessions, daysPerWeek, deadlineWeeks, answers.deadline !== 'Sem prazo definido');
@@ -1775,12 +1887,14 @@ const lifeBuildStudyPlan = (answers) => {
         return { index: i + 1, title, when, detail, ...method, ...practical, sessionMinutes, cadence: `${daysPerWeek} dias/sem · ${sessionMinutes} min por sessão`, review: 'Revisão curta em 1, 3 e 7 dias após concluir a etapa.' };
     });
     const blocker = LIFE_STUDY_BLOCKER_DATA[answers.blocker] || LIFE_STUDY_BLOCKER_DATA['Não sei por onde começar'];
-    const riskNote = [topic.riskNote || '',feasibleSchedule.warning].filter(Boolean).join(' ');
-    const bookList = (topic.books || []).slice(0, 3);
+    const life149Report=window.LifeIntelligence149?.studyReport(answers,topic);
+    const riskNote = [topic.riskNote || '',feasibleSchedule.warning, life149Report?.note, ...(life149Report?.notes||[]).slice(0,2)].filter(Boolean).join(' ');
+    const verifiedBooks=window.LifeIntelligence149?.recommendBooks(topic,answers,4)||[];
+    const bookList = verifiedBooks.length ? verifiedBooks.map(b=>b.title+' — '+b.author) : (answers.resources==='Apenas recursos gratuitos' ? ['Busque materiais abertos específicos da etapa; título não confirmado neste catálogo'] : (topic.books||[]).slice(0,3));
     const reading = (bookList.length ? bookList : ['Material introdutório confiável']).map((book, index) => ({
         kind: index === 0 && answers.reading === 'Não leio hoje' ? 'LEITURA / COMEÇO LEVE' : 'LIVRO / REFERÊNCIA',
         title: book,
-        text: index === 0 && answers.reading === 'Não leio hoje' ? 'Comece com uma seção curta e pare para explicar o que entendeu antes de avançar.' : 'Use como referência para aprofundar a etapa atual e transforme cada seção em perguntas próprias.'
+        text: (verifiedBooks[index]?.reason ? verifiedBooks[index].reason+' ' : '')+(index === 0 && answers.reading === 'Não leio hoje' ? 'Comece com uma seção curta e explique o que entendeu antes de avançar.' : 'Use apenas trechos ligados à etapa e transforme cada seção em perguntas próprias.')
     }));
     if (answers.reading === 'Não leio hoje') reading.push({ kind: 'HÁBITO', title: 'Leitura mínima consistente', text: 'Comece pequeno e aumente apenas quando a rotina já estiver estável.' });
     const channels = (topic.channels || []).slice(0, 4).map(name => ({ kind: 'VÍDEO / CANAL', title: name, text: 'Referência em vídeo para complementar a etapa atual. Abra a busca do canal no YouTube e escolha uma aula diretamente ligada ao tópico da semana.', url: 'https://www.youtube.com/results?search_query=' + encodeURIComponent(name + ' ' + topic.title) }));
@@ -1795,13 +1909,13 @@ const lifeBuildStudyPlan = (answers) => {
         proof: 'A trilha termina quando você consegue fazer um teste final ou aplicação sem consulta, corrigir o que errou e explicar por que a resposta correta faz sentido.'
     };
     const orientation = lifeStudyOrientation(topic, answers, timeline);
-    return { id: 'study_' + Date.now(), guideVersion: 122, scheduleNote: feasibleSchedule.warning, estimatedTotalSessions: feasibleSchedule.demand, recommendedWeeks:feasibleSchedule.recommendedWeeks, topic: topic.title, domain: topic.domain, answers, createdAt: new Date().toISOString(), timeline, completedStages: [], resources: [...reading, ...channels, ...videoDiscovery, ...blockerLinks], blocker, finalObjective, sessionMinutes, daysPerWeek, riskNote, orientation };
+    return { id: 'study_' + Date.now(), guideVersion: 149, report:life149Report, scheduleNote: feasibleSchedule.warning, estimatedTotalSessions: feasibleSchedule.demand, recommendedWeeks:feasibleSchedule.recommendedWeeks, topic: topic.title, domain: topic.domain, answers, createdAt: new Date().toISOString(), timeline, completedStages: [], resources: [...reading, ...channels, ...videoDiscovery, ...blockerLinks], blocker, finalObjective, sessionMinutes, daysPerWeek, riskNote, orientation };
 };
 function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, autoStart = false }) {
     const load = (k, d) => lifeReadStoredValue(k, d);
     const initialPrefill = (()=>{ try { return lifeRawStorageGet('life_study_prefill_v6') || ''; } catch { return ''; } })();
     const studyDraft = load('life_form_study_v9', null);
-    const [open, setOpen] = React.useState(false), [step, setStep] = React.useState(()=>Number(studyDraft?.step)||0), [answers, setAnswers] = React.useState(()=>initialPrefill?{topic:initialPrefill}:(studyDraft?.answers||{})), [topicQ, setTopicQ] = React.useState(initialPrefill||studyDraft?.topicQ||''), [topicFocus, setTopicFocus] = React.useState(false), [plan, setPlan] = React.useState(() => lifeUpgradeStudyPlanV66(load('life_study_plan_v2', null)));
+    const [open, setOpen] = React.useState(false), [step, setStep] = React.useState(()=>Math.max(0,Math.min(11,Number(studyDraft?.step)||0))), [answers, setAnswers] = React.useState(()=>initialPrefill?{topic:initialPrefill}:(studyDraft?.answers||{})), [topicQ, setTopicQ] = React.useState(initialPrefill||studyDraft?.topicQ||''), [topicFocus, setTopicFocus] = React.useState(false), [plan, setPlan] = React.useState(() => lifeUpgradeStudyPlanV66(load('life_study_plan_v2', null)));
     React.useEffect(()=>{ try{ if(open) lifeRawStorageSet('life_form_study_v9',JSON.stringify({step,answers,topicQ,updatedAt:new Date().toISOString()})); }catch(e){} },[open,step,answers,topicQ]);
     const topicSuggestions = React.useMemo(() => { const found = lifeStudySearch(topicQ); return hasPro ? found : found.filter(t => !lifeStudyIsProTopic(t)); }, [topicQ, hasPro]);
     React.useEffect(() => { if (autoStart && (initialPrefill || !plan)) { const p=initialPrefill; setAnswers(p?{topic:p}:{}); setTopicQ(p); setStep(p?1:0); setOpen(true); } }, [autoStart]);
@@ -1813,7 +1927,11 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
         { key: 'blocker', q: 'O que mais limita você de estudar?', desc: 'A resposta gera uma estratégia específica e recursos adequados.', options: Object.keys(LIFE_STUDY_BLOCKER_DATA) },
         { key: 'session', q: 'Quanto tempo cabe em uma sessão normal?', desc: 'O plano precisa caber na sua rotina real.', options: ['20 minutos', '30 minutos', '45 minutos', '60 minutos', '90 minutos', 'Varia muito'] },
         { key: 'frequency', q: 'Quantos dias por semana você consegue estudar?', desc: 'Comece com uma frequência sustentável.', options: ['2 dias', '3 dias', '4 dias', '5 dias', '6 dias', 'Todos os dias, com sessões curtas'] },
-        { key: 'deadline', q: 'Existe um prazo para chegar no objetivo?', desc: 'O LIFE distribui as etapas sem fingir que todo conteúdo cabe em poucos dias.', options: ['2 semanas', '1 mês', '3 meses', '6 meses', 'Sem prazo definido'] }
+        { key: 'deadline', q: 'Existe um prazo para chegar no objetivo?', desc: 'O LIFE distribui as etapas sem fingir que todo conteúdo cabe em poucos dias.', options: ['2 semanas', '1 mês', '3 meses', '6 meses', 'Sem prazo definido'] },
+        { key: 'practice', q: 'Como você quer comprovar o que aprendeu?', desc: 'Sua resposta muda o tipo de atividade e a prova de domínio.', options: ['Resolver questões e simulados', 'Explicar com minhas palavras', 'Criar um projeto', 'Praticar conversação ou escrita', 'Ainda não sei'] },
+        { key: 'baseline', q: 'Qual foi seu resultado mais recente tentando aplicar o conteúdo?', desc: 'Não é uma prova diagnóstica. Se não testou, diga isso: o LIFE não inventa seu nível.', options: ['Ainda não testei o que sei', 'Errei a maioria das questões', 'Acertei parte das questões', 'Acertei a maioria com segurança', 'Meu progresso varia por tema'] },
+        { key: 'format', q: 'Que tipo de material ajuda mais você?', desc: 'O LIFE organiza referências e atividades de acordo com esse formato.', options: ['Texto e leitura', 'Áudio e vídeo', 'Exemplos resolvidos', 'Exercícios interativos', 'Uma mistura de formatos'] },
+        { key: 'resources', q: 'Que materiais você consegue usar?', desc: 'O relatório evita recomendar recursos incompatíveis com sua situação.', options: ['Apenas recursos gratuitos', 'Livros e conteúdos digitais', 'Aulas e materiais da escola', 'Posso combinar várias opções'] }
     ];
     const reset = () => { try{lifeRawStorageRemove('life_study_prefill_v6');lifeRawStorageRemove('life_form_study_v9')}catch(e){}; setAnswers({}); setTopicQ(''); setStep(0); setOpen(true); };
     const chooseTopic = t => { if (!t)
@@ -2172,6 +2290,7 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
     } });
     const [result, setResult] = React.useState(null);
     const [ready, setReady] = React.useState(null);
+    const [savedPreview, setSavedPreview] = React.useState(null);
     const q = LIFE_NUTRITION_QUESTIONS_V81[step];
     React.useEffect(() => { try {
         lifeRawStorageSet('life_nutrition_profile_v81', JSON.stringify(answers));
@@ -2267,32 +2386,34 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
                 React.createElement("i", null, x[0]),
                 x[1])))),
         React.createElement("div", { className: "life-nut-tabs" }, ['Visão geral', 'Personalizado', 'Planos prontos', 'Receitas', 'Meus planos'].map(x => { const proTab = x === 'Personalizado' || x === 'Meus planos'; return React.createElement("button", { type: "button", key: x, className: (tab === x ? 'on ' : '') + (proTab ? 'pro-tab' : ''), onClick: () => { if (proTab && !hasPro) { onUpgrade && onUpgrade('nutrition_personalized'); return; } setTab(x); if (x !== 'Personalizado') setStarted(false); } }, x.toUpperCase() + (proTab ? ' · PRO' : '')); })),
-        tab === 'Visão geral' && React.createElement("div", { className: "life-nut-grid" },
-            React.createElement("article", { className: "life-nut-card" },
-                React.createElement("small", null, "PERSONALIZA\u00C7\u00C3O"),
-                React.createElement("h3", null, "Question\u00E1rio completo."),
-                React.createElement("p", null, "Idade, altura, peso como contexto, rotina, refei\u00E7\u00F5es, treino, tempo de preparo, or\u00E7amento, prefer\u00EAncias, intoler\u00E2ncias e suplementos."),
+        tab === 'Visão geral' && React.createElement("div", { className: "life-nut-grid life-clean-grid-v149" },
+            React.createElement("article", { className: "life-nut-card life-clean-card-v149" },
+                React.createElement("small", null, "01 · PERSONALIZADO"),
+                React.createElement("h3", null, "Plano feito para sua rotina."),
+                React.createElement("p", null, "Questionário completo e resultado organizado em uma planilha simples de seguir."),
                 React.createElement("div", { className: "life-nut-actions" },
                     React.createElement("button", { type: "button", onClick: () => { if (!hasPro) {
                             onUpgrade && onUpgrade('nutrition_personalized');
                             return;
                         } setTab('Personalizado'); setStarted(true); } }, hasPro ? 'COMEÇAR →' : 'DESBLOQUEAR PRO →'))),
-            React.createElement("article", { className: "life-nut-card" },
-                React.createElement("small", null, "MODELOS"),
-                React.createElement("h3", null,
-                    LIFE_READY_MEAL_PLANS_V81.length,
-                    " planos prontos."),
-                React.createElement("p", null, "Rotinas para escola, trabalho, turnos, treino em hor\u00E1rios diferentes, viagem, or\u00E7amento, alimenta\u00E7\u00E3o vegetariana/vegana e preparo semanal."),
+            React.createElement("article", { className: "life-nut-card life-clean-card-v149" },
+                React.createElement("small", null, "02 · PLANOS PRONTOS"),
+                React.createElement("h3", null, LIFE_READY_MEAL_PLANS_V81.length, " modelos claros."),
+                React.createElement("p", null, "Estruturas simples para escola, treino, orçamento, rotina corrida e preparo semanal."),
                 React.createElement("div", { className: "life-nut-actions" },
-                    React.createElement("button", { type: "button", onClick: () => setTab('Planos prontos') }, "EXPLORAR \u2192"))),
-            React.createElement("article", { className: "life-nut-card" },
-                React.createElement("small", null, "COZINHA"),
-                React.createElement("h3", null,
-                    LIFE_EDITORIAL_RECIPES_V81.length,
-                    " receitas detalhadas."),
-                React.createElement("p", null, "Ingredientes, utens\u00EDlios, etapas, ponto certo, substitui\u00E7\u00F5es, armazenamento e busca por ingrediente."),
+                    React.createElement("button", { type: "button", onClick: () => setTab('Planos prontos') }, "VER PLANOS →"))),
+            React.createElement("article", { className: "life-nut-card life-clean-card-v149" },
+                React.createElement("small", null, "03 · RECEITAS"),
+                React.createElement("h3", null, LIFE_EDITORIAL_RECIPES_V81.length, " receitas."),
+                React.createElement("p", null, "Abra receitas detalhadas e use-as para alimentar seus planos sem bagunça."),
                 React.createElement("div", { className: "life-nut-actions" },
-                    React.createElement("button", { type: "button", onClick: () => setTab('Receitas') }, "ABRIR \u2192")))),
+                    React.createElement("button", { type: "button", onClick: () => setTab('Receitas') }, "ABRIR RECEITAS →"))),
+            React.createElement("article", { className: "life-nut-card life-clean-card-v149" },
+                React.createElement("small", null, "04 · MINHA PASTA"),
+                React.createElement("h3", null, savedPlans?.length ? savedPlans.length + ' plano(s) salvo(s).' : 'Sua pasta alimentar.'),
+                React.createElement("p", null, "Tudo que você salvar volta pronto para consulta, ajuste e contexto da LIFE AI."),
+                React.createElement("div", { className: "life-nut-actions" },
+                    React.createElement("button", { type: "button", onClick: () => hasPro ? setTab('Meus planos') : onUpgrade && onUpgrade('nutrition_personalized') }, hasPro ? 'ABRIR PASTA →' : 'PASTA · PRO →')))),
         tab === 'Personalizado' && !started && !result && React.createElement("div", { className: "life-nut-card" },
             React.createElement("small", null, "PLANO PERSONALIZADO"),
             React.createElement("h3", null, "Vamos montar o seu contexto primeiro."),
@@ -2324,29 +2445,14 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
                 React.createElement("p", null, "Somente respostas fornecidas por voc\u00EA. Nada \u00E9 inferido sobre apar\u00EAncia, \u201Cpeso ideal\u201D ou necessidade de suplemento."),
                 React.createElement("div", null, Object.entries(answers).filter(([k, v]) => v && (!Array.isArray(v) || v.length)).slice(-8).map(([k, v]) => React.createElement("span", { key: k }, String(Array.isArray(v) ? v.join(', ') : v).slice(0, 30)))))),
         tab === 'Personalizado' && result && React.createElement("div", { className: "life-nut-result" },
-            React.createElement("div", { className: "life-nut-summary" },
-                React.createElement("div", null,
-                    React.createElement("small", null, "OBJETIVO"),
-                    React.createElement("b", null, result.profile.goal || 'Organização')),
-                React.createElement("div", null,
-                    React.createElement("small", null, "ROTINA"),
-                    React.createElement("b", null, result.profile.routine || 'Flexível')),
-                React.createElement("div", null,
-                    React.createElement("small", null, "ESTILO"),
-                    React.createElement("b", null, result.profile.style || 'Variado')),
-                React.createElement("div", null,
-                    React.createElement("small", null, "FAIXA"),
-                    React.createElement("b", null, Number(result.profile.age) < 18 ? 'Modo jovem' : 'Adulto'))),
-            React.createElement("div", { className: "life-nut-card" },
-                React.createElement("small", null, "ESTRUTURA DO DIA"),
-                React.createElement("h3", null, result.blocked ? 'Organização geral, não dieta médica.' : 'Plano alimentar flexível.'),
-                result.items.map((x, i) => React.createElement("div", { className: "life-nut-day", key: i },
-                    React.createElement("small", null, x.k),
-                    React.createElement("div", null,
-                        React.createElement("h4", null, x.t),
-                        React.createElement("p", null, x.d)))),
+            React.createElement("div", { className: "life-nut-summary life-clean-summary-v149" }, lifeNutritionProfileSummaryV149(result).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))),
+            React.createElement("div", { className: "life-nut-card life-clean-card-v149" },
+                React.createElement("small", null, "PLANILHA PERSONALIZADA"),
+                React.createElement("h3", null, result.blocked ? 'Organização geral, não dieta médica.' : 'Seu plano alimentar está pronto.'),
+                React.createElement("p", null, "Os blocos abaixo ficaram mais limpos: nome visível, explicação curta e leitura rápida."),
+                lifeRenderNutritionBlocksV149(result.items),
                 result.notes.map((n, i) => React.createElement("div", { className: "life-nut-note", key: i }, n)),
-                Array.isArray(result.shopping) && result.shopping.length > 0 && React.createElement("div", { className: "life-nut-shopping" },
+                Array.isArray(result.shopping) && result.shopping.length > 0 && React.createElement("div", { className: "life-nut-shopping life-nut-shopping-v149" },
                     React.createElement("small", null, "LISTA DE COMPRAS SUGERIDA"),
                     React.createElement("h4", null, "Bases coerentes com suas respostas."),
                     React.createElement("ul", null, result.shopping.map((item, i) => React.createElement("li", { key: i }, item)))),
@@ -2372,11 +2478,7 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
                             React.createElement("p", null, ready.summary)),
                         React.createElement("button", { type: "button", onClick: () => setReady(null) }, "\u00D7")),
                     React.createElement("div", { className: "life-recipe-body" },
-                        ready.blocks.map((x, i) => React.createElement("div", { className: "life-nut-day", key: i },
-                            React.createElement("small", null, x[0]),
-                            React.createElement("div", null,
-                                React.createElement("h4", null, x[1]),
-                                React.createElement("p", null, x[2])))),
+                        lifeRenderNutritionBlocksV149(ready.blocks.map(x => ({ k: x[0], t: x[1], d: x[2] }))),
                         React.createElement("div", { className: "life-nut-note" }, "Modelo flex\u00EDvel: adapte aos alimentos que voc\u00EA tolera, \u00E0 sua fome, rotina e orienta\u00E7\u00F5es individuais. Para alergias ou condi\u00E7\u00F5es m\u00E9dicas, n\u00E3o fa\u00E7a substitui\u00E7\u00F5es autom\u00E1ticas."),
                         React.createElement("div", { className: "life-nut-actions" },
                             React.createElement("button", { type: "button", className: "life-nut-primary", onClick: () => { if (!hasPro) {
@@ -2388,18 +2490,37 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
             React.createElement(LifeEditorialCookbook, { onAsk: onAsk }),
             React.createElement("div", { className: "life-nut-actions" },
                 React.createElement("button", { type: "button", onClick: () => onGoRecipes && onGoRecipes() }, "ABRIR BIBLIOTECA COMPLETA DE RECEITAS \u2192"))),
-        tab === 'Meus planos' && React.createElement("div", { className: "life-nut-card" },
-            React.createElement("small", null, "PLANOS SALVOS"),
-            React.createElement("h3", null, savedPlans?.length ? savedPlans.length + ' plano(s) no LIFE.' : 'Nenhum plano salvo.'),
-            React.createElement("p", null, "Os planos personalizados ficam dispon\u00EDveis para a LIFE AI usar como contexto quando voc\u00EA perguntar sobre alimenta\u00E7\u00E3o."),
-            (savedPlans || []).slice(0, 8).map((p, i) => React.createElement("div", { className: "life-nut-day", key: p.id || i },
-                React.createElement("small", null, new Date(p.createdAt || Date.now()).toLocaleDateString('pt-BR')),
-                React.createElement("div", null,
-                    React.createElement("h4", null, p.name || 'Plano alimentar'),
-                    React.createElement("p", null,
-                        p.items?.length || 0,
-                        " blocos de refei\u00E7\u00E3o \u00B7 ",
-                        p.profile?.goal || p.answers?.goal || 'organização alimentar'))))));
+        tab === 'Meus planos' && React.createElement(React.Fragment, null,
+            React.createElement("div", { className: "life-nut-card life-clean-card-v149" },
+                React.createElement("small", null, "PLANOS SALVOS"),
+                React.createElement("h3", null, savedPlans?.length ? savedPlans.length + ' plano(s) no LIFE.' : 'Nenhum plano salvo.'),
+                React.createElement("p", null, "Abra uma planilha salva para rever os blocos, a lógica do plano e a lista de compras."),
+                React.createElement("div", { className: "life-nut-saved-grid-v149" }, (savedPlans || []).slice(0, 8).map((p, i) => React.createElement("article", { className: "life-nut-saved-card-v149", key: p.id || i },
+                    React.createElement("small", null, new Date(p.createdAt || Date.now()).toLocaleDateString('pt-BR')),
+                    React.createElement("b", null, p.name || 'Plano alimentar'),
+                    React.createElement("p", null, (p.items?.length || 0) + ' blocos · ' + (p.profile?.goal || p.answers?.goal || 'organização alimentar')),
+                    React.createElement("div", { className: "life-nut-actions" },
+                        React.createElement("button", { type: "button", className: "life-nut-primary", onClick: () => setSavedPreview(p) }, "ABRIR PLANILHA →"),
+                        React.createElement("button", { type: "button", onClick: () => onAsk && onAsk('Revise meu plano alimentar salvo chamado ' + (p.name || 'Plano alimentar') + '. Considere apenas os dados salvos e sugira melhorias práticas sem inventar restrições.') }, "\u2726 PEDIR ANÁLISE")))))),
+            savedPreview && React.createElement("div", { className: "life-recipe-modal", onClick: e => { if (e.target === e.currentTarget)
+                    setSavedPreview(null); } },
+                React.createElement("article", { className: "life-recipe-sheet" },
+                    React.createElement("header", null,
+                        React.createElement("div", null,
+                            React.createElement("small", null, "MEUS PLANOS / SALVO"),
+                            React.createElement("h2", null, savedPreview.name || 'Plano alimentar'),
+                            React.createElement("p", null, (savedPreview.items?.length || 0) + ' blocos organizados para consulta rápida.')),
+                        React.createElement("button", { type: "button", onClick: () => setSavedPreview(null) }, "\u00D7")),
+                    React.createElement("div", { className: "life-recipe-body" },
+                        React.createElement("div", { className: "life-nut-summary life-clean-summary-v149" }, lifeNutritionProfileSummaryV149(savedPreview).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))),
+                        lifeRenderNutritionBlocksV149(savedPreview.items || []),
+                        Array.isArray(savedPreview.shopping) && savedPreview.shopping.length > 0 && React.createElement("div", { className: "life-nut-shopping life-nut-shopping-v149" },
+                            React.createElement("small", null, "LISTA DE COMPRAS"),
+                            React.createElement("h4", null, "Itens-base do plano."),
+                            React.createElement("ul", null, savedPreview.shopping.map((item, i) => React.createElement("li", { key: i }, item)))),
+                        React.createElement("div", { className: "life-nut-actions" },
+                            React.createElement("button", { type: "button", className: "life-nut-primary", onClick: () => setSavedPreview(null) }, "FECHAR")))))),
+    );
 }
 const LIFE_AREA_DEPTH_V81 = {
     'Hoje': { title: 'Central de execução', sub: 'Transforme o dia em decisões pequenas e claras.', modules: [['BRIEFING', 'Briefing do dia', 'Cruzar compromissos, tarefas e energia antes de começar.', 'Faça um briefing do meu dia usando somente dados reais do LIFE. Mostre o que é fixo, o que é flexível e uma primeira ação de até 15 minutos.'], ['TOP 3', 'Três prioridades', 'Separar importante de apenas urgente.', 'Me ajude a escolher três prioridades reais para hoje e explique por que cada uma merece espaço.'], ['ATRITO', 'Mapa de atritos', 'Identificar o que provavelmente vai travar o dia.', 'Analise meu dia e aponte possíveis atritos: horários apertados, tarefas vagas, excesso de contexto ou dependências.'], ['FECHAMENTO', 'Fechar o dia', 'Registrar o que avançou e definir o próximo passo.', 'Conduza um fechamento curto do meu dia: o que avançou, o que ficou aberto e qual é a primeira ação de amanhã.']], questions: [['Como o dia está?', ['Leve', 'Normal', 'Cheio', 'Imprevisível']], ['O que mais importa?', ['Estudo', 'Projeto', 'Rotina', 'Descanso / recuperação']], ['Quanto foco você tem agora?', ['15 min', '30 min', '1 hora', 'Mais de 1 hora']]] },
@@ -6126,6 +6247,12 @@ function LifeOSV18() {
     };
     const localLifeAI = (raw) => {
         const text = raw.trim(), low = text.toLowerCase();
+        if(hasV18Pro&&window.LifeIntelligence149){
+            let study=null;
+            if(aiContextFlags.plans)try{study=lifeSafeJSONParse(lifeRawStorageGet('life_study_plan_v2'),null);}catch(_){ }
+            const suggestion=window.LifeIntelligence149.answer(text,{study,training:aiContextFlags.plans?(savedCustomWorkouts?.find(w=>w?.answers)||null):null});
+            if(suggestion)return suggestion;
+        }
         if (!text)
             return { text: '' };
         if (lifeIsSimpleGreeting(text))
@@ -6350,6 +6477,15 @@ function LifeOSV18() {
                 context.product_help_catalog = Object.entries(LIFE_HOW_IT_WORKS).map(([area, info]) => ({ area: lifePublicAreaName(area), purpose: info.purpose, steps: info.steps, examples: info.examples, impact: info.impact }));
                 const knowledgeArea = lifeGuideAreaFromText(prompt) || (aiContextArea !== 'IA' ? aiContextArea : null);
                 context.knowledge_catalog = lifeSearchGuides(prompt, knowledgeArea).slice(0, 12).map(g => ({ id: g.id, area: g.area, group: g.group, title: g.title, summary: g.summary, steps: g.steps, tags: g.tags }));
+                if (hasV18Pro && window.LifeIntelligence149 && aiContextFlags.plans) {
+                    const storedStudy=lifeSafeJSONParse(lifeRawStorageGet('life_study_plan_v2'),null);
+                    if(storedStudy?.answers) {
+                        const report=window.LifeIntelligence149.studyReport(storedStudy.answers,{title:storedStudy.topic,domain:storedStudy.domain});
+                        context.study_diagnostic={completeness:report.completeness,missing:report.missing,notes:report.notes,books:report.books.map(b=>({title:b.title,author:b.author,reason:b.reason})),nextMeasure:report.nextMeasure};
+                    }
+                    const saved=savedCustomWorkouts.find(w=>w?.answers);
+                    if(saved){ const r=window.LifeIntelligence149.trainingReport(saved.answers); context.training_diagnostic={completeness:r.completeness,missing:r.missing,adjustments:r.adjustments,caution:r.caution,nextMeasure:r.nextMeasure}; }
+                }
                 const requestedMuscles = lifeExtractMuscleTargets(prompt);
                 if (requestedMuscles.length) {
                     context.requestedMuscles = requestedMuscles;
@@ -6392,7 +6528,8 @@ function LifeOSV18() {
         setAiBusy(true);
         try {
             const validatedCommand = hasV18Pro ? window.LifeIntegrity123?.localCommand(prompt) : null;
-            const deterministic = !!validatedCommand || (hasV18Pro && window.LifeBrain1463 && !!window.LifeBrain1463.answer(prompt,lifeBrainForAI())) || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
+            const life149Deterministic=!!(hasV18Pro&&window.LifeIntelligence149&&/(relat[oó]rio|diagn[oó]stico|livros? recomendados?|bibliografia)/i.test(prompt));
+            const deterministic = life149Deterministic || !!validatedCommand || (hasV18Pro && window.LifeBrain1463 && !!window.LifeBrain1463.answer(prompt,lifeBrainForAI())) || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
             let result = validatedCommand ? {text:'Preparei uma ação. Revise e confirme antes de salvar no LIFE.',action:validatedCommand} : deterministic ? (hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt)) : await callLifeAIBackend(prompt);
             if (!result)
                 result = hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt);
@@ -7133,8 +7270,8 @@ function LifeOSV18() {
     }, [intro, lifeAccess]);
     // FITNESS INTELIGENTE
     const personalTrainingDraft = load('life_form_personal_training_v9', null);
-    const [personalFlow, setPersonalFlow] = React.useState(null), [pfStep, setPfStep] = React.useState(() => life1455SafeStep(personalTrainingDraft?.step,15)), [pfAnswers, setPfAnswers] = React.useState(() => personalTrainingDraft?.answers || {}), [pfPlan, setPfPlan] = React.useState(null);
-    const startPersonalTraining = (fresh=false) => { const d=fresh?null:load('life_form_personal_training_v9',null); setPersonalFlow('training'); setPfStep(life1455SafeStep(d?.step,15)); setPfAnswers(d?.answers||{}); setPfPlan(null); setPfPlanName(''); };
+    const [personalFlow, setPersonalFlow] = React.useState(null), [pfStep, setPfStep] = React.useState(() => life1455SafeStep(personalTrainingDraft?.step,19)), [pfAnswers, setPfAnswers] = React.useState(() => personalTrainingDraft?.answers || {}), [pfPlan, setPfPlan] = React.useState(null);
+    const startPersonalTraining = (fresh=false) => { const d=fresh?null:load('life_form_personal_training_v9',null); setPersonalFlow('training'); setPfStep(life1455SafeStep(d?.step,19)); setPfAnswers(d?.answers||{}); setPfPlan(null); setPfPlanName(''); };
     React.useEffect(()=>{try{ if(personalFlow==='training') save('life_form_personal_training_v9',{step:pfStep,answers:pfAnswers,updatedAt:new Date().toISOString()}); }catch(e){}},[personalFlow,pfStep,pfAnswers]);
     const [pfPlanName, setPfPlanName] = React.useState('');
     const [savedCustomWorkouts, setSavedCustomWorkouts] = React.useState(() => load('life_custom_workouts_v2', []));
@@ -7185,7 +7322,11 @@ function LifeOSV18() {
         ["Onde você treina na maior parte do tempo?", ["Academia completa", "Casa", "Ar livre", "Equipamentos básicos"]],
         ["Como costuma estar sua recuperação entre sessões?", ["Boa na maior parte da semana", "Oscila bastante", "Tenho pouco tempo para recuperar"]],
         ["Existe lesão, condição médica ou orientação profissional que limite o treino?", ["Não", "Sim — preciso adaptar com responsável/profissional", "Não sei / quero confirmar antes"]],
-        ["Como você prefere lidar com impacto?", ["Normal", "Prefiro baixo impacto", "Quero evitar corrida intensa"]]
+        ["Como você prefere lidar com impacto?", ["Normal", "Prefiro baixo impacto", "Quero evitar corrida intensa"]],
+        ["Quais exercícios você prefere aprender e praticar?", ["Prefiro máquinas e movimentos guiados", "Prefiro pesos livres e movimentos básicos", "Gosto de variar", "Ainda estou descobrindo"]],
+        ["Como você descreveria seu momento de treino?", ["Estou voltando após uma pausa", "Quero aprender os movimentos", "Tenho uma rotina consistente", "Minha rotina muda bastante"]],
+        ["Existe algum tipo de movimento que costuma causar desconforto?", ["Nenhum", "Agachamento ou movimentos de perna", "Empurrar com braços ou ombros", "Puxar com braços ou costas", "Não sei identificar"]],
+        ["Como está seu sono nos últimos dias?", ["Tenho dormido bem", "Tenho dormido pouco", "Muda bastante", "Prefiro não responder"]]
     ];
     const dietQs = [
         ["Como é sua rotina de refeições?", ["3 refeições", "3 + lanches", "Horários variáveis", "Quero organizar melhor"]],
@@ -7585,8 +7726,12 @@ function LifeOSV18() {
                 });
                 return;
             }
+            if (a[17] && a[17]!=='Nenhum' && a[17]!=='Não sei identificar') {
+                setPfPlan({type:'training',blocked:true,items:[],message:'Você informou desconforto em um grupo de movimentos. Para não gerar automaticamente exercícios potencialmente desconfortáveis, confirme alternativas com um profissional qualificado antes de montar a semana. Suas respostas continuam salvas.'});
+                return;
+            }
             const ageCap = age > 0 && age < 18 ? 5 : 6;
-            const recoveryCap = recovery === 'Tenho pouco tempo para recuperar' ? 4 : recovery === 'Oscila bastante' ? 5 : 6;
+            const recoveryCap = recovery === 'Tenho pouco tempo para recuperar' || a[18]==='Tenho dormido pouco' ? 4 : recovery === 'Oscila bastante' || a[16]==='Estou voltando após uma pausa' ? 5 : 6;
             const cappedTotalDays = Math.max(2, Math.min(requestedTotalDays, ageCap, recoveryCap));
             const normalizedCounts = normalizeWorkoutWeekCounts(cappedTotalDays, requestedStrengthDays, requestedCardioDays, balance, goal);
             const totalDays = normalizedCounts.totalDays;
@@ -7602,8 +7747,8 @@ function LifeOSV18() {
                 balance, time, place, recovery, medical, impact
             };
             const ranked = getWorkoutSuggestions(prefs);
-            const exerciseCount = time === '30–40 min' ? 4 : time === '45–60 min' ? 5 : 6;
-            const setMode = recovery === 'Tenho pouco tempo para recuperar' || experience === 'Iniciante'
+            const exerciseCount = Math.max(3,(time === '30–40 min' ? 4 : time === '45–60 min' ? 5 : 6) - ((a[16]==='Estou voltando após uma pausa'||a[18]==='Tenho dormido pouco')?1:0));
+            const setMode = recovery === 'Tenho pouco tempo para recuperar' || experience === 'Iniciante' || a[16]==='Estou voltando após uma pausa' || a[18]==='Tenho dormido pouco'
                 ? 'base'
                 : (goal === 'Força e técnica' ? 'strength' : 'hypertrophy');
             const splitCycle = split === 'Upper / Lower'
@@ -7616,9 +7761,21 @@ function LifeOSV18() {
                             ? ['Full Body A · corpo inteiro','Full Body B · corpo inteiro']
                             : ['Peito + tríceps + ombros','Costas + bíceps + antebraço','Pernas completas']);
             const actualSplitCycle = strengthDays === 1 ? ['Full Body · corpo inteiro'] : strengthDays === 2 ? (experience === 'Iniciante' ? ['Full Body A · corpo inteiro','Full Body B · corpo inteiro'] : ['Upper · tronco completo','Lower · pernas completas']) : splitCycle;
+            const life149TrainingReport=window.LifeIntelligence149?.trainingReport(a);
+            const life149Avoid=String(a[17]||'Nenhum');
+            const life149Style=String(a[15]||'');
+            // O volume e a frequência já são moderados acima quando há retorno após pausa ou pouco sono.
             const strengthSessions = Array.from({ length: strengthDays }, (_, i) => {
                 const label = actualSplitCycle[i % actualSplitCycle.length];
-                const moves = buildStrengthMovesFor(label, place, exerciseCount, i * 3);
+                const standardMoves = buildStrengthMovesFor(label, place, exerciseCount, i * 3);
+                const blocked=/perna|agachamento/i.test(life149Avoid)?/agach|afund|leg press|passada|extensora|flexora|panturr/i:/empurrar|ombros/i.test(life149Avoid)?/supino|desenvolv|eleva[çc]|paralela|tr[ií]ceps/i:/puxar|costas/i.test(life149Avoid)?/remada|puxad|barra fixa|rosca|b[ií]ceps/i:null;
+                const filteredMoves = blocked ? standardMoves.filter(m=>!blocked.test(typeof m==='string'?m:String(m?.name||m?.move||''))) : standardMoves;
+                const equipmentLabel=m=>String(typeof m==='string'?m:(m?.name||m?.move||''));
+                const preferMachines=/máquinas/i.test(life149Style), preferFree=/pesos livres/i.test(life149Style);
+                const equipmentScore=m=>{const x=equipmentLabel(m);return preferMachines?(/máquina|leg press|puxador|polia|aparelho/i.test(x)?1:0):preferFree?(/halter|barra|livre|agachamento/i.test(x)?1:0):0};
+                const moves=(preferMachines||preferFree)?filteredMoves.slice().sort((a,b)=>equipmentScore(b)-equipmentScore(a)):filteredMoves;
+                // Never fabricate replacement exercises if the declared movement category hurts.
+
                 return {
                     k: 'MUSC ' + (i + 1),
                     t: label,
@@ -7697,8 +7854,9 @@ function LifeOSV18() {
                 suggestions: ranked.slice(0, 4),
                 height,
                 age,
-                adjustments,
-                methodNote: (age > 0 && age < 18 ? 'Modo jovem: técnica, progressão gradual e recuperação têm prioridade. ' : '') + 'O plano foi montado diretamente a partir das 15 respostas, aplicando frequência, divisão, tempo, ambiente, cardio, impacto e recuperação à semana.'
+                adjustments: [...adjustments,...(life149TrainingReport?.adjustments||[])],
+                answers:{...a}, report:life149TrainingReport,
+                methodNote: (age > 0 && age < 18 ? 'Modo jovem: técnica, progressão gradual e recuperação têm prioridade. ' : '') + 'O plano usa as respostas do questionário, considerando frequência, experiência, ambiente, recuperação e preferências. '+(life149TrainingReport?.note||'')+' '+(life149TrainingReport?.nextMeasure||'')
             };
             setPfPlanName(generatedPlanName);
             setPfPlan(generatedTrainingPlan);
@@ -13175,14 +13333,12 @@ function LifeOSV18() {
                     React.createElement("div", { className: "v27-q" }, selectedCustomWorkout.name),
                     React.createElement("div", { className: "v27-help" }, selectedCustomWorkout.temporary ? 'Estrutura sugerida pelo filtro. Revise a semana inteira antes de salvar.' : 'Plano salvo no seu LIFE. Abra qualquer dia para iniciar a sessão correspondente.'),
                     selectedCustomWorkout.type === 'Híbrido' && React.createElement("div", { className: "v27-help" }, "SEMANA HÍBRIDA · ", (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).filter(day => workoutSessionKind(day) === 'strength').length, " MUSCULAÇÃO · ", (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).filter(day => workoutSessionKind(day) === 'cardio').length, " CORRIDA/CARDIO"),
-                    React.createElement("div", { className: "v27-plan v64-week-plan" }, (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).map((x, i) => React.createElement("div", { className: "v27-day v64-session-" + workoutSessionKind(x), key: i },
+                    React.createElement("div", { className: "life-clean-summary-v149 life-workout-summary-v149" }, lifeWorkoutSessionStats(selectedCustomWorkout).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))),
+                    React.createElement("div", { className: "v27-plan v64-week-plan life-week-plan-v149" }, (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).map((x, i) => React.createElement("div", { className: "v27-day v64-session-" + workoutSessionKind(x) + ' life-day-card-v149', key: i },
                         React.createElement("small", null, x.k, " · ", workoutSessionKind(x) === 'cardio' ? 'CORRIDA/CARDIO' : workoutSessionKind(x) === 'mobility' ? 'MOBILIDADE' : 'MUSCULAÇÃO'),
                         React.createElement("b", null, x.t),
                         React.createElement("p", null, x.d),
-                        Array.isArray(x.moves) && x.moves.length > 0 && React.createElement("div", { className: "v64-session-blocks" }, x.moves.slice(0,6).map((move,mi) => React.createElement("span", { key: mi }, move))),
-                        Array.isArray(x.prescription) && x.prescription.length > 0 && React.createElement("div", { className: "vfit-prescription-list compact" }, x.prescription.slice(0,8).map((pr, pi) => React.createElement("div", { className: "vfit-prescription-row", key: pi },
-                            React.createElement("span", null, pr.move || x.moves?.[pi] || ('Exercício ' + (pi + 1))),
-                            React.createElement("small", null, (pr.sets || 1) + ' séries · ' + (pr.reps || 'controle técnico') + (pr.rest ? ' · ' + pr.rest + 's descanso' : ''))))),
+                        lifeRenderWorkoutExerciseCards(x, openExerciseDetail),
                         React.createElement("button", { type: "button", className: "v18-btn ghost mt-3", onClick: () => { startCustomWorkout(selectedCustomWorkout, i); setSelectedCustomWorkout(null); } }, workoutSessionKind(x) === 'cardio' ? "INICIAR CORRIDA/CARDIO \u2192" : "INICIAR MUSCULAÇÃO \u2192")))),
                     selectedCustomWorkout.suggestions?.length > 0 && React.createElement("div", { className: "vfit-similar" },
                         React.createElement("div", { className: "v28-k" }, "TREINOS PRONTOS SEMELHANTES"),
@@ -13241,14 +13397,14 @@ function LifeOSV18() {
                                 i + 1),
                             React.createElement("b", null, x)))),
                         (personalFlow !== "training" || hasV18Pro) && React.createElement("div", { className: "v28-note" }, personalFlow === "training" ? "O LIFE prioriza técnica, consistência, recuperação e progressão gradual. A estrutura considera frequência, experiência, tempo e equipamentos informados." : "O LIFE prioriza organização, variedade e praticidade. As refeições partem da sua rotina e preferências, sem metas agressivas de peso."),
-                        !pfPlan.blocked && (personalFlow !== "training" || hasV18Pro) && React.createElement("div", { className: "v27-plan" }, pfPlan.items.map((x, i) => React.createElement("div", { className: "v27-day", key: i },
-                            React.createElement("small", null, x.k),
-                            React.createElement("b", null, x.t),
-                            React.createElement("p", null, x.d),
-                            personalFlow === "training" && Array.isArray(x.prescription) && x.prescription.length > 0 && React.createElement("div", { className: "vfit-prescription-list" }, x.prescription.map((pr, pi) => React.createElement("div", { className: "vfit-prescription-row", key: pi },
-                                React.createElement("span", null, pr.move || x.moves?.[pi] || ('Exercício ' + (pi + 1))),
-                                React.createElement("small", null, (pr.sets || 1) + ' séries · ' + (pr.reps || 'controle técnico') + (pr.rest ? ' · ' + pr.rest + 's descanso' : ''))))),
-                            personalFlow === "training" && (!Array.isArray(x.prescription) || x.prescription.length === 0) && Array.isArray(x.moves) && x.moves.length > 0 && React.createElement("div", { className: "v64-session-blocks" }, x.moves.map((move, mi) => React.createElement("span", { key: mi }, move)))))),
+                        !pfPlan.blocked && (personalFlow !== "training" || hasV18Pro) && React.createElement(React.Fragment, null,
+                            personalFlow === "training" && React.createElement("div", { className: "life-clean-summary-v149 life-workout-summary-v149" }, lifeWorkoutSessionStats({ items: pfPlan.items || [] }).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))),
+                            personalFlow === "diet" && React.createElement("div", { className: "life-clean-summary-v149" }, lifeNutritionProfileSummaryV149(pfPlan).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))),
+                            React.createElement("div", { className: "v27-plan" }, pfPlan.items.map((x, i) => React.createElement("div", { className: "v27-day life-day-card-v149", key: i },
+                                React.createElement("small", null, x.k),
+                                React.createElement("b", null, x.t),
+                                React.createElement("p", null, x.d),
+                                personalFlow === "training" ? lifeRenderWorkoutExerciseCards(x, openExerciseDetail) : lifeRenderNutritionBlocksV149([{ k: x.k, t: x.t, d: x.d }]))))),
                         personalFlow === "training" && !pfPlan.blocked && hasV18Pro && pfPlan.suggestions?.length > 0 && React.createElement("div", { className: "vfit-similar" },
                             React.createElement("div", { className: "v28-k" }, "TREINOS PRONTOS PARECIDOS COM SUAS RESPOSTAS"),
                             React.createElement("div", { className: "vfit-result-grid" }, pfPlan.suggestions.map(w => React.createElement("article", { className: "vfit-result", key: w.id },

@@ -1,3 +1,9 @@
+# LIFE OS 14.9.0 — Cérebro mais inteligente
+
+O projeto preserva o design 14.8.1. Adiciona perguntas diagnósticas, relatórios explicáveis, bibliografia curada, personalização de treinos e contexto remoto consentido. Ver `QA_REPORT_14.9.0.md` para escopo, testes e limites. A função Supabase remota requer implantação separada.
+
+---
+
 # LIFE OS 14.7.2 — Revisão de confiabilidade do Cérebro
 
 Esta atualização mantém a estrutura FREE/PRO e corrige prioridades, datas, isolamento de preferências por usuário e vazamentos de contexto de áreas desligadas na LIFE AI. Consulte `QA_REPORT_14.7.2.md` para testes e limitações.

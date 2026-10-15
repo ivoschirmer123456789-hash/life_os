@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-14.8.1-smart-hub-containment';
-const ASSET_BUILD='14.8.1';
+const LIFE_CACHE='life-os-14.9.2-audited';
+const ASSET_BUILD='14.9.2';
 const SHELL=[
   './',
   './index.html',
@@ -24,8 +24,10 @@ const SHELL=[
   './assets/css/life-brain-projection-14.6.4.css',
   './assets/js/life-cognitive-engine-14.7.2.js',
   './assets/js/life-logic-engine-14.8.0.js',
+  './assets/js/life-intelligence-14.9.0.js',
   './assets/css/usability-14.6.5.css',
   './assets/css/smart-hub-containment-14.8.1.css',
+  './assets/css/training-nutrition-visual-14.9.1.css',
   './assets/media/hero-daylight.webp',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',

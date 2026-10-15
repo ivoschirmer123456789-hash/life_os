@@ -1,2 +1,2 @@
 window.LIFE_SINGLE_FILE=false;
-window.LIFE_BUILD={version:'14.8.1',name:'FREE Essencial · PRO Signature'};
+window.LIFE_BUILD={version:'14.9.2',name:'FREE Essencial · PRO Signature'};
