@@ -1028,45 +1028,133 @@ const lifeWorkoutSessionStats = (workout) => {
         ['Mobilidade', String(mobility)]
     ];
 };
+const LIFE_EXERCISE_PHOTOS_V1495 = Object.freeze({
+    'supino reto com barra': 'assets/media/exercicio-supino-barra-14.9.5.webp',
+    'supino inclinado com halteres': 'assets/media/exercicio-supino-halteres-14.9.5.webp',
+    'crossover na polia': 'assets/media/exercicio-crucifixo-polia-14.9.5.webp',
+    'crucifixo na polia': 'assets/media/exercicio-crucifixo-polia-14.9.5.webp',
+    'mergulho nas paralelas': 'assets/media/exercicio-paralelas-14.9.5.webp',
+    'paralelas': 'assets/media/exercicio-paralelas-14.9.5.webp'
+});
+const lifePlanEmbedUrlV1493 = (id) => id ? 'https://www.youtube-nocookie.com/embed/' + id + '?rel=0&playsinline=1&iv_load_policy=3' : '';
 const lifeRenderWorkoutExerciseCards = (session, onOpenExercise) => {
     const prs = Array.isArray(session?.prescription) ? session.prescription : [];
     const moves = Array.isArray(session?.moves) && session.moves.length
-        ? session.moves.map(x=>typeof x==='string'?x:String(x?.name||x?.move||''))
-        : prs.map(x=>String(x?.move||''));
-    const rows = moves.filter(Boolean).map((move,i)=>({move,prescription:prs[i]||{}}));
-    if(!rows.length) return null;
-    return React.createElement('div',{className:'life-plan-ex-grid-v149 life-plan-ex-grid-v1493'},rows.map((row,i)=>{
-      const match=lifePlanMatchExerciseV1493(row.move),ex=match?.exercise||null;
-      const group=ex?lifeExerciseGroup(ex):(lifePlanSessionKindV149(session)==='cardio'?'Cardio':lifePlanSessionKindV149(session)==='mobility'?'Mobilidade':'Geral');
-      const info=ex?lifeExerciseVideoInfo(ex):null;
-      const exactVideo=!!(match?.exact&&info?.exact&&info?.id);
-      const referenceVideo=!!(!exactVideo&&info?.id);
-      const visuals=LIFE_PLAN_VISUALS_V149[group]||LIFE_PLAN_VISUALS_V149.Geral;
-      const pr=row.prescription,cardTitle=row.move;
-      const rest=Number(pr.rest),sets=Number(pr.sets);
-      const kind=lifePlanSessionKindV149(session);
-      const videoAction=()=>lifePlanOpenVideoV1493(cardTitle,onOpenExercise);
-      return React.createElement('article',{className:'life-plan-ex-card-v149 life-ex-card-1493',key:String(session?.k||'s')+'-'+i},
-        React.createElement('button',{type:'button',className:'life-plan-ex-thumb-v149 life-ex-image-1493'+(info?.id?' has-video':' fallback'),onClick:videoAction,'aria-label':'Ver demonstração de '+cardTitle},
-          info?.id?React.createElement(React.Fragment,null,
-            React.createElement('img',{src:'https://i.ytimg.com/vi/'+info.id+'/hqdefault.jpg',loading:'lazy',alt:(exactVideo?'Vídeo do exercício ':'Referência ilustrativa de movimento para ')+cardTitle,onError:e=>{if(e?.currentTarget)e.currentTarget.style.display='none';}}),
-            React.createElement('span',{className:'life-ex-playbadge-1493','aria-hidden':true},'▶'),
-            React.createElement('span',{className:'life-ex-photo-label-1493'},exactVideo?'DEMONSTRAÇÃO':'VÍDEO DE REFERÊNCIA')):
-            React.createElement('span',{className:'material-symbols-rounded'},visuals.icon)),
-        React.createElement('div',{className:'life-plan-ex-content-v149'},
-          React.createElement('div',{className:'life-plan-ex-top-v149'},
-            React.createElement('small',null,('0'+(i+1)).slice(-2)+' / '+group.toUpperCase()),
-            React.createElement('b',null,cardTitle)),
-          React.createElement('div',{className:'life-plan-ex-chips-v149'},
-            kind==='strength'&&React.createElement('span',null,(sets>=1&&sets<=8?sets:3)+' séries'),
-            React.createElement('span',null,pr.reps|| (kind==='strength'?'8–12 repetições':'ritmo confortável')),
-            rest>0&&React.createElement('span',null,rest+'s descanso'),
-            ex&&React.createElement('span',null,lifeExerciseMeta(ex).equipment)),
-          React.createElement('p',{className:'life-plan-ex-note-v149'},exactVideo?'Vídeo correspondente ao movimento.':referenceVideo?'Referência do padrão de movimento; confira a variação.':'Procure um tutorial específico deste exercício.'),
-          React.createElement('div',{className:'life-plan-ex-actions-v149'},
-            React.createElement('button',{type:'button',className:'hot',onClick:videoAction},info?.id?'▶ VER VÍDEO':'▶ ENCONTRAR VÍDEO'),
-            React.createElement('button',{type:'button',onClick:()=>{if(typeof window!=='undefined'&&window.open)window.open(lifePlanVideoSearchV1493(cardTitle),'_blank','noopener,noreferrer');}},'BUSCAR EXATO'),
-            ex&&React.createElement('button',{type:'button',onClick:()=>onOpenExercise&&onOpenExercise(ex)},'TÉCNICA'))));
+        ? session.moves.map(x => typeof x === 'string' ? x : String(x?.name || x?.move || ''))
+        : prs.map(x => String(x?.move || ''));
+    const rows = moves.filter(Boolean).map((move, i) => ({ move, prescription: prs[i] || {} }));
+    if (!rows.length)
+        return null;
+    return React.createElement('div', { className: 'life-plan-ex-grid-v149 life-plan-ex-grid-v1493 life-plan-ex-grid-v1495' }, rows.map((row, i) => {
+        const match = lifePlanMatchExerciseV1493(row.move), ex = match?.exercise || null;
+        const kind = lifePlanSessionKindV149(session);
+        const group = ex ? lifeExerciseGroup(ex) : (kind === 'cardio' ? 'Cardio' : kind === 'mobility' ? 'Mobilidade' : 'Geral');
+        const fallbackRule = LIFE_MOVEMENT_VIDEO_RULES.find(([rx]) => rx.test(String(row.move || '')));
+        const info = ex ? lifeExerciseVideoInfo(ex) : (fallbackRule ? { id: fallbackRule[1] || null, exact: false, label: 'TUTORIAL DE REFERÊNCIA DO PADRÃO' } : null);
+        const exactVideo = !!(match?.exact && info?.exact && info?.id);
+        const referenceVideo = !!(!exactVideo && info?.id);
+        const visuals = LIFE_PLAN_VISUALS_V149[group] || LIFE_PLAN_VISUALS_V149.Geral;
+        const pr = row.prescription, cardTitle = row.move;
+        const rest = Number(pr.rest), sets = Number(pr.sets);
+        const videoAction = (event) => {
+            const article = event?.currentTarget?.closest?.('.life-plan-ex-card-v1495');
+            const folder = article?.querySelector?.('.life-plan-ex-folder-v1495');
+            if (folder) {
+                folder.open = true;
+                folder.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
+                return;
+            }
+            lifePlanOpenVideoV1493(cardTitle, onOpenExercise);
+        };
+        const watchAction = (event) => {
+            videoAction(event);
+            if (info?.id) {
+                const article = event?.currentTarget?.closest?.('.life-plan-ex-card-v1495');
+                const video = article?.querySelector?.('.life-plan-ex-embed-v1495 iframe');
+                if (video) {
+                    const url = lifePlanEmbedUrlV1493(info.id) + '&autoplay=1';
+                    if (video.src !== url) video.src = url;
+                }
+            } else {
+                searchExact();
+            }
+        };
+        const searchExact = () => {
+            if (typeof window !== 'undefined' && window.open)
+                window.open(lifePlanVideoSearchV1493(cardTitle), '_blank', 'noopener,noreferrer');
+        };
+        const fallbackArt = lifeExerciseArt(ex || { name: cardTitle, muscle_group: group, equipment: ex?.equipment || (kind === 'cardio' ? 'Cardio' : 'Livre') });
+        const photoKey = lifeNormalizeText(cardTitle).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+        const cover = LIFE_EXERCISE_PHOTOS_V1495[photoKey] || (ex ? lifeExerciseCover(ex) : (info?.id ? 'https://i.ytimg.com/vi/' + info.id + '/hqdefault.jpg' : fallbackArt));
+        const heroActions = [];
+        if (ex)
+            heroActions.push(React.createElement('button', { type: 'button', key: 'tech', onClick: () => onOpenExercise && onOpenExercise(ex) }, 'VER TÉCNICA'));
+        heroActions.push(React.createElement('button', { type: 'button', key: 'video', className: 'hot', onClick: videoAction }, info?.id ? 'ABRIR PASTA DO VÍDEO' : 'ENCONTRAR VÍDEO'));
+        const folderActions = [
+            React.createElement('button', { type: 'button', key: 'watch', className: 'hot', onClick: watchAction }, info?.id ? '▶ REPRODUZIR' : '▶ BUSCAR VÍDEO'),
+            React.createElement('button', { type: 'button', key: 'search', onClick: searchExact }, 'BUSCAR EXATO')
+        ];
+        if (ex)
+            folderActions.push(React.createElement('button', { type: 'button', key: 'open-tech', onClick: () => onOpenExercise && onOpenExercise(ex) }, 'ABRIR TÉCNICA'));
+        const heroNode = React.createElement('div', { className: 'life-plan-ex-hero-v1495' },
+            React.createElement('button', { type: 'button', className: 'life-plan-ex-cover-v1495', onClick: videoAction, 'aria-label': 'Abrir demonstração de ' + cardTitle },
+                React.createElement('img', { src: cover, loading: 'lazy', alt: 'Imagem ilustrativa do exercício ' + cardTitle, 'data-fallback': fallbackArt, onError: e => {
+                        if (e?.currentTarget) {
+                            const fallback = e.currentTarget.dataset?.fallback;
+                            if (fallback && e.currentTarget.src !== fallback)
+                                e.currentTarget.src = fallback;
+                            else
+                                e.currentTarget.style.display = 'none';
+                        }
+                    } }),
+                React.createElement('span', { className: 'life-plan-ex-cover-badge-v1495' }, exactVideo ? 'DEMONSTRAÇÃO' : referenceVideo ? 'PASTA COM VÍDEO' : 'CAPA DO EXERCÍCIO'),
+                React.createElement('span', { className: 'life-plan-ex-cover-play-v1495', 'aria-hidden': true }, '▶'),
+                React.createElement('span', { className: 'life-plan-ex-cover-gradient-v1495', 'aria-hidden': true })),
+            React.createElement('div', { className: 'life-plan-ex-content-v149 life-plan-ex-content-v1495' },
+                React.createElement('div', { className: 'life-plan-ex-top-v149' },
+                    React.createElement('small', null, ('0' + (i + 1)).slice(-2) + ' / ' + group.toUpperCase()),
+                    React.createElement('b', null, cardTitle)),
+                React.createElement('div', { className: 'life-plan-ex-chips-v149' },
+                    kind === 'strength' ? React.createElement('span', null, (sets >= 1 && sets <= 8 ? sets : 3) + ' séries') : null,
+                    React.createElement('span', null, pr.reps || (kind === 'strength' ? '8–12 repetições' : 'ritmo confortável')),
+                    rest > 0 ? React.createElement('span', null, rest + 's descanso') : null,
+                    ex ? React.createElement('span', null, lifeExerciseMeta(ex).equipment) : null,
+                    !ex ? React.createElement('span', null, visuals.label || group) : null),
+                React.createElement('p', { className: 'life-plan-ex-note-v149' }, exactVideo ? 'A miniatura leva para a técnica e a pasta abaixo guarda o vídeo incorporado.' : referenceVideo ? 'A capa mostra o exercício e a pasta abaixo reúne o vídeo salvo do mesmo padrão de movimento.' : 'Use a pasta para abrir uma referência rápida e buscar o tutorial exato.'),
+                React.createElement('div', { className: 'life-plan-ex-actions-v149 life-plan-ex-actions-v1495' }, heroActions))
+        );
+        const folderHead = React.createElement('div', { className: 'life-plan-ex-folder-head-v1495' },
+            React.createElement('span', { className: 'material-symbols-rounded', 'aria-hidden': true }, info?.id ? 'video_library' : 'folder_open'),
+            React.createElement('div', null,
+                React.createElement('b', null, exactVideo ? 'Demonstração correspondente pronta para assistir.' : referenceVideo ? 'Tutorial de referência guardado para este movimento.' : 'Busque o tutorial exato deste exercício.'),
+                React.createElement('p', null, exactVideo ? 'Você pode assistir aqui sem sair do LIFE.' : referenceVideo ? ((info?.label || 'Vídeo de referência') + ' · confira a variação mais parecida antes de executar.') : 'Se preferir, abra a técnica do exercício ou pesquise a execução pelo nome completo.'))
+        );
+        const folderBody = React.createElement('div', { className: 'life-plan-ex-folder-body-v1495' },
+            info?.id ? React.createElement('div', { className: 'life-plan-ex-embed-v1495' },
+                React.createElement('iframe', { src: lifePlanEmbedUrlV1493(info.id), title: 'Vídeo de execução: ' + cardTitle, loading: 'lazy', referrerPolicy: 'strict-origin-when-cross-origin', allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowFullScreen: true })) : null,
+            React.createElement('div', { className: 'life-plan-ex-folder-copy-v1495' },
+                folderHead,
+                React.createElement('div', { className: 'life-plan-ex-actions-v149 life-plan-ex-folder-actions-v1495' }, folderActions))
+        );
+        const folderNode = React.createElement('details', { className: 'life-plan-ex-folder-v1495', onToggle: (event) => {
+            // Stop embedded playback whenever the folder closes; reopening never autoplays.
+            if (!info?.id) return;
+            const element = event?.currentTarget;
+            const frame = element?.querySelector?.('.life-plan-ex-embed-v1495 iframe');
+            if (!frame) return;
+            const base = lifePlanEmbedUrlV1493(info.id);
+            if (element.open) {
+                if (frame.src === 'about:blank') frame.src = base;
+            } else if (frame.src !== 'about:blank') frame.src = 'about:blank';
+        } },
+            React.createElement('summary', null,
+                React.createElement('div', null,
+                    React.createElement('small', null, 'COMO FAZER'),
+                    React.createElement('b', null, info?.id ? 'Vídeo salvo nesta pasta' : 'Abra a pasta para buscar o vídeo exato')),
+                React.createElement('span', { className: 'material-symbols-rounded', 'aria-hidden': true }, 'expand_more')),
+            folderBody
+        );
+        return React.createElement('article', { className: 'life-plan-ex-card-v149 life-ex-card-1493 life-plan-ex-card-v1495', key: String(session?.k || 's') + '-' + i }, heroNode, folderNode);
     }));
 };
 const lifeRenderNutritionBlocksV149 = (items = []) => React.createElement('div', { className: 'life-meal-grid-v149' }, (items || []).map((x, i) => {
@@ -5619,6 +5707,54 @@ function LifeOSV18() {
     const [lifePins, setLifePins] = React.useState(() => load('life_pins_v4', []));
     const [lifeActivity, setLifeActivity] = React.useState(() => lifeNormalizeActivityRows(load('life_activity_v4', [])));
     const [mobileMore, setMobileMore] = React.useState(false);
+    const [lifeSidebarMode, setLifeSidebarMode] = React.useState(() => {
+        const stored = String(load('life_sidebar_mode_v1495', 'full') || 'full');
+        return ['full', 'compact', 'hidden'].includes(stored) ? stored : 'full';
+    });
+    const [lifeSidebarWidth, setLifeSidebarWidth] = React.useState(() => Math.max(240, Math.min(380, Number(load('life_sidebar_width_v1495', 286)) || 286)));
+    const lifeSidebarDrag = React.useRef({ active: false, startX: 0, startWidth: 286 });
+    React.useEffect(() => {
+        const finalMode = ['full', 'compact', 'hidden'].includes(lifeSidebarMode) ? lifeSidebarMode : 'full';
+        const finalWidth = Math.max(240, Math.min(380, Number(lifeSidebarWidth) || 286));
+        document.documentElement.dataset.lifeSidebarMode = finalMode;
+        document.documentElement.style.setProperty('--life-sidebar-user-width', (finalMode === 'compact' ? 96 : finalWidth) + 'px');
+        document.documentElement.style.setProperty('--life-sidebar-shell-offset', (finalMode === 'hidden' ? 0 : (finalMode === 'compact' ? 120 : finalWidth + 24)) + 'px');
+        lifeRawStorageSet('life_sidebar_mode_v1495', JSON.stringify(finalMode));
+        lifeRawStorageSet('life_sidebar_width_v1495', JSON.stringify(finalWidth));
+    }, [lifeSidebarMode, lifeSidebarWidth]);
+    React.useEffect(() => {
+        const onMove = (e) => {
+            const drag = lifeSidebarDrag.current;
+            if (!drag.active)
+                return;
+            const next = Math.max(240, Math.min(380, Math.round(drag.startWidth + (e.clientX - drag.startX))));
+            if (lifeSidebarMode !== 'full')
+                setLifeSidebarMode('full');
+            setLifeSidebarWidth(next);
+        };
+        const onUp = () => {
+            if (!lifeSidebarDrag.current.active)
+                return;
+            lifeSidebarDrag.current.active = false;
+            document.body.classList.remove('life-sidebar-dragging');
+        };
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+        return () => {
+            window.removeEventListener('pointermove', onMove);
+            window.removeEventListener('pointerup', onUp);
+        };
+    }, [lifeSidebarMode]);
+    const startLifeSidebarResize = (e) => {
+        if (typeof window !== 'undefined' && window.innerWidth < 1150)
+            return;
+        lifeSidebarDrag.current = { active: true, startX: e.clientX, startWidth: lifeSidebarMode === 'full' ? lifeSidebarWidth : 286 };
+        if (lifeSidebarMode !== 'full')
+            setLifeSidebarMode('full');
+        document.body.classList.add('life-sidebar-dragging');
+        if (e?.preventDefault)
+            e.preventDefault();
+    };
     const [howItWorksArea, setHowItWorksArea] = React.useState(null);
     const [showFitnessLibrary, setShowFitnessLibrary] = React.useState(false);
     const [fitnessMainTab, setFitnessMainTab] = React.useState('Hoje');
@@ -10860,11 +10996,20 @@ function LifeOSV18() {
                 React.createElement("div", { className: "life-support-actions" },
                     React.createElement("button", { type: "button", onClick: () => setDangerOpen(false) }, "CANCELAR"),
                     React.createElement("button", { type: "button", className: "danger", onClick: clearLifeLocalData }, "APAGAR DADOS LOCAIS")))),
-        React.createElement("div", { className: "v18-shell" },
-            React.createElement("nav", { className: "v18-tabs", "aria-label": "\u00C1reas principais do LIFE" },
+        React.createElement("div", { className: "v18-shell life-shell-sidebar-v1495 life-shell-sidebar-" + lifeSidebarMode, "data-life-sidebar-mode": lifeSidebarMode, style: { '--life-user-sidebar-width': (lifeSidebarMode === 'compact' ? 96 : lifeSidebarWidth) + 'px' } },
+            React.createElement("nav", { className: "v18-tabs life-sidebar-v1495 life-sidebar-" + lifeSidebarMode, "data-life-sidebar-mode": lifeSidebarMode, "aria-label": "\u00C1reas principais do LIFE" },
                 React.createElement('div',{className:'life11-sidebar-brand'},
                     React.createElement('div',{className:'life11-brand-mark'},'L',React.createElement('span',null,'✦')),
                     React.createElement('div',{className:'life11-brand-type'},React.createElement('strong',null,'LIFE ',React.createElement('em',null,'OS')),React.createElement('small',null,'SEU SISTEMA PESSOAL'))),
+                React.createElement('div',{className:'life-sidebar-manage-v1495','aria-label':'Controles do menu lateral'},
+                    React.createElement('div',{className:'life-sidebar-manage-row-v1495'},
+                        React.createElement('button',{type:'button',className:lifeSidebarMode==='full'?'on':'',onClick:()=>setLifeSidebarMode('full'),'aria-label':'Mostrar menu lateral completo',title:'Menu completo'},React.createElement('span',{className:'material-symbols-rounded'},'left_panel_open')),
+                        React.createElement('button',{type:'button',className:lifeSidebarMode==='compact'?'on':'',onClick:()=>setLifeSidebarMode('compact'),'aria-label':'Deixar o menu compacto',title:'Menu compacto'},React.createElement('span',{className:'material-symbols-rounded'},'left_panel_close')),
+                        React.createElement('button',{type:'button',className:lifeSidebarMode==='hidden'?'on danger':'',onClick:()=>setLifeSidebarMode('hidden'),'aria-label':'Ocultar o menu lateral',title:'Ocultar menu'},React.createElement('span',{className:'material-symbols-rounded'},'keyboard_double_arrow_left'))),
+                    lifeSidebarMode==='full' && React.createElement('label',{className:'life-sidebar-range-v1495'},
+                        React.createElement('small',null,'LARGURA DO MENU'),
+                        React.createElement('input',{type:'range',min:240,max:380,step:4,value:lifeSidebarWidth,onChange:e=>{setLifeSidebarWidth(Math.max(240,Math.min(380,Number(e.target.value)||286))); if(lifeSidebarMode!=='full') setLifeSidebarMode('full');}}),
+                        React.createElement('b',null,lifeSidebarWidth+'px'))),
                 lifeNavItems.filter(x=>hasV18Pro||['Hoje','Tarefas','Estudos','Fitness','Finanças'].includes(x)).map((x, i) => React.createElement(React.Fragment, { key: x },
                 hasV18Pro && (i === 0 || premiumNavGroups[x] !== premiumNavGroups[lifeNavItems[i - 1]]) && React.createElement("span", { className: "life-premium-nav-group" }, premiumNavGroups[x]),
                 React.createElement("button", { type: "button", "aria-current": view === x ? 'page' : undefined, className: view === x ? 'on' : '', onClick: () => v18Go(x) },
@@ -10876,6 +11021,8 @@ function LifeOSV18() {
                     React.createElement('strong',null,'Pronto para o próximo passo?'),
                     React.createElement('p',null,lifeTodayOpen.length?`${lifeTodayOpen.length} ${lifeTodayOpen.length===1?'tarefa esperando':'tarefas esperando'} por você hoje.`:'Comece com uma prioridade e construa o restante no seu ritmo.'),
                     React.createElement('button',{type:'button',onClick:()=>v42Go('Tarefas')},'Abrir planejamento',React.createElement('span',{className:'material-symbols-rounded'},'arrow_outward'))),
+                React.createElement('button',{type:'button',className:'life-sidebar-dragbar-v1495',onPointerDown:startLifeSidebarResize,'aria-label':'Arraste para ajustar a largura do menu',title:'Arraste para aumentar ou diminuir o menu'},React.createElement('span',{className:'material-symbols-rounded'},'drag_indicator')),
+                lifeSidebarMode==='hidden' && React.createElement('button',{type:'button',className:'life-sidebar-restore-v1495',onClick:()=>setLifeSidebarMode('full'),'aria-label':'Mostrar menu lateral novamente'},React.createElement('span',{className:'material-symbols-rounded'},'menu_open'),'MENU'),
             hasV18Pro && view !== 'Hoje' && view !== 'Configurações' && (!areaFocusMode || areaFocusMode==='__full__') && React.createElement("section", { className: "life-premium-masthead life131-masthead", "data-life-area": view, "aria-label": "Área " + lifePublicAreaName(view) },
                 React.createElement("span", { className: "life131-masthead-glyph material-symbols-rounded", "aria-hidden": "true" }, ({Fitness:'fitness_center',Estudos:'school',Finanças:'account_balance_wallet',Receitas:'restaurant_menu',IA:'auto_awesome',Evolução:'monitoring',Tarefas:'checklist','Meu LIFE':'grid_view',Perfil:'account_circle',Notas:'edit_note',Sono:'bedtime',Músicas:'music_note',Favoritos:'favorite',Biblioteca:'book',Rotina:'calendar_month'})[view] || 'dashboard'),
                 React.createElement("div", { className: "life-premium-masthead-copy" },
@@ -10887,6 +11034,10 @@ function LifeOSV18() {
                     React.createElement("span", null, cloudStatus === 'synced' ? 'SYNC OK' : cloudStatus === 'conflict' ? 'REVISAR SYNC' : 'LOCAL'),
                     React.createElement("b", null, realPlan === 'OWNER' ? 'OWNER' : hasV18Pro ? 'PRO' : 'FREE'))),
             React.createElement("button", { type: "button", className: "life-how-entry", onClick: () => setHowItWorksArea(view) }, React.createElement("span", { className: "material-symbols-rounded" }, "help"), React.createElement("span", null, "Como funciona?")),
+            view !== 'Hoje' && React.createElement('nav',{className:'life-mobile-wayfinder-1494','aria-label':'Você está em'},
+                React.createElement('button',{type:'button',className:'life-mobile-back-1494',onClick:()=>v18Go('Hoje'),'aria-label':'Voltar para o início'},React.createElement('span',{className:'material-symbols-rounded'},'arrow_back'),'Início'),
+                React.createElement('div',{className:'life-mobile-wayfinder-name-1494'},React.createElement('small',null,'VOCÊ ESTÁ EM'),React.createElement('b',null,lifePublicAreaName(view))),
+                React.createElement('button',{type:'button',className:'life-mobile-back-1494',onClick:()=>setMobileMore(true),'aria-label':'Escolher outra área'},React.createElement('span',{className:'material-symbols-rounded'},'apps'),'Áreas')),
             !online && React.createElement("div", { className: "life-offline" },
                 React.createElement("div", null,
                     React.createElement("b", null, "SEM INTERNET"),
@@ -10902,6 +11053,23 @@ function LifeOSV18() {
                 React.createElement("span", null, lifePublicAreaName(view)),
                 React.createElement("button", { type: "button", className: 'life-area-favorite-action-v82 ' + (isLifeFavorite('areas', view) ? 'on' : ''), onClick: () => toggleLifeFavorite('areas', { id: view, title: lifePublicAreaName(view), go: view, type: 'Área' }), 'aria-pressed':isLifeFavorite('areas',view)?'true':'false' }, React.createElement('span',{className:'material-symbols-rounded'},isLifeFavorite('areas',view)?'favorite':'favorite_border'), isLifeFavorite('areas', view) ? ' FAVORITADA' : ' FAVORITAR ÁREA'),
                 React.createElement("button", { type: "button", className: isLifePinned('Área', view) ? 'on' : '', onClick: () => toggleLifePin({ type: 'Área', id: view, title: lifePublicAreaName(view), go: view, subtitle: 'Área do LIFE' }) }, isLifePinned('Área', view) ? '✓ NO MEU LIFE' : '＋ FIXAR NO MEU LIFE')),
+            (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement('section',{className:'life-mobile-start-1494','aria-label':'Comece por aqui'},
+                React.createElement('small',{className:'life-mobile-start-label-1494'},'COMECE POR AQUI'),
+                React.createElement('h2',null,'O que você quer fazer agora?'),
+                React.createElement('p',null,'Escolha um caminho. Só depois o LIFE mostra os detalhes.'),
+                React.createElement('div',{className:'life-mobile-start-grid-1494'},(hasV18Pro?[
+                    ['Tarefas','checklist','Organizar','Minhas tarefas'],
+                    ['Estudos','school','Estudar','Meu plano'],
+                    ['Fitness','fitness_center','Treinar','Treinos e vídeos'],
+                    ['Receitas','restaurant','Alimentação','Planos e receitas']
+                ]:[
+                    ['Tarefas','checklist','Organizar','Minhas tarefas'],
+                    ['Estudos','school','Estudar','Meu plano'],
+                    ['Fitness','fitness_center','Treinar','Treinos e exercícios'],
+                    ['Finanças','account_balance_wallet','Finanças','Gastos e saldo']
+                ]).map(([area,icon,label,desc])=>React.createElement('button',{type:'button',key:area,onClick:()=>v18Go(area)},
+                    React.createElement('span',{className:'material-symbols-rounded'},icon),
+                    React.createElement('b',null,label),React.createElement('small',null,desc),React.createElement('i',{className:'material-symbols-rounded'},'arrow_forward'))))),
             (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && !hasV18Pro && React.createElement('main',{className:'life1458-free-home','aria-label':'Painel básico LIFE OS FREE'},
                 React.createElement('header',{className:'life1458-free-head'},
                     React.createElement('div',null,
@@ -12728,17 +12896,34 @@ function LifeOSV18() {
                 React.createElement("button", { type: "button", className: view === 'Tarefas' ? 'on' : '', onClick: () => v18Go('Tarefas') }, React.createElement("i", { className: "material-symbols-rounded" }, "event_note"), React.createElement("span", null, "Tarefas")),
                 React.createElement("button", { type: "button", className: "life-design-nav-add", onClick: () => openSheet('capture'), "aria-label": "Criar ou capturar" }, React.createElement("i", { className: "material-symbols-rounded" }, "add"), React.createElement("span", null, "Criar")),
                 hasV18Pro ? React.createElement("button", { type: "button", className: view === 'IA' ? 'on' : '', onClick: () => v18Go('IA'), "data-nav": "ai" }, React.createElement("i", { className: "material-symbols-rounded" }, "auto_awesome"), React.createElement("span", null, "LIFE AI")) : React.createElement("button", { type: "button", className: view === 'Fitness' ? 'on' : '', onClick: () => v18Go('Fitness'), "data-nav": "fitness" }, React.createElement("i", { className: "material-symbols-rounded" }, "fitness_center"), React.createElement("span", null, "Fitness")),
-                React.createElement("button", { type: "button", className: !(hasV18Pro ? ['Hoje','Tarefas','IA'] : ['Hoje','Tarefas','Fitness']).includes(view) ? 'on' : '', onClick: () => setMobileMore(true), "data-nav": "more" }, React.createElement("i", { className: "material-symbols-rounded" }, "grid_view"), React.createElement("span", null, "Mais"))),
+                React.createElement("button", { type: "button", className: !(hasV18Pro ? ['Hoje','Tarefas','IA'] : ['Hoje','Tarefas','Fitness']).includes(view) ? 'on' : '', onClick: () => setMobileMore(true), "data-nav": "more", "aria-label": "Abrir todas as áreas do LIFE", "aria-expanded": mobileMore }, React.createElement("i", { className: "material-symbols-rounded" }, "apps"), React.createElement("span", null, "Áreas"))),
             mobileMore && React.createElement("div", { className: "life-mobile-more", onClick: e => { if (e.target === e.currentTarget) setMobileMore(false); } },
                 React.createElement("div", null,
                     React.createElement("div", { className: "life-mobile-more-head" },
-                        React.createElement("span", null, hasV18Pro ? "ÁREAS DO LIFE" : "LIFE FREE · ÁREAS"),
+                        React.createElement("span", null, "Para onde você quer ir?"),
                         React.createElement("div", { className: "life-mobile-more-actions-v930" },
                             React.createElement("button", { type: "button", className: "search", onClick: () => { setMobileMore(false); setSpot(true); }, "aria-label": "Buscar em todo o LIFE" }, React.createElement("span", { className: "material-symbols-rounded" }, "search"), "BUSCAR"),
                             React.createElement("button", { type: "button", onClick: () => setMobileMore(false), "aria-label": "Fechar" }, "×"))),
-                    React.createElement("div", { className: "life-mobile-more-grid" }, (hasV18Pro ? fullNav.filter(x => !['Hoje','Tarefas','IA'].includes(x)) : LIFE_FREE_NAV_AREAS.filter(x => !['Hoje','Tarefas','Fitness'].includes(x))).map(x => React.createElement("div", { className: 'life-mobile-area-card ' + (view === x ? 'on' : ''), key: x },
-                        React.createElement("button", { type: "button", className: 'life-mobile-area-open', onClick: () => v18Go(x) }, React.createElement("b", null, lifePublicAreaName(x)), React.createElement("small", null, "ABRIR →")),
-                        React.createElement("button", { type: "button", className: 'life-area-heart ' + (isLifeFavorite('areas', x) ? 'on' : ''), onClick: e => { e.stopPropagation(); toggleLifeFavorite('areas', { id: x, title: lifePublicAreaName(x), go: x, type: 'Área' }); }, 'aria-label': isLifeFavorite('areas', x) ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }, React.createElement("span", { className: "material-symbols-rounded" }, isLifeFavorite('areas', x) ? 'favorite' : 'favorite_border'))))),
+                    React.createElement("p", { className: "life-mobile-menu-hint-1494" }, "Escolha o que precisa agora. O restante fica em Todas as áreas."),
+                    React.createElement("div", { className: "life-mobile-menu-quick-1494" }, (hasV18Pro ? [
+                        ['Estudos','school','Plano, matérias e revisões'],
+                        ['Fitness','fitness_center','Treinos e exercícios'],
+                        ['Receitas','restaurant','Dietas e receitas'],
+                        ['Finanças','account_balance_wallet','Gastos e metas']
+                    ] : [
+                        ['Estudos','school','Plano e matérias'],
+                        ['Fitness','fitness_center','Treinos e exercícios'],
+                        ['Finanças','account_balance_wallet','Saldo e registros']
+                    ]).map(([area,icon,description]) => React.createElement("button", { type:"button", key:area, className:'life-mobile-menu-quick-card-1494 '+(view===area?'on':''), onClick:()=>v18Go(area) },
+                        React.createElement('span',{className:'material-symbols-rounded'},icon),
+                        React.createElement('b',null,lifePublicAreaName(area)),
+                        React.createElement('small',null,description),
+                        React.createElement('i',{className:'material-symbols-rounded'},'arrow_forward')))),
+                    hasV18Pro && React.createElement('details',{className:'life-mobile-menu-extras-1494'},
+                        React.createElement('summary',null,React.createElement('span',{className:'material-symbols-rounded'},'widgets'),'Todas as áreas e ferramentas',React.createElement('span',{className:'material-symbols-rounded'},'expand_more')),
+                        React.createElement("div", { className: "life-mobile-more-grid" }, (hasV18Pro ? fullNav.filter(x => !['Hoje','Tarefas','IA','Estudos','Fitness','Receitas','Finanças'].includes(x)) : LIFE_FREE_NAV_AREAS.filter(x => !['Hoje','Tarefas','Fitness','Estudos','Finanças'].includes(x))).map(x => React.createElement("div", { className: 'life-mobile-area-card ' + (view === x ? 'on' : ''), key: x },
+                            React.createElement("button", { type: "button", className: 'life-mobile-area-open', onClick: () => v18Go(x) }, React.createElement("b", null, lifePublicAreaName(x)), React.createElement("small", null, "ABRIR →")),
+                            React.createElement("button", { type: "button", className: 'life-area-heart ' + (isLifeFavorite('areas', x) ? 'on' : ''), onClick: e => { e.stopPropagation(); toggleLifeFavorite('areas', { id: x, title: lifePublicAreaName(x), go: x, type: 'Área' }); }, 'aria-label': isLifeFavorite('areas', x) ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }, React.createElement("span", { className: "material-symbols-rounded" }, isLifeFavorite('areas', x) ? 'favorite' : 'favorite_border')))))),
                     !hasV18Pro && React.createElement("section", { className: "life-mobile-pro-universe" },
                         React.createElement("small", null, "PRO · +9 ÁREAS E SISTEMAS"),
                         React.createElement("h3", null, "Seu FREE mostra o essencial. O PRO abre o resto do LIFE."),

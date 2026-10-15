@@ -22,7 +22,7 @@ test('Respostas curtas respeitam preferência',()=>{let p={priority:'Rotina',bar
 test('Nenhuma transmissão ou escrita de dados pelo motor local',()=>{let file=fs.readFileSync(path.join(base,'assets/js/life-brain-14.6.4.js'),'utf8');assert.ok(!/fetch\s*\(|localStorage|indexedDB|XMLHttpRequest|\.insert\(|\.update\(/.test(file))});
 const index=fs.readFileSync(path.join(base,'index.html'),'utf8');
 test('index referencia motor antes do app',()=>assert.ok(index.indexOf('life-brain-14.6.4.js') < index.indexOf("'assets/js/life-app-9.4.2.js")));
-test('CSS e JS listados no cache',()=>{let sw=fs.readFileSync(path.join(base,'service-worker.js'),'utf8');assert.ok(sw.includes('life-brain-14.6.4.js'));assert.ok(sw.includes('life-brain-14.6.3.css'));assert.ok(sw.includes("ASSET_BUILD='14.9.3'"))});
+test('CSS e JS listados no cache',()=>{let sw=fs.readFileSync(path.join(base,'service-worker.js'),'utf8');assert.ok(sw.includes('life-brain-14.6.4.js'));assert.ok(sw.includes('life-brain-14.6.3.css'));assert.ok(sw.includes("ASSET_BUILD='14.9.6'"))});
 const app=fs.readFileSync(path.join(base,'assets/js/life-app-9.4.2.js'),'utf8');
 test('Brain PRO condicionado ao plano e dono da conta',()=>{assert.ok(app.includes('hasV18Pro && life1459Profile && life1459Scope'));assert.ok(app.includes('life_data_owner_uid_v123'))});
 test('Confirmação de ações preservada',()=>assert.ok(app.includes('queueAIAction(result.action)')));

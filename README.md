@@ -1,29 +1,16 @@
-# LIFE OS 14.9.3 — Fichas de treino e raciocínio de planos
+# LIFE OS 14.9.6 — Revisão de estabilidade
 
-Base 14.9.2, até 100 arquivos, sem alteração da navegação principal. Treinos prontos, personalizados e player oferecem cartões com séries, execução e vídeo ou busca de vídeo específico. O motor local revê recuperação e apresenta limitações. Ver `QA_REPORT_14.9.3.md`.
+Atualização baseada na versão 14.9.4. Preserva abas, autenticação, pagamentos, Cérebro e divisão FREE/PRO.
 
----
+- **Fichas de treinos prontos e personalizados:** cada exercício tem nome, séries, repetições e descanso em card largo, com vídeo num painel `Vídeo salvo nesta pasta` expansível. A foto é capa, não reprodução do vídeo.
+- **Capas fotográficas:** quatro imagens artísticas originais para supino reto com barra, supino inclinado com halteres, crossover/crucifixo na polia e paralelas. Demais exercícios usam imagens existentes ou ilustração de fallback. Não há fotografia específica verificada para toda a biblioteca.
+- **Vídeo:** quando existe um ID conhecido, o player fica embutido e se abre sob demanda. Referências genéricas são identificadas; a busca do vídeo exato continua disponível. A disponibilidade de cada vídeo externo depende do YouTube.
+- **Menu lateral no desktop:** modo completo, compacto ou oculto; ajuste de 240 a 380 px por controle deslizante ou arrastando a borda. Há botão para restaurar o menu oculto, e a escolha fica salva neste navegador. No celular, permanece o menu simplificado da 14.9.4.
+- **Layout responsivo:** exercício usa uma ficha por linha para impedir colunas estreitas e texto vertical; vídeo 16:9, mobile em coluna única.
 
-# LIFE OS 14.9.0 — Cérebro mais inteligente
+**Publicação:** o ZIP está pronto para ser extraído com `index.html` na raiz do repositório GitHub/Vercel. Configure o backend Supabase em ambiente seguro; o ZIP não realiza alterações no Supabase remoto. Não descarte a 14.9.4 antes de validar a nova versão no seu domínio.
 
-O projeto preserva o design 14.8.1. Adiciona perguntas diagnósticas, relatórios explicáveis, bibliografia curada, personalização de treinos e contexto remoto consentido. Ver `QA_REPORT_14.9.0.md` para escopo, testes e limites. A função Supabase remota requer implantação separada.
+**Limites de validação:** verificações de JavaScript, referências de arquivos, testes locais e layout não equivalem a teste fim a fim de login, pagamento, sincronização e vídeo online.
 
----
 
-# LIFE OS 14.7.2 — Revisão de confiabilidade do Cérebro
-
-Esta atualização mantém a estrutura FREE/PRO e corrige prioridades, datas, isolamento de preferências por usuário e vazamentos de contexto de áreas desligadas na LIFE AI. Consulte `QA_REPORT_14.7.2.md` para testes e limitações.
-
----
-
-# LIFE OS 14.6.5 — Scroll desktop e conexão de cidade
-
-Versão completa baseada na 14.6.4 (motor inteligente, projeções, modos FREE/PRO) com ajustes focados em:
-
-- Roda do mouse em desktop, inclusive ao apontar o menu lateral quando ele está no limite de rolagem.
-- Detecção de janelas ocultas sem bloquear indevidamente a rolagem da página.
-- Painel de clima com busca e conexão da cidade no topo, antes dos detalhes meteorológicos.
-- Cache atualizado.
-
-## Publicação
-Extraia os arquivos do ZIP para a raiz do repositório (index.html na raiz), envie ao GitHub e confirme o novo deploy na Vercel. Mantenha a versão antiga como backup até verificar os dois pontos no site publicado. As melhorias da Edge Function life-ai continuam dependendo de publicação separada no Supabase.
+**Correção 14.9.6:** ocultar o menu agora o retira visualmente e devolve largura ao conteúdo; os modos compacto e completo ajustam a área de trabalho; fechar a pasta de vídeo interrompe a reprodução. Veja `QA_REPORT_14.9.6.md`.

@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-14.9.3-audited';
-const ASSET_BUILD='14.9.3';
+const LIFE_CACHE='life-os-14.9.6-reviewed';
+const ASSET_BUILD='14.9.6';
 const SHELL=[
   './',
   './index.html',
@@ -28,6 +28,7 @@ const SHELL=[
   './assets/css/usability-14.6.5.css',
   './assets/css/smart-hub-containment-14.8.1.css',
   './assets/css/training-nutrition-visual-14.9.1.css',
+  './assets/css/mobile-clarity-14.9.5.css',
   './assets/media/hero-daylight.webp',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',
@@ -37,6 +38,10 @@ const SHELL=[
   './assets/media/sono.webp',
   './assets/media/evolucao.webp',
   './assets/media/sidebar-mountain.webp',
+  './assets/media/exercicio-supino-barra-14.9.5.webp',
+  './assets/media/exercicio-supino-halteres-14.9.5.webp',
+  './assets/media/exercicio-crucifixo-polia-14.9.5.webp',
+  './assets/media/exercicio-paralelas-14.9.5.webp',
   './assets/css/signature-9.4.2.css',
   './assets/css/visual-marketing-10.2.css',
   './assets/css/apex-marketing-9.4.2.css',
