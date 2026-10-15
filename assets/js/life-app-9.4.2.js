@@ -1037,6 +1037,66 @@ const LIFE_EXERCISE_PHOTOS_V1495 = Object.freeze({
     'paralelas': 'assets/media/exercicio-paralelas-14.9.5.webp'
 });
 const lifePlanEmbedUrlV1493 = (id) => id ? 'https://www.youtube-nocookie.com/embed/' + id + '?rel=0&playsinline=1&iv_load_policy=3' : '';
+const lifeWorkoutDayNameV1497 = (label, index = 0) => {
+    const key = lifeNormalizeText(String(label || ''));
+    if (key.includes('seg')) return 'Segunda';
+    if (key.includes('ter')) return 'Terça';
+    if (key.includes('qua')) return 'Quarta';
+    if (key.includes('qui')) return 'Quinta';
+    if (key.includes('sex')) return 'Sexta';
+    if (key.includes('sab')) return 'Sábado';
+    if (key.includes('dom')) return 'Domingo';
+    return ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][index % 7] || ('Dia ' + (index + 1));
+};
+const lifeWorkoutDayShortV1497 = (label, index = 0) => {
+    const map = { Segunda:'SEG', 'Terça':'TER', Quarta:'QUA', Quinta:'QUI', Sexta:'SEX', 'Sábado':'SÁB', Domingo:'DOM' };
+    return map[lifeWorkoutDayNameV1497(label, index)] || String(label || ('D' + (index + 1))).slice(0, 3).toUpperCase();
+};
+const lifeCardioGuideV1497 = (move, description = '') => {
+    const text = lifeNormalizeText(String(move || '') + ' ' + String(description || ''));
+    if (/tiro|interval|bloco rapido|sprint|rapido/.test(text)) return {
+        title: 'Tiros / intervalos controlados',
+        how: 'Faça blocos rápidos curtos, mantendo a técnica, e recupere em ritmo leve entre eles.',
+        example: 'Exemplo: 10 min leves + 6 a 8 tiros de 30–60 s com 60–90 s leves + 5–10 min de desaquecimento.',
+        tip: 'Rápido não significa desorganizado: postura alta, passadas firmes e recuperação controlada.'
+    };
+    if (/long|longa|longao/.test(text)) return {
+        title: 'Longão / corrida longa',
+        how: 'Mantenha um ritmo confortável, em que ainda seja possível conversar sem ficar ofegante.',
+        example: 'Exemplo: 10 min de aquecimento + bloco contínuo leve por tempo ou distância planejada + 5–10 min soltando.',
+        tip: 'O objetivo principal é construir base aeróbica, não transformar a sessão em prova.'
+    };
+    if (/regener|recuper/.test(text)) return {
+        title: 'Regenerativo / recuperação',
+        how: 'Use um trote muito leve ou caminhada ativa para circular, soltar o corpo e facilitar a recuperação.',
+        example: 'Exemplo: 20–35 min bem leves, com respiração fácil e sensação de esforço baixa.',
+        tip: 'Se estiver pesado demais para conversar, já passou do objetivo da sessão.'
+    };
+    if (/moderad|tempo|continuo|controlad/.test(text)) return {
+        title: 'Ritmo contínuo controlado',
+        how: 'Corra em ritmo estável, acima do muito leve, mas ainda sob controle da respiração e da técnica.',
+        example: 'Exemplo: 10 min leves + 15–25 min em ritmo moderado + 5–10 min soltando.',
+        tip: 'Pense em constância: nem acelerando demais, nem deixando o ritmo cair.'
+    };
+    if (/aquec/.test(text)) return {
+        title: 'Aquecimento',
+        how: 'Comece leve e progressivo para elevar a temperatura corporal e preparar a passada.',
+        example: 'Exemplo: 5–10 min de caminhada, trote leve ou mobilidade dinâmica.',
+        tip: 'Não pule o aquecimento, principalmente antes de tiros ou treinos moderados.'
+    };
+    if (/desaquec|soltura/.test(text)) return {
+        title: 'Desaquecimento',
+        how: 'Reduza o ritmo aos poucos até a respiração voltar a ficar tranquila.',
+        example: 'Exemplo: 5–10 min de trote bem leve ou caminhada, finalizando com mobilidade leve.',
+        tip: 'Use este momento para baixar a intensidade, não para encaixar mais esforço.'
+    };
+    return {
+        title: 'Sessão aeróbica guiada',
+        how: 'Conduza a sessão em ritmo confortável e consistente, priorizando técnica e controle.',
+        example: 'Exemplo: aquecimento leve + bloco principal no ritmo indicado + retorno leve ao final.',
+        tip: 'Observe respiração, postura e sensação de esforço para ajustar o ritmo.'
+    };
+};
 const lifeRenderWorkoutExerciseCards = (session, onOpenExercise) => {
     const prs = Array.isArray(session?.prescription) ? session.prescription : [];
     const moves = Array.isArray(session?.moves) && session.moves.length
@@ -1085,28 +1145,27 @@ const lifeRenderWorkoutExerciseCards = (session, onOpenExercise) => {
         };
         const fallbackArt = lifeExerciseArt(ex || { name: cardTitle, muscle_group: group, equipment: ex?.equipment || (kind === 'cardio' ? 'Cardio' : 'Livre') });
         const photoKey = lifeNormalizeText(cardTitle).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
-        const cover = LIFE_EXERCISE_PHOTOS_V1495[photoKey] || (ex ? lifeExerciseCover(ex) : (info?.id ? 'https://i.ytimg.com/vi/' + info.id + '/hqdefault.jpg' : fallbackArt));
+        const cover = kind === 'cardio' ? null : (LIFE_EXERCISE_PHOTOS_V1495[photoKey] || (exactVideo && ex ? lifeExerciseCover(ex) : null));
+        const cardioGuide = kind === 'cardio' ? lifeCardioGuideV1497(cardTitle, String(session?.d || '')) : null;
         const heroActions = [];
         if (ex)
             heroActions.push(React.createElement('button', { type: 'button', key: 'tech', onClick: () => onOpenExercise && onOpenExercise(ex) }, 'VER TÉCNICA'));
-        heroActions.push(React.createElement('button', { type: 'button', key: 'video', className: 'hot', onClick: videoAction }, info?.id ? 'ABRIR PASTA DO VÍDEO' : 'ENCONTRAR VÍDEO'));
-        const folderActions = [
-            React.createElement('button', { type: 'button', key: 'watch', className: 'hot', onClick: watchAction }, info?.id ? '▶ REPRODUZIR' : '▶ BUSCAR VÍDEO'),
-            React.createElement('button', { type: 'button', key: 'search', onClick: searchExact }, 'BUSCAR EXATO')
-        ];
+        heroActions.push(React.createElement('button', { type: 'button', key: 'video', className: 'hot', onClick: videoAction }, kind === 'cardio' ? (info?.id ? 'ABRIR DETALHES' : 'VER EXPLICAÇÃO') : (info?.id ? 'ABRIR PASTA DO VÍDEO' : 'ENCONTRAR VÍDEO')));
+        const folderActions = kind === 'cardio' && !info?.id
+            ? [React.createElement('button', { type: 'button', key: 'optional', onClick: searchExact }, 'BUSCAR VÍDEO OPCIONAL')]
+            : [
+                React.createElement('button', { type: 'button', key: 'watch', className: 'hot', onClick: watchAction }, info?.id ? '▶ REPRODUZIR' : '▶ BUSCAR VÍDEO'),
+                React.createElement('button', { type: 'button', key: 'search', onClick: searchExact }, 'BUSCAR EXATO')
+            ];
         if (ex)
             folderActions.push(React.createElement('button', { type: 'button', key: 'open-tech', onClick: () => onOpenExercise && onOpenExercise(ex) }, 'ABRIR TÉCNICA'));
         const heroNode = React.createElement('div', { className: 'life-plan-ex-hero-v1495' },
-            React.createElement('button', { type: 'button', className: 'life-plan-ex-cover-v1495', onClick: videoAction, 'aria-label': 'Abrir demonstração de ' + cardTitle },
-                React.createElement('img', { src: cover, loading: 'lazy', alt: 'Imagem ilustrativa do exercício ' + cardTitle, 'data-fallback': fallbackArt, onError: e => {
-                        if (e?.currentTarget) {
-                            const fallback = e.currentTarget.dataset?.fallback;
-                            if (fallback && e.currentTarget.src !== fallback)
-                                e.currentTarget.src = fallback;
-                            else
-                                e.currentTarget.style.display = 'none';
-                        }
-                    } }),
+            React.createElement('button', { type: 'button', className: 'life-plan-ex-cover-v1495', onClick: videoAction, 'aria-label': 'Abrir explicação de ' + cardTitle },
+                React.createElement('div', { className: 'life-plan-ex-cover-fallback-v1498', 'aria-hidden': true },
+                    React.createElement('span', { className: 'material-symbols-rounded' }, kind === 'cardio' ? 'directions_run' : 'fitness_center'),
+                    React.createElement('b', null, group),
+                    React.createElement('small', null, 'EXECUÇÃO / LIFE')),
+                cover && React.createElement('img', { src: cover, loading: 'lazy', alt: 'Referência visual do exercício ' + cardTitle, onError: e => { if (e?.currentTarget) e.currentTarget.style.display = 'none'; } }),
                 React.createElement('span', { className: 'life-plan-ex-cover-badge-v1495' }, exactVideo ? 'DEMONSTRAÇÃO' : referenceVideo ? 'PASTA COM VÍDEO' : 'CAPA DO EXERCÍCIO'),
                 React.createElement('span', { className: 'life-plan-ex-cover-play-v1495', 'aria-hidden': true }, '▶'),
                 React.createElement('span', { className: 'life-plan-ex-cover-gradient-v1495', 'aria-hidden': true })),
@@ -1120,18 +1179,23 @@ const lifeRenderWorkoutExerciseCards = (session, onOpenExercise) => {
                     rest > 0 ? React.createElement('span', null, rest + 's descanso') : null,
                     ex ? React.createElement('span', null, lifeExerciseMeta(ex).equipment) : null,
                     !ex ? React.createElement('span', null, visuals.label || group) : null),
-                React.createElement('p', { className: 'life-plan-ex-note-v149' }, exactVideo ? 'A miniatura leva para a técnica e a pasta abaixo guarda o vídeo incorporado.' : referenceVideo ? 'A capa mostra o exercício e a pasta abaixo reúne o vídeo salvo do mesmo padrão de movimento.' : 'Use a pasta para abrir uma referência rápida e buscar o tutorial exato.'),
+                React.createElement('p', { className: 'life-plan-ex-note-v149' }, kind === 'cardio' ? ((cardioGuide?.how || 'Abra a pasta para ver a explicação prática desta etapa da corrida.') + (info?.id ? ' O vídeo fica salvo junto.' : '')) : (exactVideo ? 'A miniatura leva para a técnica e a pasta abaixo guarda o vídeo incorporado.' : referenceVideo ? 'A capa mostra o exercício e a pasta abaixo reúne o vídeo salvo do mesmo padrão de movimento.' : 'Use a pasta para abrir uma referência rápida e buscar o tutorial exato.')),
                 React.createElement('div', { className: 'life-plan-ex-actions-v149 life-plan-ex-actions-v1495' }, heroActions))
         );
         const folderHead = React.createElement('div', { className: 'life-plan-ex-folder-head-v1495' },
-            React.createElement('span', { className: 'material-symbols-rounded', 'aria-hidden': true }, info?.id ? 'video_library' : 'folder_open'),
+            React.createElement('span', { className: 'material-symbols-rounded', 'aria-hidden': true }, kind === 'cardio' ? 'directions_run' : (info?.id ? 'video_library' : 'folder_open')),
             React.createElement('div', null,
-                React.createElement('b', null, exactVideo ? 'Demonstração correspondente pronta para assistir.' : referenceVideo ? 'Tutorial de referência guardado para este movimento.' : 'Busque o tutorial exato deste exercício.'),
-                React.createElement('p', null, exactVideo ? 'Você pode assistir aqui sem sair do LIFE.' : referenceVideo ? ((info?.label || 'Vídeo de referência') + ' · confira a variação mais parecida antes de executar.') : 'Se preferir, abra a técnica do exercício ou pesquise a execução pelo nome completo.'))
+                React.createElement('b', null, kind === 'cardio' ? (info?.id ? 'Explicação da sessão com vídeo opcional.' : 'Explicação prática desta parte da corrida.') : (exactVideo ? 'Demonstração correspondente pronta para assistir.' : referenceVideo ? 'Tutorial de referência guardado para este movimento.' : 'Busque o tutorial exato deste exercício.')),
+                React.createElement('p', null, kind === 'cardio' ? (cardioGuide ? cardioGuide.tip : 'Use a explicação como guia e adapte o ritmo ao seu nível.') : (exactVideo ? 'Você pode assistir aqui sem sair do LIFE.' : referenceVideo ? ((info?.label || 'Vídeo de referência') + ' · confira a variação mais parecida antes de executar.') : 'Se preferir, abra a técnica do exercício ou pesquise a execução pelo nome completo.')))
         );
         const folderBody = React.createElement('div', { className: 'life-plan-ex-folder-body-v1495' },
+            kind === 'cardio' && cardioGuide ? React.createElement('div', { className: 'life-run-guide-v1497' },
+                React.createElement('small', null, cardioGuide.title.toUpperCase()),
+                React.createElement('b', null, cardioGuide.how),
+                React.createElement('p', null, cardioGuide.example),
+                React.createElement('em', null, cardioGuide.tip)) : null,
             info?.id ? React.createElement('div', { className: 'life-plan-ex-embed-v1495' },
-                React.createElement('iframe', { src: lifePlanEmbedUrlV1493(info.id), title: 'Vídeo de execução: ' + cardTitle, loading: 'lazy', referrerPolicy: 'strict-origin-when-cross-origin', allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowFullScreen: true })) : null,
+                React.createElement('iframe', { src: 'about:blank', title: 'Vídeo de execução: ' + cardTitle, loading: 'lazy', referrerPolicy: 'strict-origin-when-cross-origin', allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowFullScreen: true })) : null,
             React.createElement('div', { className: 'life-plan-ex-folder-copy-v1495' },
                 folderHead,
                 React.createElement('div', { className: 'life-plan-ex-actions-v149 life-plan-ex-folder-actions-v1495' }, folderActions))
@@ -1150,7 +1214,7 @@ const lifeRenderWorkoutExerciseCards = (session, onOpenExercise) => {
             React.createElement('summary', null,
                 React.createElement('div', null,
                     React.createElement('small', null, 'COMO FAZER'),
-                    React.createElement('b', null, info?.id ? 'Vídeo salvo nesta pasta' : 'Abra a pasta para buscar o vídeo exato')),
+                    React.createElement('b', null, kind === 'cardio' ? (info?.id ? 'Explicação + vídeo opcional' : 'Explicação desta sessão') : (info?.id ? 'Vídeo salvo nesta pasta' : 'Abra a pasta para buscar o vídeo exato'))),
                 React.createElement('span', { className: 'material-symbols-rounded', 'aria-hidden': true }, 'expand_more')),
             folderBody
         );
@@ -1557,10 +1621,11 @@ function LifeGuideModal({ guide, onClose, onAsk }) {
 // LIFE V80 — STUDY ARCHITECT + GLOBAL ROUTING INDEX
 // =========================================================================
 function life143Icon(name){return React.createElement('svg',{className:'life143-vector','aria-hidden':true,focusable:'false',viewBox:'0 0 24 24'},React.createElement('use',{href:'assets/icons/life143-sprite.svg#'+String(name||'apps')}));}
-const LIFE_PUBLIC_AREA_LABELS = { Hoje: 'Meu Dia', Dieta: 'Alimentação', Receitas: 'Alimentação', Archive: 'Arquivo', Favoritos: 'Salvos', Tarefas: 'Tarefas', Life: 'Planejamento', IA: 'LIFE AI', 'Meu LIFE': 'Painel pessoal' };
-const LIFE_VALID_AREAS = new Set(['Hoje','Tarefas','Favoritos','Biblioteca','Notas','Estudos','Guia de Estudos','Fitness','Dieta','Receitas','IA','Life','Finanças','Meu LIFE','Evolução','Archive','Perfil','Tutorial','Configurações']);
+const LIFE_PUBLIC_AREA_LABELS = { Hoje: 'Meu Dia', Dieta: 'Alimentação', Receitas: 'Alimentação', Archive: 'Arquivo', Favoritos: 'Salvos', Tarefas: 'Tarefas', Life: 'Planejamento', IA: 'LIFE AI', 'Meu LIFE': 'Painel pessoal', Projetos:'Projetos' };
+const LIFE_VALID_AREAS = new Set(['Hoje','Tarefas','Projetos','Favoritos','Biblioteca','Notas','Estudos','Guia de Estudos','Fitness','Dieta','Receitas','IA','Life','Finanças','Meu LIFE','Evolução','Archive','Perfil','Tutorial','Configurações']);
 const lifePublicAreaName = (area) => LIFE_PUBLIC_AREA_LABELS[area] || area;
 const LIFE_HOW_IT_WORKS = {
+    'Projetos': { purpose:'Pastas com guias cronológicos para realizar objetivos pessoais, estudos, finanças e hábitos.', steps:['Escolha um modelo ou crie seu próprio projeto.','Defina duração e início.','Abra a pasta e siga cada semana.','Marque ações feitas para acompanhar seu progresso.'],examples:['Organizar estudos ao longo de 6 meses','Revisar gastos por semana','Criar um projeto digital aos poucos'],impact:'Transforma uma meta em ações com ordem e continuidade.' },
     'Hoje': { purpose: 'É a base do LIFE: mostra apenas o que precisa acontecer hoje.', steps: ['Veja seus planos do dia.', 'Marque o que concluir.', 'Adicione somente o que realmente precisa acontecer hoje.'], examples: ['Estudar matemática às 16h', 'Treino às 18h', 'Entregar o trabalho amanhã'], impact: 'Ajuda a começar o dia com menos ruído e uma próxima ação clara.' },
     'Tarefas': { purpose: 'Organiza ações, prazos, prioridades, projetos, metas e hábitos.', steps: ['Capture uma tarefa.', 'Defina prazo ou prioridade quando fizer sentido.', 'Use projetos e filtros apenas quando precisar de mais estrutura.'], examples: ['Enviar trabalho', 'Comprar material', 'Preparar apresentação'], impact: 'Tira pendências da cabeça e transforma intenção em ação visível.' },
     'Favoritos': { purpose: 'É o atalho pessoal para as áreas que você mais usa.', steps: ['Toque no coração de qualquer área.', 'Ela aparece automaticamente aqui.', 'Toque novamente no coração para remover.'], examples: ['Favoritar Estudos e Fitness', 'Deixar Finanças fora dos atalhos se você usa pouco'], impact: 'Reduz o tempo procurando funções e deixa o LIFE com a sua cara.' },
@@ -3917,6 +3982,245 @@ function LifeFunctionCard({ icon = 'arrow_forward', title = '', description = ''
 }
 
 
+// LIFE OS 15.0 — Projetos: roteiros cronológicos, pastas e acompanhamento local.
+const LIFE_PROJECT_TEMPLATES_150 = [
+  {id:'custom',category:'Outros',icon:'folder_open',title:'Criar meu próprio projeto',description:'Objetivo livre com roteiro de planejamento, execução, acompanhamento e revisão.',months:3,
+    phases:[
+      ['Definir o objetivo','Explique o que quer realizar, para quem ou para quê, e escolha um resultado observável.','Exemplo: registrar o que será considerado concluído e quais recursos já existem.','Um objetivo claro ajuda a evitar trabalho sem direção.', ['Escrever um resultado concreto','Listar recursos e informações necessários','Escolher a menor ação que pode iniciar']],
+      ['Preparar o caminho','Separe as etapas em entregas pequenas e verifique se depende de alguém ou de alguma informação.','Exemplo: transformar uma meta ampla em três entregas possíveis.','Prefira um próximo passo real a uma agenda lotada.', ['Dividir uma etapa grande em ações','Verificar dependências e obstáculos','Concluir uma pequena entrega']],
+      ['Executar e testar','Realize entregas curtas, observe o resultado e ajuste o que não funcionou.','Exemplo: testar uma primeira versão e anotar o feedback recebido.','Melhorias devem seguir o que foi observado, não uma previsão inventada.', ['Executar a próxima ação prioritária','Verificar resultados e dificuldades','Ajustar o plano para a semana seguinte']],
+      ['Concluir e aprender','Revise o resultado, registre aprendizados e defina se vale iniciar outra etapa.','Exemplo: comparar objetivo original, entregas feitas e pontos pendentes.','Concluir pode significar encerrar, continuar ou redefinir a meta.', ['Revisar o que foi concluído','Documentar aprendizados úteis','Decidir o próximo passo do projeto']]
+    ]},
+  { id:'fin_save', category:'Finanças', icon:'savings', title:'Economizar com organização', description:'Entenda o que entra e sai, monte uma reserva no seu ritmo e revise decisões.', months:6,
+    phases:[
+      ['Entender o dinheiro','Organize entradas, despesas fixas e gastos ocasionais. Não estime valores que ainda não conhece.','Exemplo: reúna comprovantes e registre gastos durante uma semana.','Olhe primeiro para fatos, não para metas de economia impossíveis.', ['Anotar entradas e despesas da semana','Classificar gastos em essenciais e opcionais','Registrar uma dúvida ou gasto que precisa ser revisto']],
+      ['Planejar sem aperto','Escolha uma quantia possível de guardar apenas após considerar despesas necessárias.','Exemplo: separar uma pequena reserva quando sobrar dinheiro, sem se privar de necessidades.','Se um mês estiver difícil, ajuste o plano sem tratar isso como fracasso.', ['Rever o resumo do último mês','Definir uma prioridade financeira realista','Escolher uma ação de economia compatível com a rotina']],
+      ['Criar constância','Adote lembretes simples, revise gastos e compare o que realmente mudou.','Exemplo: revisar assinaturas, compras repetidas e datas de pagamentos.','Controle financeiro é clareza, não proibição de gastar.', ['Registrar despesas da semana','Revisar pelo menos uma cobrança recorrente','Conferir o que foi guardado sem inventar saldo']],
+      ['Consolidar a reserva','Revise o método, ajuste o que não funcionou e defina o próximo ciclo.','Exemplo: escrever três aprendizados e duas decisões financeiras para o mês seguinte.','Não confunda estimativa com dinheiro efetivamente disponível.', ['Comparar registros de semanas anteriores','Atualizar prioridades e possíveis imprevistos','Criar um plano simples para continuar depois do projeto']]
+    ] },
+  { id:'study_enem', category:'Estudos', icon:'school', title:'Preparação organizada para o ENEM', description:'Diagnóstico, plano por disciplinas, exercícios e revisões semanais.', months:8,
+    phases:[
+      ['Conhecer seu ponto de partida','Liste áreas da prova, experimente questões e registre assuntos em que sente insegurança.','Exemplo: resolver questões de matemática e linguagens e anotar dúvidas sem buscar pontuação perfeita.','O diagnóstico serve para escolher prioridades, não para rotular sua capacidade.', ['Separar as áreas e assuntos da prova','Resolver um pequeno bloco diagnóstico','Anotar erros e dúvidas com explicação']],
+      ['Construir fundamentos','Estude os assuntos prioritários em sessões curtas e pratique após cada explicação.','Exemplo: aprender uma ideia, resolver três aplicações e explicar o raciocínio com suas palavras.','Prefira consistência a maratonas desgastantes.', ['Escolher dois tópicos prioritários','Estudar conteúdo com uma boa fonte','Praticar e registrar por que errou ou acertou']],
+      ['Integrar e revisar','Combine matérias, redação e revisões espaçadas com exercícios variados.','Exemplo: uma proposta de redação, correção com critérios e questões interdisciplinares.','A revisão deve responder a erros observados, não ser uma repetição aleatória.', ['Revisar o caderno de erros','Praticar questões de diferentes áreas','Treinar redação e revisar a argumentação']],
+      ['Simular e ajustar','Faça simulados proporcionais ao tempo disponível e melhore a gestão da prova.','Exemplo: simulado parcial, análise dos erros e ajuste das próximas revisões.','Simulado é instrumento de treino, não previsão exata de resultado.', ['Resolver simulado compatível com a rotina','Analisar erros e tempos sem pressa','Planejar revisões e descanso antes do próximo ciclo']]
+    ] },
+  { id:'english', category:'Estudos', icon:'translate', title:'Aprender inglês com prática', description:'Da compreensão básica à conversa e revisão contínua.', months:6,
+    phases:[
+      ['Criar base útil','Aprenda expressões do cotidiano, escute frases curtas e pratique pronúncia.','Exemplo: apresentar-se, dizer onde mora e fazer perguntas básicas.','Aprenda palavras dentro de frases reais.', ['Aprender expressões de um tema cotidiano','Ouvir e repetir exemplos claros','Criar cinco frases suas e revisar erros']],
+      ['Construir conversas','Treine perguntas, respostas e pequenas histórias com vocabulário conhecido.','Exemplo: conversar sobre rotina, estudos ou música por alguns minutos.','Errar faz parte da prática; priorize ser compreendido.', ['Escolher um tema de conversa','Praticar perguntas e respostas','Revisar vocabulário útil das conversas']],
+      ['Ampliar compreensão','Use textos e áudios graduais e resuma o conteúdo sem traduzir tudo.','Exemplo: assistir a um vídeo curto e contar o que entendeu.','Aumente a dificuldade aos poucos.', ['Ouvir conteúdo um pouco mais longo','Anotar novas expressões em contexto','Fazer um resumo oral ou escrito']],
+      ['Usar com autonomia','Converse, escreva pequenos textos e volte aos temas de maior dificuldade.','Exemplo: apresentar uma ideia por três minutos e pedir correções.','Progresso real aparece na comunicação, não apenas em decorar listas.', ['Preparar conversa ou texto independente','Revisar erros recorrentes','Registrar o que já consegue comunicar']]
+    ] },
+  { id:'guitar', category:'Habilidades', icon:'music_note', title:'Evoluir no violão', description:'Técnica gradual, repertório, ritmo e apresentações pequenas.', months:4,
+    phases:[
+      ['Fundamentos e ritmo','Ajuste postura e afinação; pratique batidas e trocas de acordes simples.','Exemplo: alternar dois ou três acordes lentamente com metrônomo.','Movimentos confortáveis importam mais do que velocidade.', ['Afinar e preparar o instrumento','Praticar mudanças de acordes devagar','Tocar um padrão rítmico simples']],
+      ['Montar repertório','Aprenda músicas compatíveis com seu nível e divida trechos difíceis.','Exemplo: tocar introdução e refrão separadamente antes de unir.','Uma música bem trabalhada ensina mais do que dez apressadas.', ['Escolher uma música acessível','Separar trechos e praticar com calma','Registrar o trecho que ainda precisa de atenção']],
+      ['Melhorar precisão','Trabalhe ritmo, dedilhados e transições com repetição consciente.','Exemplo: gravar um trecho e perceber se está no tempo.','Faça pausas quando houver tensão ou desconforto.', ['Praticar um dedilhado ou batida nova','Ouvir uma gravação própria','Corrigir um detalhe por vez']],
+      ['Tocar com confiança','Una repertório e técnica numa apresentação curta para si ou conhecidos.','Exemplo: tocar duas músicas completas e avaliar o andamento.','O objetivo é tocar com fluidez e prazer.', ['Tocar as músicas do início ao fim','Revisar ritmo e transições','Escolher o próximo desafio musical']]
+    ] },
+  { id:'fitness', category:'Bem-estar', icon:'directions_run', title:'Melhorar condicionamento físico', description:'Movimento gradual, descanso e percepção de evolução, sem metas corporais.', months:3,
+    phases:[
+      ['Criar rotina confortável','Escolha atividades que gosta e encaixe movimento e descanso na sua semana.','Exemplo: caminhada, bicicleta ou exercícios leves conforme sua experiência.','Não aumente a intensidade rapidamente; desconforto importante pede pausa.', ['Escolher atividades acessíveis e seguras','Planejar dias possíveis com descanso','Registrar energia e conforto após as sessões']],
+      ['Construir consistência','Repita sessões confortáveis e observe como o corpo responde.','Exemplo: caminhada com percurso conhecido e alongamentos leves depois.','Não transforme toda sessão em treino máximo.', ['Manter a rotina possível da semana','Registrar sensação de esforço e recuperação','Ajustar a atividade conforme energia e disponibilidade']],
+      ['Explorar variedade','Experimente modalidades novas que combinem com seu interesse e capacidade.','Exemplo: alternar caminhada, esporte recreativo e mobilidade.','Sono, alimentação regular e recuperação fazem parte do projeto.', ['Escolher uma atividade diferente','Observar técnica e conforto','Revisar sono e dias de recuperação']],
+      ['Revisar hábitos','Identifique atividades sustentáveis e monte uma rotina para continuar.','Exemplo: anotar as sessões de que mais gostou e definir próximos passos.','A evolução não depende de uma aparência ou de medidas corporais.', ['Rever as sessões feitas sem julgamento','Selecionar hábitos que deseja manter','Organizar o próximo mês com flexibilidade']]
+    ] },
+  { id:'strength', category:'Bem-estar', icon:'fitness_center', title:'Ganhar força com segurança', description:'Técnica, progressão gradual e recuperação em uma rotina sustentável.', months:4,
+    phases:[
+      ['Aprender movimentos','Pratique padrões básicos com cargas e variações adequadas à experiência.','Exemplo: agachar, empurrar, puxar e estabilizar com atenção à técnica.','Peça supervisão qualificada quando tiver dúvidas.', ['Revisar técnica de movimentos básicos','Organizar uma rotina com recuperação','Anotar exercícios confortáveis']],
+      ['Firmar a execução','Repita movimentos que domina, ajustando postura e amplitude com controle.','Exemplo: registrar repetições com boa técnica, sem testar limites máximos.','Aumentos só fazem sentido quando a execução está estável.', ['Treinar com técnica controlada','Observar sinais de cansaço e sono','Rever possíveis desconfortos']],
+      ['Progredir aos poucos','Introduza pequenas mudanças apenas se estiver recuperado e seguro.','Exemplo: adicionar uma repetição mantendo forma e ritmo consistentes.','Evite excesso de treino e competições de carga.', ['Reavaliar postura e regularidade','Comparar execução em vez de aparência','Reservar dias adequados de recuperação']],
+      ['Consolidar e manter','Revise os movimentos, identifique preferências e organize a próxima fase.','Exemplo: montar um plano equilibrado de movimentos e descanso.','Constância e segurança são mais úteis que pressa.', ['Revisar o que ficou mais fácil','Identificar exercícios que funcionaram','Planejar continuidade com carga confortável']]
+    ] },
+  { id:'routine', category:'Rotina', icon:'event_available', title:'Organizar a rotina pessoal', description:'Prioridades, hábitos, tempo livre, estudos e descanso.', months:3,
+    phases:[
+      ['Observar a semana','Registre compromissos reais e identifique períodos mais tranquilos.','Exemplo: separar escola, transporte, refeições, lazer e sono.','Deixe espaços livres; não lote todas as horas.', ['Listar compromissos que não pode mover','Identificar uma prioridade por dia','Reservar tempo para pausas']],
+      ['Montar um sistema simples','Crie blocos realistas para o que importa e revise o plano no fim da semana.','Exemplo: duas sessões de estudo em dias adequados à rotina.','Uma rotina útil pode ser ajustada sem culpa.', ['Escolher um hábito pequeno','Preparar materiais com antecedência','Revisar o que realmente coube na agenda']],
+      ['Reduzir atritos','Descubra onde ocorrem atrasos e simplifique tarefas repetidas.','Exemplo: separar uma mochila no dia anterior.','Melhorar o ambiente costuma ajudar mais do que cobrar perfeição.', ['Identificar um ponto de dificuldade','Testar uma simplificação prática','Registrar o que poupou tempo']],
+      ['Criar continuidade','Mantenha hábitos úteis e retire o que tornou a rotina confusa.','Exemplo: criar checklist curto de início e fim do dia.','A organização existe para liberar tempo para a vida.', ['Rever prioridades de cada semana','Manter somente hábitos funcionais','Montar uma rotina flexível para o próximo ciclo']]
+    ] },
+  { id:'business', category:'Projetos digitais', icon:'rocket_launch', title:'Criar um projeto digital', description:'Da ideia a uma pequena versão funcional, com pesquisa e testes.', months:6,
+    phases:[
+      ['Entender a ideia','Defina para quem o projeto é útil e que problema concreto resolve.','Exemplo: entrevistar pessoas sobre uma dificuldade real.','Não assuma demanda sem ouvir usuários.', ['Escrever a proposta em uma frase','Pesquisar alternativas existentes','Conversar com possíveis usuários']],
+      ['Construir um protótipo','Escolha só as funções essenciais e desenvolva uma versão simples.','Exemplo: uma página clara e uma função funcionando do início ao fim.','Não confunda aparência com funcionamento.', ['Listar três funções prioritárias','Construir a primeira versão navegável','Testar botões e caminhos principais']],
+      ['Testar com pessoas','Peça opiniões, registre pontos confusos e corrija problemas de uso.','Exemplo: pedir a alguém para completar uma tarefa sem explicações.','Dê prioridade a falhas que impedem o uso.', ['Testar com pessoas voluntárias','Registrar feedback sem dados pessoais desnecessários','Corrigir um problema importante']],
+      ['Preparar a continuidade','Documente o projeto, revise o que funciona e escolha o próximo passo.','Exemplo: publicar uma página de apresentação clara, quando apropriado.','Não prometa resultados ou receitas que não foram verificados.', ['Atualizar instruções e documentação','Verificar funcionamento em celular','Planejar a próxima pequena melhoria']]
+    ] },
+  { id:'reading', category:'Habilidades', icon:'menu_book', title:'Criar um hábito de leitura', description:'Escolher boas leituras, registrar aprendizados e desenvolver constância.', months:3,
+    phases:[
+      ['Encontrar seu tipo de livro','Escolha um tema que desperte curiosidade e leituras compatíveis com seu tempo.','Exemplo: ler um capítulo curto e anotar a ideia principal.','Não transforme a leitura em corrida por páginas.', ['Escolher um livro de interesse','Separar alguns momentos tranquilos','Escrever uma ideia aprendida']],
+      ['Entender melhor os textos','Faça perguntas, busque contexto e conecte ideias a exemplos reais.','Exemplo: explicar para alguém a ideia central de um capítulo.','Vale voltar em um trecho sem pressa.', ['Ler com atenção às ideias principais','Registrar uma pergunta sobre o texto','Procurar um exemplo de aplicação']],
+      ['Diversificar assuntos','Experimente gêneros e compare modos diferentes de explicar um tema.','Exemplo: alternar ficção e não ficção conforme preferência.','Escolha obras acessíveis e confiáveis para o propósito.', ['Explorar outro autor ou tema','Comparar uma ideia com outra leitura','Compartilhar uma recomendação fundamentada']],
+      ['Tornar a leitura sustentável','Reveja o hábito, mantenha livros interessantes e organize o próximo ciclo.','Exemplo: montar uma lista de livros que realmente quer ler.','Mais importante que a quantidade é o que ficou com você.', ['Revisitar anotações úteis','Escolher a próxima leitura','Ajustar horários de leitura à rotina']]
+    ] }
+];
+const lifeProjectTemplates150 = LIFE_PROJECT_TEMPLATES_150;
+const lifeProjectLocalDate150 = (date = new Date()) => {
+  const year=date.getFullYear(),month=String(date.getMonth()+1).padStart(2,'0'),day=String(date.getDate()).padStart(2,'0');
+  return `${year}-${month}-${day}`;
+};
+const lifeProjectParseDate150 = (raw) => {
+  const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(raw||''));
+  if(!match)return null;
+  const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]);
+  if(year<2000||year>2100||month<1||month>12||day<1||day>31)return null;
+  const date=new Date(year,month-1,day,12,0,0,0);
+  return date.getFullYear()===year&&date.getMonth()===month-1&&date.getDate()===day?date:null;
+};
+const lifeProjectGuideFor150 = (tpl, months = tpl.months || 3, startText) => {
+  const start = lifeProjectParseDate150(startText === undefined ? lifeProjectLocalDate150() : startText);
+  if(!start)return {version:1,templateId:tpl.id,category:tpl.category,months:Number(months)||3,startDate:'',endDate:'',weeks:[]};
+  start.setHours(12,0,0,0);
+  const count = Math.max(1,Math.min(12,Number(months)||3));
+  const end = new Date(start); const targetDay=start.getDate(); end.setDate(1); end.setMonth(end.getMonth()+count); end.setDate(Math.min(targetDay,new Date(end.getFullYear(),end.getMonth()+1,0).getDate()));
+  const weeks = [];
+  for(let i=0;i<54;i++){
+    const from = new Date(start); from.setDate(from.getDate()+7*i);
+    if(from>=end)break;
+    const to = new Date(from); to.setDate(to.getDate()+6); if(to >= end)to.setTime(end.getTime()-86400000);
+    const phase = Math.min(3,Math.floor(4*i/Math.max(1,Math.ceil((end-start)/(7*86400000)))));
+    const phaseDef = tpl.phases[phase];
+    const cycle = i%4;
+    const weekLabels = ['Planejar e começar','Aplicar na prática','Ajustar o que aprendeu','Revisar e consolidar'];
+    const additional = ['Preparar os materiais ou recursos necessários','Executar uma ação pequena que possa concluir','Anotar uma dificuldade e uma solução possível','Revisar o que funcionou e ajustar a próxima semana'][cycle];
+    const steps = [phaseDef[4][cycle%phaseDef[4].length],phaseDef[4][(cycle+1)%phaseDef[4].length],additional]
+      .map((text,j)=>({id:'w'+i+'a'+j,text,done:false}));
+    weeks.push({id:'week_'+(i+1),index:i+1,monthKey:from.getFullYear()+'-'+String(from.getMonth()+1).padStart(2,'0'),
+      from:from.toLocaleDateString('pt-BR'),to:to.toLocaleDateString('pt-BR'),
+      title:weekLabels[cycle]+' · '+phaseDef[0], focus:phaseDef[1],example:phaseDef[2],tip:phaseDef[3],steps});
+  }
+  return {version:1,templateId:tpl.id,category:tpl.category,months:count,startDate:lifeProjectLocalDate150(start),endDate:lifeProjectLocalDate150(new Date(end.getTime()-86400000)),weeks};
+};
+function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
+  const h=React.createElement;
+  const [activeId,setActiveId]=React.useState(null);
+  const [openWeek,setOpenWeek]=React.useState('');
+  const [activeMonth,setActiveMonth]=React.useState('');
+  const [filter,setFilter]=React.useState('Todos');
+  const [search,setSearch]=React.useState('');
+  const [createOpen,setCreateOpen]=React.useState(false);
+  const [draft,setDraft]=React.useState({title:'',category:'Estudos',templateId:'study_enem',months:3,startDate:lifeProjectLocalDate150()});
+  const [notice,setNotice]=React.useState('');
+  const shown=Array.isArray(projects)?projects.filter(p=>p&&typeof p==='object'):[];
+  const projectKey=p=>String(p?.id||p?.n||'');
+  const guideWeeks=guide=>Array.isArray(guide?.weeks)?guide.weeks.filter(w=>w&&typeof w==='object'&&Array.isArray(w.steps)&&typeof w.id==='string'&&/^\d{4}-(0[1-9]|1[0-2])$/.test(String(w.monthKey||''))):[];
+  const selectFolder=p=>{const weeks=guideWeeks(p?.lifeGuide);const next=weeks.find(w=>w.steps.some(s=>s&&!s.done))||weeks[0];setActiveId(projectKey(p));setActiveMonth(next?.monthKey||'');setOpenWeek(next?.id||'');};
+  const categories=['Todos','Estudos','Finanças','Bem-estar','Rotina','Habilidades','Projetos digitais','Outros'];
+  const current=shown.find(p=>projectKey(p)===String(activeId));
+  const myProjects=shown.filter(p=>!search || String(p.n||'').toLocaleLowerCase('pt-BR').includes(search.toLocaleLowerCase('pt-BR')));
+  const changeDraft=(patch)=>setDraft(prev=>({...prev,...patch}));
+  const startCreate=(tpl)=>{
+    const item=tpl||LIFE_PROJECT_TEMPLATES_150[0];
+    setDraft({title:(tpl&&tpl.id!=='custom'?tpl.title:''),category:item.category,templateId:item.id,months:item.months,startDate:lifeProjectLocalDate150()});
+    setCreateOpen(true);setNotice('');
+  };
+  const create=()=>{
+    const title=String(draft.title||'').trim().slice(0,90);
+    if(title.length<3){setNotice('Escreva o nome do projeto (pelo menos 3 caracteres).');return;}
+    if(shown.length>=120){setNotice('Você já tem muitos projetos. Organize sua lista antes de criar mais.');return;}
+    const tpl=LIFE_PROJECT_TEMPLATES_150.find(t=>t.id===draft.templateId)||LIFE_PROJECT_TEMPLATES_150[0];
+    const guide=lifeProjectGuideFor150(tpl,draft.months,draft.startDate);
+    if(!guide.weeks.length){setNotice('Escolha uma data de início válida.');return;}
+    const id='guided_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+    const newProject={id,n:title,outcome:'Seguir um roteiro semanal e revisar o progresso.',category:tpl.category,deadline:guide.endDate,
+      p:0,next:guide.weeks[0].steps[0].text,createdAt:new Date().toISOString(),lifeGuide:guide,stages:[]};
+    setProjects(prev=>[newProject,...(Array.isArray(prev)?prev:[])]);setActiveId(id);setCreateOpen(false);setActiveMonth(guide.weeks[0].monthKey);setOpenWeek('week_1');
+  };
+  const completed=(guide)=>{
+    const all=guideWeeks(guide).flatMap(w=>w.steps.filter(s=>s&&typeof s==='object'));
+    return {done:all.filter(s=>!!s.done).length,total:all.length};
+  };
+  const toggle=(id,weekId,stepId)=>{
+    setProjects(prev=>(Array.isArray(prev)?prev:[]).map(p=>{
+      if(projectKey(p)!==String(id)||!p.lifeGuide)return p;
+      const weeks=(Array.isArray(p.lifeGuide.weeks)?p.lifeGuide.weeks:[]).map(w=>w?.id!==weekId||!Array.isArray(w?.steps)?w:{...w,steps:w.steps.map(s=>s?.id!==stepId?s:{...s,done:!s.done})});
+      const guide={...p.lifeGuide,weeks};
+      const summary=completed(guide),next=weeks.flatMap(w=>w.steps||[]).find(x=>x&&!x.done);
+      const progress=summary.total?Math.round(100*summary.done/summary.total):0;
+      const updates={lifeGuide:guide,lifeGuideProgress:progress};
+      if(String(p.id||'').startsWith('guided_')){updates.p=progress;updates.next=next?.text||'Revisar o projeto concluído';}
+      return {...p,...updates};
+    }));
+  };
+  const folderCard=(p)=>{
+    const c=completed(p.lifeGuide), pct=c.total?Math.round(100*c.done/c.total):0;
+    return h('button',{key:projectKey(p),type:'button',className:'lifeproj-folder',onClick:()=>selectFolder(p)},
+      h('span',{className:'material-symbols-rounded lifeproj-folder-icon'},'folder_special'),
+      h('span',{className:'lifeproj-folder-copy'},h('small',null,p.category||'Projeto'),h('b',null,p.n||'Projeto sem nome'),
+        h('em',null,p.lifeGuide?`${p.lifeGuide.months} meses · ${p.lifeGuide.weeks.length} semanas`: 'Projeto existente · adicionar guia')),
+      h('span',{className:'lifeproj-folder-percent'},pct+'%',h('i',{style:{'--lifeproj-fill':pct+'%'}})));
+  };
+  const icon=(name)=>h('span',{className:'lifeproj-ui-icon','aria-hidden':true},({
+    add:'＋',arrow_back:'←',folder_open:'▣',folder_special:'▣',expand_less:'⌃',expand_more:'⌄',
+    savings:'◈',school:'✦',translate:'Aa',music_note:'♫',directions_run:'↗',
+    self_improvement:'◉',menu_book:'▤',fitness_center:'✚',business_center:'▣',
+    account_balance:'◈',monitoring:'↗',auto_awesome:'✦',laptop_mac:'⌘',handyman:'⚒'
+  })[name]||'✦');
+  if(current){
+    const guide=guideWeeks(current.lifeGuide).length?current.lifeGuide:null;
+    const totals=completed(guide);
+    const pct=totals.total?Math.round(totals.done/totals.total*100):0;
+    const groups=[];
+    guideWeeks(guide).forEach(w=>{
+      let group=groups.find(g=>g.key===w.monthKey);
+      if(!group){group={key:w.monthKey,label:new Date(w.monthKey+'-15T12:00:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'}),weeks:[]};groups.push(group);}
+      group.weeks.push(w);
+    });
+    const selectedMonth=groups.find(g=>g.key===activeMonth)||groups[0];
+    return h('main',{className:'lifeproj lifeproj-open'},
+      h('div',{className:'lifeproj-toolbar'},h('button',{type:'button',onClick:()=>{setActiveId(null);setOpenWeek('');}},icon('arrow_back'),' Voltar às pastas'),h('span',null,'LIFE OS / PROJETOS')),
+      h('section',{className:'lifeproj-project-hero'},h('div',null,h('small',null,(current.category||'PROJETO').toUpperCase()),h('h1',null,current.n),
+        h('p',null,guide?`Roteiro de ${guide.months} meses, organizado em ${guide.weeks.length} semanas. Os prazos são sugestões de organização, não garantias de resultado.`:'Este projeto já existe no seu LIFE. Crie um cronograma para visualizar as próximas etapas.')),
+        h('div',{className:'lifeproj-progress'},h('b',null,pct+'% concluído'),h('span',null,`${totals.done} de ${totals.total} ações registradas`),h('i',{style:{'--lifeproj-fill':pct+'%'}}))),
+      !guide?h('div',{className:'lifeproj-legacy'},h('h2',null,'Adicionar roteiro passo a passo'),h('p',null,'O projeto original será preservado. Escolha um modelo para organizar etapas semanais.'),
+        h('div',{className:'lifeproj-models'},LIFE_PROJECT_TEMPLATES_150.map(t=>h('button',{key:t.id,type:'button',onClick:()=>{const updated=lifeProjectGuideFor150(t,t.months,lifeProjectLocalDate150());setProjects(prev=>prev.map(p=>projectKey(p)!==projectKey(current)?p:{...p,lifeGuide:updated,category:p.category||t.category}));setActiveMonth(updated.weeks[0]?.monthKey||'');setOpenWeek('week_1');}},icon(t.icon),h('b',null,t.title),' Gerar roteiro')))):
+      !!groups.length&&h('nav',{className:'lifeproj-month-tabs',role:'navigation','aria-label':'Meses do projeto'},groups.map((g,gi)=>h('button',{key:g.key,type:'button',className:g.key===selectedMonth?.key?'on':'','aria-current':g.key===selectedMonth?.key?'step':undefined,onClick:()=>{setActiveMonth(g.key);setOpenWeek(g.weeks.find(w=>w.steps.some(s=>s&&!s.done))?.id||g.weeks[0]?.id||'');}},
+        h('small',null,'MÊS '+(gi+1)),h('b',null,g.label),h('span',null,g.weeks.filter(w=>w.steps.every(s=>s?.done)).length+'/'+g.weeks.length+' semanas')))),
+      h('div',{className:'lifeproj-timeline'},(selectedMonth?[selectedMonth]:[]).map(g=>h('section',{key:g.key,className:'lifeproj-month'},
+        h('header',null,h('span',null,'ETAPA '+(groups.findIndex(x=>x.key===g.key)+1)),h('h2',null,g.label),h('small',null,`${g.weeks.length} semanas planejadas`)),
+        g.weeks.map(w=>{
+          const done=w.steps.filter(s=>s&&s.done).length;
+          const isOpen=openWeek===w.id;
+          return h('article',{key:w.id,className:'lifeproj-week'+(isOpen?' open':'')},
+            h('button',{type:'button',className:'lifeproj-week-trigger','aria-expanded':isOpen,onClick:()=>setOpenWeek(isOpen?'':w.id)},
+              h('span',{className:'lifeproj-week-no'},String(w.index).padStart(2,'0')),
+              h('span',null,h('b',null,'Semana '+w.index+' · '+w.title),h('small',null,w.from+' — '+w.to)),
+              h('em',null,done+'/'+w.steps.length),icon(isOpen?'expand_less':'expand_more')),
+            isOpen?h('div',{className:'lifeproj-week-body'},
+              h('div',{className:'lifeproj-week-guide'},h('div',null,h('small',null,'O QUE FAZER'),h('p',null,w.focus)),
+                h('div',null,h('small',null,'EXEMPLO PRÁTICO'),h('p',null,w.example)),h('div',null,h('small',null,'DICA DA SEMANA'),h('p',null,w.tip))),
+              h('h3',null,'Ações desta semana'),h('div',{className:'lifeproj-checks'},w.steps.filter(s=>s&&typeof s==='object').map(s=>h('label',{key:s.id,className:s.done?'done':''},
+                h('input',{type:'checkbox',checked:!!s.done,onChange:()=>toggle(projectKey(current),w.id,s.id)}),h('span',null,s.text||'Próxima ação'))))):null);
+        })))),
+      h('p',{className:'lifeproj-footnote'},'O LIFE acompanha ações registradas. O avanço mostrado não mede diretamente resultados externos, como desempenho, saúde ou dinheiro economizado.'));
+  }
+  return h('main',{className:'lifeproj lifeproj-home'},
+    h('section',{className:'lifeproj-header'},h('small',null,'LIFE OS · SISTEMA DE PROJETOS'),h('h1',null,'Projetos com começo, caminho e evolução.'),
+      h('p',null,'Escolha um objetivo, abra sua pasta e siga um tutorial cronológico. Cada mês tem semanas, instruções, exemplos e ações para acompanhar.'),
+      h('div',{className:'lifeproj-top-actions'},h('button',{type:'button',className:'primary',onClick:()=>startCreate(null)},icon('add'),' CRIAR PROJETO'),
+        h('span',null,shown.length+' projeto(s) salvos'))),
+    shown.length?h('section',{className:'lifeproj-section'},h('div',{className:'lifeproj-section-title'},h('h2',null,'Minhas pastas'),
+      h('input',{type:'search',value:search,onChange:e=>setSearch(e.target.value),placeholder:'Buscar projeto salvo…','aria-label':'Buscar projetos salvos'})),
+      h('div',{className:'lifeproj-folders'},myProjects.map(folderCard)),!myProjects.length?h('p',null,'Nenhuma pasta corresponde à busca.'):null):
+      h('section',{className:'lifeproj-empty'},icon('folder_open'),h('h2',null,'Sua primeira pasta começa aqui.'),h('p',null,'Escolha um modelo abaixo ou crie um projeto com seu próprio objetivo.')),
+    h('section',{className:'lifeproj-section'},h('div',{className:'lifeproj-section-title'},h('h2',null,'Explorar projetos guiados'),h('p',null,'Modelos com roteiro completo, ajustável à sua rotina.')),
+      h('div',{className:'lifeproj-filters'},categories.map(c=>h('button',{key:c,type:'button',className:c===filter?'on':'',onClick:()=>setFilter(c)},c))),
+      h('div',{className:'lifeproj-models'},LIFE_PROJECT_TEMPLATES_150.filter(t=>filter==='Todos'||t.category===filter).map(t=>h('article',{key:t.id,className:'lifeproj-model'},
+        h('div',{className:'lifeproj-model-icon'},icon(t.icon)),h('small',null,t.category.toUpperCase()),h('h3',null,t.title),h('p',null,t.description),
+        h('div',{className:'lifeproj-model-bottom'},h('span',null,t.months+' meses sugeridos'),h('button',{type:'button',onClick:()=>startCreate(t)},'CRIAR ESTA PASTA →')))))),
+    createOpen?h('div',{className:'lifeproj-dialog-backdrop',onClick:e=>{if(e.target===e.currentTarget)setCreateOpen(false);}},h('form',{className:'lifeproj-dialog',onSubmit:e=>{e.preventDefault();create();}},
+      h('div',{className:'lifeproj-dialog-head'},h('div',null,h('small',null,'NOVA PASTA'),h('h2',null,'Monte seu projeto.')),h('button',{type:'button',onClick:()=>setCreateOpen(false),'aria-label':'Fechar'},'×')),
+      h('label',null,'Nome do objetivo',h('input',{value:draft.title,maxLength:90,required:true,onChange:e=>changeDraft({title:e.target.value}),placeholder:'Ex.: Organizar estudos, economizar...'})),
+      h('label',null,'Tipo de projeto',h('select',{value:draft.templateId,onChange:e=>{const t=LIFE_PROJECT_TEMPLATES_150.find(t=>t.id===e.target.value);if(t)changeDraft({templateId:t.id,category:t.category});}},
+        LIFE_PROJECT_TEMPLATES_150.map(t=>h('option',{value:t.id,key:t.id},t.category+' · '+t.title)))),
+      h('div',{className:'lifeproj-form-row'},h('label',null,'Duração',h('select',{value:draft.months,onChange:e=>changeDraft({months:Number(e.target.value)})},Array.from({length:12},(_,i)=>i+1).map(m=>h('option',{value:m,key:m},m+(m===1?' mês':' meses'))))),
+        h('label',null,'Data de início',h('input',{type:'date',required:true,value:draft.startDate,onChange:e=>changeDraft({startDate:e.target.value})}))),
+      h('p',{className:'lifeproj-dialog-hint'},'O calendário será gerado semana a semana. Você poderá marcar etapas concluídas e consultar cada tutorial sempre que quiser.'),
+      notice?h('p',{className:'lifeproj-warning'},notice):null,
+      h('div',{className:'lifeproj-dialog-actions'},h('button',{type:'button',onClick:()=>setCreateOpen(false)},'CANCELAR'),h('button',{type:'submit',className:'primary'},'CRIAR E ABRIR PASTA →')))):null);
+}
+
 function LifeApp36({ area = 'LIFE', icon = 'dashboard', kicker = '', title = '', subtitle = '', metrics = [], primary = null, secondary = null, children = null }) {
     const safeAction = (action, extraClass = '') => action && typeof action.onClick === 'function' ? React.createElement('button', { type: 'button', className: extraClass, onClick: action.onClick }, action.label) : null;
     const suiteName = ({
@@ -4928,7 +5232,7 @@ function LifeOSV18() {
         favoriteAreas: 4
     });
     try { window.LIFE_FREE_LIMITS = LIFE_FREE_LIMITS; } catch (e) { }
-    const LIFE_FREE_NAV_AREAS = Object.freeze(['Hoje','Tarefas','Estudos','Fitness','Finanças']);
+    const LIFE_FREE_NAV_AREAS = Object.freeze(['Hoje','Projetos','Tarefas','Estudos','Fitness','Finanças']);
     const LIFE_FREE_ALLOWED_AREAS = new Set([...LIFE_FREE_NAV_AREAS,'Guia de Estudos','Perfil','Configurações','Tutorial']);
     const LIFE_PRO_LOCKED_AREAS = Object.freeze([
         ['Notas','edit_note','Segundo cérebro','Capture, conecte e transforme notas em ações.'],
@@ -7435,7 +7739,13 @@ function LifeOSV18() {
     const [pfPlanName, setPfPlanName] = React.useState('');
     const [savedCustomWorkouts, setSavedCustomWorkouts] = React.useState(() => load('life_custom_workouts_v2', []));
     const [selectedCustomWorkout, setSelectedCustomWorkout] = React.useState(null);
+    const [selectedCustomWorkoutDay, setSelectedCustomWorkoutDay] = React.useState(0);
+    React.useEffect(() => {
+        setSelectedCustomWorkoutDay(0);
+    }, [selectedCustomWorkout?.id]);
     const [selectedReadyWorkout, setSelectedReadyWorkout] = React.useState(null);
+    const [selectedReadyWorkoutDay, setSelectedReadyWorkoutDay] = React.useState(0);
+    React.useEffect(() => { setSelectedReadyWorkoutDay(0); }, [selectedReadyWorkout?.id]);
     const [editingCustomId, setEditingCustomId] = React.useState(null);
     const [editingCustomName, setEditingCustomName] = React.useState('');
     const workoutFinderDraft = load('life_form_workout_finder_v9', null);
@@ -8730,16 +9040,17 @@ function LifeOSV18() {
         }
         v42Go(area);
     };
-    const fullNav = ['Hoje', 'Tarefas', 'Favoritos', 'Biblioteca', 'Notas', 'Estudos', 'Fitness', 'Receitas', 'IA', 'Life', 'Finanças', 'Meu LIFE', 'Evolução', 'Archive', 'Perfil', 'Tutorial', 'Configurações'];
+    const fullNav = ['Hoje', 'Projetos', 'Tarefas', 'Favoritos', 'Biblioteca', 'Notas', 'Estudos', 'Fitness', 'Receitas', 'IA', 'Life', 'Finanças', 'Meu LIFE', 'Evolução', 'Archive', 'Perfil', 'Tutorial', 'Configurações'];
     const basePrimaryNav = LIFE_FREE_NAV_AREAS;
     const focusTargetRaw = ({ Organização: 'Tarefas', Estudos: 'Estudos', Fitness: 'Fitness', Finanças: 'Finanças', Planejamento: 'Life' })[v33Profile.focusArea];
     const focusTarget = LIFE_FREE_NAV_AREAS.includes(focusTargetRaw) ? focusTargetRaw : null;
-    const nav = focusTarget ? ['Hoje', focusTarget, ...basePrimaryNav.filter(x => x !== 'Hoje' && x !== focusTarget)].slice(0, 5) : basePrimaryNav;
-    const premiumNav = ['Hoje','Tarefas','Notas','Estudos','Fitness','Receitas','Finanças','IA','Life','Evolução','Favoritos','Perfil'];
-    const premiumNavGroups = { Hoje:'DIA', Tarefas:'ORGANIZAR', Notas:'ORGANIZAR', Estudos:'EVOLUIR', Fitness:'EVOLUIR', Receitas:'EVOLUIR', Finanças:'CLAREZA', IA:'INTELIGÊNCIA', Life:'INTELIGÊNCIA', Evolução:'REVISAR', Favoritos:'REVISAR', Perfil:'CONTA' };
+    const nav = focusTarget ? ['Hoje', focusTarget, ...basePrimaryNav.filter(x => x !== 'Hoje' && x !== focusTarget)].slice(0, 6) : basePrimaryNav;
+    const premiumNav = ['Hoje','Projetos','Tarefas','Notas','Estudos','Fitness','Receitas','Finanças','IA','Life','Evolução','Favoritos','Perfil'];
+    const premiumNavGroups = { Hoje:'DIA', Projetos:'DESTAQUE', Tarefas:'ORGANIZAR', Notas:'ORGANIZAR', Estudos:'EVOLUIR', Fitness:'EVOLUIR', Receitas:'EVOLUIR', Finanças:'CLAREZA', IA:'INTELIGÊNCIA', Life:'INTELIGÊNCIA', Evolução:'REVISAR', Favoritos:'REVISAR', Perfil:'CONTA' };
     const lifeNavItems = hasV18Pro ? premiumNav : nav;
     const lifePremiumTaglines = {
         Hoje:'Seu painel de comando para o que merece atenção agora.',
+        Projetos:'Objetivos organizados em pastas, meses, semanas e pequenas ações.',
         Tarefas:'Prioridades, execução e próximos passos em uma única superfície.',
         Notas:'Capture ideias e transforme informação em ação sem perder contexto.',
         Estudos:'Trilhas, domínio e revisão organizados para continuar evoluindo.',
@@ -8766,7 +9077,7 @@ function LifeOSV18() {
         const push = x => { if (r.length < 45 && !r.some(y => y.type === x.type && String(y.id) === String(x.id)))
             r.push(x); };
         actionShortcuts.forEach(([title,aliases,action])=>{if(lifeNormalizeText(title+' '+aliases).includes(term))push({type:'AÇÃO',text:title,id:action,commandAction:action});});
-        const allAreas = ['Hoje', 'Tarefas', 'Notas', 'Biblioteca', 'Life', 'Estudos', 'Fitness', 'Receitas', 'Finanças', 'IA', 'Meu LIFE', 'Evolução', 'Archive', 'Perfil', 'Configurações', 'Tutorial'];
+        const allAreas = ['Hoje', 'Projetos', 'Tarefas', 'Notas', 'Biblioteca', 'Life', 'Estudos', 'Fitness', 'Receitas', 'Finanças', 'IA', 'Meu LIFE', 'Evolução', 'Archive', 'Perfil', 'Configurações', 'Tutorial'];
         allAreas.forEach(x => { const label = lifePublicAreaName(x); if (lifeNormalizeText(x + ' ' + label).includes(term))
             push({ type: 'ÁREA', text: label, go: x, id: x }); });
         [
@@ -9074,7 +9385,7 @@ function LifeOSV18() {
             const openTasks=tasks.filter(t=>!taskIsDone(t)).slice(0,LIFE_FREE_LIMITS.tasksVisible);
             const addBasicTask=()=>{ const t=createLifeTask(taskDraft,'Tarefa',{priority:'Normal',duration:30}); if(t) setTaskDraft(''); };
             return shell(
-                {area:'Action OS',icon:'checklist',title:'Faça o essencial primeiro.',text:'No FREE, Tarefas é uma lista simples: capture a próxima ação, veja o que está aberto e conclua. Projetos, planejamento, recorrências e organização avançada ficam no PRO.',freeLabel:`ATÉ ${LIFE_FREE_LIMITS.tasksVisible} PENDENTES VISÍVEIS`},
+                {area:'Action OS',icon:'checklist',title:'Faça o essencial primeiro.',text:'No FREE, Tarefas é uma lista simples: capture a próxima ação, veja o que está aberto e conclua. Planejamento avançado, recorrências e organizações complexas ficam no PRO; os roteiros guiados estão na aba Projetos.',freeLabel:`ATÉ ${LIFE_FREE_LIMITS.tasksVisible} PENDENTES VISÍVEIS`},
                 React.createElement(React.Fragment,null,
                     tool('task-create','01 · CAPTURAR','Qual é a próxima ação?','Escreva algo que você realmente pode fazer. Sem projeto, dependência ou automação por enquanto.',
                         React.createElement('div',{className:'life-free-inline-v68'},
@@ -9205,7 +9516,7 @@ function LifeOSV18() {
                 React.createElement('span',{className:'material-symbols-rounded'},g.done?'check_circle':'flag'),
                 React.createElement('span',null,React.createElement('b',null,g.title),React.createElement('small',null,g.done?'Concluída':'Em andamento'))));
             return shell(
-                {area:'Planner OS',icon:'route',title:'Uma meta é suficiente para começar.',text:'No FREE, o Planner guarda uma direção simples. Projetos, hábitos, agenda, semana e conexões ficam no PRO.',freeLabel:'1 CAMADA DE METAS'},
+                {area:'Planner OS',icon:'route',title:'Uma meta é suficiente para começar.',text:'No FREE, o Planner guarda uma direção simples. Hábitos, agenda avançada e conexões ficam no PRO; roteiros simples estão na aba Projetos.',freeLabel:'1 CAMADA DE METAS'},
                 React.createElement(React.Fragment,null,
                     tool('life-goals','DIREÇÃO','O que você quer construir?','Comece com uma meta concreta; detalhes e sistemas vêm depois.',
                         React.createElement('div',{className:'life-free-inline-v68'},
@@ -9314,7 +9625,7 @@ function LifeOSV18() {
                     React.createElement(LifeApp36Panel,{eyebrow:'FERRAMENTAS',title:'Seu sistema de execução.',text:'Abra só a ferramenta necessária para a situação atual.'},
                         React.createElement(LifeApp36Actions,{items:[
                             {icon:'inbox',title:'Caixa de entrada',text:(inbox.length||0)+' captura(s) esperando decisão.',label:'PROCESSAR →',onClick:()=>openSheet('inbox')},
-                            {icon:'folder_open',title:'Projetos',text:'Quebre resultados maiores em etapas e próximas ações.',label:'ABRIR →',onClick:()=>openAdvancedArea('Tarefas',null,'PROJETOS')},
+                            {icon:'folder_open',title:'Projetos',text:'Pastas com roteiros mensais e ações semanais.',label:'ABRIR →',onClick:()=>v42Go('Projetos')},
                             {icon:'calendar_month',title:'Planejar o dia',text:'Monte uma sequência realista usando tempo e energia disponíveis.',label:'PLANEJAR →',onClick:()=>setDayPlannerOpen(true)},
                             {icon:'date_range',title:'Planejamento semanal',text:'Distribua tarefas nos horários livres sem mudar sua agenda automaticamente.',label:'MONTAR SEMANA →',onClick:()=>setWeeklyPlannerOpen(true)},
                             {icon:'rate_review',title:'Revisão semanal',text:'Limpe pendências, escolha prioridades e recupere clareza.',label:'REVISAR →',onClick:()=>setWeeklyReviewOpen(true)}]}))),
@@ -9471,7 +9782,7 @@ function LifeOSV18() {
                         React.createElement("div", null, React.createElement("small", null, "MINHA PASTA"), React.createElement("h3", null, "Meus treinos")),
                         React.createElement("span", { className: "life-function-desc" }, mine.length ? mine.length + ' salvo(s)' : 'Salve um programa para ele aparecer aqui.')),
                     mine.length ? React.createElement("div", { className: "life-folder-list" }, mine.map((w, i) => React.createElement("button", { type: "button", className: "life-folder-row", key: w.id || i, onClick: () => openAdvancedArea('Fitness', () => { setFitnessMainTab('Treinos'); setSelectedCustomWorkout(ensureHybridWorkout(w)); }, 'MEUS TREINOS · ' + (w.name || 'TREINO')) },
-                        React.createElement("i", null, React.createElement("span", { className: "material-symbols-rounded" }, "fitness_center")),
+                        React.createElement("i", null, React.createElement("span", { className: "material-symbols-rounded" }, "folder_special")),
                         React.createElement("span", null, React.createElement("b", null, w.name || 'Treino salvo'), React.createElement("small", { className: "life-function-desc" }, (w.items?.length || w.days?.length || 0) + ' bloco(s) · toque para abrir')),
                         React.createElement("em", null, "ABRIR →")))) : React.createElement("div", { className: "life-folder-empty" }, "Você ainda não salvou nenhum treino.")),
                 fitnessRecentRows.length ? React.createElement("section", { className: "life-fit34-recent" }, React.createElement("div", { className: "life-fit34-section-head" }, React.createElement("div", null, React.createElement("small", null, "ÚLTIMAS SESSÕES"), React.createElement("h3", null, "Seu histórico recente."))), list(fitnessRecentRows, '')) : null);
@@ -10187,14 +10498,16 @@ function LifeOSV18() {
         }
         if(mode==='saved'){
             const term=lifeNormalizeText(fitnessFocusSearch);
-            const rows=(savedCustomWorkouts||[]).filter(w=>!term||lifeNormalizeText((w.name||'')+' '+(w.type||'')+' '+(w.items||[]).map(x=>x.title||x.day||'').join(' ')).includes(term));
-            const list = rows.length ? React.createElement('section',{className:'life-fit-focus-saved-list-v913'},
+            const rows=(savedCustomWorkouts||[]).filter(w=>!term||lifeNormalizeText((w.name||'')+' '+(w.type||'')+' '+(w.items||[]).map(x=>x.t||x.title||x.day||'').join(' ')).includes(term));
+            const list = rows.length ? React.createElement('section',{className:'life-fit-focus-saved-list-v913 life-workout-folder-grid-v1497'},
                 ...rows.slice(0,fitnessFocusLimit).map(w=>{
                     const ready=ensureHybridWorkout(w), days=(ready.items||[]).length;
-                    return React.createElement('button',{type:'button',key:w.id,className:'life-fit-focus-saved-row-v913',onClick:()=>setSelectedCustomWorkout(ready)},
-                        React.createElement('span',{className:'material-symbols-rounded'},'fitness_center'),
-                        React.createElement('div',null,React.createElement('b',null,w.name||'Treino salvo'),React.createElement('small',null,(w.type||'Personalizado')+' · '+days+' '+(days===1?'dia':'dias'))),
-                        React.createElement('em',null,'ABRIR →'));
+                    return React.createElement('button',{type:'button',key:w.id,className:'life-workout-folder-card-v1497 life-saved-focus-folder-v1498',onClick:()=>setSelectedCustomWorkout(ready)},
+                        React.createElement('span',{className:'material-symbols-rounded life-workout-folder-icon-v1497'},'folder_special'),
+                        React.createElement('div',null,
+                            React.createElement('small',null,(w.type||'Personalizado')+' · '+days+' '+(days===1?'dia':'dias')),
+                            React.createElement('b',null,w.name||'Treino salvo')),
+                        React.createElement('em',null,'ENTRAR NA PASTA →'));
                 }),
                 rows.length>fitnessFocusLimit ? React.createElement('button',{type:'button',className:'life-fit-focus-more-v913',onClick:()=>setFitnessFocusLimit(x=>x+4)},'VER MAIS '+Math.min(4,rows.length-fitnessFocusLimit)+' →') : null
             ) : React.createElement('section',{className:'life-fit-focus-empty-v913'},
@@ -10522,7 +10835,7 @@ function LifeOSV18() {
             React.createElement("div", { className: "life-free-conversion-actions" },
                 React.createElement("span", null, "R$ 29,90/mês"),
                 React.createElement("button", { type: "button", onClick: () => openLifePro('header') }, "VER TUDO DO PRO →"))),
-        React.createElement("div", { className: 'v53-context ' + (view === 'Estudos' ? 'estudos' : view === 'Fitness' ? 'fitness' : view === 'Receitas' ? 'receitas' : view === 'Finanças' ? 'financas' : view === 'IA' ? 'life' : view === 'Meu LIFE' ? 'life' : view === 'Life' ? 'life' : view === 'Tarefas' ? 'life' : view === 'Notas' ? 'life' : view === 'Evolução' ? 'evolucao' : view === 'Archive' ? 'archive' : view === 'Perfil' ? 'perfil' : 'hoje') }),
+        React.createElement("div", { className: 'v53-context ' + (view === 'Estudos' ? 'estudos' : view === 'Fitness' ? 'fitness' : view === 'Receitas' ? 'receitas' : view === 'Finanças' ? 'financas' : view === 'IA' ? 'life' : view === 'Meu LIFE' ? 'life' : view === 'Life' ? 'life' : view === 'Projetos' ? 'life' : view === 'Tarefas' ? 'life' : view === 'Notas' ? 'life' : view === 'Evolução' ? 'evolucao' : view === 'Archive' ? 'archive' : view === 'Perfil' ? 'perfil' : 'hoje') }),
         React.createElement("div", { className: "v35-ambient" },
             React.createElement("div", { className: "v35-orb" }),
             React.createElement("div", { className: "v35-line" })),
@@ -11010,10 +11323,10 @@ function LifeOSV18() {
                         React.createElement('small',null,'LARGURA DO MENU'),
                         React.createElement('input',{type:'range',min:240,max:380,step:4,value:lifeSidebarWidth,onChange:e=>{setLifeSidebarWidth(Math.max(240,Math.min(380,Number(e.target.value)||286))); if(lifeSidebarMode!=='full') setLifeSidebarMode('full');}}),
                         React.createElement('b',null,lifeSidebarWidth+'px'))),
-                lifeNavItems.filter(x=>hasV18Pro||['Hoje','Tarefas','Estudos','Fitness','Finanças'].includes(x)).map((x, i) => React.createElement(React.Fragment, { key: x },
+                lifeNavItems.filter(x=>hasV18Pro||['Hoje','Projetos','Tarefas','Estudos','Fitness','Finanças'].includes(x)).map((x, i) => React.createElement(React.Fragment, { key: x },
                 hasV18Pro && (i === 0 || premiumNavGroups[x] !== premiumNavGroups[lifeNavItems[i - 1]]) && React.createElement("span", { className: "life-premium-nav-group" }, premiumNavGroups[x]),
                 React.createElement("button", { type: "button", "aria-current": view === x ? 'page' : undefined, className: view === x ? 'on' : '', onClick: () => v18Go(x) },
-                    React.createElement('span',{className:'life143-nav-icon','aria-hidden':true},life143Icon(({Hoje:'home',Tarefas:'checklist',Notas:'edit_note',Estudos:'menu_book',Fitness:'fitness_center',Receitas:'restaurant',Finanças:'account_balance_wallet',IA:'auto_awesome',Life:'calendar_month',Evolução:'monitoring',Favoritos:'favorite',Perfil:'person',Sono:'bedtime',Biblioteca:'book_2'})[x]||'apps')),
+                    React.createElement('span',{className:'life143-nav-icon','aria-hidden':true},life143Icon(({Hoje:'home',Projetos:'calendar_month',Tarefas:'checklist',Notas:'edit_note',Estudos:'menu_book',Fitness:'fitness_center',Receitas:'restaurant',Finanças:'account_balance_wallet',IA:'auto_awesome',Life:'calendar_month',Evolução:'monitoring',Favoritos:'favorite',Perfil:'person',Sono:'bedtime',Biblioteca:'book_2'})[x]||'apps')),
                     React.createElement('span',{className:'life143-nav-text'},(navLabel[x] || x)+(v18ProOnly.has(x) && !hasV18Pro ? ' · PRO' : '')))))),
                 React.createElement('div',{className:'life112-sidebar-quick'},
                     React.createElement('div',{className:'life112-quick-symbol','aria-hidden':true},'✧'),
@@ -11349,6 +11662,7 @@ function LifeOSV18() {
                             React.createElement("button",{type:"button",className:"life-today-favorite-remove-v82",onClick:()=>toggleLifeFavorite('areas',item),"aria-label":"Remover "+lifePublicAreaName(area)+" dos favoritos"},React.createElement("span",{className:"material-symbols-rounded"},"favorite")));
                     }))),
                 React.createElement("section", { className: "life-apex-launch-grid", "aria-label": "Áreas principais do LIFE" }, [
+                    ['folder_special','Projetos','Pastas, metas e roteiro por semanas','Projetos'],
                     ['calendar_month','Organização','Planos, tarefas e hábitos','Tarefas'],
                     ['school','Estudos','Concurso, ENEM e conhecimento','Estudos'],
                     ['fitness_center','Fitness','Treinos, saúde e evolução','Fitness'],
@@ -11367,7 +11681,7 @@ function LifeOSV18() {
                             React.createElement("small", null, "LIFE AI"),
                             React.createElement("b", null, lifeTodayOpen.length > 1 ? 'Quer organizar a ordem do seu dia?' : lifeTodayOpen.length === 1 ? 'Quer ajuda com o próximo passo?' : 'Quer preparar o restante do dia?'))),
                     React.createElement("button", { type: "button", onClick: () => { if (!hasV18Pro) { openLifePro('today_ai'); return; } setAiOriginView('Hoje'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(lifeTodayOpen.length ? 'Organize meus planos de hoje por ordem prática, usando somente as tarefas que já estão registradas no LIFE. Não crie tarefas novas.' : 'Meu dia está sem planos registrados. Faça uma pergunta curta para me ajudar a escolher no máximo três prioridades para hoje.'), 30); } }, hasV18Pro ? "ORGANIZAR" : "ORGANIZAR COM PRO →"))),
-            view !== 'Hoje' && advancedArea !== view && (hasV18Pro ? renderLifeProAreaV88() : (['Configurações','Tutorial','Perfil'].includes(view) ? React.createElement(React.Fragment, null, renderLifeSimpleArea(), React.createElement(LifeAppFlowV68,{area:view}), renderLifeV50Layer()) : renderLifeFreeAreaV68())),
+            view !== 'Hoje' && advancedArea !== view && (view === 'Projetos' ? React.createElement(LifeProjectsHub150,{projects,setProjects,onGo:v42Go,hasPro:hasV18Pro}) : (hasV18Pro ? renderLifeProAreaV88() : (['Configurações','Tutorial','Perfil'].includes(view) ? React.createElement(React.Fragment, null, renderLifeSimpleArea(), React.createElement(LifeAppFlowV68,{area:view}), renderLifeV50Layer()) : renderLifeFreeAreaV68()))),
             hasV18Pro && advancedArea === view && areaFocusMode && areaFocusMode !== '__full__' && renderAreaFocusV920(),
             hasV18Pro && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Fitness' && advancedArea === 'Fitness' && fitnessFocusMode && renderFitnessFocusV913(),
             (hasV18Pro || ['Perfil','Configurações','Tutorial'].includes(view)) && view !== 'Hoje' && advancedArea === view && !(view === 'Fitness' && fitnessFocusMode) && React.createElement("div", { className: "life-advanced-return" },
@@ -12173,33 +12487,43 @@ function LifeOSV18() {
                         React.createElement("div", { className: "vfit-smart-steps" }, ['Idade', 'Altura', 'Objetivo', 'Musculação', 'Corrida', 'Frequência', 'Recuperação', 'Limitações'].map((x, i) => React.createElement("span", { key: x },
                             React.createElement("i", null, String(i + 1).padStart(2, '0')),
                             React.createElement("b", null, x))))),
-                    hasV18Pro && React.createElement("section", { className: "vfit-folder" },
-                        React.createElement("div", { className: "v38-title" },
-                            React.createElement("div", null,
-                                React.createElement("div", { className: "v18-micro" }, "MINHA PASTA / TREINOS PERSONALIZADOS"),
-                                React.createElement("h3", null, "Seus treinos salvos.")),
-                            React.createElement("p", null, "Crie quantos planos quiser, d\u00EA um nome e volte neles quando precisar.")),
-                        savedCustomWorkouts.length === 0 ? React.createElement("div", { className: "vfit-empty" }, "Nenhum treino personalizado salvo ainda. Crie o primeiro abaixo.") : React.createElement("div", { className: "vfit-folder-grid" }, savedCustomWorkouts.map(w => React.createElement("article", { className: "vfit-folder-card", key: w.id }, editingCustomId === w.id ? React.createElement(React.Fragment, null,
-                            React.createElement("input", { value: editingCustomName, onChange: e => setEditingCustomName(e.target.value), className: "vfit-name-input", autoFocus: true }),
-                            React.createElement("div", { className: "vfit-card-actions" },
-                                React.createElement("button", { type: "button", onClick: () => renameCustomWorkout(w.id) }, "SALVAR NOME"),
-                                React.createElement("button", { type: "button", onClick: () => setEditingCustomId(null) }, "CANCELAR"))) : React.createElement(React.Fragment, null,
-                            React.createElement("small", null,
-                                "PERSONALIZADO \u00B7 ",
-                                w.items.length,
-                                " DIAS"),
-                            React.createElement("b", null, w.name),
-                            React.createElement("p", null,
-                                w.items.slice(0, 2).map(x => x.t).join(' · '),
-                                w.items.length > 2 ? ' · …' : ''),
-                            React.createElement("div", { className: "vfit-card-actions" },
-                                React.createElement("button", { type: "button", onClick: () => { const ready = ensureHybridWorkout(w); addLifeRecent({ type: 'Treino personalizado', id: w.id, title: w.name, go: 'Fitness', subtitle: (ready.items || []).length + ' dias', workout: ready }); setSelectedCustomWorkout(ready); } }, "ABRIR"),
-                                React.createElement("button", { type: "button", onClick: () => toggleLifeFavorite('workouts', { id: 'custom-' + w.id, title: w.name, go: 'Fitness', type: 'Treino personalizado', subtitle: w.items.length + ' dias', workout: w }) },
-                                    isLifeFavorite('workouts', 'custom-' + w.id) ? '★' : '☆',
-                                    " FAVORITO"),
-                                React.createElement("button", { type: "button", onClick: () => toggleLifePin({ type: 'Treino personalizado', id: w.id, title: w.name, go: 'Fitness', subtitle: w.items.length + ' dias', workout: w }) }, isLifePinned('Treino personalizado', w.id) ? '✓ FIXADO' : '＋ FIXAR'),
-                                React.createElement("button", { type: "button", onClick: () => { setEditingCustomId(w.id); setEditingCustomName(w.name); } }, "RENOMEAR"),
-                                React.createElement("button", { type: "button", onClick: () => deleteCustomWorkout(w.id) }, "EXCLUIR"))))))),
+                    hasV18Pro && (() => {
+                        const folderItems = (savedCustomWorkouts || []).map(w => {
+                            const ready = ensureHybridWorkout(w);
+                            const items = Array.isArray(ready.items) ? ready.items : [];
+                            const preview = items.slice(0, 3).map(x => x.t).join(' · ');
+                            const body = editingCustomId === w.id
+                                ? React.createElement(React.Fragment, null,
+                                    React.createElement("input", { value: editingCustomName, onChange: e => setEditingCustomName(e.target.value), className: "vfit-name-input", autoFocus: true }),
+                                    React.createElement("div", { className: "vfit-card-actions" },
+                                        React.createElement("button", { type: "button", onClick: () => renameCustomWorkout(w.id) }, "SALVAR NOME"),
+                                        React.createElement("button", { type: "button", onClick: () => setEditingCustomId(null) }, "CANCELAR")))
+                                : React.createElement(React.Fragment, null,
+                                    React.createElement('div', { className: 'life-workout-folder-card-head-v1497' },
+                                        React.createElement('span', { className: 'material-symbols-rounded life-workout-folder-icon-v1497' }, 'folder_special'),
+                                        React.createElement('div', null,
+                                            React.createElement('small', null, (w.type || 'Personalizado').toUpperCase() + ' · ' + items.length + ' ' + (items.length === 1 ? 'DIA' : 'DIAS')),
+                                            React.createElement('b', null, w.name || 'Treino salvo'),
+                                            React.createElement('p', null, preview || 'Abra a pasta para ver os dias do plano organizados.'))),
+                                    React.createElement('div', { className: 'life-workout-folder-card-actions-v1497' },
+                                        React.createElement('button', { type: 'button', className: 'primary', onClick: () => { addLifeRecent({ type: 'Treino personalizado', id: w.id, title: w.name, go: 'Fitness', subtitle: items.length + ' dias', workout: ready }); setSelectedCustomWorkout(ready); } }, 'ENTRAR NA PASTA →'),
+                                        React.createElement('div', { className: 'life-workout-folder-card-mini-v1497' },
+                                            React.createElement('button', { type: 'button', onClick: () => toggleLifeFavorite('workouts', { id: 'custom-' + w.id, title: w.name, go: 'Fitness', type: 'Treino personalizado', subtitle: items.length + ' dias', workout: w }) }, isLifeFavorite('workouts', 'custom-' + w.id) ? '★ FAVORITO' : '☆ FAVORITAR'),
+                                            React.createElement('button', { type: 'button', onClick: () => { setEditingCustomId(w.id); setEditingCustomName(w.name); } }, 'RENOMEAR'),
+                                            React.createElement('button', { type: 'button', onClick: () => deleteCustomWorkout(w.id) }, 'EXCLUIR'))));
+                            return React.createElement("article", { className: "vfit-folder-card life-workout-folder-card-v1497", key: w.id }, body);
+                        });
+                        return React.createElement("section", { className: "vfit-folder" },
+                            React.createElement("div", { className: "v38-title" },
+                                React.createElement("div", null,
+                                    React.createElement("div", { className: "v18-micro" }, "MINHA PASTA / TREINOS PERSONALIZADOS"),
+                                    React.createElement("h3", null, "Seus treinos salvos.")),
+                                React.createElement("p", null, "Crie quantos planos quiser, dê um nome e volte neles quando precisar.")),
+                            savedCustomWorkouts.length === 0
+                                ? React.createElement("div", { className: "vfit-empty" }, "Nenhum treino personalizado salvo ainda. Crie o primeiro abaixo.")
+                                : React.createElement("div", { className: "vfit-folder-grid life-workout-folder-grid-v1497" }, folderItems)
+                        );
+                    })(),
                     React.createElement("section", { className: "v28-focus" },
                         React.createElement("div", { className: "v28-k" }, "FOCO PRINCIPAL / TREINO PERSONALIZADO"),
                         React.createElement("h2", null,
@@ -12906,11 +13230,13 @@ function LifeOSV18() {
                             React.createElement("button", { type: "button", onClick: () => setMobileMore(false), "aria-label": "Fechar" }, "×"))),
                     React.createElement("p", { className: "life-mobile-menu-hint-1494" }, "Escolha o que precisa agora. O restante fica em Todas as áreas."),
                     React.createElement("div", { className: "life-mobile-menu-quick-1494" }, (hasV18Pro ? [
+                        ['Projetos','folder_special','Prazos e roteiro semanal'],
                         ['Estudos','school','Plano, matérias e revisões'],
                         ['Fitness','fitness_center','Treinos e exercícios'],
                         ['Receitas','restaurant','Dietas e receitas'],
                         ['Finanças','account_balance_wallet','Gastos e metas']
                     ] : [
+                        ['Projetos','folder_special','Seus objetivos por semana'],
                         ['Estudos','school','Plano e matérias'],
                         ['Fitness','fitness_center','Treinos e exercícios'],
                         ['Finanças','account_balance_wallet','Saldo e registros']
@@ -12921,7 +13247,7 @@ function LifeOSV18() {
                         React.createElement('i',{className:'material-symbols-rounded'},'arrow_forward')))),
                     hasV18Pro && React.createElement('details',{className:'life-mobile-menu-extras-1494'},
                         React.createElement('summary',null,React.createElement('span',{className:'material-symbols-rounded'},'widgets'),'Todas as áreas e ferramentas',React.createElement('span',{className:'material-symbols-rounded'},'expand_more')),
-                        React.createElement("div", { className: "life-mobile-more-grid" }, (hasV18Pro ? fullNav.filter(x => !['Hoje','Tarefas','IA','Estudos','Fitness','Receitas','Finanças'].includes(x)) : LIFE_FREE_NAV_AREAS.filter(x => !['Hoje','Tarefas','Fitness','Estudos','Finanças'].includes(x))).map(x => React.createElement("div", { className: 'life-mobile-area-card ' + (view === x ? 'on' : ''), key: x },
+                        React.createElement("div", { className: "life-mobile-more-grid" }, (hasV18Pro ? fullNav.filter(x => !['Hoje','Projetos','Tarefas','IA','Estudos','Fitness','Receitas','Finanças'].includes(x)) : LIFE_FREE_NAV_AREAS.filter(x => !['Hoje','Projetos','Tarefas','Fitness','Estudos','Finanças'].includes(x))).map(x => React.createElement("div", { className: 'life-mobile-area-card ' + (view === x ? 'on' : ''), key: x },
                             React.createElement("button", { type: "button", className: 'life-mobile-area-open', onClick: () => v18Go(x) }, React.createElement("b", null, lifePublicAreaName(x)), React.createElement("small", null, "ABRIR →")),
                             React.createElement("button", { type: "button", className: 'life-area-heart ' + (isLifeFavorite('areas', x) ? 'on' : ''), onClick: e => { e.stopPropagation(); toggleLifeFavorite('areas', { id: x, title: lifePublicAreaName(x), go: x, type: 'Área' }); }, 'aria-label': isLifeFavorite('areas', x) ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }, React.createElement("span", { className: "material-symbols-rounded" }, isLifeFavorite('areas', x) ? 'favorite' : 'favorite_border')))))),
                     !hasV18Pro && React.createElement("section", { className: "life-mobile-pro-universe" },
@@ -13535,69 +13861,142 @@ function LifeOSV18() {
                                     guide.good[i] && React.createElement("div", { className: "good" },
                                         "\u2713 ",
                                         guide.good[i])))))); })()))),
-            selectedReadyWorkout && React.createElement('div',{className:'v27-modal life-ready-modal-1493',onClick:e=>{if(e.target===e.currentTarget)setSelectedReadyWorkout(null)}},
-               React.createElement('article',{className:'v27-sheet vfit-detail-sheet life-workout-sheet-1493',role:'dialog','aria-modal':true,'aria-label':'Ficha de treino '+String(selectedReadyWorkout.name||'')},
-                 React.createElement('div',{className:'life-plan-hero-1493'},
-                   React.createElement('div',null,
-                     React.createElement('small',null,'LIFE OS / FICHA DE TREINO PRONTO'),
-                     React.createElement('h2',null,selectedReadyWorkout.name||'Treino pronto'),
-                     React.createElement('p',null,'Veja cada movimento e sua demonstração antes de iniciar.')),
-                   React.createElement('button',{type:'button',onClick:()=>setSelectedReadyWorkout(null),'aria-label':'Fechar ficha de treino'},'×')),
-                 React.createElement('div',{className:'life-plan-stats-1493'},
-                   [['NÍVEL',selectedReadyWorkout.level||'Adaptável'],['SESSÕES / SEMANA',String(selectedReadyWorkout.days||1)],['DURAÇÃO',selectedReadyWorkout.duration||'Flexível'],['EXERCÍCIOS',String(selectedReadyWorkout.weeklyItems?.length?selectedReadyWorkout.weeklyItems.reduce((n,d)=>n+(Array.isArray(d.moves)?d.moves.length:0),0):(selectedReadyWorkout.moves||selectedReadyWorkout.items||[]).length)]].map(([label,value])=>React.createElement('div',{key:label},React.createElement('small',null,label),React.createElement('b',null,value)))),
-                 React.createElement('div',{className:'life-plan-intel-1493'},
-                   React.createElement('span',{className:'material-symbols-rounded'},'psychology'),
-                   React.createElement('div',null,React.createElement('b',null,'Por que este plano?'),
-                     React.createElement('p',null,(window.LifeIntelligence149?.analyzeWorkoutPlan(selectedReadyWorkout,{age:trainingAge})?.summary)||'Modelo pronto. Ajuste à experiência, técnica e recuperação antes de executar.'))),
-                 React.createElement('div',{className:'life-plan-sections-1493'},
-                    (Array.isArray(selectedReadyWorkout.weeklyItems)&&selectedReadyWorkout.weeklyItems.length?selectedReadyWorkout.weeklyItems:[{
-                      k:'SESSÃO',t:selectedReadyWorkout.name||'Treino',moves:selectedReadyWorkout.moves||selectedReadyWorkout.items||[],prescription:selectedReadyWorkout.prescription||[],sessionType:selectedReadyWorkout.sessionType||'strength'}]).map((day,i)=>
-                      React.createElement('section',{className:'life-day-card-v149 life-plan-day-1493',key:i},
-                        React.createElement('div',{className:'life-plan-day-head-1493'},React.createElement('div',null,React.createElement('small',null,day.k||'SESSÃO '+(i+1)),React.createElement('h3',null,day.t||selectedReadyWorkout.name)),React.createElement('span',null,(day.moves||[]).length+' movimentos')),
-                        lifeRenderWorkoutExerciseCards(day,openExerciseDetail),
-                        React.createElement('button',{type:'button',className:'life-plan-start-1493',onClick:()=>{
-                          const normalizedMoves=Array.isArray(day.moves)?day.moves:[];
-                          startWorkoutPlayer({ ...selectedReadyWorkout,id:String(selectedReadyWorkout.id||'ready')+'_'+i,
-                            name:(selectedReadyWorkout.name||'Treino')+(selectedReadyWorkout.weeklyItems?.length?' · '+(day.t||'Dia '+(i+1)):''),
-                            moves:normalizedMoves.length?normalizedMoves:(selectedReadyWorkout.moves||selectedReadyWorkout.items||[]),
-                            prescription:day.prescription||selectedReadyWorkout.prescription||[],sessionType:day.sessionType||'strength'});
-                          setSelectedReadyWorkout(null);
-                        }},'INICIAR ESTA SESSÃO →')))),
-                 React.createElement('p',{className:'life-plan-disclaimer-1493'},'Ajuste o treino à sua experiência e recuperação. Confira a demonstração correspondente, respeite seus limites e interrompa movimentos dolorosos.'))),
-            selectedCustomWorkout && React.createElement("div", { className: "v27-modal", onClick: e => { if (e.target === e.currentTarget)
-                    setSelectedCustomWorkout(null); } },
-                React.createElement("div", { className: "v27-sheet vfit-detail-sheet life-workout-sheet-1493" },
-                    React.createElement("div", { className: "flex items-center justify-between" },
-                        React.createElement("div", { className: "micro" }, "MINHA PASTA / TREINO PERSONALIZADO"),
-                        React.createElement("button", { type: "button", onClick: () => setSelectedCustomWorkout(null), className: "iconbtn" }, "\u00D7")),
-                    React.createElement("div", { className: "v27-q" }, selectedCustomWorkout.name),
-                    React.createElement("div", { className: "v27-help" }, selectedCustomWorkout.temporary ? 'Estrutura sugerida pelo filtro. Revise a semana inteira antes de salvar.' : 'Plano salvo no seu LIFE. Abra qualquer dia para iniciar a sessão correspondente.'),
-                    selectedCustomWorkout.type === 'Híbrido' && React.createElement("div", { className: "v27-help" }, "SEMANA HÍBRIDA · ", (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).filter(day => workoutSessionKind(day) === 'strength').length, " MUSCULAÇÃO · ", (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).filter(day => workoutSessionKind(day) === 'cardio').length, " CORRIDA/CARDIO"),
-                    React.createElement('div',{className:'life-plan-intel-1493'},React.createElement('span',{className:'material-symbols-rounded'},'psychology'),React.createElement('div',null,React.createElement('b',null,'LEITURA INTELIGENTE DO TREINO'),React.createElement('p',null,(window.LifeIntelligence149?.analyzeWorkoutPlan(selectedCustomWorkout,selectedCustomWorkout.answers||{})?.summary)||'O plano considera sua semana, técnica e recuperação.'))),
-                    React.createElement("div", { className: "life-clean-summary-v149 life-workout-summary-v149" }, lifeWorkoutSessionStats(selectedCustomWorkout).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))),
-                    React.createElement("div", { className: "v27-plan v64-week-plan life-week-plan-v149" }, (Array.isArray(selectedCustomWorkout.items) ? selectedCustomWorkout.items : []).map((x, i) => React.createElement("div", { className: "v27-day v64-session-" + workoutSessionKind(x) + ' life-day-card-v149', key: i },
-                        React.createElement("small", null, x.k, " · ", workoutSessionKind(x) === 'cardio' ? 'CORRIDA/CARDIO' : workoutSessionKind(x) === 'mobility' ? 'MOBILIDADE' : 'MUSCULAÇÃO'),
-                        React.createElement("b", null, x.t),
-                        React.createElement("p", null, x.d),
-                        lifeRenderWorkoutExerciseCards(x, openExerciseDetail),
-                        React.createElement("button", { type: "button", className: "v18-btn ghost mt-3", onClick: () => { startCustomWorkout(selectedCustomWorkout, i); setSelectedCustomWorkout(null); } }, workoutSessionKind(x) === 'cardio' ? "INICIAR CORRIDA/CARDIO \u2192" : "INICIAR MUSCULAÇÃO \u2192")))),
-                    selectedCustomWorkout.suggestions?.length > 0 && React.createElement("div", { className: "vfit-similar" },
-                        React.createElement("div", { className: "v28-k" }, "TREINOS PRONTOS SEMELHANTES"),
-                        React.createElement("div", { className: "vfit-result-grid" }, selectedCustomWorkout.suggestions.map(w => React.createElement("article", { className: "vfit-result", key: w.id },
-                            React.createElement("small", null,
-                                w.type.toUpperCase(),
-                                " \u00B7 ",
-                                w.level.toUpperCase()),
-                            React.createElement("b", null, w.name),
-                            React.createElement("p", null,
-                                w.days,
-                                " dias/sem \u00B7 ",
-                                w.items.slice(0, 4).join(' · ')))))),
-                    React.createElement("div", { className: "v27-safe" }, "Ajuste m\u00E1quinas e bancos \u00E0 sua altura e conforto. Priorize t\u00E9cnica e recupera\u00E7\u00E3o; dor ou limita\u00E7\u00E3o persistente precisa de avalia\u00E7\u00E3o adequada."),
-                    React.createElement("div", { className: "v27-actions" },
-                        selectedCustomWorkout.temporary ? React.createElement("button", { type: "button", className: "v27-next", onClick: () => saveTemporaryWorkout(ensureHybridWorkout(selectedCustomWorkout)) }, "SALVAR SEMANA COMPLETA") : React.createElement("button", { type: "button", className: "v27-next", onClick: () => { startCustomWorkout(selectedCustomWorkout, 0); setSelectedCustomWorkout(null); } }, selectedCustomWorkout.type === 'Híbrido' ? "COMEÇAR PELO 1º DIA \u2192" : "INICIAR PRIMEIRO DIA \u2192"),
-                        !selectedCustomWorkout.temporary && React.createElement("button", { type: "button", className: "v27-back", onClick: () => { setEditingCustomId(selectedCustomWorkout.id); setEditingCustomName(selectedCustomWorkout.name); setSelectedCustomWorkout(null); } }, "RENOMEAR"),
-                        React.createElement("button", { type: "button", className: "v27-back", onClick: () => setSelectedCustomWorkout(null) }, "FECHAR")))),
+            selectedReadyWorkout && (() => {
+                const workout = selectedReadyWorkout;
+                const days = Array.isArray(workout.weeklyItems) && workout.weeklyItems.length ? workout.weeklyItems : [{
+                    k: 'SESSÃO', t: workout.name || 'Treino pronto', d: workout.summary || '',
+                    moves: workout.moves || workout.items || [], prescription: workout.prescription || [], sessionType: workout.sessionType || 'strength'
+                }];
+                const index = Math.min(Math.max(Number(selectedReadyWorkoutDay) || 0, 0), days.length - 1);
+                const day = days[index];
+                const kind = workoutSessionKind(day);
+                const guide = kind === 'cardio' ? lifeCardioGuideV1497(day.t || '', day.d || '') : null;
+                const close = () => setSelectedReadyWorkout(null);
+                const start = () => {
+                    const normalizedMoves = Array.isArray(day.moves) ? day.moves : [];
+                    startWorkoutPlayer({ ...workout, id: String(workout.id || 'ready') + '_' + index,
+                        name: (workout.name || 'Treino') + (days.length > 1 ? ' · ' + (day.t || 'Dia ' + (index + 1)) : ''),
+                        moves: normalizedMoves.length ? normalizedMoves : (workout.moves || workout.items || []),
+                        prescription: day.prescription || workout.prescription || [], sessionType: day.sessionType || kind
+                    });
+                    close();
+                };
+                const header = React.createElement('div', {className:'life-workout-folder-top-v1497'},
+                    React.createElement('div',{className:'life-workout-folder-breadcrumb-v1497'},
+                        React.createElement('small',null,'FITNESS / TREINO PRONTO'),
+                        React.createElement('span',null,workout.level || workout.type || 'Plano adaptável')),
+                    React.createElement('button',{type:'button',className:'iconbtn',onClick:close,'aria-label':'Fechar ficha'},'×'));
+                const hero = React.createElement('section',{className:'life-workout-folder-hero-v1497'},
+                    React.createElement('div',null,
+                        React.createElement('div',{className:'v27-q'},workout.name || 'Treino pronto'),
+                        React.createElement('p',{className:'life-workout-folder-sub-v1497'},'Escolha um dia na barra superior. Cada sessão aparece separada, pronta para consultar e iniciar.')),
+                    React.createElement('div',{className:'life-clean-summary-v149 life-workout-summary-v149 life-workout-folder-summary-v1497'},
+                        [['DIAS',String(days.length)],['NÍVEL',workout.level || 'Adaptável'],['TIPO',workout.type || 'Pronto'],['DURAÇÃO',workout.duration || 'Flexível']].map(([label,value])=>
+                            React.createElement('div',{key:label},React.createElement('small',null,label),React.createElement('b',null,value)))));
+                const tabs = React.createElement('nav',{className:'life-workout-folder-tabs-v1497','aria-label':'Escolher dia do treino'},
+                    days.map((part,i)=>React.createElement('button',{type:'button',key:String(part.k || 'd')+i,
+                        className:(i===index?'on ':'')+'life-workout-folder-tab-v1497','aria-current':i===index?'step':undefined,
+                        onClick:()=>setSelectedReadyWorkoutDay(i)},
+                        React.createElement('small',null,lifeWorkoutDayShortV1497(part.k,i)),
+                        React.createElement('b',null,days.length===1?'Sessão':lifeWorkoutDayNameV1497(part.k,i)),
+                        React.createElement('span',null,part.t || ('Dia '+(i+1))))));
+                const main = React.createElement('main',{key:'ready-day-'+index,className:'life-workout-folder-main-v1497'},
+                    React.createElement('div',{className:'life-workout-day-head-v1497'},
+                        React.createElement('small',null,(days.length===1?'SESSÃO':lifeWorkoutDayNameV1497(day.k,index))+' · '+(kind==='cardio'?'CORRIDA / CARDIO':kind==='mobility'?'MOBILIDADE':'MUSCULAÇÃO')),
+                        React.createElement('h3',null,day.t || workout.name || 'Sessão do dia'),
+                        React.createElement('p',null,day.d || workout.summary || 'Acompanhe os exercícios na ordem indicada.')),
+                    guide ? React.createElement('div',{className:'life-workout-run-strip-v1497'},
+                        React.createElement('article',null,React.createElement('small',null,'COMO FAZER'),React.createElement('b',null,guide.how)),
+                        React.createElement('article',null,React.createElement('small',null,'EXEMPLO'),React.createElement('b',null,guide.example)),
+                        React.createElement('article',null,React.createElement('small',null,'DICA'),React.createElement('b',null,guide.tip))) : null,
+                    React.createElement('div',{className:'life-workout-day-actions-v1497'},
+                        React.createElement('button',{type:'button',className:'v27-next',onClick:start},'INICIAR ESTA SESSÃO →'),
+                        index>0 ? React.createElement('button',{type:'button',className:'v27-back',onClick:()=>setSelectedReadyWorkoutDay(index-1)},'← DIA ANTERIOR') : null,
+                        index<days.length-1 ? React.createElement('button',{type:'button',className:'v27-back',onClick:()=>setSelectedReadyWorkoutDay(index+1)},'PRÓXIMO DIA →') : null),
+                    lifeRenderWorkoutExerciseCards(day,openExerciseDetail));
+                const aside=React.createElement('aside',{className:'life-workout-folder-side-v1497'},
+                    React.createElement('div',{className:'life-workout-folder-side-card-v1497'},
+                        React.createElement('small',null,'ORGANIZAÇÃO'),
+                        React.createElement('b',null,days.length+' '+(days.length===1?'sessão':'sessões')),
+                        React.createElement('p',null,'Apenas um dia por vez. A barra superior troca o conteúdo, sem empilhar todas as fichas.')),
+                    React.createElement('div',{className:'life-workout-folder-side-card-v1497'},
+                        React.createElement('small',null,'ORIENTAÇÃO'),
+                        React.createElement('b',null,kind==='cardio'?'Corrida e condicionamento':'Foco na técnica'),
+                        React.createElement('p',null,kind==='cardio'?'Leia as etapas e os exemplos; os vídeos são apoio opcional.':'Abra a pasta de cada exercício para conferir a técnica e o vídeo, quando disponível.')),
+                    React.createElement('div',{className:'life-workout-folder-side-card-v1497'},
+                        React.createElement('small',null,'CONTINUAR'),
+                        React.createElement('div',{className:'life-workout-folder-side-actions-v1497'},
+                            React.createElement('button',{type:'button',className:'v27-next',onClick:start},'COMEÇAR AGORA'),
+                            React.createElement('button',{type:'button',className:'v27-back',onClick:close},'VOLTAR'))));
+                return React.createElement('div',{className:'v27-modal life-ready-modal-1493 life-workout-folder-modal-v1497',
+                    onClick:e=>{if(e.target===e.currentTarget)close();}},
+                    React.createElement('article',{className:'v27-sheet vfit-detail-sheet life-workout-folder-sheet-v1497',
+                        role:'dialog','aria-modal':true,'aria-label':'Ficha de '+(workout.name||'treino pronto')},
+                        header,hero,tabs,React.createElement('section',{className:'life-workout-folder-stage-v1497'},main,aside)));
+            })(),
+            selectedCustomWorkout && (() => {
+                const workout = ensureHybridWorkout(selectedCustomWorkout);
+                const days = Array.isArray(workout.items) ? workout.items : [];
+                const activeIndex = Math.max(0, Math.min(days.length - 1, selectedCustomWorkoutDay));
+                const activeDay = days[activeIndex] || null;
+                const activeKind = workoutSessionKind(activeDay || {});
+                const activeGuide = activeKind === 'cardio' ? lifeCardioGuideV1497(activeDay?.t || '', activeDay?.d || '') : null;
+                const top = React.createElement("div", { className: "life-workout-folder-top-v1497" },
+                    React.createElement("div", { className: "life-workout-folder-breadcrumb-v1497" },
+                        React.createElement("small", null, "MINHA PASTA / TREINO SALVO"),
+                        React.createElement("span", null, workout.type === 'Híbrido' ? 'Plano híbrido' : (workout.type || 'Plano personalizado'))),
+                    React.createElement("button", { type: "button", onClick: () => setSelectedCustomWorkout(null), className: "iconbtn" }, "×"));
+                const hero = React.createElement("section", { className: "life-workout-folder-hero-v1497" },
+                    React.createElement("div", null,
+                        React.createElement("div", { className: "v27-q" }, workout.name),
+                        React.createElement("p", { className: "life-workout-folder-sub-v1497" }, workout.temporary ? 'Revise a semana completa e salve quando estiver satisfeito.' : 'Entre no dia que quiser, escolha a sessão e siga somente o que importa naquele treino.')),
+                    React.createElement("div", { className: "life-clean-summary-v149 life-workout-summary-v149 life-workout-folder-summary-v1497" },
+                        lifeWorkoutSessionStats(workout).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))));
+                const tabs = React.createElement("div", { className: "life-workout-folder-tabs-v1497" },
+                    days.map((day, i) => React.createElement("button", {
+                        type: "button",
+                        key: String(day.k || 'd') + i,
+                        className: (i === activeIndex ? 'on ' : '') + 'life-workout-folder-tab-v1497',
+                        onClick: () => setSelectedCustomWorkoutDay(i)
+                    },
+                        React.createElement("small", null, lifeWorkoutDayShortV1497(day.k, i)),
+                        React.createElement("b", null, lifeWorkoutDayNameV1497(day.k, i)),
+                        React.createElement("span", null, day.t || ('Sessão ' + (i + 1))))));
+                const mainColumn = activeDay ? React.createElement("div", { key:'saved-day-'+activeIndex, className: "life-workout-folder-main-v1497" },
+                    React.createElement("div", { className: "life-workout-day-head-v1497" },
+                        React.createElement("small", null, lifeWorkoutDayNameV1497(activeDay.k, activeIndex) + ' · ' + (activeKind === 'cardio' ? 'CORRIDA / CARDIO' : activeKind === 'mobility' ? 'MOBILIDADE' : 'MUSCULAÇÃO')),
+                        React.createElement("h3", null, activeDay.t || 'Sessão do dia'),
+                        React.createElement("p", null, activeDay.d || 'Siga a sessão do dia com calma e técnica.')),
+                    activeKind === 'cardio' && activeGuide ? React.createElement("div", { className: "life-workout-run-strip-v1497" },
+                        React.createElement("article", null, React.createElement("small", null, "COMO FAZER"), React.createElement("b", null, activeGuide.how)),
+                        React.createElement("article", null, React.createElement("small", null, "EXEMPLO"), React.createElement("b", null, activeGuide.example)),
+                        React.createElement("article", null, React.createElement("small", null, "DICA"), React.createElement("b", null, activeGuide.tip))) : null,
+                    React.createElement("div", { className: "life-workout-day-actions-v1497" },
+                        React.createElement("button", { type: "button", className: "v27-next", onClick: () => { startCustomWorkout(workout, activeIndex); setSelectedCustomWorkout(null); } }, activeKind === 'cardio' ? "INICIAR CORRIDA DESTE DIA →" : "INICIAR TREINO DESTE DIA →"),
+                        activeIndex > 0 ? React.createElement("button", { type: "button", className: "v27-back", onClick: () => setSelectedCustomWorkoutDay(activeIndex - 1) }, "← DIA ANTERIOR") : null,
+                        activeIndex < days.length - 1 ? React.createElement("button", { type: "button", className: "v27-back", onClick: () => setSelectedCustomWorkoutDay(activeIndex + 1) }, "PRÓXIMO DIA →") : null),
+                    lifeRenderWorkoutExerciseCards(activeDay, openExerciseDetail)
+                ) : React.createElement("div", { className: "vfit-empty life-workout-folder-main-v1497" }, "Este plano ainda não tem dias organizados.");
+                const sideColumn = activeDay ? React.createElement("aside", { className: "life-workout-folder-side-v1497" },
+                    React.createElement("div", { className: "life-workout-folder-side-card-v1497" },
+                        React.createElement("small", null, "VISÃO DO PLANO"),
+                        React.createElement("b", null, days.length + ' ' + (days.length === 1 ? 'dia organizado' : 'dias organizados')),
+                        React.createElement("p", null, "Escolha o dia na barra superior. A tela mostra só a sessão selecionada, para o treino ficar fácil de entender.")),
+                    React.createElement("div", { className: "life-workout-folder-side-card-v1497" },
+                        React.createElement("small", null, "RESUMO DO DIA"),
+                        React.createElement("b", null, activeKind === 'cardio' ? 'Sessão de corrida' : activeKind === 'mobility' ? 'Sessão de mobilidade' : 'Sessão de musculação'),
+                        React.createElement("p", null, activeKind === 'cardio' ? 'Algumas partes usam explicação escrita e exemplo prático; vídeos ficam como apoio opcional.' : 'Os exercícios aparecem em ordem, com séries, repetições e pasta individual quando houver vídeo.')),
+                    React.createElement("div", { className: "life-workout-folder-side-card-v1497" },
+                        React.createElement("small", null, "AÇÕES"),
+                        React.createElement("div", { className: "life-workout-folder-side-actions-v1497" },
+                            workout.temporary ? React.createElement("button", { type: "button", className: "v27-next", onClick: () => saveTemporaryWorkout(ensureHybridWorkout(workout)) }, "SALVAR SEMANA") : React.createElement("button", { type: "button", className: "v27-next", onClick: () => { startCustomWorkout(workout, activeIndex); setSelectedCustomWorkout(null); } }, "COMEÇAR ESTE DIA"),
+                            !workout.temporary ? React.createElement("button", { type: "button", className: "v27-back", onClick: () => { setEditingCustomId(workout.id); setEditingCustomName(workout.name); setSelectedCustomWorkout(null); } }, "RENOMEAR") : null,
+                            React.createElement("button", { type: "button", className: "v27-back", onClick: () => setSelectedCustomWorkout(null) }, "FECHAR")))) : null;
+                const stage = React.createElement("section", { className: "life-workout-folder-stage-v1497" }, mainColumn, sideColumn);
+                return React.createElement("div", { className: "v27-modal life-workout-folder-modal-v1497", onClick: e => { if (e.target === e.currentTarget)
+                            setSelectedCustomWorkout(null); } },
+                    React.createElement("div", { className: "v27-sheet vfit-detail-sheet life-workout-folder-sheet-v1497" }, top, hero, tabs, stage));
+            })(),
             personalFlow && React.createElement("div", { className: "v27-modal", onClick: (e) => { if (e.target === e.currentTarget)
                     closePf(); } },
                 React.createElement("div", { className: "v27-sheet" },

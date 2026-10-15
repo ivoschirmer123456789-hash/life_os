@@ -22,7 +22,7 @@ check('séries e repetições visíveis',()=>assert(/3 séries/.test(words(direc
 check('imagem usada somente quando vídeo exatamente correspondente',()=>assert(flat(direct).some(x=>x.tag==='img'&&x.props.alt.includes(exercise.name))));
 check('botão exato abre técnica dentro do LIFE',()=>{const b=flat(direct).find(x=>x.tag==='button'&&words(x)==='ABRIR PASTA DO VÍDEO');assert(b);b.props.onClick();assert.equal(selected.at(-1).id,exercise.id)});
 const loose=api.exerciseCards({k:'TER',t:'Bíceps',moves:['Rosca martelo no banco']},x=>selected.push(x));
-check('exercício sem correspondência recebe ilustração sem fingir vídeo exato',()=>assert(flat(loose).some(x=>x.tag==='img'&&x.props.src.startsWith('data:image/svg+xml'))));
+check('exercício sem correspondência recebe ilustração sem fingir vídeo exato',()=>assert(flat(loose).some(x=>x.props?.className==='life-plan-ex-cover-fallback-v1498')));
 check('exercício sem correspondência permite busca identificada',()=>{const b=flat(loose).find(x=>x.tag==='button'&&words(x)==='ENCONTRAR VÍDEO');assert(b);b.props.onClick();assert(opened.at(-1).url.includes('youtube.com/results?search_query='));assert.equal(opened.at(-1).target,'_blank');});
 check('sem correspondência não apresenta técnica falsa',()=>{const buttons=flat(loose).filter(x=>x.tag==='button');assert(!buttons.some(x=>words(x)==='TÉCNICA'));assert(buttons.some(x=>words(x)==='BUSCAR EXATO'));});
 const meals=api.mealCards([{k:'CAFÉ DA MANHÃ',t:'Pão, fruta e ovos',d:'Adapte ao seu apetite.'},{k:'ALMOÇO',t:'Prato caseiro',d:'Varie acompanhamentos.'}]);
@@ -37,7 +37,8 @@ check('arquivo index deve estar na raiz do pacote',()=>assert(fs.existsSync(path
 check('vídeos ficam dentro de pasta expansível',()=>{
   const details=flat(direct).find(x=>x.tag==='details'&&x.props.className?.includes('life-plan-ex-folder-v1495'));
   assert(details);assert.equal(details.props.open,undefined);
-  assert(flat(details).some(x=>x.tag==='iframe'&&x.props.src.includes('youtube-nocookie.com/embed/')));
+  assert(flat(details).some(x=>x.tag==='iframe'&&x.props.src==='about:blank'));
+  assert(typeof details.props.onToggle === 'function');
 });
 check('miniatura fotográfica original corresponde ao exercício conhecido',()=>{
   const cover=flat(direct).find(x=>x.tag==='img');
