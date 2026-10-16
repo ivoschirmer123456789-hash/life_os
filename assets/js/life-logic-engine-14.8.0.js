@@ -66,3 +66,32 @@
   root.LifeBrain1463=enhanced;root.LifeCognitiveEngine147=enhanced;
   const api=Object.freeze({version:VERSION,subscribe,notify,detectConflicts,plan,lab,syncDecision,evidenceQuality,safeAction,recordApproved,markUndone,diagnostics,analyze,day});root.LifeLogicEngine148=api;
 })(typeof window==='object'?window:globalThis);
+
+// LIFE OS 15.1 — Per-owner local recovery snapshots (not cloud synchronization).
+(function(root){
+ 'use strict';
+ const clean=(value,n=90)=>String(value==null?'':value).trim().slice(0,n);
+ // Local fallback snapshots are per active LIFE data owner; never uploaded by this module.
+ const tracked=new Set(['l18_projects','life_study_plan_v2','life_custom_workouts_v2','life_food_plans_v1','l18_tasks']);
+ const backupKey=(key,owner)=>'life_recovery_151_'+encodeURIComponent(clean(owner,90)||'local')+'_'+key;
+ const snapshots=(key,owner)=>{try{const rows=JSON.parse(root.localStorage.getItem(backupKey(key,owner))||'[]');return Array.isArray(rows)?rows:[]}catch(_){return []}};
+ const record=(key,oldRaw,owner)=>{
+  if(!tracked.has(key)||!oldRaw||oldRaw.length>340000)return false;
+  try{
+   JSON.parse(oldRaw);
+   const history=snapshots(key,owner);const now=Date.now();
+   if(history[0]&&now-Date.parse(history[0].at)<30000)return false;
+   if(history[0]?.raw===oldRaw)return false;
+   root.localStorage.setItem(backupKey(key,owner),JSON.stringify([{at:new Date().toISOString(),raw:oldRaw},...history].slice(0,3)));
+   return true;
+  }catch(_){return false}
+ };
+ const preview=(key,owner)=>snapshots(key,owner).map((x,i)=>({index:i,at:x.at,bytes:x.raw?.length||0}));
+ const recover=(key,owner,index)=>{
+  const entry=snapshots(key,owner)[index];
+  if(!entry)return {ok:false,reason:'Nenhuma cópia local disponível.'};
+  try{const data=JSON.parse(entry.raw);if(!Array.isArray(data))return {ok:false,reason:'Formato de recuperação incompatível.'};return {ok:true,data:JSON.parse(JSON.stringify(data)),at:entry.at}}
+  catch(_){return {ok:false,reason:'A cópia está incompleta.'}}
+ };
+ root.LifeReliability151=Object.freeze({record,preview,recover,version:'15.1.0'});
+})(typeof window!=='undefined'?window:globalThis);

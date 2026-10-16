@@ -20,8 +20,8 @@ assert(runtime.includes("const fixedArea=e.target?.closest?.('.v18-tabs,.v18-top
 assert(runtime.includes("if(modalCandidates().length)return;"));
 assert(css.includes('html.life-modal-active{overflow-y:hidden!important}'));
 assert(css.includes('.life1465-city-priority'));
-assert(html.includes('assets/css/usability-14.6.5.css?v=15.0.1'));
+assert(html.includes('assets/css/usability-14.6.5.css?v=15.1.0'));
 assert(sw.includes("'./assets/css/usability-14.6.5.css'"));
-assert(sw.includes("ASSET_BUILD='15.0.1'"));
+assert(sw.includes("ASSET_BUILD='15.1.0'"));
 assert(fs.existsSync(path.join(root,'assets/js/life-brain-14.6.4.js')));
 console.log('16 checks: weather-first, wheel, modal lock, assets, cache, brain retained — PASS');

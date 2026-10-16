@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-15.0.1-projects';
-const ASSET_BUILD='15.0.1';
+const LIFE_CACHE='life-os-15.1.0-projects';
+const ASSET_BUILD='15.1.0';
 const SHELL=[
   './',
   './index.html',

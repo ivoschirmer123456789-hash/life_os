@@ -186,11 +186,13 @@ const lifeReadStoredValue = (key, fallback) => {
 const load = (key, fallback) => lifeReadStoredValue(key, fallback);
 const save = (key, value) => {
     try {
+        const before = lifeRawStorageGet(key, null);
         const ok = lifeRawStorageSet(key, JSON.stringify(value));
         const dirtyOk = (key === 'life_cloud_synced_at' || key === 'life_local_dirty_at') ? true : lifeRawStorageSet('life_local_dirty_at', new Date().toISOString());
         if (!ok || !dirtyOk) throw new Error(window.lifeLastStorageError || 'storage_write_failed');
         document.documentElement.dataset.storage = 'ok';
         window.lifeLastStorageOk = true;
+        try { if (before !== null && before !== JSON.stringify(value)) window.LifeReliability151?.record(key,before,lifeRawStorageGet('life_data_owner_uid_v123','local')); } catch (_) {}
         try { window.LifeLogicEngine148?.notify(key); } catch (_) {}
     }
     catch (e) {
@@ -1221,6 +1223,26 @@ const lifeRenderWorkoutExerciseCards = (session, onOpenExercise) => {
         return React.createElement('article', { className: 'life-plan-ex-card-v149 life-ex-card-1493 life-plan-ex-card-v1495', key: String(session?.k || 's') + '-' + i }, heroNode, folderNode);
     }));
 };
+// LIFE OS 15.1 — observational check-ins; never counted as completed workouts or medical assessments.
+function LifeWorkoutReview151({ workout, day, dayIndex = 0 }) {
+    const h=React.createElement;
+    const key=String(workout?.id||workout?.name||'treino')+'_'+String(day?.k||dayIndex);
+    const [entries,setEntries]=React.useState(()=>load('life_fitness_feedback_151',[]));
+    const [note,setNote]=React.useState('');
+    const feedback=['Sessão confortável','Técnica a revisar','Preciso reduzir'];
+    const result=window.LifeExperience151?.fitnessReview(entries,key)||{count:0,last:null,advice:'Registre apenas o que observou.'};
+    const register=(answer)=>{
+        if(!feedback.includes(answer))return;
+        const row={id:'fit_feedback_'+Date.now()+'_'+Math.random().toString(36).slice(2,5),workoutId:key,feedback:answer,note:note.trim().slice(0,200),at:new Date().toISOString()};
+        const next=[...(Array.isArray(entries)?entries:[]),row].slice(-120);
+        save('life_fitness_feedback_151',next);setEntries(next);setNote('');
+    };
+    return h('section',{className:'life151-fitness-review'},
+      h('div',null,h('small',null,'ACOMPANHAMENTO DO DIA'),h('h3',null,'Como foi a sessão?'),h('p',null,'Seu relato ajuda a revisar a próxima sessão; não altera o treino automaticamente.')),
+      h('div',{className:'life151-fitness-review-buttons'},feedback.map(f=>h('button',{key:f,type:'button',onClick:()=>register(f)},f))),
+      h('label',null,'Observação opcional',h('input',{value:note,maxLength:200,placeholder:'Ex.: precisei revisar a postura',onChange:e=>setNote(e.target.value)})),
+      h('p',{className:'life151-fitness-review-result'},result.count+' registro(s) nesta sessão do plano. '+result.advice));
+}
 const lifeRenderNutritionBlocksV149 = (items = []) => React.createElement('div', { className: 'life-meal-grid-v149' }, (items || []).map((x, i) => {
     const keyLabel = x.k || x[0] || 'BLOCO';
     const title = x.t || x[1] || 'Refeição';
@@ -2092,6 +2114,15 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
     const initialPrefill = (()=>{ try { return lifeRawStorageGet('life_study_prefill_v6') || ''; } catch { return ''; } })();
     const studyDraft = load('life_form_study_v9', null);
     const [open, setOpen] = React.useState(false), [step, setStep] = React.useState(()=>Math.max(0,Math.min(11,Number(studyDraft?.step)||0))), [answers, setAnswers] = React.useState(()=>initialPrefill?{topic:initialPrefill}:(studyDraft?.answers||{})), [topicQ, setTopicQ] = React.useState(initialPrefill||studyDraft?.topicQ||''), [topicFocus, setTopicFocus] = React.useState(false), [plan, setPlan] = React.useState(() => lifeUpgradeStudyPlanV66(load('life_study_plan_v2', null)));
+    const [studyFeedback,setStudyFeedback]=React.useState(()=>load('life_study_feedback_151',{}));
+    const studyFeedbackKey=String(plan?.id||plan?.topic||'study');
+    const studyCurrentFeedback=studyFeedback?.[studyFeedbackKey]?.value||'';
+    const studyReview151=window.LifeExperience151?.studyReview(plan,studyCurrentFeedback)||{done:0,total:0,next:'',advice:''};
+    const submitStudyFeedback=(value)=>{
+        if(!['Consegui aplicar','Preciso revisar','Ainda não testei'].includes(value))return;
+        const next={...studyFeedback,[studyFeedbackKey]:{value,at:new Date().toISOString()}};
+        save('life_study_feedback_151',next);setStudyFeedback(next);
+    };
     React.useEffect(()=>{ try{ if(open) lifeRawStorageSet('life_form_study_v9',JSON.stringify({step,answers,topicQ,updatedAt:new Date().toISOString()})); }catch(e){} },[open,step,answers,topicQ]);
     const topicSuggestions = React.useMemo(() => { const found = lifeStudySearch(topicQ); return hasPro ? found : found.filter(t => !lifeStudyIsProTopic(t)); }, [topicQ, hasPro]);
     React.useEffect(() => { if (autoStart && (initialPrefill || !plan)) { const p=initialPrefill; setAnswers(p?{topic:p}:{}); setTopicQ(p); setStep(p?1:0); setOpen(true); } }, [autoStart]);
@@ -2115,7 +2146,7 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
     const current = qs[step];
     const topicReady = !!answers.topic || topicQ.trim().length >= 2;
     const canNext = current.key === 'topic' ? topicReady : !!answers[current.key];
-    const persistPlan = p => { const upgraded = lifeUpgradeStudyPlanV66(p); lifeRawStorageSet('life_study_plan_v2', JSON.stringify(upgraded)); try{lifeRawStorageRemove('life_study_prefill_v6')}catch(e){}; setPlan(upgraded); try {
+    const persistPlan = p => { const upgraded = lifeUpgradeStudyPlanV66(p); save('life_study_plan_v2',upgraded); try{lifeRawStorageRemove('life_study_prefill_v6')}catch(e){}; setPlan(upgraded); try {
         window.dispatchEvent(new CustomEvent('life:study-plan', { detail: upgraded }));
     }
     catch (e) { } };
@@ -2218,6 +2249,16 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
                 React.createElement("div", { className: "life-study-loop-title" }, React.createElement("small", null, "CICLO QUE FAZ O CONTEÚDO FICAR"), React.createElement("h3", null, "Assistir é só o começo."), React.createElement("p", null, "O aprendizado fica mais forte quando você recupera, aplica, corrige e volta ao conteúdo em outro dia.")),
                 React.createElement("div", { className: "life-study-loop-steps" }, (plan.orientation.learningLoop || []).map((x,i)=>React.createElement("article", { key: i }, React.createElement("i", null, i+1), React.createElement("b", null, x[0]), React.createElement("p", null, x[1]))))),
             plan.scheduleNote && React.createElement('div',{className:'v27-safe',role:'status'},plan.scheduleNote),
+            React.createElement('section',{className:'life151-study-review'},
+                React.createElement('div',null,
+                    React.createElement('small',null,'REVISÃO ADAPTATIVA · DADOS REGISTRADOS'),
+                    React.createElement('h3',null,'O que você realmente conseguiu aplicar?'),
+                    React.createElement('p',null,'Etapas marcadas: '+studyReview151.done+'/'+studyReview151.total+'. Próxima: '+studyReview151.next+'.')),
+                React.createElement('div',{className:'life151-study-options'},['Consegui aplicar','Preciso revisar','Ainda não testei'].map(v=>React.createElement('button',{type:'button',key:v,className:studyCurrentFeedback===v?'on':'',onClick:()=>submitStudyFeedback(v)},v))),
+                React.createElement('p',{className:'life151-study-advice'},studyReview151.advice),
+                plan.report?.missing?.length>0 && React.createElement('details',null,
+                    React.createElement('summary',null,'Informações que faltaram no diagnóstico'),
+                    React.createElement('p',null,plan.report.missing.slice(0,6).join(' · ')))),
             React.createElement("div", { className: "life-study-roadmap" }, visibleTimeline.map(s => { const done = (plan.completedStages || []).includes(s.index); return React.createElement("article", { className: 'life-study-stage ' + (done ? 'done' : ''), key: s.index },
                 React.createElement("i", null, done ? '✓' : String(s.index).padStart(2, '0')),
                 React.createElement("small", null, s.when),
@@ -4102,10 +4143,17 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
   const [createOpen,setCreateOpen]=React.useState(false);
   const [draft,setDraft]=React.useState({title:'',category:'Estudos',templateId:'study_enem',months:3,startDate:lifeProjectLocalDate150()});
   const [notice,setNotice]=React.useState('');
+  const [reviewAnswers,setReviewAnswers]=React.useState({priority:'',evidence:'',capacity:''});
+  const [reviewNotice,setReviewNotice]=React.useState('');
+  const [replanPreview,setReplanPreview]=React.useState(null);
+  const [restoreConfirm,setRestoreConfirm]=React.useState(null);
+  const experience=window.LifeExperience151;
+  const reliable=window.LifeReliability151;
+  const questions=category=>experience?.questionsFor(category)||[];
   const shown=Array.isArray(projects)?projects.filter(p=>p&&typeof p==='object'):[];
   const projectKey=p=>String(p?.id||p?.n||'');
   const guideWeeks=guide=>Array.isArray(guide?.weeks)?guide.weeks.filter(w=>w&&typeof w==='object'&&Array.isArray(w.steps)&&typeof w.id==='string'&&/^\d{4}-(0[1-9]|1[0-2])$/.test(String(w.monthKey||''))):[];
-  const selectFolder=p=>{const weeks=guideWeeks(p?.lifeGuide);const next=weeks.find(w=>w.steps.some(s=>s&&!s.done))||weeks[0];setActiveId(projectKey(p));setActiveMonth(next?.monthKey||'');setOpenWeek(next?.id||'');};
+  const selectFolder=p=>{const weeks=guideWeeks(p?.lifeGuide);const next=weeks.find(w=>w.steps.some(s=>s&&!s.done&&!s.optional))||weeks[0];setActiveId(projectKey(p));setActiveMonth(next?.monthKey||'');setOpenWeek(next?.id||'');setReviewAnswers(p?.lifeAnswers||{priority:'',evidence:'',capacity:''});setReviewNotice('');setReplanPreview(null);setRestoreConfirm(null);};
   const categories=['Todos','Estudos','Finanças','Bem-estar','Rotina','Habilidades','Projetos digitais','Outros'];
   const current=shown.find(p=>projectKey(p)===String(activeId));
   const myProjects=shown.filter(p=>!search || String(p.n||'').toLocaleLowerCase('pt-BR').includes(search.toLocaleLowerCase('pt-BR')));
@@ -4113,22 +4161,23 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
   const startCreate=(tpl)=>{
     const item=tpl||LIFE_PROJECT_TEMPLATES_150[0];
     setDraft({title:(tpl&&tpl.id!=='custom'?tpl.title:''),category:item.category,templateId:item.id,months:item.months,startDate:lifeProjectLocalDate150()});
-    setCreateOpen(true);setNotice('');
+    setReviewAnswers({priority:'',evidence:'',capacity:''});setCreateOpen(true);setNotice('');
   };
   const create=()=>{
     const title=String(draft.title||'').trim().slice(0,90);
     if(title.length<3){setNotice('Escreva o nome do projeto (pelo menos 3 caracteres).');return;}
     if(shown.length>=120){setNotice('Você já tem muitos projetos. Organize sua lista antes de criar mais.');return;}
     const tpl=LIFE_PROJECT_TEMPLATES_150.find(t=>t.id===draft.templateId)||LIFE_PROJECT_TEMPLATES_150[0];
-    const guide=lifeProjectGuideFor150(tpl,draft.months,draft.startDate);
+    const bareGuide=lifeProjectGuideFor150(tpl,draft.months,draft.startDate);
+    const guide=experience?.adaptGuide(bareGuide,reviewAnswers)||bareGuide;
     if(!guide.weeks.length){setNotice('Escolha uma data de início válida.');return;}
     const id='guided_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
     const newProject={id,n:title,outcome:'Seguir um roteiro semanal e revisar o progresso.',category:tpl.category,deadline:guide.endDate,
-      p:0,next:guide.weeks[0].steps[0].text,createdAt:new Date().toISOString(),lifeGuide:guide,stages:[]};
-    setProjects(prev=>[newProject,...(Array.isArray(prev)?prev:[])]);setActiveId(id);setCreateOpen(false);setActiveMonth(guide.weeks[0].monthKey);setOpenWeek('week_1');
+      p:0,next:guide.weeks[0].steps[0].text,createdAt:new Date().toISOString(),lifeGuide:guide,lifeAnswers:{...reviewAnswers},lifeReviews:[],stages:[]};
+    setProjects(prev=>[newProject,...(Array.isArray(prev)?prev:[])]);setActiveId(id);setCreateOpen(false);setActiveMonth(guide.weeks[0].monthKey);setOpenWeek('week_1');setReviewNotice('Projeto criado. A avaliação poderá ser atualizada sempre que sua rotina mudar.');
   };
   const completed=(guide)=>{
-    const all=guideWeeks(guide).flatMap(w=>w.steps.filter(s=>s&&typeof s==='object'));
+    const all=guideWeeks(guide).flatMap(w=>w.steps.filter(s=>s&&typeof s==='object'&&!s.optional));
     return {done:all.filter(s=>!!s.done).length,total:all.length};
   };
   const toggle=(id,weekId,stepId)=>{
@@ -4136,12 +4185,39 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
       if(projectKey(p)!==String(id)||!p.lifeGuide)return p;
       const weeks=(Array.isArray(p.lifeGuide.weeks)?p.lifeGuide.weeks:[]).map(w=>w?.id!==weekId||!Array.isArray(w?.steps)?w:{...w,steps:w.steps.map(s=>s?.id!==stepId?s:{...s,done:!s.done})});
       const guide={...p.lifeGuide,weeks};
-      const summary=completed(guide),next=weeks.flatMap(w=>w.steps||[]).find(x=>x&&!x.done);
+      const summary=completed(guide),next=weeks.flatMap(w=>w.steps||[]).find(x=>x&&!x.done&&!x.optional);
       const progress=summary.total?Math.round(100*summary.done/summary.total):0;
       const updates={lifeGuide:guide,lifeGuideProgress:progress};
       if(String(p.id||'').startsWith('guided_')){updates.p=progress;updates.next=next?.text||'Revisar o projeto concluído';}
       return {...p,...updates};
     }));
+  };
+  const saveReview=()=>{
+    if(!current)return;
+    const answers={...reviewAnswers};
+    const now=new Date().toISOString();
+    setProjects(prev=>(Array.isArray(prev)?prev:[]).map(p=>projectKey(p)!==projectKey(current)?p:{...p,lifeAnswers:answers,lifeReviews:[...(Array.isArray(p.lifeReviews)?p.lifeReviews:[]).slice(-23),{at:now,answers}],lifeReviewedAt:now}));
+    setReviewNotice('Revisão registrada. O roteiro continua igual até você confirmar alguma alteração.');
+  };
+  const propose=()=>{
+    if(!current)return;
+    const result=experience?.replanProposal(current);
+    setReplanPreview(result||{ok:false,reason:'Revisão indisponível.'});
+  };
+  const applyReplan=()=>{
+    if(!current||!replanPreview?.ok)return;
+    const snapshot=replanPreview.guide;
+    setProjects(prev=>(Array.isArray(prev)?prev:[]).map(p=>projectKey(p)!==projectKey(current)?p:{...p,lifeGuide:snapshot,deadline:snapshot.endDate}));
+    const next=snapshot.weeks.find(w=>w.steps?.some(x=>x&&!x.done&&!x.optional));
+    setActiveMonth(next?.monthKey||'');setOpenWeek(next?.id||'');setReplanPreview(null);
+    setReviewNotice('Novo calendário aplicado com confirmação. As tarefas concluídas foram mantidas.');
+  };
+  const recoverProjects=()=>{
+    if(!restoreConfirm)return;
+    const result=reliable?.recover('l18_projects',lifeRawStorageGet('life_data_owner_uid_v123','local'),0);
+    if(!result?.ok){setReviewNotice(result?.reason||'Nenhuma cópia disponível.');setRestoreConfirm(null);return;}
+    setProjects(result.data);setActiveId(null);setRestoreConfirm(null);
+    setReviewNotice('Cópia anterior restaurada neste navegador. Confira antes de sincronizar com outros dispositivos.');
   };
   const folderCard=(p)=>{
     const c=completed(p.lifeGuide), pct=c.total?Math.round(100*c.done/c.total):0;
@@ -4168,6 +4244,9 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
       group.weeks.push(w);
     });
     const selectedMonth=groups.find(g=>g.key===activeMonth)||groups[0];
+    const insight=experience?.report(current,current.lifeAnswers||{})||{facts:[],missing:[],suggestions:[],next:'',percent:0};
+    const recentReviews=Array.isArray(current.lifeReviews)?current.lifeReviews:[];
+    const qlist=questions(current.category);
     return h('main',{className:'lifeproj lifeproj-open'},
       h('div',{className:'lifeproj-toolbar'},h('button',{type:'button',onClick:()=>{setActiveId(null);setOpenWeek('');}},icon('arrow_back'),' Voltar às pastas'),h('span',null,'LIFE OS / PROJETOS')),
       h('section',{className:'lifeproj-project-hero'},h('div',null,h('small',null,(current.category||'PROJETO').toUpperCase()),h('h1',null,current.n),
@@ -4175,23 +4254,44 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
         h('div',{className:'lifeproj-progress'},h('b',null,pct+'% concluído'),h('span',null,`${totals.done} de ${totals.total} ações registradas`),h('i',{style:{'--lifeproj-fill':pct+'%'}}))),
       !guide?h('div',{className:'lifeproj-legacy'},h('h2',null,'Adicionar roteiro passo a passo'),h('p',null,'O projeto original será preservado. Escolha um modelo para organizar etapas semanais.'),
         h('div',{className:'lifeproj-models'},LIFE_PROJECT_TEMPLATES_150.map(t=>h('button',{key:t.id,type:'button',onClick:()=>{const updated=lifeProjectGuideFor150(t,t.months,lifeProjectLocalDate150());setProjects(prev=>prev.map(p=>projectKey(p)!==projectKey(current)?p:{...p,lifeGuide:updated,category:p.category||t.category}));setActiveMonth(updated.weeks[0]?.monthKey||'');setOpenWeek('week_1');}},icon(t.icon),h('b',null,t.title),' Gerar roteiro')))):
-      !!groups.length&&h('nav',{className:'lifeproj-month-tabs',role:'navigation','aria-label':'Meses do projeto'},groups.map((g,gi)=>h('button',{key:g.key,type:'button',className:g.key===selectedMonth?.key?'on':'','aria-current':g.key===selectedMonth?.key?'step':undefined,onClick:()=>{setActiveMonth(g.key);setOpenWeek(g.weeks.find(w=>w.steps.some(s=>s&&!s.done))?.id||g.weeks[0]?.id||'');}},
-        h('small',null,'MÊS '+(gi+1)),h('b',null,g.label),h('span',null,g.weeks.filter(w=>w.steps.every(s=>s?.done)).length+'/'+g.weeks.length+' semanas')))),
+      guide&&h('section',{className:'life151-review'},
+        h('div',{className:'life151-review-head'},h('div',null,h('small',null,'LIFE AI · REVISÃO CONTEXTUAL'),h('h2',null,'Seu próximo passo, com base no que registrou.'),h('p',null,insight.note)),
+          h('span',{className:'life151-progress-tag'},insight.done+' de '+insight.total+' ações')),
+        h('div',{className:'life151-review-summary'},
+          h('article',null,h('small',null,'PRÓXIMA AÇÃO'),h('b',null,insight.next)),
+          h('article',null,h('small',null,'RECOMENDAÇÃO'),h('b',null,insight.suggestions[0]||'Siga uma etapa de cada vez.')),
+          h('article',null,h('small',null,'CONFIANÇA DOS DADOS'),h('b',null,insight.missing.length?insight.missing.length+' pergunta(s) sem resposta':'Questionário preenchido'),h('span',null,'Não é previsão de resultado.'))),
+        h('details',{className:'life151-review-details'},h('summary',null,'✦ REVER PLANO E RESPONDER PERGUNTAS'),
+          h('div',{className:'life151-review-fields'},qlist.map(([id,question,options])=>h('label',{key:id},question,
+            h('select',{value:reviewAnswers[id]||'',onChange:e=>setReviewAnswers(a=>({...a,[id]:e.target.value}))},
+              h('option',{value:''},'Escolher resposta'),options.map(x=>h('option',{key:x,value:x},x)))))),
+          h('div',{className:'life151-review-actions'},
+            h('button',{type:'button',className:'primary',onClick:saveReview},'SALVAR REVISÃO'),
+            h('button',{type:'button',onClick:propose},'SIMULAR REORGANIZAÇÃO')),
+          recentReviews.length>0&&h('p',{className:'life151-review-history'},recentReviews.length+' revisões registradas · última em '+new Date(recentReviews[recentReviews.length-1].at).toLocaleDateString('pt-BR')),
+          replanPreview&&h('div',{className:'life151-review-proposal',role:'status'},
+            h('b',null,replanPreview.ok?'Proposta de calendário':'Nenhuma mudança necessária'),
+            h('p',null,replanPreview.ok?replanPreview.affected+' semanas pendentes seriam movidas '+replanPreview.days+' dia(s). '+replanPreview.reason:replanPreview.reason),
+            replanPreview.ok&&h('button',{type:'button',className:'primary',onClick:applyReplan},'CONFIRMAR NOVO CALENDÁRIO'),
+            h('button',{type:'button',onClick:()=>setReplanPreview(null)},'CANCELAR'))),
+        reviewNotice&&h('p',{className:'life151-review-notice',role:'status'},reviewNotice)),
+      !!groups.length&&h('nav',{className:'lifeproj-month-tabs',role:'navigation','aria-label':'Meses do projeto'},groups.map((g,gi)=>h('button',{key:g.key,type:'button',className:g.key===selectedMonth?.key?'on':'','aria-current':g.key===selectedMonth?.key?'step':undefined,onClick:()=>{setActiveMonth(g.key);setOpenWeek(g.weeks.find(w=>w.steps.some(s=>s&&!s.done&&!s.optional))?.id||g.weeks[0]?.id||'');}},
+        h('small',null,'MÊS '+(gi+1)),h('b',null,g.label),h('span',null,g.weeks.filter(w=>w.steps.every(s=>s?.done||s?.optional)).length+'/'+g.weeks.length+' semanas')))),
       h('div',{className:'lifeproj-timeline'},(selectedMonth?[selectedMonth]:[]).map(g=>h('section',{key:g.key,className:'lifeproj-month'},
         h('header',null,h('span',null,'ETAPA '+(groups.findIndex(x=>x.key===g.key)+1)),h('h2',null,g.label),h('small',null,`${g.weeks.length} semanas planejadas`)),
         g.weeks.map(w=>{
-          const done=w.steps.filter(s=>s&&s.done).length;
+          const required=w.steps.filter(s=>s&&!s.optional);const done=required.filter(s=>s.done).length;
           const isOpen=openWeek===w.id;
           return h('article',{key:w.id,className:'lifeproj-week'+(isOpen?' open':'')},
             h('button',{type:'button',className:'lifeproj-week-trigger','aria-expanded':isOpen,onClick:()=>setOpenWeek(isOpen?'':w.id)},
               h('span',{className:'lifeproj-week-no'},String(w.index).padStart(2,'0')),
               h('span',null,h('b',null,'Semana '+w.index+' · '+w.title),h('small',null,w.from+' — '+w.to)),
-              h('em',null,done+'/'+w.steps.length),icon(isOpen?'expand_less':'expand_more')),
+              h('em',null,done+'/'+required.length),icon(isOpen?'expand_less':'expand_more')),
             isOpen?h('div',{className:'lifeproj-week-body'},
               h('div',{className:'lifeproj-week-guide'},h('div',null,h('small',null,'O QUE FAZER'),h('p',null,w.focus)),
                 h('div',null,h('small',null,'EXEMPLO PRÁTICO'),h('p',null,w.example)),h('div',null,h('small',null,'DICA DA SEMANA'),h('p',null,w.tip))),
-              h('h3',null,'Ações desta semana'),h('div',{className:'lifeproj-checks'},w.steps.filter(s=>s&&typeof s==='object').map(s=>h('label',{key:s.id,className:s.done?'done':''},
-                h('input',{type:'checkbox',checked:!!s.done,onChange:()=>toggle(projectKey(current),w.id,s.id)}),h('span',null,s.text||'Próxima ação'))))):null);
+              h('h3',null,'Ações desta semana'),h('div',{className:'lifeproj-checks'},w.steps.filter(s=>s&&typeof s==='object'&&!s.optional).map(s=>h('label',{key:s.id,className:s.done?'done':''},
+                h('input',{type:'checkbox',checked:!!s.done,onChange:()=>toggle(projectKey(current),w.id,s.id)}),h('span',null,(s.text||'Próxima ação')+(s.optional?' · opcional':'')))))):null);
         })))),
       h('p',{className:'lifeproj-footnote'},'O LIFE acompanha ações registradas. O avanço mostrado não mede diretamente resultados externos, como desempenho, saúde ou dinheiro economizado.'));
   }
@@ -4199,7 +4299,11 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
     h('section',{className:'lifeproj-header'},h('small',null,'LIFE OS · SISTEMA DE PROJETOS'),h('h1',null,'Projetos com começo, caminho e evolução.'),
       h('p',null,'Escolha um objetivo, abra sua pasta e siga um tutorial cronológico. Cada mês tem semanas, instruções, exemplos e ações para acompanhar.'),
       h('div',{className:'lifeproj-top-actions'},h('button',{type:'button',className:'primary',onClick:()=>startCreate(null)},icon('add'),' CRIAR PROJETO'),
-        h('span',null,shown.length+' projeto(s) salvos'))),
+        h('span',null,shown.length+' projeto(s) salvos'),
+        (reliable?.preview('l18_projects',lifeRawStorageGet('life_data_owner_uid_v123','local'))||[]).length>0&&h('button',{type:'button',onClick:()=>setRestoreConfirm(true)},'RECUPERAR PASTAS'))),
+    restoreConfirm&&h('section',{className:'life151-recover-confirm'},h('b',null,'Restaurar a última cópia local das pastas?'),h('p',null,'Esta ação substituirá a lista atual por uma versão anterior deste navegador. Ela não altera diretamente a nuvem; confira seus dados antes de sincronizar.'),
+      h('button',{type:'button',className:'primary',onClick:recoverProjects},'SIM, RESTAURAR CÓPIA'),h('button',{type:'button',onClick:()=>setRestoreConfirm(null)},'CANCELAR')),
+    reviewNotice&&h('p',{className:'life151-review-notice',role:'status'},reviewNotice),
     shown.length?h('section',{className:'lifeproj-section'},h('div',{className:'lifeproj-section-title'},h('h2',null,'Minhas pastas'),
       h('input',{type:'search',value:search,onChange:e=>setSearch(e.target.value),placeholder:'Buscar projeto salvo…','aria-label':'Buscar projetos salvos'})),
       h('div',{className:'lifeproj-folders'},myProjects.map(folderCard)),!myProjects.length?h('p',null,'Nenhuma pasta corresponde à busca.'):null):
@@ -4216,6 +4320,10 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
         LIFE_PROJECT_TEMPLATES_150.map(t=>h('option',{value:t.id,key:t.id},t.category+' · '+t.title)))),
       h('div',{className:'lifeproj-form-row'},h('label',null,'Duração',h('select',{value:draft.months,onChange:e=>changeDraft({months:Number(e.target.value)})},Array.from({length:12},(_,i)=>i+1).map(m=>h('option',{value:m,key:m},m+(m===1?' mês':' meses'))))),
         h('label',null,'Data de início',h('input',{type:'date',required:true,value:draft.startDate,onChange:e=>changeDraft({startDate:e.target.value})}))),
+      h('fieldset',{className:'life151-create-questions'},h('legend',null,'3 perguntas para ajustar o roteiro'),
+        questions(draft.category).map(([id,question,options])=>h('label',{key:id},question,
+          h('select',{value:reviewAnswers[id]||'',onChange:e=>setReviewAnswers(a=>({...a,[id]:e.target.value}))},
+            h('option',{value:''},'Prefiro responder depois'),options.map(x=>h('option',{key:x,value:x},x)))))),
       h('p',{className:'lifeproj-dialog-hint'},'O calendário será gerado semana a semana. Você poderá marcar etapas concluídas e consultar cada tutorial sempre que quiser.'),
       notice?h('p',{className:'lifeproj-warning'},notice):null,
       h('div',{className:'lifeproj-dialog-actions'},h('button',{type:'button',onClick:()=>setCreateOpen(false)},'CANCELAR'),h('button',{type:'submit',className:'primary'},'CRIAR E ABRIR PASTA →')))):null);
@@ -6710,6 +6818,25 @@ function LifeOSV18() {
     };
     const localLifeAI = (raw) => {
         const text = raw.trim(), low = text.toLowerCase();
+        if(hasV18Pro && window.LifeExperience151 && /(projetos?|cronograma|replanej)/i.test(text) && /(relat[oó]rio|revis|diagn[oó]stico|passo|como|plano|replanej|cronograma|acompanha|melhorar)/i.test(text)){
+            if(!aiContextFlags.projects) return {text:'O contexto da aba Projetos está desativado. Ative Projetos nas permissões de contexto da LIFE AI ou abra a própria aba para revisar suas etapas.'};
+            const all=(Array.isArray(projects)?projects:[]).filter(p=>p&&p.n);
+            if(!all.length)return {text:'Você ainda não tem projetos salvos. Abra Projetos → Criar projeto; escolha seu objetivo e responda às perguntas sobre prioridade, evidência e disponibilidade.'};
+            const specified=all.filter(p=>lifeNormalizeText(text).includes(lifeNormalizeText(p.n)));
+            if(specified.length===0&&all.length>1)return {text:'Qual projeto você quer revisar? Tenho '+all.slice(0,6).map(p=>'“'+p.n+'”').join(', ')+(all.length>6?' e outros.':'')+' Abra a pasta desejada ou escreva o nome do projeto; não vou misturar cronogramas diferentes.'};
+            const p=specified[0]||all[0];
+            const diag=window.LifeExperience151.report(p,p.lifeAnswers||{});
+            const missing=diag.missing.length?'Antes de ajustar, responda: '+diag.missing[0]:'Suas respostas principais já estão registradas.';
+            return {text:[
+                'RELATÓRIO DO PROJETO “'+p.n+'”',
+                'AÇÕES MARCADAS: '+diag.done+'/'+diag.total+' ('+diag.percent+'%). Isto mede tarefas marcadas, não sucesso garantido.',
+                'PRÓXIMO PASSO: '+diag.next,
+                'DADOS DECLARADOS: '+diag.facts.filter(x=>x.answer).map(x=>x.question+' '+x.answer).join('; '),
+                'RECOMENDAÇÃO: '+diag.suggestions.join(' '),
+                missing,
+                'Para reorganizar prazos, abra a pasta → Rever plano → Simular reorganização; nenhuma data será alterada sem confirmação.'
+            ].join('\n')};
+        }
         if(hasV18Pro&&window.LifeIntelligence149){
             let study=null;
             if(aiContextFlags.plans)try{study=lifeSafeJSONParse(lifeRawStorageGet('life_study_plan_v2'),null);}catch(_){ }
@@ -6949,6 +7076,13 @@ function LifeOSV18() {
                     const saved=savedCustomWorkouts.find(w=>w?.answers);
                     if(saved){ const r=window.LifeIntelligence149.trainingReport(saved.answers); context.training_diagnostic={completeness:r.completeness,missing:r.missing,adjustments:r.adjustments,caution:r.caution,nextMeasure:r.nextMeasure}; }
                 }
+                if(aiContextFlags.projects && window.LifeExperience151){
+                    context.projects_diagnostic=(Array.isArray(projects)?projects:[]).slice(0,5).filter(p=>p&&p.lifeGuide).map(p=>{
+                        const r=window.LifeExperience151.report(p,p.lifeAnswers||{});
+                        return {name:String(p.n||'Projeto').slice(0,80),completed_actions:r.done,total_actions:r.total,next:r.next,
+                            missing_questions:r.missing.slice(0,3),recommendations:r.suggestions.slice(0,3),not_a_success_probability:true};
+                    });
+                }
                 const requestedMuscles = lifeExtractMuscleTargets(prompt);
                 if (requestedMuscles.length) {
                     context.requestedMuscles = requestedMuscles;
@@ -6992,7 +7126,8 @@ function LifeOSV18() {
         try {
             const validatedCommand = hasV18Pro ? window.LifeIntegrity123?.localCommand(prompt) : null;
             const life149Deterministic=!!(hasV18Pro&&window.LifeIntelligence149&&/(relat[oó]rio|diagn[oó]stico|livros? recomendados?|bibliografia)/i.test(prompt));
-            const deterministic = life149Deterministic || !!validatedCommand || (hasV18Pro && window.LifeBrain1463 && !!window.LifeBrain1463.answer(prompt,lifeBrainForAI())) || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
+            const life151ProjectQuery=!!(hasV18Pro&&/(projetos?|cronograma|replanej)/i.test(prompt)&&/(relat[oó]rio|revis|diagn[oó]stico|passo|como|plano|replanej|cronograma|acompanha|melhorar)/i.test(prompt));
+            const deterministic = life149Deterministic || life151ProjectQuery || !!validatedCommand || (hasV18Pro && window.LifeBrain1463 && !!window.LifeBrain1463.answer(prompt,lifeBrainForAI())) || lifeIsSimpleGreeting(prompt) || (lifeExtractMuscleTargets(prompt).length > 0 && /(trein|exerc|academia|me fale|monta|monte)/i.test(prompt));
             let result = validatedCommand ? {text:'Preparei uma ação. Revise e confirme antes de salvar no LIFE.',action:validatedCommand} : deterministic ? (hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt)) : await callLifeAIBackend(prompt);
             if (!result)
                 result = hasV18Pro ? localLifeAI(prompt) : localLifeAIFree(prompt);
@@ -7757,9 +7892,9 @@ function LifeOSV18() {
     const startWorkoutFinder = (fresh=false) => { const d=fresh?null:load('life_form_workout_finder_v9',null); setWfStep(life1455SafeStep(d?.step,14)); setWfAnswers(d?.answers||{}); setWfResults(null); setWfSafetyMessage(''); setWorkoutFinderOpen(true); };
     React.useEffect(()=>{try{save('life_form_workout_finder_v9',{open:workoutFinderOpen,step:wfStep,answers:wfAnswers,updatedAt:new Date().toISOString()})}catch(e){}},[workoutFinderOpen,wfStep,wfAnswers]);
     React.useEffect(() => { try {
-        lifeRawStorageSet('life_custom_workouts_v2', JSON.stringify(savedCustomWorkouts));
-    }
-    catch (e) { } }, [savedCustomWorkouts]);
+        const proposed=JSON.stringify(savedCustomWorkouts);
+        if(lifeRawStorageGet('life_custom_workouts_v2')!==proposed) save('life_custom_workouts_v2',savedCustomWorkouts);
+    } catch (e) { } }, [savedCustomWorkouts]);
     React.useEffect(() => {
         if (!hasV18Pro) return;
         try {
@@ -13913,7 +14048,8 @@ function LifeOSV18() {
                         React.createElement('button',{type:'button',className:'v27-next',onClick:start},'INICIAR ESTA SESSÃO →'),
                         index>0 ? React.createElement('button',{type:'button',className:'v27-back',onClick:()=>setSelectedReadyWorkoutDay(index-1)},'← DIA ANTERIOR') : null,
                         index<days.length-1 ? React.createElement('button',{type:'button',className:'v27-back',onClick:()=>setSelectedReadyWorkoutDay(index+1)},'PRÓXIMO DIA →') : null),
-                    lifeRenderWorkoutExerciseCards(day,openExerciseDetail));
+                    lifeRenderWorkoutExerciseCards(day,openExerciseDetail),
+                    React.createElement(LifeWorkoutReview151,{key:'ready_'+String(workout.id||workout.name)+'_'+index,workout,day,dayIndex:index}));
                 const aside=React.createElement('aside',{className:'life-workout-folder-side-v1497'},
                     React.createElement('div',{className:'life-workout-folder-side-card-v1497'},
                         React.createElement('small',null,'ORGANIZAÇÃO'),
@@ -13975,7 +14111,8 @@ function LifeOSV18() {
                         React.createElement("button", { type: "button", className: "v27-next", onClick: () => { startCustomWorkout(workout, activeIndex); setSelectedCustomWorkout(null); } }, activeKind === 'cardio' ? "INICIAR CORRIDA DESTE DIA →" : "INICIAR TREINO DESTE DIA →"),
                         activeIndex > 0 ? React.createElement("button", { type: "button", className: "v27-back", onClick: () => setSelectedCustomWorkoutDay(activeIndex - 1) }, "← DIA ANTERIOR") : null,
                         activeIndex < days.length - 1 ? React.createElement("button", { type: "button", className: "v27-back", onClick: () => setSelectedCustomWorkoutDay(activeIndex + 1) }, "PRÓXIMO DIA →") : null),
-                    lifeRenderWorkoutExerciseCards(activeDay, openExerciseDetail)
+                    lifeRenderWorkoutExerciseCards(activeDay, openExerciseDetail),
+                    !workout.temporary && React.createElement(LifeWorkoutReview151,{key:String(workout.id||workout.name)+'_'+activeIndex,workout,day:activeDay,dayIndex:activeIndex})
                 ) : React.createElement("div", { className: "vfit-empty life-workout-folder-main-v1497" }, "Este plano ainda não tem dias organizados.");
                 const sideColumn = activeDay ? React.createElement("aside", { className: "life-workout-folder-side-v1497" },
                     React.createElement("div", { className: "life-workout-folder-side-card-v1497" },

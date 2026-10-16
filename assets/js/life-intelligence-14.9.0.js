@@ -202,3 +202,98 @@
  }
  root.LifeIntelligence149=Object.freeze({recommendBooks,studyReport,trainingReport,analyzeWorkoutPlan,refineTrainingPlan,answer,version:'14.9.3'});
 })(typeof window!=='undefined'?window:globalThis);
+
+// LIFE OS 15.1 — deterministic, consent-first planning and recovery utilities.
+// This supplements the existing local/remote AI; it does not claim to replace either.
+(function(root){
+ 'use strict';
+ const CLAMP=(n,min,max)=>Math.max(min,Math.min(max,Number(n)||min));
+ const clean=(v,len=220)=>String(v==null?'':v).trim().slice(0,len);
+ const QUESTION_BANK={
+  Estudos:[['priority','Qual matéria ou habilidade merece mais atenção agora?',['Uma matéria','Várias matérias','Ainda não sei']],['evidence','Como você sabe que está aprendendo?',['Fiz questões ou exercícios','Consigo explicar com exemplos','Ainda não testei']],['capacity','Quantos momentos de estudo cabem na sua semana?',['1–2 momentos','3–4 momentos','5 ou mais momentos']]],
+  Finanças:[['priority','O que quer organizar primeiro?',['Registrar gastos','Planejar reserva','Rever despesas recorrentes']],['evidence','Você já tem registros de despesas?',['Sim, registrados','Alguns','Ainda não']],['capacity','Quanto tempo pode reservar para revisar?',['Uma vez na semana','Duas vezes na semana','Preciso começar pequeno']]],
+  'Bem-estar':[['priority','O que mais precisa melhorar na sua rotina?',['Consistência','Técnica e segurança','Recuperação e descanso']],['evidence','Como acompanha sua atividade?',['Registo sessões','Anoto disposição e conforto','Ainda não acompanho']],['capacity','Quanto espaço há na semana?',['1–2 dias','3–4 dias','Varia bastante']]],
+  default:[['priority','Qual é a próxima entrega observável?',['Aprender o básico','Criar uma primeira versão','Melhorar algo existente']],['evidence','Como vai verificar o resultado?',['Teste prático','Revisão de alguém','Ainda preciso definir']],['capacity','Quanto espaço real tem na semana?',['1–2 momentos','3–4 momentos','Varia bastante']]]
+ };
+ const questionsFor=(category)=>QUESTION_BANK[category]||QUESTION_BANK.default;
+ const report=(project,answers={})=>{
+  const qs=questionsFor(project?.category); const facts=qs.map(([id,question])=>({question,answer:clean(answers?.[id],100)}));
+  const missing=facts.filter(x=>!x.answer).map(x=>x.question);
+  const weeks=Array.isArray(project?.lifeGuide?.weeks)?project.lifeGuide.weeks:[];
+  const valid=weeks.flatMap(w=>Array.isArray(w?.steps)?w.steps.filter(s=>s&&typeof s==='object'&&!s.optional):[]);
+  const done=valid.filter(s=>s.done).length;
+  const upcoming=weeks.find(w=>Array.isArray(w?.steps)&&w.steps.some(s=>s&&!s.done&&!s.optional));
+  const suggestions=[];
+  if(answers.evidence==='Ainda não testei'||answers.evidence==='Ainda não acompanho'||answers.evidence==='Ainda não') suggestions.push('Registre um pequeno teste ou fato observado antes de interpretar o progresso.');
+  if(/1–2|começar pequeno|Varia bastante|Varia muito/.test(clean(answers.capacity))) suggestions.push('Distribua no máximo um ou dois blocos essenciais por semana; não preencha toda a agenda.');
+  if(answers.priority==='Recuperação e descanso') suggestions.push('Proteja dias de recuperação e ajuste a dificuldade se a disposição diminuir.');
+  if(answers.priority==='Rever despesas recorrentes') suggestions.push('Revise cobranças documentadas e compare com despesas necessárias antes de sugerir cortes.');
+  if(answers.priority==='Várias matérias') suggestions.push('Escolha primeiro duas prioridades de estudo e revise o resultado antes de ampliar.');
+  if(!suggestions.length) suggestions.push('Conclua uma etapa, registre o que aconteceu e revise o plano com base nesse resultado.');
+  return {facts,missing,suggestions,done,total:valid.length,percent:valid.length?Math.round(done/valid.length*100):0,
+   next:clean(upcoming?.steps?.find(s=>s&&!s.done)?.text||'Revise o objetivo e escolha a próxima etapa.'),
+   note:'O percentual indica ações marcadas, não resultado corporal, escolar ou financeiro.'};
+ };
+ const adaptGuide=(guide,answers={})=>{
+  if(!guide||!Array.isArray(guide.weeks))return guide;
+  const capacity=clean(answers.capacity);
+  const small=/1–2|começar pequeno|Varia bastante|Varia muito/.test(capacity);
+  return {...guide,adaptive:{...Object.fromEntries(['priority','evidence','capacity'].map(k=>[k,clean(answers[k],120)])),appliedAt:new Date().toISOString()},
+   weeks:guide.weeks.map((w,i)=>({...w,steps:(w.steps||[]).map((s,j)=>({...s,optional:small&&j===2})),
+    focus:clean(w.focus,700)+(small?' Priorize a primeira ação; a terceira fica opcional se a semana estiver apertada.':''),
+    reviewPrompt:i%4===3?'O que foi concluído, o que não funcionou e qual ajuste é útil?':'Qual evidência concreta você conseguiu registrar esta semana?'}))};
+ };
+ const todayKey=(date=new Date())=>{
+  const d=date instanceof Date?date:new Date(date);
+  if(!Number.isFinite(d.getTime()))return null;
+  return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
+ };
+ const parseDay=(key)=>{
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(String(key)))return null;
+  const [y,m,d]=key.split('-').map(Number);
+  const date=new Date(y,m-1,d,12);
+  return date.getFullYear()===y&&date.getMonth()===m-1&&date.getDate()===d?date:null;
+ };
+ const addDays=(day,n)=>{const date=parseDay(day);if(!date)return null;date.setDate(date.getDate()+n);return todayKey(date)};
+ const replanProposal=(project,asOf=todayKey())=>{
+  const weeks=project?.lifeGuide?.weeks;
+  const today=parseDay(asOf);
+  if(!Array.isArray(weeks)||!today)return {ok:false,reason:'Projeto sem cronograma válido.'};
+  const pending=weeks.find(w=>Array.isArray(w?.steps)&&w.steps.some(s=>s&&!s.done&&!s.optional));
+  if(!pending)return {ok:false,reason:'Nenhuma semana pendente.'};
+  const oldDate=parseDay(project.lifeGuide.startDate),first=parseDay(pending.from?.split('/').reverse().join('-'));
+  // The source calendar is local; when parsing pt-BR dates, validate all parts.
+  const from=first||oldDate;
+  if(!from)return {ok:false,reason:'Datas do projeto inválidas.'};
+  const todayAtNoon=new Date(today.getFullYear(),today.getMonth(),today.getDate(),12);
+  const shift=Math.max(0,Math.ceil((todayAtNoon-from)/(86400000)));
+  if(!shift)return {ok:false,reason:'O cronograma já está em dia.'};
+  const affected=weeks.filter(w=>Array.isArray(w?.steps)&&w.steps.some(s=>s&&!s.done&&!s.optional)).length;
+  if(!affected)return {ok:false,reason:'Nenhum item pendente.'};
+  const reformatted=weeks.map(w=>{
+    if(!w||!Array.isArray(w.steps))return w;
+    if(w.steps.every(s=>s?.done||s?.optional))return {...w};
+    const fr=String(w.from||'').split('/').reverse().join('-'),to=String(w.to||'').split('/').reverse().join('-');
+    const nf=addDays(fr,shift),nt=addDays(to,shift);
+    if(!nf||!nt)return null;
+    const fmt=x=>x.slice(8,10)+'/'+x.slice(5,7)+'/'+x.slice(0,4);
+    return {...w,from:fmt(nf),to:fmt(nt),monthKey:nf.slice(0,7)};
+  });
+  if(reformatted.some(x=>!x))return {ok:false,reason:'Existem datas inválidas; revise antes de reorganizar.'};
+  return {ok:true,days:shift,affected,guide:{...project.lifeGuide,weeks:reformatted,endDate:reformatted[reformatted.length-1]?.to?.split('/').reverse().join('-')||project.lifeGuide.endDate,
+   revisedAt:new Date().toISOString()},reason:'Proposta, ainda não aplicada. Semanas concluídas mantêm suas datas; somente semanas pendentes mudam.'};
+ };
+ const studyReview=(plan,feedback='')=>{
+  const done=new Set(plan?.completedStages||[]),steps=Array.isArray(plan?.timeline)?plan.timeline:[];
+  const next=steps.find(s=>!done.has(s.index));
+  const advice=feedback==='Preciso revisar'?'Volte a um exemplo guiado, corrija os erros e tente um exercício diferente.':feedback==='Consegui aplicar'?'Experimente uma questão nova, sem consulta, antes de marcar domínio.':'Faça uma questão curta ou explique o tema com suas palavras; ainda falta evidência de domínio.';
+  return {done:steps.filter(s=>done.has(s.index)).length,total:steps.length,next:next?.title||'Revisão final',advice};
+ };
+ const fitnessReview=(records=[],workoutId='')=>{
+  const rows=(Array.isArray(records)?records:[]).filter(x=>!workoutId||String(x.workoutId)===String(workoutId));
+  const latest=rows.slice(-1)[0];
+  const low=rows.slice(-3).filter(x=>x.feedback==='Preciso reduzir').length;
+  return {count:rows.length,last:latest||null,advice:low>=2?'Você marcou recuperação limitada em mais de uma revisão. Priorize descanso e ajuste com orientação adequada.':latest?.feedback==='Técnica a revisar'?'Na próxima sessão, revise a execução e escolha variações confortáveis antes de progredir.':latest?.feedback==='Sessão confortável'?'Mantenha a regularidade; não é necessário aumentar a dificuldade automaticamente.':'Após treinar, registre como foi a técnica e a recuperação.'};
+ };
+ root.LifeExperience151=Object.freeze({questionsFor,report,adaptGuide,replanProposal,studyReview,fitnessReview,todayKey,version:'15.1.0'});
+})(typeof window!=='undefined'?window:globalThis);
