@@ -231,7 +231,7 @@
   if(answers.priority==='Várias matérias') suggestions.push('Escolha primeiro duas prioridades de estudo e revise o resultado antes de ampliar.');
   if(!suggestions.length) suggestions.push('Conclua uma etapa, registre o que aconteceu e revise o plano com base nesse resultado.');
   return {facts,missing,suggestions,done,total:valid.length,percent:valid.length?Math.round(done/valid.length*100):0,
-   next:clean(upcoming?.steps?.find(s=>s&&!s.done)?.text||'Revise o objetivo e escolha a próxima etapa.'),
+   next:clean(upcoming?.steps?.find(s=>s&&!s.done&&!s.optional)?.text||'Revise o objetivo e escolha a próxima etapa.'),
    note:'O percentual indica ações marcadas, não resultado corporal, escolar ou financeiro.'};
  };
  const adaptGuide=(guide,answers={})=>{
@@ -284,10 +284,10 @@
    revisedAt:new Date().toISOString()},reason:'Proposta, ainda não aplicada. Semanas concluídas mantêm suas datas; somente semanas pendentes mudam.'};
  };
  const studyReview=(plan,feedback='')=>{
-  const done=new Set(plan?.completedStages||[]),steps=Array.isArray(plan?.timeline)?plan.timeline:[];
-  const next=steps.find(s=>!done.has(s.index));
+  const done=new Set(Array.isArray(plan?.completedStages)?plan.completedStages:[]),steps=Array.isArray(plan?.timeline)?plan.timeline:[];
+  const next=steps.find(s=>s&&!done.has(s.index));
   const advice=feedback==='Preciso revisar'?'Volte a um exemplo guiado, corrija os erros e tente um exercício diferente.':feedback==='Consegui aplicar'?'Experimente uma questão nova, sem consulta, antes de marcar domínio.':'Faça uma questão curta ou explique o tema com suas palavras; ainda falta evidência de domínio.';
-  return {done:steps.filter(s=>done.has(s.index)).length,total:steps.length,next:next?.title||'Revisão final',advice};
+  return {done:steps.filter(s=>s&&done.has(s.index)).length,total:steps.filter(s=>s&&typeof s==='object').length,next:next?.title||'Revisão final',advice};
  };
  const fitnessReview=(records=[],workoutId='')=>{
   const rows=(Array.isArray(records)?records:[]).filter(x=>!workoutId||String(x.workoutId)===String(workoutId));
@@ -297,3 +297,142 @@
  };
  root.LifeExperience151=Object.freeze({questionsFor,report,adaptGuide,replanProposal,studyReview,fitnessReview,todayKey,version:'15.1.0'});
 })(typeof window!=='undefined'?window:globalThis);
+
+
+/* LIFE 15.2 — Evidence-based continuity, task linking and UI decision support.
+   Pure local functions. No API calls, data writes or access to denied context. */
+(function(root){
+ 'use strict';
+ const arr=x=>Array.isArray(x)?x:[];
+ const obj=x=>!!x&&typeof x==='object'&&!Array.isArray(x);
+ const txt=(x,n=160)=>String(x==null?'':x).trim().slice(0,n);
+ const key=x=>txt(x,220).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').replace(/\s+/g,' ');
+ const projectId=p=>txt(p?.id||p?.n,120);
+ const unfinished=project=>arr(project?.lifeGuide?.weeks).flatMap(w=>arr(w?.steps).filter(step=>obj(step)&&!step.done&&!step.optional).map(step=>({projectId:projectId(project),projectName:txt(project.n||'Projeto',90),weekId:txt(w.id,70),weekNumber:Number(w.index)||0,stepId:txt(step.id,70),text:txt(step.text,180),from:txt(w.from,20)}))).filter(s=>s.text&&s.weekId&&s.stepId);
+ const calendarDate=raw=>{const match=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec(txt(raw));if(!match)return null;const [_,day,month,year]=match;const d=new Date(+year,+month-1,+day,12);return d.getDate()===+day&&d.getMonth()===+month-1&&d.getFullYear()===+year?`${year}-${month}-${day}`:null;};
+ function linkedTask(project,step,tasks=[]){
+  const pid=projectId(project),candidate=arr(tasks).filter(obj);
+  const match=candidate.find(t=>txt(t.projectId,120)===pid&&txt(t.projectWeekId,70)===txt(step?.weekId,70)&&txt(t.projectStepId,70)===txt(step?.stepId,70));
+  return match||candidate.find(t=>txt(t.projectId,120)===pid&&key(t.text||t.title)===key(step?.text))||null;
+ }
+ function taskPreview(project,tasks=[]){
+  if(!obj(project))return {ok:false,reason:'Escolha um projeto válido.'};
+  const remaining=unfinished(project); // Do not hide later steps in long (12-month) projects.
+  const next=remaining.find(st=>!linkedTask(project,st,tasks));
+  if(!next)return {ok:false,reason:remaining.length?'As próximas etapas já estão vinculadas às Tarefas.':'Este projeto não tem etapas pendentes.'};
+  const date=calendarDate(next.from);
+  return {ok:true,projectId:next.projectId,projectName:next.projectName,weekId:next.weekId,stepId:next.stepId,text:next.text,day:date,description:'Será criada apenas uma tarefa, sem alterar o cronograma do projeto. A data é referência da semana, não um compromisso em horário fixo.'};
+ }
+ function overview({projects=[],tasks=[],studyPlan=null,workouts=[],feedback=[]}={}){
+  const ps=arr(projects).filter(obj).slice(0,120),ts=arr(tasks).filter(obj).slice(0,300);
+  const guided=ps.filter(p=>arr(p.lifeGuide?.weeks).length);
+  const open=ts.filter(t=>!(t.done??t.completed));
+  const nextProject=guided.map(p=>taskPreview(p,ts)).find(x=>x.ok)||null;
+  const hasStudy=obj(studyPlan);
+  const timeline=hasStudy?arr(studyPlan.timeline):[];
+  const studied=new Set(arr(studyPlan?.completedStages).map(x=>String(x)));
+  const nextStudy=timeline.find(x=>obj(x)&&!studied.has(String(x.index)));
+  const lastFeedback=arr(feedback).filter(obj).slice(-1)[0]||null;
+  const available=['Projetos','Tarefas',...(hasStudy?['Estudos']:[]),...(arr(workouts).length?['Fitness']:[])];
+  // Deadline alerts use only explicit task timestamps, never guessed dates.
+  const now=Date.now();
+  const overdue=open.filter(t=>{
+    if(typeof t.dueAt!=='string'||!/\d{4}-\d{2}-\d{2}/.test(t.dueAt))return false;
+    const ms=Date.parse(t.dueAt);return Number.isFinite(ms)&&ms<now;
+  });
+  const linkedStatus=root.LifePlanLink154?.syncSummary(ps,ts)||null;
+  const notes=[];
+  if(overdue.length)notes.push({area:'Tarefas',label:'Conferir prazo informado',text:overdue.length+' tarefa(s) com prazo vencido',reason:'Prazos identificados apenas nos registros informados'});
+  if(nextProject)notes.push({area:'Projetos',label:'Próxima etapa disponível',text:nextProject.text,reason:'Primeira ação ainda não enviada à lista de Tarefas'});
+  if(open.length)notes.push({area:'Tarefas',label:'Tarefas pendentes',text:open.length+' pendente(s) registrado(s)',reason:'Contagem baseada nas tarefas locais, não em tempo estimado'});
+  if(nextStudy)notes.push({area:'Estudos',label:'Próxima etapa de estudo',text:txt(nextStudy.title||'Revisar conteúdo'),reason:'Etapa da trilha ainda não concluída'});
+  if(lastFeedback?.feedback==='Preciso reduzir'||lastFeedback?.feedback==='Técnica a revisar')notes.push({area:'Fitness',label:'Atenção à recuperação / técnica',text:txt(lastFeedback.feedback),reason:'Último relato informado pelo usuário, sem diagnóstico médico'});
+  return {version:'15.4.1',counts:{projects:ps.length,guidedProjects:guided.length,openTasks:open.length,overdueTasks:overdue.length,savedWorkouts:arr(workouts).length,studyStages:timeline.length,studyCompleted:timeline.filter(x=>obj(x)&&studied.has(String(x.index))).length},linkedStatus,available,notes:notes.slice(0,4),nextProject,nextStudy:nextStudy?txt(nextStudy.title):null,source:'Dados locais autorizados no LIFE; estimativas e resultados externos não foram inferidos.',missing:[!ps.length?'Nenhum projeto registrado':null,!hasStudy?'Sem trilha de estudos disponível':null].filter(Boolean)};
+ }
+ function question({projects=[],tasks=[],studyPlan=null,workouts=[],feedback=[]}={}){
+  const result=overview({projects,tasks,studyPlan,workouts,feedback});
+  if(result.counts.overdueTasks>0)return {area:'Tarefas',text:'Você tem '+result.counts.overdueTasks+' prazo(s) registrado(s) que passaram. Quer revisar essas tarefas antes de planejar novas?',options:['Revisar tarefas','Ver meus projetos']};
+  if(!result.counts.projects)return {area:'Projetos',text:'Qual objetivo você quer acompanhar primeiro?',options:['Estudos','Organização','Finanças','Bem-estar']};
+  if(result.nextProject)return {area:'Projetos',text:'Quer levar a próxima etapa de '+result.nextProject.projectName+' para suas Tarefas?',options:['Ver antes de criar','Apenas consultar']};
+  if(result.counts.openTasks>0)return {area:'Tarefas',text:'Qual das tarefas pendentes merece prioridade nesta semana?',options:['Ver lista','Rever projeto']};
+  return {area:'Projetos',text:'O que você gostaria de revisar nesta semana?',options:['Meus projetos','Estudos','Fitness']};
+ }
+ root.LifeExperience152=Object.freeze({version:'15.2.1',unfinished,linkedTask,taskPreview,overview,question,calendarDate});
+})(typeof window!=='undefined'?window:globalThis);
+
+
+/* LIFE OS 15.4 — Linked project/task status and evidence-safe guidance.
+ * Pure functions: caller owns mutation and synchronization. Never creates tasks,
+ * sends data, changes entitlements or calls the network. */
+(function(root){
+  'use strict';
+  const arr=x=>Array.isArray(x)?x:[];
+  const obj=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
+  const ident=x=>String(x===undefined||x===null?'':x).trim().slice(0,180);
+  const projectId=p=>ident(p?.id||p?.n);
+  const done=x=>x?.done===true||x?.completed===true;
+  const readProgress=project=>{
+    const valid=arr(project?.lifeGuide?.weeks).filter(obj).flatMap(w=>arr(w.steps).filter(s=>obj(s)&&!s.optional));
+    const finished=valid.filter(done).length;
+    return {finished,total:valid.length,percent:valid.length?Math.round(100*finished/valid.length):0};
+  };
+  function setStep(project,weekId,stepId,value){
+    const weeks=arr(project?.lifeGuide?.weeks);
+    let matched=false;
+    const next=weeks.map(w=>{
+      if(!obj(w)||ident(w.id)!==ident(weekId))return w;
+      const steps=arr(w.steps).map(st=>{
+        if(!obj(st)||ident(st.id)!==ident(stepId)||st.optional)return st;
+        if(done(st)===!!value)return st;
+        matched=true;return {...st,done:!!value,completed:undefined};
+      });
+      return {...w,steps};
+    });
+    if(!matched)return project;
+    const lifeGuide={...project.lifeGuide,weeks:next};
+    const progress=readProgress({lifeGuide});
+    const updates={...project,lifeGuide,lifeGuideProgress:progress.percent};
+    if(ident(project.id).startsWith('guided_')){
+      updates.p=progress.percent;
+      updates.next=next.flatMap(w=>arr(w?.steps)).find(s=>obj(s)&&!done(s)&&!s.optional)?.text||'Revisar o projeto concluído';
+    }
+    return updates;
+  }
+  function taskToProjects(projects,task,newDone){
+    if(!obj(task)||!ident(task.projectId)||!ident(task.projectWeekId)||!ident(task.projectStepId))
+      return {items:projects,changed:false,reason:'Sem vínculo explícito com etapa de Projeto.'};
+    if(typeof newDone!=='boolean')return {items:projects,changed:false,reason:'Estado inválido.'};
+    let changed=false;
+    const items=arr(projects).map(project=>{
+      if(!obj(project)||projectId(project)!==ident(task.projectId))return project;
+      const result=setStep(project,task.projectWeekId,task.projectStepId,newDone);
+      if(result!==project)changed=true;
+      return result;
+    });
+    return {items:changed?items:projects,changed,reason:changed?'Etapa de projeto vinculada atualizada.':'Nenhuma etapa correspondente precisou de atualização.'};
+  }
+  function stepToTasks(tasks,project,weekId,stepId,newDone){
+    if(!obj(project)||!ident(projectId(project))||!ident(weekId)||!ident(stepId)||typeof newDone!=='boolean')
+      return {items:tasks,changed:false,reason:'Identificadores incompletos.'};
+    const pid=projectId(project);
+    let changed=false;
+    const items=arr(tasks).map(task=>{
+      if(!obj(task)||ident(task.projectId)!==pid||ident(task.projectWeekId)!==ident(weekId)||ident(task.projectStepId)!==ident(stepId)||done(task)===newDone)return task;
+      changed=true;
+      return {...task,done:newDone,completed:undefined,doneAt:newDone?new Date().toISOString():undefined};
+    });
+    return {items:changed?items:tasks,changed,reason:changed?'Tarefa vinculada atualizada.':'Nenhuma tarefa vinculada precisou de atualização.'};
+  }
+  const syncSummary=(projects,tasks)=>{
+    const p=arr(projects).filter(obj), t=arr(tasks).filter(obj);
+    let linked=0, mismatch=0, orphan=0;
+    t.filter(x=>ident(x.projectWeekId)&&ident(x.projectStepId)&&ident(x.projectId)).slice(0,500).forEach(task=>{
+      const project=p.find(x=>projectId(x)===ident(task.projectId));
+      const step=arr(project?.lifeGuide?.weeks).filter(obj).flatMap(w=>arr(w.steps).filter(obj).map(s=>({w,s}))).find(x=>ident(x.w.id)===ident(task.projectWeekId)&&ident(x.s.id)===ident(task.projectStepId))?.s;
+      if(!step){orphan++;return;}
+      linked++;if(done(step)!==done(task))mismatch++;
+    });
+    return {linked,mismatch,orphan,canReview:mismatch>0||orphan>0,disclaimer:'Este diagnóstico é local. Não valida sincronização entre dispositivos.'};
+  };
+  root.LifePlanLink154=Object.freeze({version:'15.4.1',readProgress,taskToProjects,stepToTasks,syncSummary});
+})(typeof window==='object'?window:globalThis);

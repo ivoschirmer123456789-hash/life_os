@@ -138,11 +138,17 @@ const lifeRawStorageGet = (key, fallback = null) => {
     }
     catch (e) {
         window.lifeLastStorageError = String(e?.message || e || 'storage_read_error').slice(0, 240);
+        // A failed first read must never be replaced by a default empty state.
+        // Keep the affected key read-only until the page is safely reopened.
+        if(!(window.lifeStorageReadBlockedKeys154 instanceof Set))window.lifeStorageReadBlockedKeys154=new Set();
+        window.lifeStorageReadBlockedKeys154.add(String(key));
+        try { window.dispatchEvent(new CustomEvent('life:storage-error')); } catch (_) {}
         return fallback;
     }
 };
 const lifeRawStorageSet = (key, value) => {
     try {
+        if(window.lifeStorageReadBlockedKeys154?.has(String(key)))throw new Error('storage_read_failed_reload_required');
         window['localStorage'].setItem(key, String(value));
         return true;
     }
@@ -150,6 +156,7 @@ const lifeRawStorageSet = (key, value) => {
         try { document.documentElement.dataset.storage = 'error'; } catch (_) {}
         window.lifeLastStorageOk = false;
         window.lifeLastStorageError = String(e?.message || e || 'storage_write_error').slice(0, 240);
+        try { window.dispatchEvent(new CustomEvent('life:storage-error')); } catch (_) {}
         return false;
     }
 };
@@ -170,12 +177,17 @@ const lifeSessionSet = (key, value) => { try { window['sessionStorage'].setItem(
 const lifeSessionRemove = (key) => { try { window['sessionStorage'].removeItem(key); } catch (e) {} };
 const lifeStorageKeys = () => { try { return Object.keys(window['localStorage']); } catch (e) { return []; } };
 const lifeReadStoredValue = (key, fallback) => {
+    const raw = lifeRawStorageGet(key, null);
+    if (raw === null) return fallback;
     try {
-        const raw = lifeRawStorageGet(key, null);
-        if (raw === null) return fallback;
         return lifeCoerceStoredValue(JSON.parse(raw), fallback);
-    }
-    catch (e) {
+    } catch (e) {
+        // An unreadable record must never be silently replaced by empty defaults.
+        if (!(window.lifeStorageReadBlockedKeys154 instanceof Set)) window.lifeStorageReadBlockedKeys154 = new Set();
+        window.lifeStorageReadBlockedKeys154.add(String(key));
+        window.lifeLastStorageOk = false;
+        window.lifeLastStorageError = 'stored_json_invalid_reload_or_restore';
+        try { document.documentElement.dataset.storage = 'error'; window.dispatchEvent(new CustomEvent('life:storage-error')); } catch (_) {}
         return fallback;
     }
 };
@@ -187,19 +199,39 @@ const load = (key, fallback) => lifeReadStoredValue(key, fallback);
 const save = (key, value) => {
     try {
         const before = lifeRawStorageGet(key, null);
-        const ok = lifeRawStorageSet(key, JSON.stringify(value));
+        const payload=JSON.stringify(value);
+        if(typeof payload!=='string')throw new Error('invalid_storage_payload');
+        if(before===payload)return; // No-op re-renders must not mark remote data dirty.
+        const ok = lifeRawStorageSet(key,payload);
+        if(!ok) throw new Error(window.lifeLastStorageError || 'storage_write_failed');
         const dirtyOk = (key === 'life_cloud_synced_at' || key === 'life_local_dirty_at') ? true : lifeRawStorageSet('life_local_dirty_at', new Date().toISOString());
-        if (!ok || !dirtyOk) throw new Error(window.lifeLastStorageError || 'storage_write_failed');
+        if (!dirtyOk) throw new Error(window.lifeLastStorageError || 'storage_write_failed');
         document.documentElement.dataset.storage = 'ok';
         window.lifeLastStorageOk = true;
-        try { if (before !== null && before !== JSON.stringify(value)) window.LifeReliability151?.record(key,before,lifeRawStorageGet('life_data_owner_uid_v123','local')); } catch (_) {}
+        try { if (before !== null) window.LifeReliability151?.record(key,before,lifeRawStorageGet('life_data_owner_uid_v123','local')); } catch (_) {}
         try { window.LifeLogicEngine148?.notify(key); } catch (_) {}
     }
     catch (e) {
         document.documentElement.dataset.storage = 'error';
         window.lifeLastStorageOk = false;
         window.lifeLastStorageError = String(e?.message || e || 'storage_error').slice(0, 240);
+        try { window.dispatchEvent(new CustomEvent('life:storage-error')); } catch (_) {}
     }
+};
+// LIFE 15.4.2 — Only explicit user actions may claim a saved plan after read-back verification.
+function lifeVerifiedSave1542(key, value) {
+    try {
+        if (window.lifeStorageReadBlockedKeys154?.has(String(key))) return false;
+        const encoded = JSON.stringify(value);
+        if (typeof encoded !== 'string') return false;
+        if (lifeRawStorageGet(key, null) === encoded) return true;
+        save(key, value);
+        return window.lifeLastStorageOk !== false && lifeRawStorageGet(key, null) === encoded;
+    } catch (_) { return false; }
+}
+const lifeNormalizeStudyPlan1542 = plan => {
+    if (!plan || typeof plan !== 'object' || Array.isArray(plan)) return null;
+    return lifeUpgradeStudyPlanV66(plan);
 };
 const MASTER_QUESTIONS = [
     { id: 'q_foco', specialty: 'Objetivos & Direção', title: 'Qual é o seu objetivo número 1 agora?', desc: 'A grande meta que mudará o seu jogo nos próximos meses.', placeholder: 'Ex: Aprender inglês, lançar projeto...', type: 'text' },
@@ -2022,23 +2054,29 @@ const lifeStudyOrientation = (topic, answers, timeline) => {
 };
 
 const lifeUpgradeStudyPlanV66 = (plan) => {
-    if (!plan || typeof plan !== 'object') return plan;
+    if (!plan || typeof plan !== 'object' || Array.isArray(plan)) return null;
+    const savedAnswers = plan.answers && typeof plan.answers === 'object' && !Array.isArray(plan.answers) ? plan.answers : {};
     const safeAnswers = {
         goal: 'Aprender do zero', level: 'Iniciante', reading: 'Leio às vezes',
         blocker: 'Não sei por onde começar', session: '30 minutos', frequency: '3 dias',
-        deadline: 'Sem prazo definido', ...(plan.answers || {})
+        deadline: 'Sem prazo definido', ...savedAnswers
     };
-    const topic = LIFE_STUDY_TOPICS.find(t => t.title === plan.topic) || lifeStudySearch(plan.topic)[0] || { title: plan.topic || 'Tema escolhido', domain: plan.domain || 'Personalizado', stages: (plan.timeline || []).map(x => x.title), channels: [], books: [] };
-    const timeline = (Array.isArray(plan.timeline) ? plan.timeline : []).map((s, i, arr) => ({ ...s, ...lifeStudyStageExtras(topic, s.title, i, arr.length, safeAnswers) }));
-    const blocker = plan.blocker || LIFE_STUDY_BLOCKER_DATA[safeAnswers.blocker] || LIFE_STUDY_BLOCKER_DATA['Não sei por onde começar'];
-    return { ...plan, answers: safeAnswers, blocker, guideVersion: 66, timeline, orientation: lifeStudyOrientation(topic, safeAnswers, timeline) };
+    const stages = Array.isArray(plan.timeline) ? plan.timeline.filter(s => s && typeof s === 'object' && typeof s.title === 'string' && s.title.trim()) : [];
+    const topic = LIFE_STUDY_TOPICS.find(t => t.title === plan.topic) || lifeStudySearch(typeof plan.topic === 'string' ? plan.topic : '')[0] || { title: typeof plan.topic === 'string' ? plan.topic : 'Tema escolhido', domain: plan.domain || 'Personalizado', stages: stages.map(x => x.title), channels: [], books: [] };
+    const timeline = stages.map((s, i, arr) => ({ ...s, index: Number.isInteger(s.index) && s.index > 0 ? s.index : i + 1, ...lifeStudyStageExtras(topic, s.title, i, arr.length, safeAnswers) }));
+    const blocker = plan.blocker && typeof plan.blocker === 'object' && typeof plan.blocker.text === 'string' ? plan.blocker : LIFE_STUDY_BLOCKER_DATA[safeAnswers.blocker] || LIFE_STUDY_BLOCKER_DATA['Não sei por onde começar'];
+    const completedStages = Array.isArray(plan.completedStages) ? [...new Set(plan.completedStages.filter(x => timeline.some(s => s.index === x)))] : [];
+    const resources = Array.isArray(plan.resources) ? plan.resources.filter(r => r && typeof r === 'object' && typeof r.title === 'string') : [];
+    return { ...plan, answers: safeAnswers, blocker, completedStages, resources, guideVersion: 66, timeline, orientation: lifeStudyOrientation(topic, safeAnswers, timeline) };
 };
 
 const lifeBuildStudyPlan = (answers) => {
     const topic = LIFE_STUDY_TOPICS.find(t => t.title === answers.topic) || lifeStudySearch(answers.topic)[0] || { title: answers.topic || 'Tema escolhido', domain: 'Personalizado', stages: ['Fundamentos e vocabulário', 'Conceitos essenciais', 'Exemplos guiados', 'Prática ativa', 'Aplicações', 'Revisão e projeto final'], channels: ['Khan Academy'], books: ['Material introdutório confiável do tema'] };
     const deadlineWeeks = { '2 semanas': 2, '1 mês': 4, '3 meses': 12, '6 meses': 24, 'Sem prazo definido': 8 }[answers.deadline] || 8;
     const levelOffset = answers.baseline==='Errei a maioria das questões'||answers.baseline==='Ainda não testei o que sei'?0:(answers.level === 'Avançado' ? 2 : answers.level === 'Intermediário' ? 1 : 0);
-    const stages = (topic.stages || []).slice(levelOffset);
+    const availableStages = Array.isArray(topic.stages) ? topic.stages.filter(x => typeof x === 'string' && x.trim()) : [];
+    const stages = availableStages.slice(Math.min(levelOffset, Math.max(0, availableStages.length - 1)));
+    if (!stages.length) stages.push('Fundamentos e prática do tema');
     const sessionMinutes = Number(String(answers.session || '30').match(/\d+/)?.[0] || 30);
     const daysPerWeek = window.LifeGeneratorRules122.studyFrequency(answers.frequency);
     const isQuant = /Exatas|Dados|Tecnologia/.test(topic.domain || '') || /Matem|Física|Química|Cálculo|Estatística|Programação|SQL|Excel/i.test(topic.title || '');
@@ -2115,13 +2153,14 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
     const studyDraft = load('life_form_study_v9', null);
     const [open, setOpen] = React.useState(false), [step, setStep] = React.useState(()=>Math.max(0,Math.min(11,Number(studyDraft?.step)||0))), [answers, setAnswers] = React.useState(()=>initialPrefill?{topic:initialPrefill}:(studyDraft?.answers||{})), [topicQ, setTopicQ] = React.useState(initialPrefill||studyDraft?.topicQ||''), [topicFocus, setTopicFocus] = React.useState(false), [plan, setPlan] = React.useState(() => lifeUpgradeStudyPlanV66(load('life_study_plan_v2', null)));
     const [studyFeedback,setStudyFeedback]=React.useState(()=>load('life_study_feedback_151',{}));
+    const [studySaveError,setStudySaveError]=React.useState('');
     const studyFeedbackKey=String(plan?.id||plan?.topic||'study');
     const studyCurrentFeedback=studyFeedback?.[studyFeedbackKey]?.value||'';
     const studyReview151=window.LifeExperience151?.studyReview(plan,studyCurrentFeedback)||{done:0,total:0,next:'',advice:''};
     const submitStudyFeedback=(value)=>{
         if(!['Consegui aplicar','Preciso revisar','Ainda não testei'].includes(value))return;
         const next={...studyFeedback,[studyFeedbackKey]:{value,at:new Date().toISOString()}};
-        save('life_study_feedback_151',next);setStudyFeedback(next);
+        if (lifeVerifiedSave1542('life_study_feedback_151',next)) {setStudyFeedback(next);setStudySaveError('');} else setStudySaveError('Não foi possível salvar sua revisão. Verifique o armazenamento antes de continuar.');
     };
     React.useEffect(()=>{ try{ if(open) lifeRawStorageSet('life_form_study_v9',JSON.stringify({step,answers,topicQ,updatedAt:new Date().toISOString()})); }catch(e){} },[open,step,answers,topicQ]);
     const topicSuggestions = React.useMemo(() => { const found = lifeStudySearch(topicQ); return hasPro ? found : found.filter(t => !lifeStudyIsProTopic(t)); }, [topicQ, hasPro]);
@@ -2146,10 +2185,10 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
     const current = qs[step];
     const topicReady = !!answers.topic || topicQ.trim().length >= 2;
     const canNext = current.key === 'topic' ? topicReady : !!answers[current.key];
-    const persistPlan = p => { const upgraded = lifeUpgradeStudyPlanV66(p); save('life_study_plan_v2',upgraded); try{lifeRawStorageRemove('life_study_prefill_v6')}catch(e){}; setPlan(upgraded); try {
+    const persistPlan = p => { const upgraded = lifeNormalizeStudyPlan1542(p); if (!upgraded || !lifeVerifiedSave1542('life_study_plan_v2', upgraded)) { setStudySaveError('Falha ao salvar a trilha. Seus dados não foram descartados; tente novamente após verificar o armazenamento.'); return false; } setStudySaveError(''); try{lifeRawStorageRemove('life_study_prefill_v6')}catch(e){}; setPlan(upgraded); try {
         window.dispatchEvent(new CustomEvent('life:study-plan', { detail: upgraded }));
     }
-    catch (e) { } };
+    catch (e) { } return true; };
     const toggleStage = index => { if (!plan)
         return; const done = new Set(plan.completedStages || []); done.has(index) ? done.delete(index) : done.add(index); persistPlan({ ...plan, completedStages: [...done].sort((a, b) => a - b) }); };
     const next = () => { if (!canNext)
@@ -2157,7 +2196,7 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
         setAnswers(effective); if (step < qs.length - 1) {
         setStep(x => x + 1);
         return;
-    } if (!hasPro && lifeStudyIsProTopic(effective.topic)) { onUpgrade && onUpgrade('estudos_catalogo'); return; } const p = lifeBuildStudyPlan(effective); persistPlan(p); try{lifeRawStorageRemove('life_form_study_v9')}catch(e){}; setOpen(false); setStep(0); };
+    } if (!hasPro && lifeStudyIsProTopic(effective.topic)) { onUpgrade && onUpgrade('estudos_catalogo'); return; } try { const p = lifeBuildStudyPlan(effective); if (!Array.isArray(p?.timeline) || !p.timeline.length) throw new Error('empty_study_plan'); if (!persistPlan(p)) return; try{lifeRawStorageRemove('life_form_study_v9')}catch(e){}; setOpen(false); setStep(0); } catch (e) { console.error('[LIFE STUDY] Falha ao gerar a trilha',e); setStudySaveError('Não foi possível gerar esta trilha. Revise as respostas ou tente novamente; o questionário foi preservado.'); } };
     const planLocked = !!(plan && !hasPro && lifeStudyIsProTopic(plan.topic));
     const nextStage = plan?.timeline?.find(s => !(plan.completedStages || []).includes(s.index)) || null;
     const progress = plan?.timeline?.length ? Math.round(((plan.completedStages || []).length / plan.timeline.length) * 100) : 0;
@@ -2165,6 +2204,7 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
     const visibleTimeline = hasPro ? (plan?.timeline || []) : (plan?.timeline || []).slice(0, 2);
     const hiddenStageCount = Math.max(0, (plan?.timeline || []).length - visibleTimeline.length);
     return React.createElement("section", { className: "life-study-architect" },
+        studySaveError && React.createElement('p',{className:'life1542-save-alert',role:'alert'},studySaveError),
         React.createElement("div", { className: "life-study-architect-head" },
             React.createElement("div", null,
                 React.createElement("small", null, "LIFE / PLANEJADOR DE ESTUDOS"),
@@ -2321,6 +2361,7 @@ function LifeStudyArchitect({ onAsk, onStartFocus, hasPro = false, onUpgrade, au
         open && React.createElement("div", { className: "life-study-modal", onClick: e => { if (e.target === e.currentTarget)
                 setOpen(false); } },
             React.createElement("div", { className: "life-study-sheet" },
+                studySaveError && React.createElement('p',{className:'life1542-save-alert',role:'alert'},studySaveError),
                 React.createElement("div", { className: "life-study-progress" },
                     React.createElement("i", { style: { width: ((step + 1) / qs.length * 100) + '%' } })),
                 React.createElement("div", { className: "life-study-q" },
@@ -2498,7 +2539,7 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
     const nutritionDraft = (()=>{try{return lifeSafeJSONParse(lifeRawStorageGet('life_form_nutrition_v9'),null)}catch(e){return null}})();
     const [tab, setTab] = React.useState(nutritionDraft?.started ? 'Personalizado' : (initialTab || 'Visão geral'));
     const [started, setStarted] = React.useState(!!nutritionDraft?.started || initialTab === 'Personalizado');
-    const [step, setStep] = React.useState(()=>Number(nutritionDraft?.step)||0);
+    const [step, setStep] = React.useState(()=>Math.max(0, Math.min(LIFE_NUTRITION_QUESTIONS_V81.length - 1, Number(nutritionDraft?.step)||0)));
     const [answers, setAnswers] = React.useState(() => { try {
         return nutritionDraft?.answers || lifeSafeJSONParse(lifeRawStorageGet('life_nutrition_profile_v81'), {}) || {};
     }
@@ -2508,7 +2549,8 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
     const [result, setResult] = React.useState(null);
     const [ready, setReady] = React.useState(null);
     const [savedPreview, setSavedPreview] = React.useState(null);
-    const q = LIFE_NUTRITION_QUESTIONS_V81[step];
+    const [nutritionSaveError,setNutritionSaveError] = React.useState('');
+    const q = LIFE_NUTRITION_QUESTIONS_V81[Math.max(0, Math.min(LIFE_NUTRITION_QUESTIONS_V81.length - 1, Number(step) || 0))];
     React.useEffect(() => { try {
         lifeRawStorageSet('life_nutrition_profile_v81', JSON.stringify(answers));
     }
@@ -2558,7 +2600,11 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
         const noGluten = intolerances.includes('Glúten por diagnóstico/orientação');
         const noEgg = intolerances.includes('Ovo');
         const noNuts = intolerances.includes('Amendoim / castanhas');
-        const protectedPlan = window.LifeGeneratorRules122.buildNutrition(a);
+        let protectedPlan;
+        try { protectedPlan = window.LifeGeneratorRules122.buildNutrition(a); }
+        catch (e) { console.error('[LIFE NUTRITION] Falha de geração',e); setNutritionSaveError('Não foi possível gerar o plano. Suas respostas foram mantidas para revisão.'); return; }
+        if (!Array.isArray(protectedPlan?.items) || !protectedPlan.items.length) {setNutritionSaveError('O gerador não retornou refeições válidas. Revise suas respostas e tente novamente.');return;}
+        setNutritionSaveError('');
         let blocks = protectedPlan.items.map(x=>[x.k,x.t,x.d]);
         const trainingNote = a.training && a.training !== 'Não treino atualmente' && a.training !== 'Não tenho horário fixo' ? 'Treino informado: ' + String(a.training).toLowerCase() + '. O LIFE mantém a refeição anterior simples e conhecida e usa a próxima refeição normal como recuperação, sem exigir suplemento.' : 'Sem horário de treino fixo, o plano não prende alimentação a uma janela rígida.';
         const supp = Array.isArray(a.supplements) ? a.supplements : [];
@@ -2574,7 +2620,7 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
         if (protectedPlan.blocked) {
             shopping = [];
         }
-        try{lifeRawStorageRemove('life_form_nutrition_v9')}catch(e){}; setResult({ id: 'meal_' + Date.now(), name: 'Plano alimentar LIFE', createdAt: new Date().toISOString(), type: 'nutrition', answers: { ...a }, profile: { age: a.age, height: a.height, weight: a.weight, goal: a.goal, routine: a.routine, style: a.style, budget: a.budget, hunger: a.hunger }, items: blocks.map(x => ({ k: x[0], t: x[1], d: x[2] })), shopping, notes: [goalNote, budgetNote, trainingNote, restrictionNote, avoidNote, supplementNote + interest, bodyContextNote, safetyNote].filter(Boolean), personalization: { quick, portable, budgetMode, intolerances: restrictionLabels, avoidList, hunger: a.hunger || '', goal: a.goal || '' }, blocked: protectedPlan.blocked });
+        setResult({ id: 'meal_' + Date.now(), name: 'Plano alimentar LIFE', createdAt: new Date().toISOString(), type: 'nutrition', answers: { ...a }, profile: { age: a.age, height: a.height, weight: a.weight, goal: a.goal, routine: a.routine, style: a.style, budget: a.budget, hunger: a.hunger }, items: blocks.map(x => ({ k: x[0], t: x[1], d: x[2] })), shopping, notes: [goalNote, budgetNote, trainingNote, restrictionNote, avoidNote, supplementNote + interest, bodyContextNote, safetyNote].filter(Boolean), personalization: { quick, portable, budgetMode, intolerances: restrictionLabels, avoidList, hunger: a.hunger || '', goal: a.goal || '' }, blocked: protectedPlan.blocked });
         setStarted(false);
         setTab('Personalizado');
     };
@@ -2582,8 +2628,9 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
         return; if (!hasPro) {
         onUpgrade && onUpgrade('nutrition_personalized');
         return;
-    } onSavePlan && onSavePlan(result); setResult(null); setTab('Meus planos'); };
+    } if (typeof onSavePlan !== 'function' || onSavePlan(result) !== true) {setNutritionSaveError('O plano não foi salvo. Ele continua aberto para você tentar novamente.'); return;} setNutritionSaveError(''); try{lifeRawStorageRemove('life_form_nutrition_v9')}catch(e){} setResult(null); setTab('Meus planos'); };
     return React.createElement("section", { className: "life-nutrition" },
+        nutritionSaveError && React.createElement('p',{className:'life1542-save-alert',role:'alert'},nutritionSaveError),
         React.createElement("div", { className: "life-nutrition-hero" },
             React.createElement("div", null,
                 React.createElement("small", null, "FITNESS / ALIMENTA\u00C7\u00C3O / NUTRI\u00C7\u00C3O"),
@@ -2696,12 +2743,13 @@ function LifeNutritionStudio({ hasPro, onUpgrade, onSavePlan, savedPlans, onAsk,
                         React.createElement("button", { type: "button", onClick: () => setReady(null) }, "\u00D7")),
                     React.createElement("div", { className: "life-recipe-body" },
                         lifeRenderNutritionBlocksV149(ready.blocks.map(x => ({ k: x[0], t: x[1], d: x[2] }))),
+                        nutritionSaveError && React.createElement('p',{className:'life1542-save-alert',role:'alert'},nutritionSaveError),
                         React.createElement("div", { className: "life-nut-note" }, "Modelo flex\u00EDvel: adapte aos alimentos que voc\u00EA tolera, \u00E0 sua fome, rotina e orienta\u00E7\u00F5es individuais. Para alergias ou condi\u00E7\u00F5es m\u00E9dicas, n\u00E3o fa\u00E7a substitui\u00E7\u00F5es autom\u00E1ticas."),
                         React.createElement("div", { className: "life-nut-actions" },
                             React.createElement("button", { type: "button", className: "life-nut-primary", onClick: () => { if (!hasPro) {
                                     onUpgrade && onUpgrade('nutrition_personalized');
                                     return;
-                                } const plan = { id: 'ready_' + ready.id + '_' + Date.now(), name: ready.title, createdAt: new Date().toISOString(), type: 'nutrition-ready', items: ready.blocks.map(x => ({ k: x[0], t: x[1], d: x[2] })), profile: { goal: ready.title, routine: ready.tag, style: 'Modelo flexível' }, answers: { source: 'Plano pronto LIFE' } }; onSavePlan && onSavePlan(plan); setReady(null); setTab('Meus planos'); } }, hasPro ? 'SALVAR ESTE PLANO →' : 'SALVAR PLANO · PRO →'),
+                                } const plan = { id: 'ready_' + ready.id + '_' + Date.now(), name: ready.title, createdAt: new Date().toISOString(), type: 'nutrition-ready', items: ready.blocks.map(x => ({ k: x[0], t: x[1], d: x[2] })), profile: { goal: ready.title, routine: ready.tag, style: 'Modelo flexível' }, answers: { source: 'Plano pronto LIFE' } }; if (typeof onSavePlan !== 'function' || onSavePlan(plan) !== true) {setNutritionSaveError('Não foi possível salvar o plano pronto. A pasta permanece aberta.'); return;} setNutritionSaveError(''); setReady(null); setTab('Meus planos'); } }, hasPro ? 'SALVAR ESTE PLANO →' : 'SALVAR PLANO · PRO →'),
                             React.createElement("button", { type: "button", onClick: () => onAsk && onAsk('Quero adaptar o plano pronto ' + ready.title + ' para minha rotina. Faça perguntas sobre horários, preferências, alergias/intolerâncias, treino, orçamento e preparo antes de sugerir mudanças.') }, "\u2726 PERSONALIZAR COM LIFE AI")))))),
         tab === 'Receitas' && React.createElement(React.Fragment, null,
             React.createElement(LifeEditorialCookbook, { onAsk: onAsk }),
@@ -2854,14 +2902,15 @@ function LifeTodayBrainV3({ tasks = [], events = [], studyPlan = null, weather =
                 React.createElement("button", { type: "button", onClick: () => onAsk && onAsk(prompt) }, "EXPLICAR COM LIFE AI \u2192"))));
 }
 function LifeStudyMasteryV3({ onAsk, onStartFocus, onActivity }) {
-    const [plan, setPlan] = React.useState(() => lifeLocalGet('life_study_plan_v2', null));
+    const [plan, setPlan] = React.useState(() => lifeNormalizeStudyPlan1542(lifeLocalGet('life_study_plan_v2', null)));
     const [errors, setErrors] = React.useState(() => lifeLocalGet('life_study_errors_v3', []));
     const [reviews, setReviews] = React.useState(() => lifeLocalGet('life_study_reviews_v3', []));
     const [cards, setCards] = React.useState(() => lifeLocalGet('life_study_cards_v3', []));
     const [err, setErr] = React.useState({ topic: '', mistake: '', correct: '' });
     const [card, setCard] = React.useState({ q: '', a: '' });
     const [checks, setChecks] = React.useState({});
-    React.useEffect(() => { const fn = e => setPlan(e.detail || lifeLocalGet('life_study_plan_v2', null)); window.addEventListener('life:study-plan', fn); return () => window.removeEventListener('life:study-plan', fn); }, []);
+    const [masterySaveError,setMasterySaveError] = React.useState('');
+    React.useEffect(() => { const fn = e => setPlan(lifeNormalizeStudyPlan1542(e.detail || lifeLocalGet('life_study_plan_v2', null))); window.addEventListener('life:study-plan', fn); return () => window.removeEventListener('life:study-plan', fn); }, []);
     const next = plan?.timeline?.find(s => !(plan.completedStages || []).includes(s.index));
     const progress = plan?.timeline?.length ? Math.round(((plan.completedStages || []).length / plan.timeline.length) * 100) : 0;
     const today = new Date();
@@ -2872,9 +2921,10 @@ function LifeStudyMasteryV3({ onAsk, onStartFocus, onActivity }) {
     const saveCard = () => { if (!card.q.trim() || !card.a.trim())
         return; const rows = [{ id: Date.now(), ...card, topic: plan?.topic || 'Geral' }, ...cards].slice(0, 120); setCards(rows); lifeLocalSet('life_study_cards_v3', rows); setCard({ q: '', a: '' }); };
     const markMastered = () => { if (!plan || !next)
-        return; const masteredTitle = next.title; const updated = { ...plan, completedStages: [...(plan.completedStages || []), next.index] }; setPlan(updated); lifeLocalSet('life_study_plan_v2', updated); window.dispatchEvent(new CustomEvent('life:study-plan', { detail: updated })); onActivity && onActivity('ESTUDOS', 'Dominou ' + masteredTitle, 'Estudos', plan.topic || 'Trilha de estudos'); setChecks({}); };
+        return; const masteredTitle = next.title; const updated = { ...plan, completedStages: [...(plan.completedStages || []), next.index] }; if(!lifeVerifiedSave1542('life_study_plan_v2',updated)) {setMasterySaveError('A etapa não foi marcada: ocorreu uma falha de salvamento. Tente novamente.');return;} setMasterySaveError('');setPlan(updated); window.dispatchEvent(new CustomEvent('life:study-plan', { detail: updated })); onActivity && onActivity('ESTUDOS', 'Dominou ' + masteredTitle, 'Estudos', plan.topic || 'Trilha de estudos'); setChecks({}); };
     const ready = Object.values(checks).filter(Boolean).length >= 3;
     return React.createElement("section", { className: "life-mastery", "data-life-section": "study-mastery" },
+        masterySaveError && React.createElement('p',{className:'life1542-save-alert',role:'alert'},masterySaveError),
         React.createElement("div", { className: "life-mastery-head" },
             React.createElement("div", null,
                 React.createElement("small", null, "STUDY ENGINE / DOM\u00CDNIO"),
@@ -4133,7 +4183,7 @@ const lifeProjectGuideFor150 = (tpl, months = tpl.months || 3, startText) => {
   }
   return {version:1,templateId:tpl.id,category:tpl.category,months:count,startDate:lifeProjectLocalDate150(start),endDate:lifeProjectLocalDate150(new Date(end.getTime()-86400000)),weeks};
 };
-function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
+function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro,tasks=[],onStageTask,onToggleLinkedStep,studyPlan=null,workouts=[],fitnessFeedback=[]}){
   const h=React.createElement;
   const [activeId,setActiveId]=React.useState(null);
   const [openWeek,setOpenWeek]=React.useState('');
@@ -4147,13 +4197,16 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
   const [reviewNotice,setReviewNotice]=React.useState('');
   const [replanPreview,setReplanPreview]=React.useState(null);
   const [restoreConfirm,setRestoreConfirm]=React.useState(null);
+  const [taskDraftPreview,setTaskDraftPreview]=React.useState(null);
   const experience=window.LifeExperience151;
   const reliable=window.LifeReliability151;
+  const continuity=window.LifeExperience152;
+  const integrated=continuity?.overview({projects,tasks,studyPlan,workouts,feedback:fitnessFeedback})||null;
   const questions=category=>experience?.questionsFor(category)||[];
   const shown=Array.isArray(projects)?projects.filter(p=>p&&typeof p==='object'):[];
   const projectKey=p=>String(p?.id||p?.n||'');
   const guideWeeks=guide=>Array.isArray(guide?.weeks)?guide.weeks.filter(w=>w&&typeof w==='object'&&Array.isArray(w.steps)&&typeof w.id==='string'&&/^\d{4}-(0[1-9]|1[0-2])$/.test(String(w.monthKey||''))):[];
-  const selectFolder=p=>{const weeks=guideWeeks(p?.lifeGuide);const next=weeks.find(w=>w.steps.some(s=>s&&!s.done&&!s.optional))||weeks[0];setActiveId(projectKey(p));setActiveMonth(next?.monthKey||'');setOpenWeek(next?.id||'');setReviewAnswers(p?.lifeAnswers||{priority:'',evidence:'',capacity:''});setReviewNotice('');setReplanPreview(null);setRestoreConfirm(null);};
+  const selectFolder=p=>{const weeks=guideWeeks(p?.lifeGuide);const next=weeks.find(w=>w.steps.some(s=>s&&!s.done&&!s.optional))||weeks[0];setActiveId(projectKey(p));setActiveMonth(next?.monthKey||'');setOpenWeek(next?.id||'');setReviewAnswers(p?.lifeAnswers||{priority:'',evidence:'',capacity:''});setReviewNotice('');setReplanPreview(null);setRestoreConfirm(null);setTaskDraftPreview(null);};
   const categories=['Todos','Estudos','Finanças','Bem-estar','Rotina','Habilidades','Projetos digitais','Outros'];
   const current=shown.find(p=>projectKey(p)===String(activeId));
   const myProjects=shown.filter(p=>!search || String(p.n||'').toLocaleLowerCase('pt-BR').includes(search.toLocaleLowerCase('pt-BR')));
@@ -4181,16 +4234,22 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
     return {done:all.filter(s=>!!s.done).length,total:all.length};
   };
   const toggle=(id,weekId,stepId)=>{
+    const project=shown.find(p=>projectKey(p)===String(id));
+    const week=(Array.isArray(project?.lifeGuide?.weeks)?project.lifeGuide.weeks:[]).find(w=>String(w?.id)===String(weekId));
+    const step=(Array.isArray(week?.steps)?week.steps:[]).find(s=>String(s?.id)===String(stepId));
+    if(!project||!step||step.optional)return;
+    const newDone=!step.done;
     setProjects(prev=>(Array.isArray(prev)?prev:[]).map(p=>{
       if(projectKey(p)!==String(id)||!p.lifeGuide)return p;
-      const weeks=(Array.isArray(p.lifeGuide.weeks)?p.lifeGuide.weeks:[]).map(w=>w?.id!==weekId||!Array.isArray(w?.steps)?w:{...w,steps:w.steps.map(s=>s?.id!==stepId?s:{...s,done:!s.done})});
+      const weeks=(Array.isArray(p.lifeGuide.weeks)?p.lifeGuide.weeks:[]).map(w=>w?.id!==weekId||!Array.isArray(w?.steps)?w:{...w,steps:w.steps.map(s=>s?.id!==stepId?s:{...s,done:newDone})});
       const guide={...p.lifeGuide,weeks};
-      const summary=completed(guide),next=weeks.flatMap(w=>w.steps||[]).find(x=>x&&!x.done&&!x.optional);
+      const summary=completed(guide),next=weeks.flatMap(w=>w?.steps||[]).find(x=>x&&!x.done&&!x.optional);
       const progress=summary.total?Math.round(100*summary.done/summary.total):0;
       const updates={lifeGuide:guide,lifeGuideProgress:progress};
       if(String(p.id||'').startsWith('guided_')){updates.p=progress;updates.next=next?.text||'Revisar o projeto concluído';}
       return {...p,...updates};
     }));
+    if(typeof onToggleLinkedStep==='function')onToggleLinkedStep(project,weekId,stepId,newDone);
   };
   const saveReview=()=>{
     if(!current)return;
@@ -4202,29 +4261,54 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
   const propose=()=>{
     if(!current)return;
     const result=experience?.replanProposal(current);
-    setReplanPreview(result||{ok:false,reason:'Revisão indisponível.'});
+    const proposal=result?.ok?{...result,projectKey:projectKey(current),baseGuide:JSON.stringify(current.lifeGuide||null)}:result;
+    setReplanPreview(proposal||{ok:false,reason:'Revisão indisponível.'});
   };
   const applyReplan=()=>{
     if(!current||!replanPreview?.ok)return;
+    const base=replanPreview.baseGuide;
+    const id=replanPreview.projectKey;
+    // A completed checkbox, a new review or an imported calendar invalidates the old preview.
+    // Never overwrite newer changes with a stale full-calendar snapshot.
+    if(!base||id!==projectKey(current)||JSON.stringify(current.lifeGuide||null)!==base){
+      setReplanPreview(null);
+      setReviewNotice('O projeto mudou desde a simulação. Gere uma nova prévia para não perder alterações.');
+      return;
+    }
     const snapshot=replanPreview.guide;
-    setProjects(prev=>(Array.isArray(prev)?prev:[]).map(p=>projectKey(p)!==projectKey(current)?p:{...p,lifeGuide:snapshot,deadline:snapshot.endDate}));
-    const next=snapshot.weeks.find(w=>w.steps?.some(x=>x&&!x.done&&!x.optional));
+    setProjects(prev=>(Array.isArray(prev)?prev:[]).map(p=>{
+      if(projectKey(p)!==id)return p;
+      if(JSON.stringify(p.lifeGuide||null)!==base)return p;
+      return {...p,lifeGuide:snapshot,deadline:snapshot.endDate};
+    }));
+    const next=snapshot.weeks.find(w=>w?.steps?.some(x=>x&&!x.done&&!x.optional));
     setActiveMonth(next?.monthKey||'');setOpenWeek(next?.id||'');setReplanPreview(null);
-    setReviewNotice('Novo calendário aplicado com confirmação. As tarefas concluídas foram mantidas.');
+    setReviewNotice('Calendário confirmado. Nenhuma etapa registrada após a prévia deve ser substituída.');
   };
   const recoverProjects=()=>{
     if(!restoreConfirm)return;
     const result=reliable?.recover('l18_projects',lifeRawStorageGet('life_data_owner_uid_v123','local'),0);
     if(!result?.ok){setReviewNotice(result?.reason||'Nenhuma cópia disponível.');setRestoreConfirm(null);return;}
-    setProjects(result.data);setActiveId(null);setRestoreConfirm(null);
+    setProjects(result.data);setActiveId(null);setRestoreConfirm(null);setTaskDraftPreview(null);
     setReviewNotice('Cópia anterior restaurada neste navegador. Confira antes de sincronizar com outros dispositivos.');
+  };
+  const showStageTaskPreview=()=>{
+    const result=continuity?.taskPreview(current,tasks);
+    if(!result?.ok){setReviewNotice(result?.reason||'Nenhuma tarefa disponível.');return;}
+    setTaskDraftPreview(result);
+  };
+  const confirmStageTask=()=>{
+    if(!taskDraftPreview?.ok||typeof onStageTask!=='function')return;
+    const result=onStageTask(taskDraftPreview);
+    setReviewNotice(result?.message||'Ação conferida.');
+    setTaskDraftPreview(null);
   };
   const folderCard=(p)=>{
     const c=completed(p.lifeGuide), pct=c.total?Math.round(100*c.done/c.total):0;
     return h('button',{key:projectKey(p),type:'button',className:'lifeproj-folder',onClick:()=>selectFolder(p)},
       h('span',{className:'material-symbols-rounded lifeproj-folder-icon'},'folder_special'),
       h('span',{className:'lifeproj-folder-copy'},h('small',null,p.category||'Projeto'),h('b',null,p.n||'Projeto sem nome'),
-        h('em',null,p.lifeGuide?`${p.lifeGuide.months} meses · ${p.lifeGuide.weeks.length} semanas`: 'Projeto existente · adicionar guia')),
+        h('em',null,guideWeeks(p.lifeGuide).length?`${Number(p.lifeGuide?.months)||'Vários'} meses · ${guideWeeks(p.lifeGuide).length} semanas`: 'Projeto existente · adicionar guia')),
       h('span',{className:'lifeproj-folder-percent'},pct+'%',h('i',{style:{'--lifeproj-fill':pct+'%'}})));
   };
   const icon=(name)=>h('span',{className:'lifeproj-ui-icon','aria-hidden':true},({
@@ -4250,7 +4334,7 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
     return h('main',{className:'lifeproj lifeproj-open'},
       h('div',{className:'lifeproj-toolbar'},h('button',{type:'button',onClick:()=>{setActiveId(null);setOpenWeek('');}},icon('arrow_back'),' Voltar às pastas'),h('span',null,'LIFE OS / PROJETOS')),
       h('section',{className:'lifeproj-project-hero'},h('div',null,h('small',null,(current.category||'PROJETO').toUpperCase()),h('h1',null,current.n),
-        h('p',null,guide?`Roteiro de ${guide.months} meses, organizado em ${guide.weeks.length} semanas. Os prazos são sugestões de organização, não garantias de resultado.`:'Este projeto já existe no seu LIFE. Crie um cronograma para visualizar as próximas etapas.')),
+        h('p',null,guide?`Roteiro de ${guide.months||'vários'} meses, organizado em ${guideWeeks(guide).length} semanas. Os prazos são sugestões de organização, não garantias de resultado.`:'Este projeto já existe no seu LIFE. Crie um cronograma para visualizar as próximas etapas.')),
         h('div',{className:'lifeproj-progress'},h('b',null,pct+'% concluído'),h('span',null,`${totals.done} de ${totals.total} ações registradas`),h('i',{style:{'--lifeproj-fill':pct+'%'}}))),
       !guide?h('div',{className:'lifeproj-legacy'},h('h2',null,'Adicionar roteiro passo a passo'),h('p',null,'O projeto original será preservado. Escolha um modelo para organizar etapas semanais.'),
         h('div',{className:'lifeproj-models'},LIFE_PROJECT_TEMPLATES_150.map(t=>h('button',{key:t.id,type:'button',onClick:()=>{const updated=lifeProjectGuideFor150(t,t.months,lifeProjectLocalDate150());setProjects(prev=>prev.map(p=>projectKey(p)!==projectKey(current)?p:{...p,lifeGuide:updated,category:p.category||t.category}));setActiveMonth(updated.weeks[0]?.monthKey||'');setOpenWeek('week_1');}},icon(t.icon),h('b',null,t.title),' Gerar roteiro')))):
@@ -4275,6 +4359,13 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
             replanPreview.ok&&h('button',{type:'button',className:'primary',onClick:applyReplan},'CONFIRMAR NOVO CALENDÁRIO'),
             h('button',{type:'button',onClick:()=>setReplanPreview(null)},'CANCELAR'))),
         reviewNotice&&h('p',{className:'life151-review-notice',role:'status'},reviewNotice)),
+      guide&&h('section',{className:'life152-connect'},
+        h('div',{className:'life152-connect-copy'},h('small',null,'PROJETOS + TAREFAS'),h('h2',null,'Um próximo passo, sem duplicação.'),h('p',null,'Confira a próxima ação antes de enviá-la para Tarefas. A partir de agora, marcar uma ação vinculada em uma das áreas atualiza a etapa correspondente na outra.'),
+          (()=>{const status=window.LifePlanLink154?.syncSummary([current],tasks);return status?.canReview?h('p',{className:'life154-link-note',role:'status'},status.mismatch+' etapa(s) divergente(s) · '+status.orphan+' vínculo(s) antigo(s) sem etapa. Confira seus dados; nada foi apagado.'):null;})()),
+        h('button',{type:'button',className:'life152-primary',onClick:showStageTaskPreview},'REVISAR PRÓXIMA AÇÃO →'),
+        taskDraftPreview&&h('div',{className:'life152-task-confirm',role:'status'},
+          h('b',null,taskDraftPreview.text),h('p',null,taskDraftPreview.description),
+          h('div',null,h('button',{type:'button',className:'life152-primary',onClick:confirmStageTask},'CONFIRMAR E CRIAR TAREFA'),h('button',{type:'button',onClick:()=>setTaskDraftPreview(null)},'CANCELAR')))),
       !!groups.length&&h('nav',{className:'lifeproj-month-tabs',role:'navigation','aria-label':'Meses do projeto'},groups.map((g,gi)=>h('button',{key:g.key,type:'button',className:g.key===selectedMonth?.key?'on':'','aria-current':g.key===selectedMonth?.key?'step':undefined,onClick:()=>{setActiveMonth(g.key);setOpenWeek(g.weeks.find(w=>w.steps.some(s=>s&&!s.done&&!s.optional))?.id||g.weeks[0]?.id||'');}},
         h('small',null,'MÊS '+(gi+1)),h('b',null,g.label),h('span',null,g.weeks.filter(w=>w.steps.every(s=>s?.done||s?.optional)).length+'/'+g.weeks.length+' semanas')))),
       h('div',{className:'lifeproj-timeline'},(selectedMonth?[selectedMonth]:[]).map(g=>h('section',{key:g.key,className:'lifeproj-month'},
@@ -4301,6 +4392,20 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
       h('div',{className:'lifeproj-top-actions'},h('button',{type:'button',className:'primary',onClick:()=>startCreate(null)},icon('add'),' CRIAR PROJETO'),
         h('span',null,shown.length+' projeto(s) salvos'),
         (reliable?.preview('l18_projects',lifeRawStorageGet('life_data_owner_uid_v123','local'))||[]).length>0&&h('button',{type:'button',onClick:()=>setRestoreConfirm(true)},'RECUPERAR PASTAS'))),
+    integrated&&h('section',{className:'life152-overview','aria-label':'Resumo integrado do LIFE'},
+      h('div',{className:'life152-overview-heading'},h('small',null,'VISÃO GERAL'),h('h2',null,'O que merece atenção agora'),h('p',null,'Só informações que você realmente registrou. Sem gráficos inventados e sem ações automáticas.')),
+      h('div',{className:'life152-overview-grid'},
+        [['folder_special','Projetos',integrated.counts.projects+' salvos'],['checklist','Tarefas',integrated.counts.openTasks+' pendentes'+(integrated.counts.overdueTasks?' · '+integrated.counts.overdueTasks+' prazos':'')],['school','Estudos',integrated.counts.studyStages?integrated.counts.studyCompleted+'/'+integrated.counts.studyStages+' etapas':'Sem trilha'],['fitness_center','Fitness',integrated.counts.savedWorkouts+' planos']].map(([icon,label,metric])=>h('button',{type:'button',key:label,onClick:()=>label!=='Projetos'&&onGo?.(label),disabled:label==='Projetos'},
+          h('span',{className:'material-symbols-rounded'},icon),h('b',null,label),h('small',null,metric)))),
+      integrated.notes.length>0&&h('div',{className:'life152-overview-next'},
+        h('small',null,'PRÓXIMA AÇÃO SUGERIDA'),
+        h('b',null,integrated.notes[0].text),
+        h('span',null,integrated.notes[0].reason),
+        integrated.notes[0].area==='Projetos'&&integrated.nextProject?.projectId&&h('button',{type:'button',className:'life154-open-step',onClick:()=>{
+          const target=shown.find(p=>projectKey(p)===String(integrated.nextProject.projectId));
+          if(target)selectFolder(target);
+        }},'ABRIR A PASTA DO PROJETO →'),
+        integrated.notes[0].area==='Tarefas'&&h('button',{type:'button',className:'life154-open-step',onClick:()=>onGo?.('Tarefas')},'ABRIR TAREFAS →'))),
     restoreConfirm&&h('section',{className:'life151-recover-confirm'},h('b',null,'Restaurar a última cópia local das pastas?'),h('p',null,'Esta ação substituirá a lista atual por uma versão anterior deste navegador. Ela não altera diretamente a nuvem; confira seus dados antes de sincronizar.'),
       h('button',{type:'button',className:'primary',onClick:recoverProjects},'SIM, RESTAURAR CÓPIA'),h('button',{type:'button',onClick:()=>setRestoreConfirm(null)},'CANCELAR')),
     reviewNotice&&h('p',{className:'life151-review-notice',role:'status'},reviewNotice),
@@ -4308,7 +4413,7 @@ function LifeProjectsHub150({projects=[],setProjects,onGo,hasPro}){
       h('input',{type:'search',value:search,onChange:e=>setSearch(e.target.value),placeholder:'Buscar projeto salvo…','aria-label':'Buscar projetos salvos'})),
       h('div',{className:'lifeproj-folders'},myProjects.map(folderCard)),!myProjects.length?h('p',null,'Nenhuma pasta corresponde à busca.'):null):
       h('section',{className:'lifeproj-empty'},icon('folder_open'),h('h2',null,'Sua primeira pasta começa aqui.'),h('p',null,'Escolha um modelo abaixo ou crie um projeto com seu próprio objetivo.')),
-    h('section',{className:'lifeproj-section'},h('div',{className:'lifeproj-section-title'},h('h2',null,'Explorar projetos guiados'),h('p',null,'Modelos com roteiro completo, ajustável à sua rotina.')),
+    h('details',{className:'lifeproj-section life152-models-toggle'},h('summary',null,h('span',{className:'material-symbols-rounded'},'auto_awesome'),h('span',null,h('b',null,'Explorar modelos guiados'),h('small',null,'Abra para escolher um novo roteiro de projeto'))),h('div',{className:'lifeproj-section-title'},h('h2',null,'Explorar projetos guiados'),h('p',null,'Modelos com roteiro completo, ajustável à sua rotina.')),
       h('div',{className:'lifeproj-filters'},categories.map(c=>h('button',{key:c,type:'button',className:c===filter?'on':'',onClick:()=>setFilter(c)},c))),
       h('div',{className:'lifeproj-models'},LIFE_PROJECT_TEMPLATES_150.filter(t=>filter==='Todos'||t.category===filter).map(t=>h('article',{key:t.id,className:'lifeproj-model'},
         h('div',{className:'lifeproj-model-icon'},icon(t.icon)),h('small',null,t.category.toUpperCase()),h('h3',null,t.title),h('p',null,t.description),
@@ -5194,6 +5299,24 @@ function LifeOSV18() {
     const [lifeAccountSwitch, setLifeAccountSwitch] = React.useState(null);
     const [lifeBackupDownloadStarted, setLifeBackupDownloadStarted] = React.useState(false);
     const [tasks, setTasks] = React.useState(() => lifeReadStoredValue('lifeos_v5_tasks', []));
+    const [lifeStorageWarning154,setLifeStorageWarning154] = React.useState(() => Boolean(window.lifeStorageReadBlockedKeys154?.size)||window.lifeLastStorageOk===false);
+    React.useEffect(() => {
+        const onFailure=()=>setLifeStorageWarning154(true);
+        window.addEventListener('life:storage-error',onFailure);
+        return ()=>window.removeEventListener('life:storage-error',onFailure);
+    },[]);
+    const lifeRetryStorage154=()=>{
+        const key='life_storage_healthcheck_154';
+        const ok=lifeRawStorageSet(key,new Date().toISOString());
+        if(ok){
+            lifeRawStorageRemove(key);
+            if(window.lifeStorageReadBlockedKeys154?.size){
+                setLifeStorageWarning154(true);
+                setToast('A leitura anterior falhou. Reabra o LIFE para proteger os dados.');
+            } else {setLifeStorageWarning154(false);setToast('Armazenamento disponível. Confira alterações anteriores.');}
+        }
+        else setLifeStorageWarning154(true);
+    };
     const [lifeTrash, setLifeTrash] = React.useState(() => lifeReadStoredValue('life_trash_v1', []));
     const [lastDeleted, setLastDeleted] = React.useState(null);
     const deleteTimerRef = React.useRef(null);
@@ -5219,10 +5342,9 @@ function LifeOSV18() {
         setLifeTrash(prev => prev.filter(x=>x.id!==row.id)); setLastDeleted(null); setToast('ITEM RESTAURADO'); setTimeout(()=>setToast(''),1400);
     };
     const purgeTrashItem = (id) => setLifeTrash(prev => prev.filter(x=>x.id!==id));
-    React.useEffect(() => { try {
-        lifeRawStorageSet('lifeos_v5_tasks', JSON.stringify(tasks));
-    }
-    catch (e) { } }, [tasks]);
+    // Task persistence now uses the same guarded save/backup path as Projects.
+    // A failed write is surfaced instead of silently discarding the change.
+    React.useEffect(() => { save('lifeos_v5_tasks',tasks); }, [tasks]);
     const [realPlan, setRealPlan] = React.useState('FREE');
     const [planMeta, setPlanMeta] = React.useState({ rawPlan: 'FREE', proUntil: null, subscriptionStatus: null, checkedAt: null });
     const [proActivation, setProActivation] = React.useState('idle');
@@ -6533,7 +6655,7 @@ function LifeOSV18() {
     }, [notificationPrefs.morning, notificationPrefs.night, notificationPrefs.morningTime, notificationPrefs.nightTime]);
     const aiAreaMap = {
         'Estudos': 'Estudos', 'Fitness': 'Fitness', 'Dieta': 'Alimentação', 'Receitas': 'Alimentação', 'Finanças': 'Finanças',
-        'Life': 'Planejamento', 'Hoje': 'Planejamento', 'Tarefas': 'Organização', 'Meu LIFE': 'Organização', 'Evolução': 'Evolução', 'Archive': 'Organização', 'Perfil': 'Sistema', 'Notas': 'Organização', 'Biblioteca': 'Geral', 'IA': 'Geral'
+        'Life': 'Planejamento', 'Projetos': 'Planejamento', 'Hoje': 'Planejamento', 'Tarefas': 'Organização', 'Meu LIFE': 'Organização', 'Evolução': 'Evolução', 'Archive': 'Organização', 'Perfil': 'Sistema', 'Notas': 'Organização', 'Biblioteca': 'Geral', 'IA': 'Geral'
     };
     const aiContextArea = (view === 'IA' ? aiOriginView : view) || 'Hoje';
     const aiSpecialist = aiManualSpecialist === 'Auto' ? (aiAreaMap[aiContextArea] || 'Geral') : aiManualSpecialist;
@@ -6558,6 +6680,15 @@ function LifeOSV18() {
             ctx.notes = v49Notes.slice(0, 8).map(n => ({ id: n.id, text: aiSafeText(n.text, 120), date: n.date }));
         if (aiContextFlags.projects)
             ctx.projects = projects.slice(0, 12).map(p => ({ id: p.id || p.n, title: aiSafeText(p.n, 100), next: aiSafeText(p.next, 100), outcome: aiSafeText(p.outcome, 120), deadline: p.deadline || null, goalId: p.goalId || null, stages: (p.stages || []).slice(0, 10) }));
+        if(window.LifeExperience152 && (aiContextFlags.projects||aiContextFlags.tasks||aiContextFlags.plans)){
+            const snap=window.LifeExperience152.overview({
+                projects:aiContextFlags.projects?projects:[],
+                tasks:aiContextFlags.tasks?tasks:[],
+                studyPlan:aiContextFlags.plans?lifeSafeJSONParse(lifeRawStorageGet('life_study_plan_v2'),null):null,
+                workouts:aiContextFlags.plans?savedCustomWorkouts:[]
+            });
+            ctx.continuity_152={counts:snap.counts,notes:snap.notes.slice(0,3),source:snap.source,missing:snap.missing};
+        }
         if (aiContextFlags.goals)
             ctx.goals = { items: lifeGoals.slice(0, 8).map(g => ({ title: aiSafeText(g.title, 100), done: !!g.done })), habits: lifeHabits.slice(0, 8).map(h => ({ title: aiSafeText(h.title, 100), doneToday: !!(h.checks || {})[localDayKey()] })) };
         if (aiContextFlags.plans)
@@ -6797,7 +6928,7 @@ function LifeOSV18() {
         const routed = lifeRouteFromText(text);
         const low = text.toLowerCase();
         const aliases = {
-            'meu life': 'Meu LIFE', 'favorit': 'Meu LIFE', 'fixad': 'Meu LIFE', 'recent': 'Meu LIFE', 'estudo': 'Estudos', 'prova': 'Estudos', 'enem': 'Estudos', 'fitness': 'Fitness', 'treino': 'Fitness', 'despensa': 'Receitas', 'mercado': 'Receitas', 'cozinha': 'Receitas', 'dieta': 'Dieta', 'aliment': 'Dieta', 'refeição': 'Dieta', 'refeicao': 'Dieta', 'receita': 'Receitas', 'finan': 'Finanças', 'dinheiro': 'Finanças', 'gasto': 'Finanças', 'evol': 'Evolução', 'progresso': 'Evolução', 'arquivo': 'Archive', 'backup': 'Archive', 'perfil': 'Perfil', 'privacidade': 'Perfil', 'sincron': 'Perfil', 'tarefa': 'Tarefas', 'nota': 'Notas', 'hoje': 'Hoje', 'planej': 'Life', 'sono': 'Life', 'life': 'Life', 'ia': 'IA'
+            'meu life': 'Meu LIFE', 'favorit': 'Meu LIFE', 'fixad': 'Meu LIFE', 'recent': 'Meu LIFE', 'estudo': 'Estudos', 'prova': 'Estudos', 'enem': 'Estudos', 'fitness': 'Fitness', 'treino': 'Fitness', 'despensa': 'Receitas', 'mercado': 'Receitas', 'cozinha': 'Receitas', 'dieta': 'Dieta', 'aliment': 'Dieta', 'refeição': 'Dieta', 'refeicao': 'Dieta', 'receita': 'Receitas', 'finan': 'Finanças', 'dinheiro': 'Finanças', 'gasto': 'Finanças', 'evol': 'Evolução', 'progresso': 'Evolução', 'arquivo': 'Archive', 'backup': 'Archive', 'perfil': 'Perfil', 'privacidade': 'Perfil', 'sincron': 'Perfil', 'projet': 'Projetos', 'tarefa': 'Tarefas', 'nota': 'Notas', 'hoje': 'Hoje', 'planej': 'Life', 'sono': 'Life', 'life': 'Life', 'ia': 'IA'
         };
         for (const [k, v] of Object.entries(aliases))
             if (low.includes(k))
@@ -6818,6 +6949,20 @@ function LifeOSV18() {
     };
     const localLifeAI = (raw) => {
         const text = raw.trim(), low = text.toLowerCase();
+        if(hasV18Pro && window.LifeExperience152 && /(resumo|panorama|vis[aã]o geral|integra[cç][aã]o|pr[oó]xim[ao] pass[oa])/i.test(low) && /(life|projet|tarefa|estudo|treino|minha semana|meu dia|minha rotina|minhas [aá]reas)/i.test(low)){
+            if(!aiContextFlags.projects&&!aiContextFlags.tasks&&!aiContextFlags.plans)
+                return {text:'Para criar um panorama conectado, ative pelo menos um contexto autorizado de Projetos, Tarefas ou Planos nas permissões da LIFE AI.'};
+            const summary=window.LifeExperience152.overview({
+                projects:aiContextFlags.projects?projects:[],
+                tasks:aiContextFlags.tasks?tasks:[],
+                studyPlan:aiContextFlags.plans?lifeSafeJSONParse(lifeRawStorageGet('life_study_plan_v2'),null):null,
+                workouts:aiContextFlags.plans?savedCustomWorkouts:[],
+                feedback:aiContextFlags.plans?load('life_fitness_feedback_151',[]):[]
+            });
+            const prompt=window.LifeExperience152.question({projects:aiContextFlags.projects?projects:[],tasks:aiContextFlags.tasks?tasks:[],studyPlan:aiContextFlags.plans?lifeSafeJSONParse(lifeRawStorageGet('life_study_plan_v2'),null):null,workouts:aiContextFlags.plans?savedCustomWorkouts:[]});
+            return {text:'PANORAMA DO SEU LIFE (somente dados autorizados)\n'+summary.notes.map(x=>'• '+x.area+': '+x.text+' — '+x.reason).join('\n')+(summary.notes.length?'':'Ainda não há registros suficientes para uma conclusão.')+'\nPERGUNTA PARA AJUSTAR O PRÓXIMO PASSO: '+prompt.text+'\nNenhum dado foi alterado automaticamente.',action:{type:'navigate',target:'Projetos',label:'Abrir Projetos',go:'Projetos'}};
+        }
+
         if(hasV18Pro && window.LifeExperience151 && /(projetos?|cronograma|replanej)/i.test(text) && /(relat[oó]rio|revis|diagn[oó]stico|passo|como|plano|replanej|cronograma|acompanha|melhorar)/i.test(text)){
             if(!aiContextFlags.projects) return {text:'O contexto da aba Projetos está desativado. Ative Projetos nas permissões de contexto da LIFE AI ou abra a própria aba para revisar suas etapas.'};
             const all=(Array.isArray(projects)?projects:[]).filter(p=>p&&p.n);
@@ -7225,6 +7370,10 @@ function LifeOSV18() {
             }
             return next;
         });
+        if(current?.projectStepId&&current?.projectWeekId&&current?.projectId){
+            const mirror=window.LifePlanLink154;
+            if(mirror?.taskToProjects)setProjects(prev=>mirror.taskToProjects(prev,current,willDone).items);
+        }
         if (current && willDone)
             logLifeActivity('TAREFA', 'Concluiu ' + (current.text || current.title || 'tarefa'), 'Tarefas', current.category || 'Tarefa');
     };
@@ -7663,6 +7812,20 @@ function LifeOSV18() {
         return; createLifeTask(note.text, 'Tarefa', { sourceNoteId: note.id, priority: 'Normal', duration: 30 }); setToast('Anotação transformada em tarefa.'); setTimeout(() => setToast(''), 1800); };
     const askAboutNote = (note) => { if (!note?.text)
         return; setAiOriginView('Notas'); setAiQuickOpen(true); setTimeout(() => submitLifeAI('Use esta anotação como contexto e me ajude a decidir o próximo passo: ' + note.text), 30); };
+    const mirrorProjectStep154=(project,weekId,stepId,newDone)=>{
+        const engine=window.LifePlanLink154;
+        if(engine?.stepToTasks)setTasks(prev=>engine.stepToTasks(prev,project,weekId,stepId,newDone).items);
+    };
+    const createProjectStepTask152 = (action) => {
+        const engine=window.LifeExperience152;
+        const project=(Array.isArray(projects)?projects:[]).find(p=>String(p.id||p.n)===String(action?.projectId));
+        const current=engine?.taskPreview(project,tasks);
+        if(!current?.ok||current.weekId!==action?.weekId||current.stepId!==action?.stepId||current.text!==action?.text)
+            return {ok:false,message:'O projeto ou a próxima etapa mudou. Abra a prévia novamente.'};
+        if(engine?.linkedTask(project,action,tasks))return {ok:false,message:'Esta ação já existe em Tarefas.'};
+        const t=createLifeTask(current.text,'Projeto',{projectId:current.projectId,projectWeekId:current.weekId,projectStepId:current.stepId,source:'life_projects_152'});
+        return t?{ok:true,message:'Tarefa adicionada à lista local do LIFE. Confira o salvamento e a sincronização antes de trocar de dispositivo.'}:{ok:false,message:'Não foi possível criar a tarefa.'};
+    };
     const updateLifeTask = (id, patch) => setTasks(prev => prev.map(t => t.id === id ? { ...t, ...patch } : t));
     const saveLifeProject = (draft) => setProjects(prev => prev.map(p => String(p.id || p.n) === String(draft.id || draft.n) ? { ...p, ...draft } : p));
     const noteToProject = (note) => { if (!note?.text)
@@ -8365,7 +8528,14 @@ function LifeOSV18() {
                         : (strengthDays <= 2
                             ? ['Full Body A · corpo inteiro','Full Body B · corpo inteiro']
                             : ['Peito + tríceps + ombros','Costas + bíceps + antebraço','Pernas completas']);
-            const actualSplitCycle = strengthDays === 1 ? ['Full Body · corpo inteiro'] : strengthDays === 2 ? (experience === 'Iniciante' ? ['Full Body A · corpo inteiro','Full Body B · corpo inteiro'] : ['Upper · tronco completo','Lower · pernas completas']) : splitCycle;
+            // 15.4.1: A divisão PPL ou por grupos pode exigir aparelhos que o usuário não possui.
+            // Em Casa/Ar livre, organizar padrões de movimentos acessíveis em vez de bloquear o plano inteiro.
+            const limitedEquipment = place === 'Casa' || place === 'Ar livre';
+            const compatibleSplit = limitedEquipment && strengthDays >= 3
+                ? ['Upper A · tronco sem aparelhos','Lower A · pernas sem aparelhos',
+                   'Full Body · corpo inteiro','Upper B · tronco sem aparelhos','Lower B · pernas sem aparelhos']
+                : splitCycle;
+            const actualSplitCycle = strengthDays === 1 ? ['Full Body · corpo inteiro'] : strengthDays === 2 ? (experience === 'Iniciante' ? ['Full Body A · corpo inteiro','Full Body B · corpo inteiro'] : ['Upper · tronco completo','Lower · pernas completas']) : compatibleSplit;
             const life149TrainingReport=window.LifeIntelligence149?.trainingReport(a);
             const life149Avoid=String(a[17]||'Nenhum');
             const life149Style=String(a[15]||'');
@@ -8442,7 +8612,9 @@ function LifeOSV18() {
                 `Experiência: ${experience}; ${setMode === 'base' ? 'volume inicial mais conservador' : setMode === 'strength' ? 'faixas mais voltadas a força/técnica' : 'faixas gerais de hipertrofia'}.`,
                 `Semana: ${totalDays} dias disponíveis; o plano usa ${strengthDays} sessão(ões) de musculação e ${cardioDays} de cardio dentro desse limite.`,
                 normalizedCounts.adjusted ? `Compatibilidade semanal: sua combinação original ultrapassava os dias disponíveis; ela foi ajustada sem criar sessões extras escondidas.` : `Compatibilidade semanal: musculação + cardio cabe nos dias informados.`,
-                `Divisão: ${split}.`,
+                limitedEquipment && strengthDays >= 3
+                    ? `Divisão adaptada ao ambiente: sessões de tronco, pernas e corpo inteiro, sem depender de aparelhos indisponíveis (preferência original: ${split}).`
+                    : `Divisão: ${split}.`,
                 `Tempo por sessão: ${time}; sessões de força com cerca de ${exerciseCount} exercícios.`,
                 `Ambiente: ${place}; exercícios priorizados conforme equipamento compatível.`,
                 `Recuperação: ${recovery}; limite semanal ajustado para ${totalDays} dias.`,
@@ -8499,7 +8671,15 @@ function LifeOSV18() {
             return;
         const fallback = "Treino " + String.fromCharCode(65 + (savedCustomWorkouts.length % 26));
         const item = { id: Date.now(), name: (pfPlanName || fallback).trim(), type: pfPlan.planType || (pfPlan.goal === "Treino híbrido" ? "Híbrido" : "Personalizado"), createdAt: new Date().toISOString(), items: (pfPlan.items || []).map(day => ({ ...day, sessionType: workoutSessionKind(day) })), answers: { ...pfAnswers }, suggestions: pfPlan.suggestions || [] };
-        setSavedCustomWorkouts(prev => [item, ...prev]);
+        // Confirmar que a gravação foi realmente concluída antes de fechar o plano gerado.
+        const nextWorkouts=[item,...(Array.isArray(savedCustomWorkouts)?savedCustomWorkouts:[])];
+        save('life_custom_workouts_v2',nextWorkouts);
+        if(lifeRawStorageGet('life_custom_workouts_v2',null)!==JSON.stringify(nextWorkouts)){
+            setToast('NÃO FOI POSSÍVEL SALVAR. VERIFIQUE O ARMAZENAMENTO.');
+            setTimeout(()=>setToast(''),4500);
+            return;
+        }
+        setSavedCustomWorkouts(nextWorkouts);
         addLifeRecent({ type: 'Treino personalizado', id: item.id, title: item.name, go: 'Fitness', subtitle: item.items.length + ' dias', workout: item });
         logLifeActivity('FITNESS', 'Criou ' + item.name, 'Fitness');
         setSelectedCustomWorkout(item);
@@ -11681,7 +11861,7 @@ function LifeOSV18() {
         lifeTodayPlans.length?lifeTodayPlans.slice(0,4).map((t,i)=>React.createElement('button',{type:'button',key:t.id||i,className:'life143-mini-task',onClick:()=>toggleLifeTask(t.id)},React.createElement('span',{className:'life143-mini-check '+(taskIsDone(t)?'done':''),'aria-hidden':true},taskIsDone(t)?'✓':''),React.createElement('span',null,t.text||t.title||'Tarefa'))):React.createElement('p',{className:'life143-no-mini'},'Nenhuma tarefa registrada para hoje.')),
       React.createElement('section',{className:'life143-focus-card'},React.createElement('span',null,'ESPAÇO DE CONCENTRAÇÃO'),React.createElement('strong',null,'Seu tempo, protegido.'),React.createElement('button',{type:'button',onClick:()=>setFocus(true)},'Entrar no modo foco',life143Icon('arrow_forward'))),
       lifeHomeShown('ai') && React.createElement('button',{type:'button',className:'life143-ai-card',onClick:()=>{setAiOriginView('Hoje');setAiQuickOpen(true);}},React.createElement('span',{className:'life143-ai-icon'},life143Icon('psychology')),React.createElement('span',null,React.createElement('strong',null,'LIFE AI'),React.createElement('small',null,'Seu parceiro de evolução.')),life143Icon('arrow_forward')))),
-  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 14.6.4 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
+  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 15.4.1 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
     lifeCustomizeHome && React.createElement('div',{className:'life121-home-pref-options'},[['capture','Captura rápida'],['metrics','Indicadores'],['agenda','Agenda e foco'],['areas','Áreas do LIFE'],['ai','LIFE AI']].map(([id,label])=>React.createElement('label',{key:id},React.createElement('input',{type:'checkbox',checked:lifeHomeShown(id),onChange:()=>lifeToggleHome(id)}),label))))),
             false && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement("main", { className: "life-today-minimal" },
                 React.createElement("section", { className: "life-today-minimal-head" },
@@ -11816,7 +11996,7 @@ function LifeOSV18() {
                             React.createElement("small", null, "LIFE AI"),
                             React.createElement("b", null, lifeTodayOpen.length > 1 ? 'Quer organizar a ordem do seu dia?' : lifeTodayOpen.length === 1 ? 'Quer ajuda com o próximo passo?' : 'Quer preparar o restante do dia?'))),
                     React.createElement("button", { type: "button", onClick: () => { if (!hasV18Pro) { openLifePro('today_ai'); return; } setAiOriginView('Hoje'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(lifeTodayOpen.length ? 'Organize meus planos de hoje por ordem prática, usando somente as tarefas que já estão registradas no LIFE. Não crie tarefas novas.' : 'Meu dia está sem planos registrados. Faça uma pergunta curta para me ajudar a escolher no máximo três prioridades para hoje.'), 30); } }, hasV18Pro ? "ORGANIZAR" : "ORGANIZAR COM PRO →"))),
-            view !== 'Hoje' && advancedArea !== view && (view === 'Projetos' ? React.createElement(LifeProjectsHub150,{projects,setProjects,onGo:v42Go,hasPro:hasV18Pro}) : (hasV18Pro ? renderLifeProAreaV88() : (['Configurações','Tutorial','Perfil'].includes(view) ? React.createElement(React.Fragment, null, renderLifeSimpleArea(), React.createElement(LifeAppFlowV68,{area:view}), renderLifeV50Layer()) : renderLifeFreeAreaV68()))),
+            view !== 'Hoje' && advancedArea !== view && (view === 'Projetos' ? React.createElement(LifeProjectsHub150,{projects,setProjects,tasks,onStageTask:createProjectStepTask152,onToggleLinkedStep:mirrorProjectStep154,studyPlan:lifeLocalGet('life_study_plan_v2',null),workouts:savedCustomWorkouts,fitnessFeedback:lifeLocalGet('life_fitness_feedback_151',[]),onGo:v42Go,hasPro:hasV18Pro}) : (hasV18Pro ? renderLifeProAreaV88() : (['Configurações','Tutorial','Perfil'].includes(view) ? React.createElement(React.Fragment, null, renderLifeSimpleArea(), React.createElement(LifeAppFlowV68,{area:view}), renderLifeV50Layer()) : renderLifeFreeAreaV68()))),
             hasV18Pro && advancedArea === view && areaFocusMode && areaFocusMode !== '__full__' && renderAreaFocusV920(),
             hasV18Pro && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Fitness' && advancedArea === 'Fitness' && fitnessFocusMode && renderFitnessFocusV913(),
             (hasV18Pro || ['Perfil','Configurações','Tutorial'].includes(view)) && view !== 'Hoje' && advancedArea === view && !(view === 'Fitness' && fitnessFocusMode) && React.createElement("div", { className: "life-advanced-return" },
@@ -12716,7 +12896,7 @@ function LifeOSV18() {
                         React.createElement("aside", null,
                             React.createElement("div", { className: "v18-micro" }, "COMO COME\u00C7AR"),
                             React.createElement("p", { className: "v18-muted text-[9px] mt-3" }, "Toque em um treino abaixo ou use a busca inteligente no PRO. Nada aparece como \u201Cem andamento\u201D antes de voc\u00EA iniciar.")))),
-                fitnessMainTab === 'Alimentação' && React.createElement(LifeNutritionStudio, { key: 'nutrition-' + nutritionEntryTarget, initialTab: nutritionEntryTarget, hasPro: hasV18Pro, onUpgrade: openLifePro, defaultAge: trainingAge, savedPlans: savedMealPlans, onSavePlan: (plan) => { setSavedMealPlans(prev => [{ ...plan, name: plan.name || ('Plano alimentar ' + (prev.length + 1)) }, ...prev].slice(0, 30)); logLifeActivity('ALIMENTAÇÃO', 'Criou plano alimentar personalizado', 'Fitness'); setToast('PLANO ALIMENTAR SALVO'); setTimeout(() => setToast(''), 1800); }, onAsk: (prompt) => { setAiOriginView('Dieta'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); }, onGoRecipes: () => v42Go('Receitas') }),
+                fitnessMainTab === 'Alimentação' && React.createElement(LifeNutritionStudio, { key: 'nutrition-' + nutritionEntryTarget, initialTab: nutritionEntryTarget, hasPro: hasV18Pro, onUpgrade: openLifePro, defaultAge: trainingAge, savedPlans: savedMealPlans, onSavePlan: (plan) => { if(!plan || !Array.isArray(plan.items) || !plan.items.length) {setToast('PLANO INCOMPLETO · REVISE'); return false;} const rows = lifeReadStoredValue('life_food_plans_v1', []); const current = Array.isArray(rows) ? rows : []; const next = [{...plan,name:plan.name||('Plano alimentar '+(current.length+1))}, ...current.filter(p=>p?.id!==plan.id)].slice(0,30); if (!lifeVerifiedSave1542('life_food_plans_v1', next)) {setToast('FALHA AO SALVAR · TENTE NOVAMENTE');return false;} setSavedMealPlans(next); logLifeActivity('ALIMENTAÇÃO', 'Criou plano alimentar', 'Fitness'); setToast('PLANO ALIMENTAR SALVO'); setTimeout(() => setToast(''), 1800); return true; }, onAsk: (prompt) => { setAiOriginView('Dieta'); setAiQuickOpen(true); setTimeout(() => submitLifeAI(prompt), 30); }, onGoRecipes: () => v42Go('Receitas') }),
                 fitnessMainTab === 'Alimentação' && React.createElement('section', { className: 'life-kitchen-handoff-v65' }, React.createElement('div', null, React.createElement('small', null, 'KITCHEN OS / COZINHA'), React.createElement('h3', null, 'Despensa, compras e receitas agora têm uma casa própria.'), React.createElement('p', null, 'O Fitness mantém planejamento alimentar e contexto de treino. A cozinha completa fica em Receitas para não misturar dois aplicativos na mesma tela.')), React.createElement('button', { type: 'button', onClick: () => v42Go('Receitas') }, 'ABRIR KITCHEN OS →')),
                 fitnessMainTab === 'Progresso' && React.createElement("section", { className: "life-fit34-progress-tab" },
                     React.createElement("div", { className: "life-fit34-section-head" },
@@ -14093,6 +14273,8 @@ function LifeOSV18() {
                         type: "button",
                         key: String(day.k || 'd') + i,
                         className: (i === activeIndex ? 'on ' : '') + 'life-workout-folder-tab-v1497',
+                        'aria-current': i === activeIndex ? 'step' : undefined,
+                        'aria-label': 'Abrir treino de ' + lifeWorkoutDayNameV1497(day.k, i) + ': ' + (day.t || 'Sessão'),
                         onClick: () => setSelectedCustomWorkoutDay(i)
                     },
                         React.createElement("small", null, lifeWorkoutDayShortV1497(day.k, i)),
@@ -14155,12 +14337,17 @@ function LifeOSV18() {
                                 React.createElement("span", null, "anos"))) : React.createElement("div", { className: "v27-options" }, qs[pfStep][1].map(v => React.createElement("button", { type: "button", key: v, className: "v27-option " + (pfAnswers[pfStep] === v ? "on" : ""), onClick: () => choosePf(v) }, v))),
                         React.createElement("div", { className: "v27-actions" },
                             React.createElement("button", { type: "button", className: "v27-back", disabled: pfStep === 0, onClick: () => setPfStep(x => Math.max(0, x - 1)) }, "VOLTAR"),
-                            React.createElement("button", { type: "button", className: "v27-next", disabled: personalFlow === "training" && qs[pfStep][1][0] === "__AGE__" ? !(Number(pfAnswers[pfStep]) >= 13 && Number(pfAnswers[pfStep]) <= 90) : personalFlow === "training" && qs[pfStep][1][0] === "__HEIGHT__" ? !(pfAnswers[pfStep] === "Prefiro não informar" || (Number(pfAnswers[pfStep]) >= 120 && Number(pfAnswers[pfStep]) <= 230)) : !pfAnswers[pfStep], onClick: () => pfStep < qs.length - 1 ? setPfStep(x => x + 1) : buildPfPlan() }, pfStep < qs.length - 1 ? "CONTINUAR" : "GERAR COM LIFE"))) : React.createElement(React.Fragment, null,
+                            React.createElement("button", { type: "button", className: "v27-next", disabled: personalFlow === "training" && qs[pfStep][1][0] === "__AGE__" ? !(Number(pfAnswers[pfStep]) >= 13 && Number(pfAnswers[pfStep]) <= 90) : personalFlow === "training" && qs[pfStep][1][0] === "__HEIGHT__" ? !(pfAnswers[pfStep] === "Prefiro não informar" || (Number(pfAnswers[pfStep]) >= 120 && Number(pfAnswers[pfStep]) <= 230)) : !pfAnswers[pfStep], onClick: () => { if (pfStep < qs.length - 1) {setPfStep(x => x + 1);return;} try {buildPfPlan();} catch (e) { console.error('[LIFE FITNESS] Falha ao gerar plano', e); setPfPlan({type:personalFlow==='training'?'training':'diet',blocked:true,items:[],message:'Não foi possível concluir a geração deste plano. Suas respostas continuam preservadas. Volte para revisar as escolhas ou tente novamente após atualizar o LIFE.'}); } } }, pfStep < qs.length - 1 ? "CONTINUAR" : "GERAR COM LIFE"))) : React.createElement(React.Fragment, null,
                         React.createElement("div", { className: "v27-q" }, personalFlow === "training" ? (pfPlan.blocked ? "Antes de montar seu treino." : (!hasV18Pro ? "Seu treino foi gerado." : "Sua semana de treino está pronta.")) : (pfPlan.blocked ? "Antes de montar sua rotina alimentar." : "Sua rotina alimentar foi organizada.")),
-                        React.createElement("div", { className: "v27-help" }, pfPlan.blocked ? pfPlan.message : (personalFlow === "training" && !hasV18Pro ? "Treino salvo na versão PRO. Suas respostas e o rascunho desta semana foram preservados; assine o PRO para abrir o treino personalizado completo." : "Plano criado a partir das respostas desta sessão. Você pode refazer o questionário quando sua rotina mudar.")),
+                        React.createElement("div", { className: "v27-help" }, pfPlan.blocked ? pfPlan.message : (personalFlow === "training" && !hasV18Pro ? "O LIFE gerou sua semana. Veja uma amostra abaixo; o rascunho foi guardado neste navegador e a ficha completa fica disponível no PRO." : "Plano criado a partir das respostas desta sessão. Você pode refazer o questionário quando sua rotina mudar.")),
                         personalFlow === "training" && !pfPlan.blocked && !hasV18Pro && React.createElement("div",{className:"life-pf-free-lock-v82"},
                             React.createElement("span",{className:"material-symbols-rounded"},"lock"),
                             React.createElement("div",null,React.createElement("small",null,"TREINO PERSONALIZADO · PRO"),React.createElement("b",null,"Seu resultado está pronto — mas continua atrás da porta PRO."),React.createElement("p",null,"Você não precisa responder tudo de novo. Ao desbloquear o PRO neste navegador, o LIFE recupera este rascunho e coloca o treino na sua pasta."))),
+                        personalFlow === "training" && !pfPlan.blocked && !hasV18Pro && Array.isArray(pfPlan.items) && pfPlan.items.length > 0 && React.createElement('section', {className:'life-workout-free-sample-v1541'},
+                            React.createElement('small',null,'PRÉVIA FREE · 1 SESSÃO'),
+                            React.createElement('h3',null,pfPlan.items[0].t || 'Primeiro dia do plano'),
+                            React.createElement('p',null,'A semana foi gerada com '+pfPlan.items.length+' sessão(ões). Veja uma amostra; a ficha completa e o salvamento ficam no PRO.'),
+                            React.createElement('div',{className:'life-workout-free-sample-list-v1541'},...(pfPlan.items[0].moves||[]).slice(0,2).map((m,i)=>React.createElement('span',{key:i},typeof m==='string'?m:String(m?.name||m?.move||'Exercício'))))),
                         personalFlow === "diet" && !pfPlan.blocked && pfPlan.methodNote && React.createElement("div", { className: "v27-safe", style: { marginBottom: 12 } }, pfPlan.methodNote),
                         personalFlow === "training" && !pfPlan.blocked && hasV18Pro && pfPlan.methodNote && React.createElement("div", { className: "v27-safe", style: { marginBottom: 12 } }, pfPlan.methodNote),
                         personalFlow === "training" && !pfPlan.blocked && hasV18Pro && pfPlan.adjustments?.length > 0 && React.createElement("div", { className: "v27-safe", style: { marginBottom: 12 } }, React.createElement("b", null, "COMO SUAS RESPOSTAS MUDARAM O PLANO"), React.createElement("ul", null, pfPlan.adjustments.map((x,i)=>React.createElement("li",{key:i},x)))),
@@ -14193,7 +14380,7 @@ function LifeOSV18() {
                                 React.createElement("p", null,
                                     w.days,
                                     " dias/sem \u00B7 ",
-                                    w.items.slice(0, 4).join(' · ')),
+                                    (Array.isArray(w.items) ? w.items : Array.isArray(w.weeklyItems) ? w.weeklyItems.map(day=>day?.t||day?.k||'Sessão') : []).slice(0,4).map(x=>typeof x==='string'?x:String(x?.t||x?.name||x?.k||'Sessão')).join(' · ') || 'Sessões na pasta do treino'),
                                 React.createElement("button", { type: "button", onClick: () => runLifeTransition('MEU TREINO · ' + (w.name || w.title || 'TREINO'), () => openLifeWorkout(w)) }, "INICIAR TREINO \u2192"))))),
                         personalFlow === "diet" && !pfPlan.blocked && React.createElement(React.Fragment, null,
                             React.createElement("div", { className: "v27-safe" }, "Sugest\u00F5es gerais de organiza\u00E7\u00E3o e variedade alimentar. Ajuste escolhas \u00E0 fome, rotina e orienta\u00E7\u00F5es individuais; o LIFE n\u00E3o cria dieta restritiva autom\u00E1tica."),
@@ -14202,7 +14389,7 @@ function LifeOSV18() {
                                 React.createElement("input", { value: mealPlanName, onChange: e => setMealPlanName(e.target.value), placeholder: "Ex.: Plano da semana" }))),
                         personalFlow === "training" && !pfPlan.blocked && hasV18Pro && React.createElement("div", { className: "v27-safe" }, "Comece de forma gradual, priorize t\u00E9cnica, recupera\u00E7\u00E3o e qualidade de movimento. Se houver dor, les\u00E3o, condi\u00E7\u00E3o m\u00E9dica ou orienta\u00E7\u00E3o espec\u00EDfica, interrompa e siga a avalia\u00E7\u00E3o de um respons\u00E1vel e profissional qualificado."),
                         React.createElement("div", { className: "v27-actions" },
-                            React.createElement("button", { type: "button", className: "v27-back", onClick: () => { setPfPlan(null); setPfStep(0); setPfAnswers({}); setPfPlanName(''); setMealPlanName(''); } }, "REFAZER"),
+                            React.createElement("button", { type: "button", className: "v27-back", onClick: () => { const revise=personalFlow==='training' && pfPlan?.blocked; setPfPlan(null); setPfStep(revise ? (pfAnswers[13]!=='Não' ? 13 : (pfAnswers[17] && pfAnswers[17]!=='Nenhum' && pfAnswers[17]!=='Não sei identificar' ? 17 : 11)) : 0); if(!revise) setPfAnswers({}); setPfPlanName(''); setMealPlanName(''); } }, pfPlan?.blocked && personalFlow==='training' ? "REVISAR RESPOSTAS" : "REFAZER"),
                             personalFlow === "training" ? (pfPlan.blocked ? React.createElement("button", { type: "button", className: "v27-next", onClick: closePf }, "FECHAR") : (hasV18Pro ? React.createElement("button", { type: "button", className: "v27-next", onClick: savePersonalWorkout }, "SALVAR NA MINHA PASTA") : React.createElement("button",{type:"button",className:"v27-next life-pf-unlock-v82",onClick:()=>openLifePro('treino_personalizado')},"VER MEU TREINO · PRO →"))) : (pfPlan.blocked ? React.createElement("button", { type: "button", className: "v27-next", onClick: closePf }, "FECHAR") : React.createElement("button", { type: "button", className: "v27-next", onClick: saveCurrentMealPlan }, "SALVAR PLANO NO LIFE")))))),
             standby && React.createElement("div", { className: "v20-standby", onClick: () => setStandby(false) },
                 React.createElement("div", { className: "text-center" },
@@ -14244,6 +14431,10 @@ function LifeOSV18() {
                     React.createElement("div", { className: "flex gap-2 mt-6" },
                         React.createElement("button", { type: "button", className: "v18-btn hot", onClick: () => { setDietOpen(null); say('RECEITA SALVA ◇'); } }, "SALVAR \u25C7"),
                         React.createElement("button", { type: "button", className: "v18-btn", onClick: () => setDietOpen(null) }, "FECHAR")))),
+            lifeStorageWarning154 && React.createElement('aside',{className:'life154-storage-warning',role:'alert','aria-live':'assertive'},
+                React.createElement('span',{className:'material-symbols-rounded'},'warning'),
+                React.createElement('div',null,React.createElement('b',null,'Não foi possível salvar no dispositivo.'),React.createElement('p',null,'Alterações recentes podem não estar protegidas. Verifique o espaço e as permissões do navegador. Se o erro continuar, reabra o LIFE antes de alterar mais dados.')),
+                React.createElement('button',{type:'button',onClick:lifeRetryStorage154},'TESTAR NOVAMENTE')),
             lastDeleted && React.createElement('div',{className:'life-undo-bar'},React.createElement('span',null,'Movido para a lixeira · '+(lastDeleted.label||lastDeleted.kind)),React.createElement('button',{type:'button',onClick:()=>restoreTrashItem(lastDeleted)},'DESFAZER')),
             toast && React.createElement("div", { className: "v18-toast" }, toast)));
 }
