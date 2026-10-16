@@ -1,20 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid slice">
- <defs>
-  <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#111820"/><stop offset=".42" stop-color="#20262c"/><stop offset=".72" stop-color="#6a4030"/><stop offset="1" stop-color="#d46b34"/></linearGradient>
-  <radialGradient id="sun" cx="72%" cy="31%" r="42%"><stop offset="0" stop-color="#ffd0a0" stop-opacity=".92"/><stop offset=".16" stop-color="#fca25d" stop-opacity=".58"/><stop offset=".43" stop-color="#f57d3b" stop-opacity=".22"/><stop offset="1" stop-color="#f57d3b" stop-opacity="0"/></radialGradient>
-  <linearGradient id="far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a583f"/><stop offset="1" stop-color="#2f3031"/></linearGradient>
-  <linearGradient id="mid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4d4540"/><stop offset="1" stop-color="#15191c"/></linearGradient>
-  <linearGradient id="near" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#292d30"/><stop offset="1" stop-color="#070a0c"/></linearGradient>
-  <filter id="soft"><feGaussianBlur stdDeviation="20"/></filter>
-  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="7"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .08 0"/></filter>
- </defs>
- <rect width="1400" height="760" fill="url(#sky)"/>
- <rect width="1400" height="760" fill="url(#sun)"/>
- <ellipse cx="1040" cy="250" rx="245" ry="190" fill="#ff8b43" opacity=".12" filter="url(#soft)"/>
- <path d="M0 505 L110 443 L205 486 L320 355 L405 411 L495 326 L590 411 L720 248 L845 394 L960 285 L1060 360 L1165 235 L1400 450 L1400 760 L0 760Z" fill="url(#far)" opacity=".82"/>
- <path d="M0 570 L145 472 L255 538 L382 397 L510 516 L648 356 L770 488 L900 346 L1010 470 L1138 329 L1260 468 L1400 388 L1400 760 L0 760Z" fill="url(#mid)" opacity=".98"/>
- <path d="M0 635 L165 518 L270 585 L418 470 L565 620 L720 451 L870 586 L1015 455 L1120 580 L1245 468 L1400 550 L1400 760 L0 760Z" fill="url(#near)"/>
- <path d="M0 684 C125 648 245 671 350 643 C460 614 540 652 650 637 C810 613 930 624 1040 606 C1160 586 1270 616 1400 596 L1400 760 L0 760Z" fill="#060809"/>
- <g opacity=".42" fill="#e27a3b"><circle cx="812" cy="376" r="2.5"/><circle cx="847" cy="361" r="1.6"/><circle cx="901" cy="340" r="2"/><circle cx="965" cy="322" r="1.8"/><circle cx="1092" cy="316" r="2.4"/></g>
- <rect width="1400" height="760" filter="url(#grain)" opacity=".26"/>
-</svg>
+-- LIFE OS — Quality Update / segurança de dados e OWNER
+-- Execute no SQL Editor do Supabase do projeto do LIFE OS.
+-- Objetivo: o navegador pode LER o plano, mas não pode transformar FREE em PRO/OWNER.
+-- Pagamentos/Edge Functions usando service_role continuam capazes de atualizar plan/pro_until/subscription_status.
+
+begin;
+
+alter table public.profiles enable row level security;
+
+-- Função segura para identificar o proprietário sem recursão de RLS.
+create or replace function public.is_life_owner()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.profiles
+    where id = auth.uid()
+      and upper(coalesce(plan, 'FREE')) = 'OWNER'
+  );
+$$;
+
+revoke all on function public.is_life_owner() from public;
+grant execute on function public.is_life_owner() to authenticated;
+
+-- Remove políticas LIFE antigas com estes nomes para tornar o arquivo reaplicável.
+drop policy if exists "life_profiles_read_own_or_owner" on public.profiles;
+drop policy if exists "life_profiles_insert_own" on public.profiles;
+drop policy if exists "life_profiles_update_own" on public.profiles;
+drop policy if exists "life_profiles_owner_all" on public.profiles;
+
+-- Usuário comum lê apenas o próprio perfil. OWNER consegue listar todas as contas.
+create policy "life_profiles_read_own_or_owner"
+on public.profiles
+for select
+to authenticated
+using (id = auth.uid() or public.is_life_owner());
+
+-- Não criamos policy de UPDATE para authenticated.
+-- Assim, plan/pro_until/subscription_status não podem ser alterados diretamente pelo navegador.
+revoke all on table public.profiles from anon;
+revoke insert, update, delete on table public.profiles from authenticated;
+grant select on table public.profiles to authenticated;
+
+-- Única escrita do app: backup do LIFE da própria conta.
+create or replace function public.save_life_data(payload jsonb)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if auth.uid() is null then
+    raise exception 'not_authenticated';
+  end if;
+
+  update public.profiles
+  set life_data = payload
+  where id = auth.uid();
+
+  if not found then
+    raise exception 'profile_not_found';
+  end if;
+end;
+$$;
+
+revoke all on function public.save_life_data(jsonb) from public;
+grant execute on function public.save_life_data(jsonb) to authenticated;
+
+commit;
+
+-- VERIFICAÇÃO RÁPIDA (rode logado pelo app):
+-- 1) FREE/PRO/OWNER deve carregar normalmente.
+-- 2) Sincronizar dados deve continuar funcionando.
+-- 3) Uma tentativa direta de UPDATE em profiles deve falhar para usuário comum.
+-- 4) Conta OWNER deve conseguir abrir LIFE CONTROL e listar as contas.

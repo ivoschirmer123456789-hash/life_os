@@ -1,0 +1,232 @@
+/* LIFE OS 14.5.8 | FREE STARTER / PRO SIGNATURE
+ * Visual separation only: the authenticated server role remains the source of truth.
+ * Every FREE rule is explicitly scoped; PRO/OWNER existing styles remain unchanged.
+ */
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life-free-active{
+ --lf-page:#0e1319;--lf-panel:#171e26;--lf-panel2:#1d252e;
+ --lf-ink:#edf0f3;--lf-muted:#a7b2bd;--lf-line:rgba(231,239,248,.11);
+ --lf-highlight:#e88d48;--lf-button:#e88d48;--lf-button-ink:#1e130a;
+}
+html.life14-ultra.life-theme-day[data-life-visual-plan="FREE"] .life-free-active{
+ --lf-page:#f1f3f6;--lf-panel:#fff;--lf-panel2:#f8f9fb;
+ --lf-ink:#25303b;--lf-muted:#667381;--lf-line:#dce2e8;
+ --lf-highlight:#c85e28;--lf-button:#d96a2d;--lf-button-ink:white;
+}
+/* FREE is a useful minimal app, not a recolored copy of the cinematic PRO. */
+html[data-life-apex="9"][data-life-visual-plan="FREE"] body.tech-bg{
+ background:#0e1319!important;background-image:none!important;
+}
+html.life14-ultra.life-theme-day[data-life-visual-plan="FREE"] body.tech-bg{
+ background:#f1f3f6!important;background-image:none!important;
+}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] body.tech-bg:before,
+html[data-life-apex="9"][data-life-visual-plan="FREE"] body.tech-bg:after{display:none!important}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-shell,
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life-free-active{
+ background:var(--lf-page)!important;background-image:none!important;color:var(--lf-ink)!important;
+}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-shell:before,
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-shell:after,
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life-boot-material,
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life-boot-symbols{display:none!important}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-tabs{
+ background:var(--lf-panel)!important;background-image:none!important;
+ border-right:1px solid var(--lf-line)!important;box-shadow:none!important;
+}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-tabs:before,
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-tabs:after{display:none!important}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-tabs button{
+ box-shadow:none!important;background:transparent!important;color:var(--lf-muted)!important;
+ border-radius:12px!important;filter:none!important;
+}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-tabs button.on,
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-tabs button[aria-current="page"]{
+ background:var(--lf-panel2)!important;color:var(--lf-ink)!important;
+ border-color:var(--lf-line)!important;
+}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-tabs .life143-nav-icon{
+ background:transparent!important;border-color:transparent!important;
+ box-shadow:none!important;color:var(--lf-highlight)!important;
+}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life11-sidebar-brand{
+ border-bottom:1px solid var(--lf-line)!important;box-shadow:none!important;background:none!important;
+}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life11-brand-type :is(strong,small){color:var(--lf-ink)!important}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life11-brand-type em{color:var(--lf-highlight)!important}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life112-sidebar-quick{
+ background:var(--lf-panel2)!important;border:1px solid var(--lf-line)!important;
+ box-shadow:none!important;filter:none!important;
+}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life112-sidebar-quick:before,
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .life112-sidebar-quick:after{display:none!important}
+html[data-life-apex="9"][data-life-visual-plan="FREE"] .v18-top{
+ background:var(--lf-panel)!important;background-image:none!important;
+ border-bottom:1px solid var(--lf-line)!important;box-shadow:none!important;
+}
+/* A functional dedicated FREE dashboard; no landscape, cinematic hero or dummy cards. */
+html[data-life-apex="9"] .life1458-free-home{
+ width:100%;min-width:0;max-width:1480px;margin:0 auto;padding:20px clamp(12px,2.2vw,30px) 130px;
+ display:grid;gap:20px;color:var(--lf-ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+ background:none!important;background-image:none!important;
+}
+html[data-life-apex="9"] .life1458-free-home *{box-sizing:border-box;min-width:0}
+html[data-life-apex="9"] .life1458-free-home button{cursor:pointer;font:inherit;transition:background .15s ease,border-color .15s ease,transform .15s ease}
+html[data-life-apex="9"] .life1458-free-home button:focus-visible,
+html[data-life-apex="9"] .life1458-tour button:focus-visible{outline:2px solid var(--lf-highlight,#ee8b3e)!important;outline-offset:3px}
+html[data-life-apex="9"] .life1458-free-head{
+ display:flex;justify-content:space-between;align-items:center;gap:18px;
+ padding:28px 28px 30px;border-bottom:1px solid var(--lf-line);
+}
+html[data-life-apex="9"] .life1458-free-eyebrow,
+html[data-life-apex="9"] .life1458-free-card-head small{
+ display:block;font-size:10px;letter-spacing:.15em;font-weight:850;color:var(--lf-highlight)!important;
+}
+html[data-life-apex="9"] .life1458-free-head h1{
+ margin:9px 0 7px;font-size:clamp(29px,3.2vw,47px);line-height:1.13;
+ font-weight:850;letter-spacing:-.05em;color:var(--lf-ink)!important;-webkit-text-fill-color:var(--lf-ink)!important;
+}
+html[data-life-apex="9"] .life1458-free-head p,
+html[data-life-apex="9"] .life1458-free-home p{color:var(--lf-muted)!important;margin:0;line-height:1.65}
+html[data-life-apex="9"] .life1458-free-tag{
+ display:inline-block;flex:none;padding:9px 14px;border:1px solid var(--lf-line);
+ border-radius:11px;background:var(--lf-panel2);font-size:11px;letter-spacing:.12em;
+ font-weight:900;color:var(--lf-ink)!important;
+}
+html[data-life-apex="9"] .life1458-free-top{
+ display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:start;gap:18px;
+}
+html[data-life-apex="9"] .life1458-free-card{
+ background:var(--lf-panel)!important;background-image:none!important;border:1px solid var(--lf-line)!important;
+ border-radius:17px;padding:25px;box-shadow:0 5px 17px rgba(0,0,0,.025)!important;
+}
+html[data-life-apex="9"] .life1458-free-card-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:19px}
+html[data-life-apex="9"] .life1458-free-card-head h2{font-weight:850;letter-spacing:-.03em;font-size:21px;margin:7px 0 0;color:var(--lf-ink)!important}
+html[data-life-apex="9"] .life1458-free-card-head>strong{
+ font-size:13px;color:var(--lf-ink)!important;padding:7px 11px;border-radius:9px;background:var(--lf-panel2)
+}
+html[data-life-apex="9"] .life1458-free-track{height:6px;border-radius:50px;background:var(--lf-panel2);border:1px solid var(--lf-line);overflow:hidden;margin-bottom:19px}
+html[data-life-apex="9"] .life1458-free-track>span{display:block;height:100%;background:var(--lf-highlight);border-radius:50px}
+html[data-life-apex="9"] .life1458-free-add{display:flex;gap:8px;align-items:center;margin-bottom:14px}
+html[data-life-apex="9"] .life1458-free-add input{
+ flex:1;min-width:0;width:100%;border:1px solid var(--lf-line)!important;background:var(--lf-panel2)!important;
+ border-radius:10px;padding:14px 12px;color:var(--lf-ink)!important;font:inherit;font-size:13px;
+}
+html[data-life-apex="9"] .life1458-free-add input::placeholder{color:var(--lf-muted)!important}
+html[data-life-apex="9"] .life1458-free-add button{
+ padding:13px 16px;border:0!important;background:var(--lf-button)!important;color:var(--lf-button-ink)!important;
+ border-radius:10px;font-size:12px;font-weight:850;box-shadow:none!important;
+}
+html[data-life-apex="9"] .life1458-free-add button:disabled{opacity:.45;cursor:not-allowed}
+html[data-life-apex="9"] .life1458-free-tasks{display:grid;gap:7px}
+html[data-life-apex="9"] .life1458-free-task{
+ display:flex;align-items:center;gap:11px;text-align:left;width:100%;min-height:44px;
+ border:1px solid var(--lf-line)!important;background:var(--lf-panel2)!important;
+ color:var(--lf-ink)!important;border-radius:10px;padding:10px 12px;font-size:13px!important;
+}
+html[data-life-apex="9"] .life1458-free-task.done{opacity:.62}
+html[data-life-apex="9"] .life1458-free-task.done>span:last-child{text-decoration:line-through}
+html[data-life-apex="9"] .life1458-free-check{border:1.5px solid var(--lf-muted);width:19px;height:19px;flex:none;
+ border-radius:6px;display:grid;place-items:center;color:var(--lf-ink);font-weight:900;font-size:12px}
+html[data-life-apex="9"] .life1458-free-task.done .life1458-free-check{background:var(--lf-highlight);color:white;border-color:var(--lf-highlight)}
+html[data-life-apex="9"] .life1458-free-empty{padding:12px 0;font-size:13px!important}
+html[data-life-apex="9"] .life1458-text-link{padding:15px 0 0!important;border:0!important;background:none!important;color:var(--lf-highlight)!important;font-size:12px!important;font-weight:850!important}
+html[data-life-apex="9"] .life1458-free-shortcuts{display:grid;align-content:start;gap:9px}
+html[data-life-apex="9"] .life1458-free-shortcut{
+ display:flex;align-items:center;gap:13px;min-height:66px;padding:12px 13px;
+ width:100%;text-align:left;border:1px solid var(--lf-line)!important;background:var(--lf-panel2)!important;
+ border-radius:12px;color:var(--lf-ink)!important;
+}
+html[data-life-apex="9"] .life1458-free-shortcut .life143-vector{width:22px;height:22px;flex:none;color:var(--lf-highlight)}
+html[data-life-apex="9"] .life1458-free-shortcut .life143-vector:last-child{margin-left:auto;width:16px;height:16px;color:var(--lf-muted)}
+html[data-life-apex="9"] .life1458-free-shortcut>span{display:grid;gap:3px}
+html[data-life-apex="9"] .life1458-free-shortcut strong{font-size:13px;color:var(--lf-ink)!important}
+html[data-life-apex="9"] .life1458-free-shortcut small{font-size:11px;color:var(--lf-muted)!important}
+html[data-life-apex="9"] .life1458-free-upgrade{
+ display:grid;grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr);gap:20px;align-items:stretch;
+ padding:22px;border-radius:20px;border:1px solid rgba(243,154,78,.20);
+ background:linear-gradient(115deg,#1c2027,#11171d)!important;
+ box-shadow:0 12px 34px rgba(0,0,0,.10)!important;color:#fafafa!important;
+}
+html[data-life-apex="9"] .life1458-free-upgrade-copy{padding:22px 14px}
+html[data-life-apex="9"] .life1458-upgrade-kicker{display:inline-block;color:#ffb370!important;font-size:10px;letter-spacing:.17em;font-weight:900}
+html[data-life-apex="9"] .life1458-free-upgrade h2{color:#fff!important;font-size:clamp(25px,2.6vw,38px);line-height:1.14;letter-spacing:-.04em;margin:13px 0 12px}
+html[data-life-apex="9"] .life1458-free-upgrade p{color:#c4cbd2!important;font-size:13px;max-width:53ch}
+html[data-life-apex="9"] .life1458-upgrade-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:21px}
+html[data-life-apex="9"] .life1458-upgrade-actions button{min-height:45px;border-radius:11px;padding:12px 17px;font-size:12px;font-weight:850!important}
+html[data-life-apex="9"] .life1458-upgrade-primary{background:#ff993e!important;color:#261305!important;border:1px solid #ff993e!important;box-shadow:none!important}
+html[data-life-apex="9"] .life1458-upgrade-outline{background:transparent!important;color:#f9eeee!important;border:1px solid rgba(255,255,255,.27)!important}
+html[data-life-apex="9"] .life1458-upgrade-peek{
+ display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;min-height:255px;overflow:hidden;
+ border:1px solid rgba(255,255,255,.15)!important;border-radius:16px;padding:23px!important;
+ background:linear-gradient(0deg,rgba(7,10,14,.96),rgba(7,10,14,.28) 63%,rgba(7,10,14,.1)),url('../media/hero-mountain.webp') center/cover!important;
+ position:relative;color:white!important;text-align:left;box-shadow:none!important;
+}
+html[data-life-apex="9"] .life1458-peek-top{position:absolute;top:15px;left:18px;right:18px;display:flex;justify-content:space-between;color:#ffd5aa!important;font-size:10px;font-weight:900;letter-spacing:.12em}
+html[data-life-apex="9"] .life1458-peek-top em{font-style:normal;color:white!important;background:#bd6023;padding:4px 7px;border-radius:5px}
+html[data-life-apex="9"] .life1458-upgrade-peek strong{font-size:clamp(20px,2vw,29px);color:white!important;letter-spacing:-.035em;line-height:1.14;max-width:265px}
+html[data-life-apex="9"] .life1458-upgrade-peek small{color:#e8dbce!important;font-size:11px;margin-top:8px}
+html[data-life-apex="9"] .life1458-peek-arrow{position:absolute;right:18px;bottom:16px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#f58d3e;color:#1b1008}
+html[data-life-apex="9"] .life1458-free-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+html[data-life-apex="9"] .life1458-free-compare>div{padding:19px 21px;background:var(--lf-panel);border:1px solid var(--lf-line);border-radius:13px}
+html[data-life-apex="9"] .life1458-free-compare small{display:block;color:var(--lf-highlight)!important;font-size:10px;letter-spacing:.13em;font-weight:900;margin-bottom:7px}
+html[data-life-apex="9"] .life1458-free-compare strong{color:var(--lf-ink)!important;font-size:13px}
+html[data-life-apex="9"] .life1458-free-compare p{font-size:11px;margin-top:6px}
+html[data-life-apex="9"] .life1458-free-shortcut:hover,
+html[data-life-apex="9"] .life1458-free-task:hover{border-color:var(--lf-highlight)!important}
+/* Premium demo has exclusive atmosphere; it is a preview only, not an unlocked view. */
+html[data-life-apex="9"] .life1458-tour{display:grid;gap:10px;margin:15px 0 16px}
+html[data-life-apex="9"] .life1458-tour-tabs{display:flex;flex-wrap:wrap;gap:7px}
+html[data-life-apex="9"] .life1458-tour-tabs button{border:1px solid rgba(155,164,176,.26)!important;border-radius:10px;padding:10px 15px;background:rgba(13,17,22,.09)!important;color:#dfecf7!important;font-size:12px;font-weight:850}
+html[data-life-apex="9"] .life1458-tour-tabs button.on{background:#ef8734!important;color:#1c1209!important;border-color:#ef8734!important}
+html[data-life-apex="9"] .life1458-tour-frame{
+ min-height:225px;overflow:hidden;border-radius:17px;padding:18px 23px!important;
+ color:white!important;background:linear-gradient(90deg,rgba(6,9,14,.95),rgba(6,9,14,.50)),url('../media/hero-mountain.webp') center/cover!important;
+ border:1px solid rgba(244,165,87,.28)!important;
+}
+html[data-life-apex="9"] .life1458-tour-top{display:flex;justify-content:space-between;gap:10px;align-items:center;color:#ffc18b!important;font-size:10px;letter-spacing:.11em;font-weight:850}
+html[data-life-apex="9"] .life1458-tour-top small{color:#f3e4d4!important;font-size:9px}
+html[data-life-apex="9"] .life1458-tour-panel{margin-top:29px;max-width:520px}
+html[data-life-apex="9"] .life1458-tour-panel h3{color:white!important;font-size:clamp(20px,3vw,30px)!important;line-height:1.12;margin:0 0 8px;font-weight:900}
+html[data-life-apex="9"] .life1458-tour-panel p{color:#e4e8ec!important;font-size:12px;line-height:1.6!important;margin:0 0 16px!important}
+html[data-life-apex="9"] .life1458-tour-mini{display:flex;flex-wrap:wrap;gap:7px}
+html[data-life-apex="9"] .life1458-tour-mini span{border:1px solid rgba(255,255,255,.24);background:rgba(0,0,0,.35);border-radius:7px;padding:8px 10px;color:#ffe1c1!important;font-size:9px;font-weight:850}
+html[data-life-apex="9"] .life1458-tour-disclaimer{color:#a7b0ba!important;font-size:10px;line-height:1.45;display:block}
+html.life14-ultra.life-theme-day[data-life-apex="9"] .life1458-tour-tabs button{color:#384655!important;background:#fff6e9!important}
+html.life14-ultra.life-theme-day[data-life-apex="9"] .life1458-tour-tabs button.on{background:#ef8734!important;color:#1c1209!important}
+html.life14-ultra.life-theme-day[data-life-apex="9"] .life1458-tour-frame h3{color:white!important}
+html.life14-ultra.life-theme-day[data-life-apex="9"] .life1458-tour-frame p{color:#e4e8ec!important}
+html.life14-ultra.life-theme-day[data-life-apex="9"] .life1458-tour-top small{color:#f3e4d4!important}
+@media(max-width:920px){
+ html[data-life-apex="9"] .life1458-free-top,
+ html[data-life-apex="9"] .life1458-free-upgrade{grid-template-columns:1fr}
+ html[data-life-apex="9"] .life1458-upgrade-peek{min-height:235px}
+}
+@media(max-width:620px){
+ html[data-life-apex="9"] .life1458-free-home{padding:8px 12px 170px;gap:13px}
+ html[data-life-apex="9"] .life1458-free-head{padding:20px 6px 21px}
+ html[data-life-apex="9"] .life1458-free-head h1{font-size:clamp(25px,7.4vw,34px)}
+ html[data-life-apex="9"] .life1458-free-head p{font-size:12px}
+ html[data-life-apex="9"] .life1458-free-card{padding:17px}
+ html[data-life-apex="9"] .life1458-free-upgrade{padding:13px;gap:10px}
+ html[data-life-apex="9"] .life1458-free-upgrade-copy{padding:17px 8px 9px}
+ html[data-life-apex="9"] .life1458-free-compare{grid-template-columns:1fr}
+ html[data-life-apex="9"] .life1458-free-add button{padding:14px 12px}
+ html[data-life-apex="9"] .life1458-free-head .life1458-free-tag{padding:7px 8px}
+ html[data-life-apex="9"] .life1458-tour-frame{padding:17px 15px!important}
+ html[data-life-apex="9"] .life1458-tour-top{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){html[data-life-apex="9"] .life1458-free-home button{transition:none!important}}
+/* Last-mile Aurora specificity repair: the day theme sets generic heading
+   colors with !important; the embedded PRO teaser must stay readable. */
+html.life14-ultra.life-theme-day[data-life-apex="9"][data-life-visual-plan="FREE"] .life1458-free-upgrade :is(h2,strong){
+ color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="9"][data-life-visual-plan="FREE"] .life1458-free-upgrade p{
+ color:#d6dbe0!important;-webkit-text-fill-color:#d6dbe0!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="9"][data-life-visual-plan="FREE"] .life1458-upgrade-peek small{
+ color:#f4e6d9!important;-webkit-text-fill-color:#f4e6d9!important;
+}
+html.life14-ultra.life-theme-day[data-life-apex="9"][data-life-visual-plan="FREE"] .life1458-upgrade-kicker{
+ color:#ffb370!important;-webkit-text-fill-color:#ffb370!important;
+}

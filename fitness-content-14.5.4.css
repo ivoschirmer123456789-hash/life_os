@@ -1,0 +1,26 @@
+/* LIFE OS 14.5.4 · Fitness catalog restoration — accessible, not illustration */
+.life154-fitness-showcase{margin:30px 0 34px;padding:26px;border:1px solid rgba(255,156,71,.20);border-radius:26px;background:linear-gradient(140deg,rgba(255,140,53,.075),rgba(12,16,22,.96) 44%);box-shadow:0 22px 65px rgba(0,0,0,.19)}
+.life154-catalog-head{padding-bottom:21px;border-bottom:1px solid rgba(255,255,255,.085)}
+.life154-catalog-head small{display:block;font-size:10px;letter-spacing:.18em;color:#ffb376;font-weight:850}
+.life154-catalog-head h2{font-size:clamp(23px,3.2vw,36px);line-height:1.1;letter-spacing:-.035em;margin:9px 0 8px;color:#f5f6f9}
+.life154-catalog-head p{font-size:13px;max-width:680px;line-height:1.6;color:#acb3bd;margin:0}
+.life154-catalog-column{margin-top:26px}.life154-catalog-sub{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:14px}.life154-catalog-sub b{font-size:17px;color:#f5f6f9}.life154-catalog-sub span{font-size:12px;color:#a0a8b3}.life154-catalog-sub button{appearance:none;background:rgba(255,133,35,.15);border:1px solid rgba(255,135,41,.30);color:#ffc28d;font-weight:850;font-size:11px;min-height:38px;padding:9px 13px;border-radius:11px;cursor:pointer}
+.life154-catalog-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.life154-catalog-grid>button{display:flex;flex-direction:column;align-items:flex-start;min-width:0;text-align:left;appearance:none;background:linear-gradient(155deg,rgba(36,39,47,.98),rgba(17,20,27,.98));border:1px solid rgba(255,255,255,.10);border-radius:16px;min-height:115px;padding:17px;color:#f3f4f7;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s}
+.life154-catalog-grid>button:hover,.life154-catalog-grid>button:focus-visible{transform:translateY(-2px);border-color:rgba(255,159,69,.6);box-shadow:0 12px 27px rgba(255,114,0,.1);outline:none}
+.life154-catalog-grid>button small{color:#ffac66;font-size:10px;font-weight:850;letter-spacing:.09em;text-transform:uppercase}
+.life154-catalog-grid>button b{display:block;font-size:14px;line-height:1.38;margin:8px 0;color:#fff}
+.life154-catalog-grid>button span,.life154-catalog-grid>button em{font-size:11px;line-height:1.4;margin-top:auto;color:#b8c1cc;font-style:normal}
+.life154-catalog-note{margin:17px 0 0;font-size:11px;color:#adb5be;line-height:1.6}
+.life-free-app-v68 .life154-catalog-grid>button{min-height:110px}
+html.life-theme-day .life154-fitness-showcase{background:linear-gradient(135deg,#fff3e8,#fff);border-color:#ecd4c2;box-shadow:0 15px 32px rgba(58,36,23,.08)}
+html.life-theme-day .life154-catalog-head h2,html.life-theme-day .life154-catalog-sub b{color:#19202a}
+html.life-theme-day .life154-catalog-head p,html.life-theme-day .life154-catalog-note{color:#586576}
+html.life-theme-day .life154-catalog-grid>button{background:#fff;color:#232a33;border-color:#e4d2c3}
+html.life-theme-day .life154-catalog-grid>button b{color:#222831}
+html.life-theme-day .life154-catalog-grid>button span{color:#546171}
+@media(max-width:980px){.life154-catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.life154-fitness-showcase{padding:17px;margin:22px 0 30px;border-radius:22px}.life154-catalog-grid{grid-template-columns:1fr;gap:10px}.life154-catalog-grid>button{min-height:94px;padding:14px}.life154-catalog-sub{flex-wrap:wrap}.life154-catalog-sub b{font-size:16px}.life154-catalog-sub button{width:100%}.life154-catalog-head h2{font-size:25px}}
+@media(prefers-reduced-motion:reduce){.life154-catalog-grid>button{transition:none!important}}
+/* The FREE catalog spans the whole hub grid rather than appearing as one compressed tile. */
+.life-entry-hub-grid-free-v912 > .life154-fitness-showcase{grid-column:1 / -1;width:100%;min-width:0}

@@ -1,0 +1,7 @@
+/* LIFE OS 14.5.5: readable incremental catalogues and clear empty states. */
+.life1455-results-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 16px;margin:18px 0 10px;background:linear-gradient(130deg,rgba(255,145,45,.07),rgba(13,17,23,.93));border:1px solid rgba(255,153,57,.22);border-radius:17px;font-size:12px;font-weight:750;color:#d4d9df;line-height:1.5}
+.life1455-results-footer button,.life1455-more-workouts{border:1px solid rgba(255,150,55,.55)!important;background:linear-gradient(125deg,#ffad53,#ff8126)!important;color:#1d1006!important;border-radius:12px!important;font-size:12px!important;font-weight:900!important;padding:12px 15px!important;cursor:pointer;box-shadow:0 8px 23px rgba(255,126,28,.14)}
+.life1455-results-footer button:focus-visible,.life1455-more-workouts:focus-visible{outline:3px solid #79d9fa;outline-offset:3px}
+.life1455-more-workouts{width:100%;margin-top:14px}
+@media(max-width:600px){.life1455-results-footer{align-items:stretch;flex-direction:column;gap:12px}.life1455-results-footer button{width:100%;min-height:46px}}
+@media(prefers-reduced-motion:reduce){.life1455-results-footer button,.life1455-more-workouts{transition:none!important}}

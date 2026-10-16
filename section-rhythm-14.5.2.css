@@ -1,0 +1,228 @@
+/* LIFE OS 14.5.2 — SECTION RHYTHM. Source: real pages, no dummy page or icon overlays.
+   Page-scoped styling: avoids modal/dialog/checkout/form internal structure. */
+html[data-life-apex="8"] .v18[data-life-view]{
+  --life-flow-step:clamp(20px,2.6vw,30px);
+  --life-flow-panel:clamp(16px,2.1vw,25px);
+  --life-flow-line:rgba(255,155,72,.20);
+  --life-flow-ink:rgba(235,242,252,.11);
+}
+
+/* Avoid a second global hero when the actual page already has its own named header.
+   This applies on desktop as well as mobile, without touching the Home page. */
+html[data-life-apex="8"] .v18[data-life-view]:has(.v43-page-head) .v18-shell > .life-premium-masthead.life131-masthead,
+html[data-life-apex="8"] .v18[data-life-view]:has(main.life-app50 > .life-app36-hero) .v18-shell > .life-premium-masthead.life131-masthead,
+html[data-life-apex="8"] .v18[data-life-view]:has(main.life-fit-focus-v913 > .life-fit-focus-head-v913) .v18-shell > .life-premium-masthead.life131-masthead,
+html[data-life-apex="8"] .v18[data-life-view]:has(main.life-ai36-shell > .life-ai36-top) .v18-shell > .life-premium-masthead.life131-masthead{
+  display:none!important;
+}
+
+/* A) Large page blocks: give them the same breathing room everywhere.
+   Apply only to immediate children of known page containers, never nested grids. */
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app50,.life-notes-page,.life-tasks-page,.life-finance-page,.life-my,
+ .life-ai36-shell,.life-fit-focus-v913,.life-area-focus-v920,.life-study-universe-v6,
+ .life-food-system,.life-study-architect,.life-study-mastery
+) > :where(section,article,header,footer,main,div) + :where(section,article,header,footer,main,div){
+  margin-block-start:var(--life-flow-step)!important;
+}
+/* Treat external area panels as clearly separate sections. */
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-panel,.life-v50-section,.life-my-section,.v46-section,
+ .life-finance-ai-strip,.life-finance-summary,.life-food-suggest,
+ .life-area-focus-card-v920,.life-fit-focus-toolbar-v913,.life-fit-focus-personal-v913,
+ .life-study-architect,.life-study-mastery,.life-study-universe-v6,
+ .life-connected-v72,.life-ai36-chat,.life-ai36-side
+){
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+  border-color:rgba(224,232,245,.13)!important;
+}
+/* Make edges readable but stay inside the approved dark/orange identity. */
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-panel,.life-v50-section,.life-my-section,
+ .life-study-architect,.life-study-mastery,.life-connected-v72,
+ .life-food-system,.life-fit-focus-searchhero-v913
+){
+  outline:1px solid rgba(255,255,255,.055);
+  outline-offset:-1px;
+}
+
+/* B) Sections inside pages that are built from nested blocks. */
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-panel,.life-v50-section,.life-food-system,.life-study-architect,
+ .life-study-mastery,.life-connected-v72,.life-fit-focus-personal-v913
+) > :where(header,section,article,div) + :where(header,section,article,div){
+  margin-block-start:clamp(16px,2vw,23px);
+}
+/* Heading belongs to its own panel, content begins a visible distance below. */
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-panel-head,.life-section-head,.life-depth-head,.life-mastery-head,
+ .life-study-architect-head,.v46-head,.life-connected-head-v72
+){
+  min-width:0;
+  max-width:100%;
+  gap:clamp(10px,1.5vw,16px)!important;
+  margin-block-end:clamp(12px,1.8vw,20px)!important;
+}
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-panel-head,.life-depth-head,.life-section-head,
+ .life-mastery-head,.v46-head
+) h2,
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-panel-head,.life-depth-head,.life-section-head,
+ .life-mastery-head,.v46-head
+) h3{
+  line-height:1.23!important;
+  overflow-wrap:break-word;
+  text-wrap:balance;
+}
+/* A low-contrast heading rail helps users scan where an area starts. */
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-panel-head,.life-depth-head,.life-section-head,.life-mastery-head,.v46-head
+){
+  border-inline-start:2px solid var(--life-flow-line);
+  padding-inline-start:clamp(10px,1.6vw,15px);
+}
+
+/* C) Improve separation of interactive cards without growing every card. */
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-actions-grid,.life-app36-list,.life-my-grid,.life-study-universe-grid,
+ .life-food-system-grid,.life-fit-focus-workout-list-v913,.life-fit-focus-saved-list-v913,
+ .life-fit-focus-exercise-list-v913,.life-area-focus-list-v920,
+ .life-pro88-commands,.life-connected-metrics-v72
+){
+  gap:clamp(11px,1.7vw,18px)!important;
+}
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-action,.life-app36-row,.life-my-grid>article,
+ .life-area-focus-row-v920,.life-fit-focus-workout-row-v913,
+ .life-fit-focus-exercise-row-v913,.life-fit-focus-saved-row-v913
+){
+  min-width:0;
+  overflow-wrap:anywhere;
+  border-color:rgba(221,229,243,.12)!important;
+}
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-app36-action,.life-app36-row,.life-area-focus-row-v920,
+ .life-fit-focus-workout-row-v913,.life-fit-focus-exercise-row-v913,
+ .life-fit-focus-saved-row-v913
+):focus-visible{
+  outline:2px solid #ff9d52!important;
+  outline-offset:3px;
+}
+
+/* D) Form questions, choices and fields: consistent vertical spacing. */
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-study-question,.life-study-form-options,.life-fit-focus-personal-copy-v913,
+ .life-fit-focus-options-v913,.life-finance-period,.life-food-saved,
+ .life-shopping,.life-task-create
+){
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+html[data-life-apex="8"] .v18[data-life-view] :is(
+ .life-study-question,.life-study-form-options,.life-finance-period
+) + :is(.life-study-question,.life-study-form-options,.life-finance-period){
+  margin-block-start:15px!important;
+}
+
+/* E) Prevent stacked headings spilling over on narrow screens. */
+@media (max-width:820px){
+ html[data-life-apex="8"] .v18[data-life-view]{
+  --life-flow-step:23px;
+  --life-flow-panel:18px;
+ }
+ /* When an area already has its own real hero, do not render a second giant title. */
+ html[data-life-apex="8"] .v18[data-life-view]:has(.v43-page-head) .v18-shell > .life-premium-masthead.life131-masthead,
+ html[data-life-apex="8"] .v18[data-life-view]:has(main.life-app50 > .life-app36-hero) .v18-shell > .life-premium-masthead.life131-masthead,
+ html[data-life-apex="8"] .v18[data-life-view]:has(main.life-ai36-shell > .life-ai36-top) .v18-shell > .life-premium-masthead.life131-masthead{
+  display:none!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] :is(
+   .life-app36-panel,.life-v50-section,.life-my-section,.life-food-system,
+   .life-study-architect,.life-study-mastery,.life-connected-v72,
+   .life-area-focus-card-v920,.life-finance-page > section,.life-ai36-chat,.life-ai36-side
+ ){
+   width:100%!important;
+   min-width:0!important;
+   max-width:100%!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] :is(
+   .life-app36-panel,.life-v50-section,.life-my-section,
+   .life-study-architect,.life-study-mastery,.life-food-system,
+   .life-area-focus-card-v920,.life-ai36-chat,.life-ai36-side
+ ){
+   padding:clamp(16px,4.2vw,23px)!important;
+   border-radius:20px!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] :is(
+   .life-app36-panel-head,.life-depth-head,.life-section-head,.life-mastery-head,
+   .life-connected-head-v72,.v46-head,.life-study-architect-head
+ ){
+   flex-wrap:wrap!important;
+   align-items:flex-start!important;
+   gap:12px!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] :is(
+   .life-app36-title,.v43-page-head h1,.life-depth-head h2,
+   .life-area-focus-head-v920 h1,.life-ai36-top h1
+ ){
+   max-width:100%!important;
+   overflow-wrap:break-word!important;
+   word-break:normal!important;
+   text-wrap:balance;
+   line-height:1.12!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] :is(
+  .life-app36-panel-head>div,.life-depth-head>div,.life-section-head>div,
+  .life-mastery-head>div,.life-connected-head-v72>div
+ ){
+   min-width:0!important;
+   max-width:100%!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] :is(
+   .life-app36-actions-grid,.life-food-system-grid,.life-ai36-layout,
+   .life-connected-grid-v72
+ ){
+   grid-template-columns:minmax(0,1fr)!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] :is(
+   .life-app36-panel-head>button,.life-section-head>button,
+   .life-connected-head-v72>button
+ ){
+   min-height:43px;
+   max-width:100%;
+   white-space:normal!important;
+ }
+ /* Header/help and mobile dock must not float over content. */
+ html[data-life-apex="8"] .v18[data-life-view] .v18-shell{
+  padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] .life-how-entry{
+  position:relative!important;
+  inset:auto!important;
+  max-width:calc(100% - 28px)!important;
+  margin:10px 14px 18px auto!important;
+  transform:none!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] :is(input,select,textarea){
+  min-width:0;
+  max-width:100%;
+ }
+}
+@media (max-width:420px){
+ html[data-life-apex="8"] .v18[data-life-view]{--life-flow-step:25px;}
+ html[data-life-apex="8"] .v18[data-life-view] :is(.life-app36-action,.life-app36-row){
+  padding:14px!important;
+ }
+ html[data-life-apex="8"] .v18[data-life-view] :is(.life-study-universe-grid,.life-connected-metrics-v72){
+  gap:10px!important;
+ }
+}
+@media (prefers-reduced-motion:reduce){
+ html[data-life-apex="8"] .v18[data-life-view] :is(.life-app36-action,.life-app36-row){
+  transition:none!important;
+ }
+}
