@@ -4,7 +4,7 @@ from urllib.parse import unquote
 root=Path(__file__).resolve().parent.parent
 assert root.joinpath('index.html').exists()
 html=(root/'index.html').read_text()
-version='15.4.2'
+version='15.4.4'
 assert f'content="{version}"' in html
 assert f"version:'{version}'" in (root/'assets/js/config-9.4.2.js').read_text()
 assert version in json.loads((root/'manifest.webmanifest').read_text())['name']

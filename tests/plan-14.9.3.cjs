@@ -43,6 +43,6 @@ check('gerador não inventa avaliação para plano sem movimentos',()=>assert(en
 check('motor não salva/compartilha dados na rede',()=>assert(!/fetch\s*\(|localStorage\.|XMLHttpRequest/.test(fs.readFileSync(path.join(root,'assets/js/life-intelligence-14.9.0.js'),'utf8'))));
 check('treinos prontos usam ficha antes de iniciar',()=>assert(js.includes('setSelectedReadyWorkout(w)')&&js.includes('life-ready-modal-1493')));
 check('treino ativo mostra demonstração de cada exercício',()=>assert(js.includes("k:'EM EXECUÇÃO'")));
-check('treino personalizado passa por refinamento de plano',()=>assert(js.includes('refineTrainingPlan(generatedTrainingPlan,a)')));
+check('treino personalizado passa por refinamento de plano',()=>assert(js.includes('refineTrainingPlan?.(generatedTrainingPlan,a)') && js.includes('treino base preservado')));
 check('modal pronto mantém confirmação do acesso PRO',()=>assert(js.includes("if (!hasV18Pro) {\n            const freeWorkoutIds")));
 console.log(`PASS ${pass} cenários LIFE 14.9.5`);

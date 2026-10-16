@@ -1,15 +1,10 @@
-# LIFE OS 15.4.2 — Auditoria de geradores, salvamento e compatibilidade
+# LIFE OS 15.4.4 — gerador de treinos ajustado
 
-**Base:** LIFE OS 15.4.1. **Entrega:** aplicativo completo com 100 arquivos e `index.html` na raiz. Preservadas as abas, os planos FREE/PRO, os módulos Supabase e o visual preto e laranja.
+1. Publique o **conteúdo extraído** deste ZIP no mesmo projeto GitHub/Vercel; `index.html` fica na raiz.
+2. Confira a versão **15.4.4** acima do questionário em **Fitness → Treino personalizado**. Se permanecer 15.4.3, o deploy/cache ainda está antigo.
+3. Se escolher um grupo de movimento que prefere evitar, o LIFE faz **uma pergunta adicional**: se é apenas preferência **sem dor** ou se existe dor/instabilidade/risco. No primeiro caso, gera uma ficha adaptada excluindo o grupo; no segundo, continua recomendando avaliação antes do plano, sem descartar respostas.
+4. A conta FREE vê uma prévia; a conta PRO pode ver e salvar a ficha completa segundo as regras existentes.
 
-### Correções
-- Confirmação efetiva ao salvar planos alimentares personalizados/prontos: sem fechamento do formulário nem aviso de sucesso em caso de falha de escrita.
-- Estudo: geração com tratamento de exceções, conservação do questionário quando ocorre falha, verificação da gravação e feedback visível.
-- Compatibilidade de trilhas antigas com campos vazios ou inválidos; etapas concluídas e recursos válidos preservados.
-- As etapas e os registros de domínio de Estudos só são marcados após o armazenamento aceitar a alteração.
-- JSON local ilegível passa a proteger a chave contra sobregravação silenciosa, permitindo diagnóstico e recuperação posterior.
-- Gerador de estudos mantém uma etapa mínima em tópicos curtos mesmo no nível avançado.
-- Dados do questionário alimentar continuam recuperáveis até o plano ser salvo com sucesso.
+**Não é preciso limpar os dados do navegador** para atualizar. Preserve a versão anterior como backup e valide em uma implantação de teste antes de substituir o domínio.
 
-### Validação
-Consulte `QA_REPORT_15.4.2.md`. Faça deploy em ambiente de teste na Vercel e confirme os percursos de Treino, Alimentação, Estudos e Projetos com usuários FREE/PRO. O pacote não realiza testes reais de autenticação, cobrança ou sincronização em nuvem.
+Leia `QA_REPORT_15.4.4.md` para detalhes e limites da validação.

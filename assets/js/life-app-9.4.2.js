@@ -218,7 +218,7 @@ const save = (key, value) => {
         try { window.dispatchEvent(new CustomEvent('life:storage-error')); } catch (_) {}
     }
 };
-// LIFE 15.4.2 — Only explicit user actions may claim a saved plan after read-back verification.
+// LIFE 15.4.4 — Only explicit user actions may claim a saved plan after read-back verification.
 function lifeVerifiedSave1542(key, value) {
     try {
         if (window.lifeStorageReadBlockedKeys154?.has(String(key))) return false;
@@ -1061,6 +1061,16 @@ const lifeWorkoutSessionStats = (workout) => {
         ['Cardio', String(cardio)],
         ['Mobilidade', String(mobility)]
     ];
+};
+// 15.4.4: a failure in optional exercise media must not erase a generated workout.
+const life1543SafeWorkoutCards = (day, onOpenExercise) => {
+    try { return lifeRenderWorkoutExerciseCards(day, onOpenExercise); }
+    catch (e) {
+        console.error('[LIFE FITNESS] Falha em mídia opcional. Mostrando ficha textual.',e);
+        const moves=Array.isArray(day?.moves)?day.moves:[];
+        return React.createElement('div',{className:'v27-safe',role:'list','aria-label':'Exercícios do dia'},
+            moves.map((m,i)=>React.createElement('p',{key:i,role:'listitem'},String(i+1)+'. '+String(typeof m==='string'?m:m?.name||m?.move||'Exercício'))));
+    }
 };
 const LIFE_EXERCISE_PHOTOS_V1495 = Object.freeze({
     'supino reto com barra': 'assets/media/exercicio-supino-barra-14.9.5.webp',
@@ -8031,8 +8041,8 @@ function LifeOSV18() {
     }, [intro, lifeAccess]);
     // FITNESS INTELIGENTE
     const personalTrainingDraft = load('life_form_personal_training_v9', null);
-    const [personalFlow, setPersonalFlow] = React.useState(null), [pfStep, setPfStep] = React.useState(() => life1455SafeStep(personalTrainingDraft?.step,19)), [pfAnswers, setPfAnswers] = React.useState(() => personalTrainingDraft?.answers || {}), [pfPlan, setPfPlan] = React.useState(null);
-    const startPersonalTraining = (fresh=false) => { const d=fresh?null:load('life_form_personal_training_v9',null); setPersonalFlow('training'); setPfStep(life1455SafeStep(d?.step,19)); setPfAnswers(d?.answers||{}); setPfPlan(null); setPfPlanName(''); };
+    const [personalFlow, setPersonalFlow] = React.useState(null), [pfStep, setPfStep] = React.useState(() => life1455SafeStep(personalTrainingDraft?.step,20)), [pfAnswers, setPfAnswers] = React.useState(() => personalTrainingDraft?.answers || {}), [pfPlan, setPfPlan] = React.useState(null);
+    const startPersonalTraining = (fresh=false) => { const d=fresh?null:load('life_form_personal_training_v9',null); setPersonalFlow('training'); setPfStep(life1455SafeStep(d?.step,20)); setPfAnswers(d?.answers||{}); setPfPlan(null); setPfPlanName(''); };
     React.useEffect(()=>{try{ if(personalFlow==='training') save('life_form_personal_training_v9',{step:pfStep,answers:pfAnswers,updatedAt:new Date().toISOString()}); }catch(e){}},[personalFlow,pfStep,pfAnswers]);
     const [pfPlanName, setPfPlanName] = React.useState('');
     const [savedCustomWorkouts, setSavedCustomWorkouts] = React.useState(() => load('life_custom_workouts_v2', []));
@@ -8075,6 +8085,22 @@ function LifeOSV18() {
             setTimeout(()=>setToast(''),2600);
         } catch (e) {}
     }, [hasV18Pro]);
+    // Preferências de movimento são diferentes de dor: filtrar grupos antes da montagem.
+    // Nenhuma correspondência implica que o exercício restante seja seguro em caso de dor.
+    const life1544AvoidanceGroup = (value) => /agachamento|movimentos de perna/i.test(String(value||'')) ? 'legs'
+        : /empurrar com braços|ombros/i.test(String(value||'')) ? 'push'
+        : /puxar com braços|costas/i.test(String(value||'')) ? 'pull' : null;
+    const life1544AvoidExercise = (ex, group) => {
+        if (!group) return false;
+        const muscle = lifeExerciseGroup(ex), name = lifeNormalizeText(ex?.name||'');
+        if (group==='legs') return ['Pernas','Quadríceps','Posterior','Glúteos','Adutores','Panturrilha'].includes(muscle)
+            || /agach|afundo|passada|terra|leg press|panturr|extensora|flexora|hip thrust|ponte de glute|step.up|lunge|levantamento romeno/.test(name);
+        if (group==='push') return ['Peito','Ombros','Tríceps'].includes(muscle)
+            || /supino|desenvolvimento|flexao de brac|triceps|chest press|eleva[cç]|paralela|peck deck|crucifixo|shoulder press/.test(name);
+        if (group==='pull') return ['Costas','Bíceps','Antebraço','Trapézio'].includes(muscle)
+            || /remada|puxada|barra fixa|rosca|face pull|pulldown|encolhimento/.test(name);
+        return false;
+    };
     const trainingQs = [
         ["Qual é sua idade?", ["__AGE__"]],
         ["Qual é sua altura?", ["__HEIGHT__"]],
@@ -8093,8 +8119,9 @@ function LifeOSV18() {
         ["Como você prefere lidar com impacto?", ["Normal", "Prefiro baixo impacto", "Quero evitar corrida intensa"]],
         ["Quais exercícios você prefere aprender e praticar?", ["Prefiro máquinas e movimentos guiados", "Prefiro pesos livres e movimentos básicos", "Gosto de variar", "Ainda estou descobrindo"]],
         ["Como você descreveria seu momento de treino?", ["Estou voltando após uma pausa", "Quero aprender os movimentos", "Tenho uma rotina consistente", "Minha rotina muda bastante"]],
-        ["Existe algum tipo de movimento que costuma causar desconforto?", ["Nenhum", "Agachamento ou movimentos de perna", "Empurrar com braços ou ombros", "Puxar com braços ou costas", "Não sei identificar"]],
-        ["Como está seu sono nos últimos dias?", ["Tenho dormido bem", "Tenho dormido pouco", "Muda bastante", "Prefiro não responder"]]
+        ["Existe algum movimento que você prefere evitar ou que causa desconforto?", ["Nenhum", "Agachamento ou movimentos de perna", "Empurrar com braços ou ombros", "Puxar com braços ou costas", "Não sei identificar"]],
+        ["Como está seu sono nos últimos dias?", ["Tenho dormido bem", "Tenho dormido pouco", "Muda bastante", "Prefiro não responder"]],
+        ...(life1544AvoidanceGroup(pfAnswers[17]) ? [["Esse movimento causa dor ou você apenas prefere não fazê-lo?", ["Quero evitar por preferência, sem dor", "Sinto dor, instabilidade ou outra limitação", "Não sei dizer com segurança"]]] : [])
     ];
     const dietQs = [
         ["Como é sua rotina de refeições?", ["3 refeições", "3 + lanches", "Horários variáveis", "Quero organizar melhor"]],
@@ -8105,7 +8132,7 @@ function LifeOSV18() {
         ["Há alergia ou necessidade médica?", ["Não", "Sim — preciso de orientação responsável/profissional"]]
     ];
     const qs = personalFlow === "training" ? trainingQs : dietQs;
-    const choosePf = (v) => setPfAnswers(a => ({ ...a, [pfStep]: v }));
+    const choosePf = (v) => setPfAnswers(a => ({ ...a, [pfStep]: v, ...(personalFlow==='training' && pfStep===17 ? {19:''} : {}) }));
     const finderQs = [
         { key: "age", q: "Qual é sua idade?", type: "age" },
         { key: "height", q: "Qual é sua altura?", type: "height" },
@@ -8280,9 +8307,9 @@ function LifeOSV18() {
         if (n.includes('upper')) return ['Peito','Costas','Ombros','Bíceps','Tríceps'];
         return ['Peito','Costas','Pernas','Ombros','Abdômen'];
     };
-    const buildStrengthMovesFor = (label, place, count, offset = 0) => {
+    const buildStrengthMovesFor = (label, place, count, offset = 0, avoidGroup = null) => {
         const groups = workoutGroupsForLabel(label);
-        const allowed = IRON_EXERCISE_LIBRARY.filter(ex => workoutPlaceAllows(ex, place));
+        const allowed = IRON_EXERCISE_LIBRARY.filter(ex => workoutPlaceAllows(ex, place) && !life1544AvoidExercise(ex, avoidGroup));
         const chosen = [], names = new Set();
         // Rotate within each target group rather than taking the first N items of the library.
         // The first pass guarantees diverse training patterns before filling remaining slots.
@@ -8465,6 +8492,33 @@ function LifeOSV18() {
         setToast("TREINO SALVO NA MINHA PASTA");
         setTimeout(() => setToast(''), 2200);
     };
+    // 15.4.4: Generate the useful plan even when non-essential AI/recommendation modules fail.
+    // No profile answers are written to diagnostics; failures stay explainable to the user.
+    const life1543GeneratorResult = (kind, outcome, reason='') => {
+        try {
+            window.LIFE_GENERATOR_DIAGNOSTICS = {
+                version:'15.4.4',kind,ok:!!(outcome && !outcome.blocked && Array.isArray(outcome.items) && outcome.items.length),
+                blocked:!!outcome?.blocked,days:Array.isArray(outcome?.items)?outcome.items.length:0,
+                code:String(reason||'').slice(0,65),at:new Date().toISOString()
+            };
+        } catch (_) {}
+        return outcome;
+    };
+    const runPfGenerate = () => {
+        try {
+            const result=buildPfPlan();
+            if(result && result.blocked) life1543GeneratorResult(personalFlow,result,'review_required');
+            else if(result && Array.isArray(result.items) && result.items.length) life1543GeneratorResult(personalFlow,result);
+            else {
+                life1543GeneratorResult(personalFlow,result,'empty_generation');
+                setPfPlan({type:personalFlow==='training'?'training':'diet',blocked:true,items:[],message:'O gerador não retornou sessões. Suas respostas foram mantidas. Toque em REVISAR RESPOSTAS e tente novamente. Se persistir, confirme a versão 15.4.4 publicada.'});
+            }
+        } catch (e) {
+            console.error('[LIFE GENERATOR 15.4.4] Erro no fluxo de geração',e);
+            life1543GeneratorResult(personalFlow,null, String(e?.name||'generation_exception'));
+            setPfPlan({type:personalFlow==='training'?'training':'diet',blocked:true,items:[],message:'O LIFE não conseguiu montar o plano nesta tentativa. Nenhuma resposta foi apagada. Use REVISAR RESPOSTAS e, se continuar, confira se o site está na versão 15.4.4.'});
+        }
+    };
     const buildPfPlan = () => {
         const a = pfAnswers;
         if (personalFlow === "training") {
@@ -8492,20 +8546,29 @@ function LifeOSV18() {
                     type: "training", blocked: true, items: [],
                     message: "O LIFE não vai gerar um treino automático enquanto existir uma limitação médica, lesão ou dúvida de segurança. Confirme primeiro com um responsável e um profissional qualificado; depois você pode voltar e montar o plano com essas orientações."
                 });
-                return;
+                return {blocked:true,type:'training',items:[]};
             }
-            if (a[17] && a[17]!=='Nenhum' && a[17]!=='Não sei identificar') {
-                setPfPlan({type:'training',blocked:true,items:[],message:'Você informou desconforto em um grupo de movimentos. Para não gerar automaticamente exercícios potencialmente desconfortáveis, confirme alternativas com um profissional qualificado antes de montar a semana. Suas respostas continuam salvas.'});
-                return;
+            const movementAvoidance=life1544AvoidanceGroup(a[17]);
+            const avoidanceReason=String(a[19]||'');
+            if (movementAvoidance && avoidanceReason!=='Quero evitar por preferência, sem dor') {
+                const blocked={type:'training',blocked:true,items:[],message:!avoidanceReason
+                    ? 'Você selecionou um movimento que causa desconforto ou prefere evitar. Para adaptar com segurança, revise a resposta e esclareça se existe dor. Suas respostas foram preservadas.'
+                    : 'Como você relatou dor, instabilidade ou incerteza sobre o movimento, o LIFE não vai presumir que outros exercícios são seguros. Peça orientação de um profissional qualificado e, se for menor, de um responsável. Suas respostas continuam salvas.'};
+                setPfPlan(blocked);
+                return blocked;
             }
             const ageCap = age > 0 && age < 18 ? 5 : 6;
             const recoveryCap = recovery === 'Tenho pouco tempo para recuperar' || a[18]==='Tenho dormido pouco' ? 4 : recovery === 'Oscila bastante' || a[16]==='Estou voltando após uma pausa' ? 5 : 6;
             const cappedTotalDays = Math.max(2, Math.min(requestedTotalDays, ageCap, recoveryCap));
             const normalizedCounts = normalizeWorkoutWeekCounts(cappedTotalDays, requestedStrengthDays, requestedCardioDays, balance, goal);
-            const totalDays = normalizedCounts.totalDays;
-            const strengthDays = normalizedCounts.strengthDays;
+            let strengthDays = normalizedCounts.strengthDays;
             let cardioDays = normalizedCounts.cardioDays;
             if (impact === 'Quero evitar corrida intensa') cardioDays = Math.min(cardioDays, 2);
+            // Uma preferência por evitar movimentos não é uma lesão; não repetir o padrão
+            // evitado, não compensar com volume excessivo e não inventar sessões extras.
+            if (movementAvoidance) strengthDays = Math.min(strengthDays, 2);
+            if (movementAvoidance==='legs') cardioDays = 0;
+            const totalDays = Math.min(normalizedCounts.totalDays, strengthDays+cardioDays);
             const prefs = {
                 age, height, goal, experience,
                 days: totalDays + " dias",
@@ -8514,7 +8577,9 @@ function LifeOSV18() {
                 cardioDays: cardioDays + " sessões",
                 balance, time, place, recovery, medical, impact
             };
-            const ranked = getWorkoutSuggestions(prefs);
+            let ranked=[];
+            try { const suggestions=getWorkoutSuggestions(prefs); ranked=Array.isArray(suggestions)?suggestions.filter(w=>w && typeof w==='object' && w.id!=null):[]; }
+            catch(e) { console.warn('[LIFE FITNESS] Recomendações opcionais indisponíveis; treino principal continua.',e); }
             const exerciseCount = Math.max(3,(time === '30–40 min' ? 4 : time === '45–60 min' ? 5 : 6) - ((a[16]==='Estou voltando após uma pausa'||a[18]==='Tenho dormido pouco')?1:0));
             const setMode = recovery === 'Tenho pouco tempo para recuperar' || experience === 'Iniciante' || a[16]==='Estou voltando após uma pausa' || a[18]==='Tenho dormido pouco'
                 ? 'base'
@@ -8535,16 +8600,19 @@ function LifeOSV18() {
                 ? ['Upper A · tronco sem aparelhos','Lower A · pernas sem aparelhos',
                    'Full Body · corpo inteiro','Upper B · tronco sem aparelhos','Lower B · pernas sem aparelhos']
                 : splitCycle;
-            const actualSplitCycle = strengthDays === 1 ? ['Full Body · corpo inteiro'] : strengthDays === 2 ? (experience === 'Iniciante' ? ['Full Body A · corpo inteiro','Full Body B · corpo inteiro'] : ['Upper · tronco completo','Lower · pernas completas']) : compatibleSplit;
-            const life149TrainingReport=window.LifeIntelligence149?.trainingReport(a);
+            const actualSplitCycle = movementAvoidance==='legs' ? ['Upper A · tronco completo','Upper B · tronco completo']
+                : movementAvoidance==='push' ? ['Pull · costas + bíceps + antebraço','Lower · pernas completas']
+                : movementAvoidance==='pull' ? ['Push · peito + ombros + tríceps','Lower · pernas completas']
+                : strengthDays === 1 ? ['Full Body · corpo inteiro'] : strengthDays === 2 ? (experience === 'Iniciante' ? ['Full Body A · corpo inteiro','Full Body B · corpo inteiro'] : ['Upper · tronco completo','Lower · pernas completas']) : compatibleSplit;
+            let life149TrainingReport=null;
+            try { life149TrainingReport=window.LifeIntelligence149?.trainingReport?.(a)||null; }
+            catch(e) { console.warn('[LIFE FITNESS] Relatório opcional indisponível; treino principal continua.',e); }
             const life149Avoid=String(a[17]||'Nenhum');
             const life149Style=String(a[15]||'');
             // O volume e a frequência já são moderados acima quando há retorno após pausa ou pouco sono.
             const strengthSessions = Array.from({ length: strengthDays }, (_, i) => {
                 const label = actualSplitCycle[i % actualSplitCycle.length];
-                const standardMoves = buildStrengthMovesFor(label, place, exerciseCount, i * 3);
-                const blocked=/perna|agachamento/i.test(life149Avoid)?/agach|afund|leg press|passada|extensora|flexora|panturr/i:/empurrar|ombros/i.test(life149Avoid)?/supino|desenvolv|eleva[çc]|paralela|tr[ií]ceps/i:/puxar|costas/i.test(life149Avoid)?/remada|puxad|barra fixa|rosca|b[ií]ceps/i:null;
-                const filteredMoves = blocked ? standardMoves.filter(m=>!blocked.test(typeof m==='string'?m:String(m?.name||m?.move||''))) : standardMoves;
+                const filteredMoves = buildStrengthMovesFor(label, place, exerciseCount, i * 3, movementAvoidance);
                 const equipmentLabel=m=>String(typeof m==='string'?m:(m?.name||m?.move||''));
                 const preferMachines=/máquinas/i.test(life149Style), preferFree=/pesos livres/i.test(life149Style);
                 const equipmentScore=m=>{const x=equipmentLabel(m);return preferMachines?(/máquina|leg press|puxador|polia|aparelho/i.test(x)?1:0):preferFree?(/halter|barra|livre|agachamento/i.test(x)?1:0):0};
@@ -8560,9 +8628,27 @@ function LifeOSV18() {
                     sessionType: 'strength'
                 };
             });
-            if (strengthSessions.some(day => day.moves.length < Math.min(3, exerciseCount))) {
-                setPfPlan({ type:'training',blocked:true,items:[],message:'Não encontrei exercícios suficientes compatíveis com o local e os equipamentos informados. Altere o ambiente de treino ou procure orientação para adaptar a divisão. Não vou sugerir máquinas que você não possui.' });
-                return;
+            // Se um local não tem exercícios suficientes para uma divisão adaptada,
+            // substituí-la por uma sessão de outro grupo permitido (sem inventar aparelho).
+            if (movementAvoidance) {
+                const fallbackLabels=movementAvoidance==='legs'
+                    ? ['Upper · tronco completo','Push · peito + ombros + tríceps','Pull · costas + bíceps + antebraço']
+                    : movementAvoidance==='push'
+                        ? ['Lower · pernas completas','Pull · costas + bíceps + antebraço']
+                        : ['Lower · pernas completas','Push · peito + ombros + tríceps'];
+                strengthSessions.forEach((day,i)=>{
+                    if (day.moves.length>=2) return;
+                    const better=fallbackLabels.map(label=>({label,moves:buildStrengthMovesFor(label,place,exerciseCount,i*3,movementAvoidance)}))
+                        .sort((a,b)=>b.moves.length-a.moves.length)[0];
+                    if (!better || better.moves.length<=day.moves.length) return;
+                    day.t=better.label;day.moves=better.moves;
+                    day.prescription=makeStrengthPrescription(better.moves,setMode);
+                });
+            }
+            if (strengthSessions.some(day => day.moves.length < (movementAvoidance ? 2 : Math.min(3, exerciseCount)))) {
+                const blocked={type:'training',blocked:true,items:[],message:'Não encontrei exercícios suficientes para uma ficha adaptada sem o movimento que você deseja evitar. Suas respostas foram preservadas. Revise ambiente/equipamentos ou procure orientação profissional para escolher alternativas.'};
+                setPfPlan(blocked);
+                return blocked;
             }
             const cardioName = impact === 'Prefiro baixo impacto'
                 ? 'Cardio de baixo impacto'
@@ -8610,7 +8696,8 @@ function LifeOSV18() {
             const adjustments = [
                 `Objetivo: ${goal}.`,
                 `Experiência: ${experience}; ${setMode === 'base' ? 'volume inicial mais conservador' : setMode === 'strength' ? 'faixas mais voltadas a força/técnica' : 'faixas gerais de hipertrofia'}.`,
-                `Semana: ${totalDays} dias disponíveis; o plano usa ${strengthDays} sessão(ões) de musculação e ${cardioDays} de cardio dentro desse limite.`,
+                `Semana: ${totalDays} sessões planejadas; ${strengthDays} de musculação e ${cardioDays} de cardio, dentro dos dias disponíveis.`,
+                movementAvoidance ? `Adaptação solicitada: movimentos de ${movementAvoidance==='legs'?'pernas/agachamento':movementAvoidance==='push'?'empurrar e ombros':'puxar e costas'} foram excluídos por preferência sem dor. As sessões foram limitadas e devem ter descanso entre si. Isso não significa que exercícios restantes sejam seguros caso você sinta dor.` : '',
                 normalizedCounts.adjusted ? `Compatibilidade semanal: sua combinação original ultrapassava os dias disponíveis; ela foi ajustada sem criar sessões extras escondidas.` : `Compatibilidade semanal: musculação + cardio cabe nos dias informados.`,
                 limitedEquipment && strengthDays >= 3
                     ? `Divisão adaptada ao ambiente: sessões de tronco, pernas e corpo inteiro, sem depender de aparelhos indisponíveis (preferência original: ${split}).`
@@ -8628,14 +8715,27 @@ function LifeOSV18() {
                 planType: goal === 'Treino híbrido' ? 'Híbrido' : 'Personalizado',
                 goal,
                 items: items.map(day => ({ ...day, sessionType: workoutSessionKind(day) })),
-                suggestions: ranked.slice(0, 4),
+                suggestions: movementAvoidance ? [] : ranked.slice(0, 4),
                 height,
                 age,
                 adjustments: [...adjustments,...(life149TrainingReport?.adjustments||[])],
                 answers:{...a}, report:life149TrainingReport,
-                methodNote: (age > 0 && age < 18 ? 'Modo jovem: técnica, progressão gradual e recuperação têm prioridade. ' : '') + 'O plano usa as respostas do questionário, considerando frequência, experiência, ambiente, recuperação e preferências. '+(life149TrainingReport?.note||'')+' '+(life149TrainingReport?.nextMeasure||'')
+                methodNote: (age > 0 && age < 18 ? 'Modo jovem: técnica, progressão gradual e recuperação têm prioridade. ' : '') + (movementAvoidance ? 'PLANO ADAPTADO A UMA PREFERÊNCIA SEM DOR: a área indicada foi excluída; não compense com sessões extras. Se o movimento causar dor ou instabilidade, não realize o exercício e procure avaliação. ' : '') + 'O plano usa as respostas do questionário, considerando frequência, experiência, ambiente, recuperação e preferências. '+(life149TrainingReport?.note||'')+' '+(life149TrainingReport?.nextMeasure||'')
             };
-            const refinedPlan=window.LifeIntelligence149?.refineTrainingPlan(generatedTrainingPlan,a)||generatedTrainingPlan;
+            let refinedPlan=generatedTrainingPlan;
+            try {
+                const candidate=movementAvoidance ? null : window.LifeIntelligence149?.refineTrainingPlan?.(generatedTrainingPlan,a);
+                if(candidate && !candidate.blocked && Array.isArray(candidate.items) && candidate.items.length &&
+                   candidate.items.every(day=>day && typeof day==='object' && Array.isArray(day.moves) && day.moves.length)) {
+                    refinedPlan=candidate;
+                }
+            } catch(e) { console.warn('[LIFE FITNESS] Refinamento opcional indisponível; treino base preservado.',e); }
+            // Renderers must receive a complete, validated week; never present an empty success state.
+            if(!Array.isArray(refinedPlan.items)||!refinedPlan.items.length) {
+                const blocked={type:'training',blocked:true,items:[],message:'O gerador não encontrou uma semana válida com estas respostas. Revise dias, ambiente e equipamentos.'};
+                setPfPlan(blocked);return blocked;
+            }
+            refinedPlan={...refinedPlan,suggestions:(Array.isArray(refinedPlan.suggestions)?refinedPlan.suggestions:[]).filter(w=>w && typeof w==='object')};
             setPfPlanName(generatedPlanName);
             setPfPlan(refinedPlan);
             if (!hasV18Pro) {
@@ -8646,7 +8746,7 @@ function LifeOSV18() {
                     }));
                 } catch (e) {}
             }
-            return;
+            return refinedPlan;
         }
         const routine = a[0] || 'Horários variáveis';
         const cook = a[1] || 'Receitas rápidas';
@@ -8656,7 +8756,7 @@ function LifeOSV18() {
         const medical = a[5] || 'Não';
         if (String(medical).startsWith('Sim')) {
             setPfPlan({ type: 'diet', blocked: true, items: [], message: 'Como você informou alergia ou necessidade médica, o LIFE não vai montar automaticamente uma rotina alimentar. Use suas orientações profissionais e, se for menor de 18 anos, envolva também um responsável.' });
-            return;
+            return {blocked:true,type:'diet',items:[]};
         }
         const common = window.LifeGeneratorRules122.buildNutrition({
             style: preference === 'Vegetariana' ? 'Vegetariana' : style,
@@ -8664,7 +8764,8 @@ function LifeOSV18() {
             intolerances:preference==='Sem lactose por preferência'?['Lactose']:[],
             medical:'Não'
         });
-        setPfPlan({ type:'diet',items:common.items,foodMeta:{routine,cook,style,focus,preference},methodNote:'Sugestões filtradas conforme rotina e preferências. Para alergias, confirme alimentos e rótulos com profissional; o LIFE não substitui avaliação individual.' });
+        const result={ type:'diet',items:Array.isArray(common?.items)?common.items:[],foodMeta:{routine,cook,style,focus,preference},methodNote:'Sugestões filtradas conforme rotina e preferências. Para alergias, confirme alimentos e rótulos com profissional; o LIFE não substitui avaliação individual.' };
+        setPfPlan(result);return result;
     };
     const savePersonalWorkout = () => {
         if (!pfPlan || pfPlan.type !== "training")
@@ -14326,6 +14427,7 @@ function LifeOSV18() {
                         React.createElement("div", { className: "v27-progress" },
                             React.createElement("i", { style: { width: ((pfStep + 1) / qs.length * 100) + "%" } })),
                         React.createElement("div", { className: "v27-q" }, qs[pfStep][0]),
+                        personalFlow === "training" && React.createElement("small",{className:"micro",style:{opacity:.78}},"GERADOR LOCAL · LIFE 15.4.4 · ETAPA "+(pfStep+1)+" / "+qs.length),
                         React.createElement("div", { className: "v27-help" }, personalFlow === "training" ? (qs[pfStep][1][0] === "__AGE__" ? "A idade ajuda o LIFE a escolher um nível de cautela adequado. Menores de 18 anos não recebem automaticamente estruturas avançadas de alto volume." : qs[pfStep][1][0] === "__HEIGHT__" ? "A altura serve apenas como referência de ajuste de equipamentos e ergonomia, nunca como padrão corporal." : "O plano cruza objetivo, experiência, musculação, corrida/cardio, frequência, recuperação, ambiente e limitações antes de montar a semana.") : "O LIFE usa rotina e preferências para organizar refeições variadas — sem metas agressivas de peso."),
                         personalFlow === "training" && qs[pfStep][1][0] === "__HEIGHT__" ? React.createElement("div", { className: "vfit-height" },
                             React.createElement("div", { className: "vfit-height-row" },
@@ -14337,7 +14439,7 @@ function LifeOSV18() {
                                 React.createElement("span", null, "anos"))) : React.createElement("div", { className: "v27-options" }, qs[pfStep][1].map(v => React.createElement("button", { type: "button", key: v, className: "v27-option " + (pfAnswers[pfStep] === v ? "on" : ""), onClick: () => choosePf(v) }, v))),
                         React.createElement("div", { className: "v27-actions" },
                             React.createElement("button", { type: "button", className: "v27-back", disabled: pfStep === 0, onClick: () => setPfStep(x => Math.max(0, x - 1)) }, "VOLTAR"),
-                            React.createElement("button", { type: "button", className: "v27-next", disabled: personalFlow === "training" && qs[pfStep][1][0] === "__AGE__" ? !(Number(pfAnswers[pfStep]) >= 13 && Number(pfAnswers[pfStep]) <= 90) : personalFlow === "training" && qs[pfStep][1][0] === "__HEIGHT__" ? !(pfAnswers[pfStep] === "Prefiro não informar" || (Number(pfAnswers[pfStep]) >= 120 && Number(pfAnswers[pfStep]) <= 230)) : !pfAnswers[pfStep], onClick: () => { if (pfStep < qs.length - 1) {setPfStep(x => x + 1);return;} try {buildPfPlan();} catch (e) { console.error('[LIFE FITNESS] Falha ao gerar plano', e); setPfPlan({type:personalFlow==='training'?'training':'diet',blocked:true,items:[],message:'Não foi possível concluir a geração deste plano. Suas respostas continuam preservadas. Volte para revisar as escolhas ou tente novamente após atualizar o LIFE.'}); } } }, pfStep < qs.length - 1 ? "CONTINUAR" : "GERAR COM LIFE"))) : React.createElement(React.Fragment, null,
+                            React.createElement("button", { type: "button", className: "v27-next", disabled: personalFlow === "training" && qs[pfStep][1][0] === "__AGE__" ? !(Number(pfAnswers[pfStep]) >= 13 && Number(pfAnswers[pfStep]) <= 90) : personalFlow === "training" && qs[pfStep][1][0] === "__HEIGHT__" ? !(pfAnswers[pfStep] === "Prefiro não informar" || (Number(pfAnswers[pfStep]) >= 120 && Number(pfAnswers[pfStep]) <= 230)) : !pfAnswers[pfStep], onClick: () => { if (pfStep < qs.length - 1) {setPfStep(x => x + 1);return;} runPfGenerate() } }, pfStep < qs.length - 1 ? "CONTINUAR" : "GERAR COM LIFE"))) : React.createElement(React.Fragment, null,
                         React.createElement("div", { className: "v27-q" }, personalFlow === "training" ? (pfPlan.blocked ? "Antes de montar seu treino." : (!hasV18Pro ? "Seu treino foi gerado." : "Sua semana de treino está pronta.")) : (pfPlan.blocked ? "Antes de montar sua rotina alimentar." : "Sua rotina alimentar foi organizada.")),
                         React.createElement("div", { className: "v27-help" }, pfPlan.blocked ? pfPlan.message : (personalFlow === "training" && !hasV18Pro ? "O LIFE gerou sua semana. Veja uma amostra abaixo; o rascunho foi guardado neste navegador e a ficha completa fica disponível no PRO." : "Plano criado a partir das respostas desta sessão. Você pode refazer o questionário quando sua rotina mudar.")),
                         personalFlow === "training" && !pfPlan.blocked && !hasV18Pro && React.createElement("div",{className:"life-pf-free-lock-v82"},
@@ -14361,21 +14463,21 @@ function LifeOSV18() {
                                 i + 1),
                             React.createElement("b", null, x)))),
                         (personalFlow !== "training" || hasV18Pro) && React.createElement("div", { className: "v28-note" }, personalFlow === "training" ? "O LIFE prioriza técnica, consistência, recuperação e progressão gradual. A estrutura considera frequência, experiência, tempo e equipamentos informados." : "O LIFE prioriza organização, variedade e praticidade. As refeições partem da sua rotina e preferências, sem metas agressivas de peso."),
-                        !pfPlan.blocked && (personalFlow !== "training" || hasV18Pro) && React.createElement(React.Fragment, null,
+                        !pfPlan.blocked && Array.isArray(pfPlan.items) && (personalFlow !== "training" || hasV18Pro) && React.createElement(React.Fragment, null,
                             personalFlow === "training" && React.createElement("div", { className: "life-clean-summary-v149 life-workout-summary-v149" }, lifeWorkoutSessionStats({ items: pfPlan.items || [] }).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))),
                             personalFlow === "diet" && React.createElement("div", { className: "life-clean-summary-v149" }, lifeNutritionProfileSummaryV149(pfPlan).map((item, i) => React.createElement("div", { key: i }, React.createElement("small", null, item[0].toUpperCase()), React.createElement("b", null, item[1])))),
                             React.createElement("div", { className: "v27-plan" }, pfPlan.items.map((x, i) => React.createElement("div", { className: "v27-day life-day-card-v149", key: i },
                                 React.createElement("small", null, x.k),
                                 React.createElement("b", null, x.t),
                                 React.createElement("p", null, x.d),
-                                personalFlow === "training" ? lifeRenderWorkoutExerciseCards(x, openExerciseDetail) : lifeRenderNutritionBlocksV149([{ k: x.k, t: x.t, d: x.d }]))))),
+                                personalFlow === "training" ? life1543SafeWorkoutCards(x, openExerciseDetail) : lifeRenderNutritionBlocksV149([{ k: x.k, t: x.t, d: x.d }]))))),
                         personalFlow === "training" && !pfPlan.blocked && hasV18Pro && pfPlan.suggestions?.length > 0 && React.createElement("div", { className: "vfit-similar" },
                             React.createElement("div", { className: "v28-k" }, "TREINOS PRONTOS PARECIDOS COM SUAS RESPOSTAS"),
                             React.createElement("div", { className: "vfit-result-grid" }, pfPlan.suggestions.map(w => React.createElement("article", { className: "vfit-result", key: w.id },
                                 React.createElement("small", null,
-                                    w.type.toUpperCase(),
+                                    String(w.type||'Treino').toUpperCase(),
                                     " \u00B7 ",
-                                    w.level.toUpperCase()),
+String(w.level||'Base').toUpperCase()),
                                 React.createElement("b", null, w.name),
                                 React.createElement("p", null,
                                     w.days,
@@ -14389,7 +14491,7 @@ function LifeOSV18() {
                                 React.createElement("input", { value: mealPlanName, onChange: e => setMealPlanName(e.target.value), placeholder: "Ex.: Plano da semana" }))),
                         personalFlow === "training" && !pfPlan.blocked && hasV18Pro && React.createElement("div", { className: "v27-safe" }, "Comece de forma gradual, priorize t\u00E9cnica, recupera\u00E7\u00E3o e qualidade de movimento. Se houver dor, les\u00E3o, condi\u00E7\u00E3o m\u00E9dica ou orienta\u00E7\u00E3o espec\u00EDfica, interrompa e siga a avalia\u00E7\u00E3o de um respons\u00E1vel e profissional qualificado."),
                         React.createElement("div", { className: "v27-actions" },
-                            React.createElement("button", { type: "button", className: "v27-back", onClick: () => { const revise=personalFlow==='training' && pfPlan?.blocked; setPfPlan(null); setPfStep(revise ? (pfAnswers[13]!=='Não' ? 13 : (pfAnswers[17] && pfAnswers[17]!=='Nenhum' && pfAnswers[17]!=='Não sei identificar' ? 17 : 11)) : 0); if(!revise) setPfAnswers({}); setPfPlanName(''); setMealPlanName(''); } }, pfPlan?.blocked && personalFlow==='training' ? "REVISAR RESPOSTAS" : "REFAZER"),
+                            React.createElement("button", { type: "button", className: "v27-back", onClick: () => { const revise=personalFlow==='training' && pfPlan?.blocked; setPfPlan(null); setPfStep(revise ? (pfAnswers[13]!=='Não' ? 13 : (life1544AvoidanceGroup(pfAnswers[17]) ? (pfAnswers[19] ? 19 : 17) : 11)) : 0); if(!revise) setPfAnswers({}); setPfPlanName(''); setMealPlanName(''); } }, pfPlan?.blocked && personalFlow==='training' ? "REVISAR RESPOSTAS" : "REFAZER"),
                             personalFlow === "training" ? (pfPlan.blocked ? React.createElement("button", { type: "button", className: "v27-next", onClick: closePf }, "FECHAR") : (hasV18Pro ? React.createElement("button", { type: "button", className: "v27-next", onClick: savePersonalWorkout }, "SALVAR NA MINHA PASTA") : React.createElement("button",{type:"button",className:"v27-next life-pf-unlock-v82",onClick:()=>openLifePro('treino_personalizado')},"VER MEU TREINO · PRO →"))) : (pfPlan.blocked ? React.createElement("button", { type: "button", className: "v27-next", onClick: closePf }, "FECHAR") : React.createElement("button", { type: "button", className: "v27-next", onClick: saveCurrentMealPlan }, "SALVAR PLANO NO LIFE")))))),
             standby && React.createElement("div", { className: "v20-standby", onClick: () => setStandby(false) },
                 React.createElement("div", { className: "text-center" },
