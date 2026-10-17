@@ -4,9 +4,9 @@ from urllib.parse import unquote
 root=Path(__file__).resolve().parent.parent
 assert root.joinpath('index.html').exists()
 html=(root/'index.html').read_text()
-version='15.4.5'
+version='15.4.7'
 assert f'content="{version}"' in html
-assert f"version:'{version}'" in (root/'assets/js/config-15.4.5.js').read_text()
+assert f"version:'{version}'" in (root/'assets/js/config-15.4.7.js').read_text()
 assert version in json.loads((root/'manifest.webmanifest').read_text())['name']
 sw=(root/'service-worker.js').read_text()
 assert f"ASSET_BUILD='{version}'" in sw

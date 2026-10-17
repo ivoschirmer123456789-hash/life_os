@@ -1,11 +1,11 @@
-# LIFE OS 15.4.5 — Atualização de cache e gerador de treinos
+# LIFE OS 15.4.7 — Auditoria e correções de Fitness
 
-Abra `index.html` no topo do ZIP para publicação. Preserve todos os arquivos, incluindo os novos nomes `assets/js/life-app-15.4.5.js`, `assets/js/config-15.4.5.js`, `assets/js/life-release-15.4.5.js` e `assets/css/mobile-clarity-15.4.5.css`.
+Atualização completa sobre a 15.4.6. Mantém a navegação **pastas dos dias → uma ficha por vez → voltar** e os recursos existentes de Projetos, Estudos, Alimentação, Cérebro, FREE e PRO.
 
-**Por que mudou o nome dos arquivos?** O service worker das versões antigas ignora o parâmetro `?v=` e pode continuar enviando JavaScript velho. Os novos caminhos são essenciais para evitar esse problema no primeiro carregamento após publicar.
+Corrige a organização de dias em planos antigos, preserva o identificador anterior do acompanhamento, impede início de sessões sem exercícios válidos, reconhece exercícios importados no formato `move`, protege contra falso sucesso de salvamento e valida o acesso PRO ao salvar fichas temporárias.
 
-**Como conferir:** Fitness → Treino personalizado → procurar `LIFE / FITNESS / PERSONAL · V15.4.5`. No questionário há o botão `ATUALIZAR ARQUIVOS DO LIFE`, que não apaga seu perfil, suas tarefas nem os dados do navegador. Se a versão 15.4.5 não aparece, a atualização ainda não chegou ao seu navegador/domínio.
+**Para publicar:** descompacte e envie todos os arquivos, mantendo `index.html` na raiz. Depois confirme `V15.4.7` em Fitness → Treino personalizado. O ZIP não substitui automaticamente os arquivos no domínio.
 
-Dor ou lesão real continua exigindo orientação profissional; o gerador só adapta preferências sem dor. O plano FREE mostra prévia e o PRO mostra ficha completa conforme permissões originais.
+**Recomendação:** primeiro teste em uma implantação separada na Vercel e mantenha o backup da versão anterior. A validação autenticada, assinaturas, pagamentos e sincronização real não foi realizada aqui.
 
-Revisão, testes e limitações: `QA_REPORT_15.4.5.md`.
+Detalhes: `QA_REPORT_15.4.7.md`.
