@@ -1,11 +1,19 @@
-# LIFE OS 15.4.7 — Auditoria e correções de Fitness
+# LIFE OS 15.6.1 — Revisão funcional e proteção de dados
 
-Atualização completa sobre a 15.4.6. Mantém a navegação **pastas dos dias → uma ficha por vez → voltar** e os recursos existentes de Projetos, Estudos, Alimentação, Cérebro, FREE e PRO.
+Projeto completo para publicar no GitHub/Vercel. O arquivo `index.html` fica na raiz. Mantidas todas as abas, o sistema de treinos 15.5, o visual preto e laranja, as pastas semanais e FREE/PRO.
 
-Corrige a organização de dias em planos antigos, preserva o identificador anterior do acompanhamento, impede início de sessões sem exercícios válidos, reconhece exercícios importados no formato `move`, protege contra falso sucesso de salvamento e valida o acesso PRO ao salvar fichas temporárias.
+## Correções desta versão
 
-**Para publicar:** descompacte e envie todos os arquivos, mantendo `index.html` na raiz. Depois confirme `V15.4.7` em Fitness → Treino personalizado. O ZIP não substitui automaticamente os arquivos no domínio.
+- Planejador: respeita a duração real de uma tarefa já cadastrada como prioridade e avisa quando ela não cabe no tempo informado. Duração de nova prioridade fica identificada como estimativa de 15 minutos.
+- Finanças: um lançamento inválido não reserva um identificador duplicado nem esconde outro lançamento válido.
+- Alimentação / Minha Cozinha: uma restrição desconhecida informada junto de restrições reconhecidas não é ignorada; receitas não são classificadas como compatíveis sem revisão.
+- Estudos: relatórios aceitam IDs de etapas antigos tanto numéricos como texto e ignoram índices duplicados.
+- Minha Cozinha: despensa, preferências, compras e favoritos só mudam na tela depois da confirmação de salvamento; falha mostra alerta e preserva os registros anteriores.
+- Despensa: itens cuja validade informada passou não são sugeridos no bloco “Use primeiro”; são destacados separadamente.
+- Catálogo de receitas: a quantidade de ingredientes na despensa agora é nomeada corretamente, sem insinuar que isso certifica segurança para alergias.
 
-**Recomendação:** primeiro teste em uma implantação separada na Vercel e mantenha o backup da versão anterior. A validação autenticada, assinaturas, pagamentos e sincronização real não foi realizada aqui.
+## Publicação
 
-Detalhes: `QA_REPORT_15.4.7.md`.
+Teste primeiro em uma Vercel separada antes de trocar o domínio. Confira o número **15.6.1** na interface. Os novos arquivos de aplicativo, estilo, configuração e cache possuem versionamento próprio. Os testes locais não equivalem a validar login, assinatura, IA remota e sincronização Supabase na instalação publicada.
+
+Consulte `QA_REPORT_15.6.1.md` para o relatório detalhado.

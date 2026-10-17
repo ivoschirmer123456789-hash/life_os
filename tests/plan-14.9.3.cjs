@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const root=path.resolve(__dirname,'..');
-const js=fs.readFileSync(path.join(root,'assets/js/life-app-15.4.7.js'),'utf8');
+const js=fs.readFileSync(path.join(root,'assets/js/life-app-15.6.1.js'),'utf8');
 const section=js.slice(js.indexOf('const LIFE_PLAN_VISUALS_V149 ='),js.indexOf('const lifeIsSimpleGreeting ='));
 let pass=0;
 const check=(name,fn)=>{fn();console.log('PASS',name);pass++};
