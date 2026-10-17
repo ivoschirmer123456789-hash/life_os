@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-15.4.4-projects';
-const ASSET_BUILD='15.4.4';
+const LIFE_CACHE='life-os-15.4.5-projects';
+const ASSET_BUILD='15.4.5';
 const SHELL=[
   './',
   './index.html',
@@ -28,7 +28,7 @@ const SHELL=[
   './assets/css/usability-14.6.5.css',
   './assets/css/smart-hub-containment-14.8.1.css',
   './assets/css/training-nutrition-visual-14.9.1.css',
-  './assets/css/mobile-clarity-14.9.5.css',
+  './assets/css/mobile-clarity-15.4.5.css',
   './assets/media/hero-daylight.webp',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',
@@ -52,14 +52,14 @@ const SHELL=[
   './assets/js/life-integrity-12.3.js',
   './assets/js/life-brain-14.6.4.js',
   './assets/js/life-quality-12.4.js',
-  './assets/js/life-release-12.5.js',
+  './assets/js/life-release-15.4.5.js',
   './assets/js/life-production-12.6.js',
   './assets/js/life-extras-13.0.js',
-  './assets/js/config-9.4.2.js',
+  './assets/js/config-15.4.5.js',
   './assets/js/product-core-9.4.2.js',
   './assets/js/product-spacious-9.4.2.js',
   './assets/js/clarity-guardrails-9.4.2.js',
-  './assets/js/life-app-9.4.2.js',
+  './assets/js/life-app-15.4.5.js',
   './assets/js/context-help-9.4.2.js',
   './assets/js/supabase-auth-9.4.2.js',
   './assets/js/runtime-9.4.2.js',
@@ -124,10 +124,11 @@ self.addEventListener('fetch',event=>{
   if(url.origin===self.location.origin){
     const isAsset=/\/assets\//.test(url.pathname);
     if(isAsset){
-      // Versioned local assets: fast cache-first, quietly refreshed in the background.
+      // Versioned local assets: compare full URL INCLUDING release query.
+      // IMPORTANT: ignoreSearch:true previously reused obsolete workout generators after deploy.
       event.respondWith((async()=>{
         const cache=await caches.open(LIFE_CACHE);
-        const cached=await cache.match(req,{ignoreSearch:true});
+        const cached=await cache.match(req);
         if(cached)return cached; // Immutable, versioned app shell; no duplicate background requests.
         try{
           const fresh=await fetch(req);
