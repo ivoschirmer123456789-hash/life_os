@@ -1,6 +1,6 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
-const root=path.resolve(__dirname,'..'),source=fs.readFileSync(path.join(root,'assets/js/life-app-15.6.1.js'),'utf8');
+const root=path.resolve(__dirname,'..'),source=fs.readFileSync(path.join(root,'assets/js/life-app-15.7.1.js'),'utf8');
 const begin=source.indexOf('const LIFE_PLAN_VISUALS_V149 = '),end=source.indexOf('const lifeIsSimpleGreeting = ',begin);
 assert(begin>=0&&end>begin,'helper region exists');
 const n=x=>String(x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,'').trim();
@@ -64,7 +64,7 @@ check('menu possui controles de expandir, compactar e ocultar',()=>{
 });
 
 check('ocultar esconde o menu por CSS, não apenas bloqueia os cliques',()=>{
-  const css=fs.readFileSync(path.join(root,'assets/css/mobile-clarity-15.6.1.css'),'utf8');
+  const css=fs.readFileSync(path.join(root,'assets/css/mobile-clarity-15.7.1.css'),'utf8');
   assert(/\.life-sidebar-v1495\.life-sidebar-hidden\s*\{[^}]*display\s*:\s*none\s*!important/.test(css));
   assert(css.includes('.life-sidebar-restore-v1495'));
 });

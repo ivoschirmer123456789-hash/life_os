@@ -95,3 +95,56 @@
  };
  root.LifeReliability151=Object.freeze({record,preview,recover,version:'15.1.0'});
 })(typeof window!=='undefined'?window:globalThis);
+
+
+/* LIFE 15.7 · Integração verificável. Somente leitura por padrão; ações exigem confirmação. */
+(function(root,factory){'use strict';const api=factory();if(root)root.LifeIntegration157=api;if(typeof module==='object'&&module.exports)module.exports=api})(typeof window!=='undefined'?window:globalThis,function(){'use strict';
+ const rows=a=>Array.isArray(a)?a.filter(x=>x&&typeof x==='object'&&!Array.isArray(x)).slice(0,600):[];
+ const short=(x,n=110)=>String(x??'').replace(/[\x00-\x1f]/g,' ').trim().slice(0,n);
+ const done=x=>x?.done===true||x?.completed===true||x?.d===true;
+ const day=x=>{if(typeof x!=='string')return null;const s=x.slice(0,10);if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return null;const n=new Date(s+'T12:00:00Z');return Number.isFinite(+n)&&n.toISOString().slice(0,10)===s?s:null;};
+ const todayKey=(input)=>{const date=input instanceof Date?input:(input?new Date(input):new Date());return Number.isFinite(+date)?[date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-'):null;};
+ const addDays=(key,offset)=>{const t=new Date(key+'T12:00:00Z');t.setUTCDate(t.getUTCDate()+offset);return t.toISOString().slice(0,10)};
+ const minute=s=>{const m=/^(\d{1,2}):(\d{2})$/.exec(String(s||''));if(!m)return null;const h=+m[1],min=+m[2];return h<24&&min<60?h*60+min:null;};
+ const duration=x=>{if(x===null||x===undefined||x==='')return null;const n=Number(x);return Number.isFinite(n)&&n>=5&&n<=480?Math.round(n):null};
+ const eventDuration=e=>duration(e?.duration)||duration(/(\d+)\s*min/i.exec(String(e?.m||''))?.[1]);
+ function integrate(context={},opts={}){
+   const now=day(opts.today)||todayKey(opts.now)||todayKey();const tasks=rows(context.tasks),projects=rows(context.projects),events=rows(context.events),workouts=rows(context.workouts),meals=rows(context.mealPlans);
+   const study=context.studyPlan&&typeof context.studyPlan==='object'&&!Array.isArray(context.studyPlan)?context.studyPlan:null;
+   const timeline=[];const warnings=[];let incomplete=0;
+   const append=(kind,date,title,ref,extra='')=>{if(!date){incomplete++;return;} timeline.push({kind,date,title:short(title),ref:short(ref,90),extra:short(extra,120)});};
+   tasks.forEach(t=>{if(done(t))return;const date=day(t.dueAt);if(t.dueAt&&!date)warnings.push({type:'data',area:'Tarefas',text:'Uma tarefa contém prazo inválido; revise esse registro.'});if(date)append('Tarefa',date,t.text||t.title||'Tarefa',t.id||'',duration(t.duration)?duration(t.duration)+' min':'Duração não informada');});
+   events.filter(x=>!done(x)).forEach(e=>{const date=day(e.date)||day(e.startAt);if(!date&&e.date)warnings.push({type:'data',area:'Agenda',text:'Um compromisso tem data inválida.'});if(date)append('Agenda',date,e.n||e.title||'Compromisso',e.id||'',(e.t||e.time||'Horário não definido')+(e.linkedTaskId?' · Vinculado à tarefa':''));});
+   projects.filter(x=>!done(x)).forEach(p=>{if(p.deadline){const date=day(p.deadline);if(date)append('Projeto',date,p.n||p.title||'Projeto',p.id||p.n||'','Prazo do projeto');else warnings.push({type:'data',area:'Projetos',text:'Um projeto tem prazo inválido.'});}});
+   timeline.sort((a,b)=>a.date.localeCompare(b.date)||({Agenda:0,Tarefa:1,Projeto:2}[a.kind]-{Agenda:0,Tarefa:1,Projeto:2}[b.kind]));
+   const cutoff=addDays(now,6),upcoming=timeline.filter(x=>x.date>=now&&x.date<=cutoff).slice(0,70);
+   const overdue=timeline.filter(x=>x.date<now&&x.kind!=='Agenda');
+   const open=tasks.filter(x=>!done(x)),completed=tasks.filter(done);
+   const linked=events.filter(e=>e.linkedTaskId&&!done(e));const dupeLinks=new Map();linked.forEach(e=>{const k=String(e.linkedTaskId);dupeLinks.set(k,(dupeLinks.get(k)||0)+1)});
+   if([...dupeLinks.values()].some(x=>x>1))warnings.push({type:'duplicate',area:'Agenda',text:'Há tarefas com mais de um bloco agendado. Revise antes de criar outros.'});
+   const currentStudies=Array.isArray(study?.timeline)?study.timeline.filter(x=>x&&typeof x==='object'):[];const stageDone=new Set((Array.isArray(study?.completedStages)?study.completedStages:[]).map(String));const nextStage=currentStudies.find(x=>!stageDone.has(String(x.index)));
+   const projectActive=projects.filter(x=>!done(x));const nextProject=projectActive.find(p=>p.next)||null;
+   const durationCoverage=open.filter(x=>duration(x.duration)!==null).length;
+   const insights=[];
+   if(overdue.length)insights.push({id:'overdue',priority:1,area:'Tarefas',title:overdue.length+' prazo(s) para revisar',body:'Confirme quais ainda são válidos antes de mudar qualquer data.'});
+   if(nextStage)insights.push({id:'study',priority:2,area:'Estudos',title:'Retomar a trilha de estudos',body:short(nextStage.title||'Próxima etapa')+' · estágio ainda não marcado como concluído.'});
+   if(nextProject)insights.push({id:'project',priority:3,area:'Projetos',title:'Próxima etapa do projeto',body:short(nextProject.n||nextProject.title)+' · '+short(nextProject.next,110)});
+   if(open.length&&durationCoverage<open.length)insights.push({id:'duration',priority:4,area:'Tarefas',title:'Planejamento mais preciso',body:(open.length-durationCoverage)+' tarefa(s) aberta(s) sem duração válida; informe o tempo antes de montar blocos.'});
+   if(!insights.length)insights.push({id:'baseline',priority:5,area:'Tarefas',title:'Organizar a próxima ação',body:'Registre uma tarefa, etapa de estudo ou prazo para receber orientação baseada em dados.'});
+   return {today:now,end:cutoff,upcoming,overdue:overdue.slice(0,15),warnings:warnings.slice(0,8),insights:insights.sort((a,b)=>a.priority-b.priority),summary:{openTasks:open.length,completedTasks:completed.length,projectCount:projectActive.length,workoutPlans:workouts.length,mealPlans:meals.length,studyStages:currentStudies.length,studyDone:currentStudies.filter(x=>stageDone.has(String(x.index))).length,calendarItems:upcoming.length,unscheduledTasks:open.filter(x=>!linked.some(e=>String(e.linkedTaskId)===String(x.id))).length},limit:'Somente registros com datas explícitas entram na semana. Planos de treino sem horário ou dia datado permanecem separados. Não implica sincronização em nuvem.'};
+ }
+ function proposeBlock(task,events=[],opts={}){
+   if(!task||typeof task!=='object'||done(task))return {ok:false,reason:'A tarefa não existe ou já foi concluída.'};
+   const id=short(task.id,90),name=short(task.text||task.title);if(!id||!name)return {ok:false,reason:'Tarefa sem identificação ou título.'};
+   if(rows(events).some(e=>!done(e)&&String(e.linkedTaskId||'')===id))return {ok:false,reason:'Esta tarefa já tem um bloco na agenda. Confira antes de criar outro.'};
+   const d=duration(task.duration);if(!d)return {ok:false,reason:'Informe uma duração válida (5 a 480 minutos) na tarefa antes de agendar.'};
+   const date=day(opts.date);if(!date)return {ok:false,reason:'Selecione uma data válida para o bloco.'};
+   const min=minute(opts.time);if(min===null)return {ok:false,reason:'Informe um horário válido.'};
+   if(min<360||min+d>1320)return {ok:false,reason:'Escolha um horário entre 06:00 e 22:00 que comporte a duração.'};
+   const unknown=[];const busy=rows(events).filter(e=>!done(e)&&day(e.date||e.startAt)===date).map(e=>{const m=minute(e.t||e.time);if(m===null)return null;const ed=eventDuration(e);if(ed===null){unknown.push(e.n||e.title||'Compromisso');return null;}return {start:m,end:m+ed,title:short(e.n||e.title)};}).filter(Boolean);
+   const collision=busy.find(e=>min<e.end&&min+d>e.start);
+   if(collision)return {ok:false,reason:'Horário ocupado por '+collision.title+'. Escolha outra faixa.'};
+   return {ok:true,requiresConfirmation:true,warning:unknown.length?'Existem compromissos sem duração; confira possíveis conflitos manualmente.':'',preview:{taskId:id,title:name,date,time:String(opts.time),duration:d},event:{id:'event_task_157_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),n:name,t:String(opts.time),date,duration:d,m:'Tarefa · '+d+' min',linkedTaskId:task.id,d:false}};
+ }
+ return Object.freeze({version:'15.7.1',integrate,proposeBlock,day,todayKey,addDays,duration,minute});
+});
