@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('fs'),path=require('path'), assert=require('assert').strict;
 const root=path.join(__dirname,'..');const read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const app=read('assets/js/life-app-15.7.1.js'),runtime=read('assets/js/runtime-9.4.2.js');
+const app=read('assets/js/life-app-15.8.1.js'),runtime=read('assets/js/runtime-9.4.2.js');
 const html=read('index.html'),sw=read('service-worker.js'),css=read('assets/css/usability-14.6.5.css');
 const weather=app.indexOf("sheet === 'weather'");
 const city=app.indexOf('className: "life1465-city-priority"',weather);
@@ -20,8 +20,8 @@ assert(runtime.includes("const fixedArea=e.target?.closest?.('.v18-tabs,.v18-top
 assert(runtime.includes("if(modalCandidates().length)return;"));
 assert(css.includes('html.life-modal-active{overflow-y:hidden!important}'));
 assert(css.includes('.life1465-city-priority'));
-assert(html.includes('assets/css/usability-14.6.5.css?v=15.7.1'));
+assert(html.includes('assets/css/usability-14.6.5.css?v=15.8.1'));
 assert(sw.includes("'./assets/css/usability-14.6.5.css'"));
-assert(sw.includes("ASSET_BUILD='15.7.1'"));
+assert(sw.includes("ASSET_BUILD='15.8.1'"));
 assert(fs.existsSync(path.join(root,'assets/js/life-brain-14.6.4.js')));
 console.log('16 checks: weather-first, wheel, modal lock, assets, cache, brain retained — PASS');

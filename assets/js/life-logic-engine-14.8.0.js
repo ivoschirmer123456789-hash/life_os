@@ -146,5 +146,5 @@
    if(collision)return {ok:false,reason:'Horário ocupado por '+collision.title+'. Escolha outra faixa.'};
    return {ok:true,requiresConfirmation:true,warning:unknown.length?'Existem compromissos sem duração; confira possíveis conflitos manualmente.':'',preview:{taskId:id,title:name,date,time:String(opts.time),duration:d},event:{id:'event_task_157_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),n:name,t:String(opts.time),date,duration:d,m:'Tarefa · '+d+' min',linkedTaskId:task.id,d:false}};
  }
- return Object.freeze({version:'15.7.1',integrate,proposeBlock,day,todayKey,addDays,duration,minute});
+ return Object.freeze({version:'15.8.1',integrate,proposeBlock,day,todayKey,addDays,duration,minute});
 });
