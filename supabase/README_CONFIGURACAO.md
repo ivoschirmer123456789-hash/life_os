@@ -18,7 +18,7 @@ O plano PRO e o pagamento **não são ativados por esta função**. A aprovaçã
 Nota: se já houver uma função `life-ai` publicada, compare as versões e faça backup antes de substituir.
 
 
-## LIFE OS 15.8.1 — pagamentos Mercado Pago (cartão, Pix e boleto)
+## LIFE OS 15.8.2 — pagamentos Mercado Pago (cartão, Pix e boleto)
 
 **Não basta subir o ZIP na Vercel.** As duas Edge Functions precisam ser publicadas no
 Supabase **que já atende o LIFE OS**, e o SQL da integração deve ser instalado antes.
@@ -28,7 +28,7 @@ Não configure acesso de produção sem revisar o esquema existente e fazer back
    e que os meios de pagamento desejados aparecem no painel de Integrações.
    Utilize uma conta de titular que cumpra as exigências de idade e titularidade do provedor.
 2. Faça backup do Supabase. No SQL Editor, revise e execute
-   `database/mercadopago-billing-15.8.1.sql`. Requer a tabela `profiles` com `plan`,
+   `database/mercadopago-billing-15.8.2.sql`. Requer a tabela `profiles` com `plan`,
    `pro_until` e `subscription_status`. Confirme também a política de proteção dos
    campos de assinatura em `database/security.sql` no esquema realmente publicado.
 3. Com o Supabase CLI apontando para o projeto correto, configure estes **segredos somente no servidor**:
@@ -84,14 +84,14 @@ A página de retorno por si só **nunca** libera o PRO.
 Documentação Mercado Pago: https://www.mercadopago.com.br/developers/pt/docs/subscriptions/overview
 e https://www.mercadopago.com.br/developers/pt/docs/checkout-pro-preferences/payment-notifications
 
-### Auditoria 15.8.1 — pendências para ativar cobrança real
+### Auditoria 15.8.2 — pendências para ativar cobrança real
 
 - Revise registros antigos em `life_mp_checkouts` antes do índice único de cartões.
   Caso existam tentativas de cobrança duplicadas, concilie manualmente os IDs no Mercado Pago
   **antes** de executar a migração. A migração falha com segurança se existirem duplicações.
 - Use **titular de conta apto segundo as regras do provedor**, sem compartilhar credenciais.
 - Confirme a entrega dos webhooks por `payment` para Pix/boleto **e** a associação da
-  fatura autorizada à assinatura para cartão. A 15.8.1 também verifica notificações
+  fatura autorizada à assinatura para cartão. A 15.8.2 também verifica notificações
   `payment` de cobranças recorrentes consultando `/authorized_payments/search`.
 - Tentativas anteriores de cartão podem ser canceladas em Perfil. Uma tentativa
   que não chega a criar o checkout é marcada como falha para permitir outra.

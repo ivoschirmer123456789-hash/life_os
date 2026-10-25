@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-15.8.1-projects';
-const ASSET_BUILD='15.8.1';
+const LIFE_CACHE='life-os-15.8.2-projects';
+const ASSET_BUILD='15.8.2';
 const SHELL=[
   './',
   './index.html',
@@ -28,7 +28,7 @@ const SHELL=[
   './assets/css/usability-14.6.5.css',
   './assets/css/smart-hub-containment-14.8.1.css',
   './assets/css/training-nutrition-visual-14.9.1.css',
-  './assets/css/mobile-clarity-15.8.1.css',
+  './assets/css/mobile-clarity-15.8.2.css',
   './assets/media/hero-daylight.webp',
   './assets/media/hero-mountain.webp',
   './assets/media/fitness.webp',
@@ -52,14 +52,14 @@ const SHELL=[
   './assets/js/life-integrity-12.3.js',
   './assets/js/life-brain-14.6.4.js',
   './assets/js/life-quality-12.4.js',
-  './assets/js/life-release-15.8.1.js',
+  './assets/js/life-release-15.8.2.js',
   './assets/js/life-production-12.6.js',
   './assets/js/life-extras-13.0.js',
-  './assets/js/config-15.8.1.js',
+  './assets/js/config-15.8.2.js',
   './assets/js/product-core-9.4.2.js',
   './assets/js/product-spacious-9.4.2.js',
   './assets/js/clarity-guardrails-9.4.2.js',
-  './assets/js/life-app-15.8.1.js',
+  './assets/js/life-app-15.8.2.js',
   './assets/js/context-help-9.4.2.js',
   './assets/js/supabase-auth-9.4.2.js',
   './assets/js/runtime-9.4.2.js',

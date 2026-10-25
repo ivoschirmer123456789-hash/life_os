@@ -366,7 +366,7 @@
     layer.addEventListener('click',e=>{if(e.target===layer)close()});
     layer.querySelector('.life-runtime-pro-close').onclick=close;
     layer.querySelector('footer .ghost').onclick=close;
-    layer.querySelector('footer .primary').onclick=()=>{try{if(typeof window.lifeStartProCheckout==='function')window.lifeStartProCheckout();else window.dispatchEvent(new CustomEvent('life:open-pro-plans',{detail:{source}}));}catch(err){storeError('pro-checkout-fallback',err)}};
+    layer.querySelector('footer .primary').onclick=()=>{try{if(typeof window.lifeOpenProPlans==='function')window.lifeOpenProPlans(source);else window.dispatchEvent(new CustomEvent('life:open-pro-plans',{detail:{source}}));setTimeout(()=>{if(document.querySelector('.life-pro-paywall')){close();return;}const message=layer.querySelector('section>p');if(message)message.textContent='O seletor de pagamento não carregou. Atualize os arquivos do LIFE e verifique se as funções do Mercado Pago estão publicadas no Supabase. Nenhuma cobrança foi criada.';},250);}catch(err){storeError('pro-checkout-fallback',err)}};
   };
   const openRuntimeProPreview=(source)=>{
     removeRuntimeProFallback();
@@ -393,9 +393,14 @@
       b.classList.add('life70-ack');setTimeout(()=>b.classList.remove('life70-ack'),260);
       try{if(navigator.vibrate&&matchMedia('(pointer:coarse)').matches)navigator.vibrate(5)}catch(_){ }
       if(b.dataset?.lifeProAction==='plans'){
+        // Capture listener runs before React's onClick. Never unmount the clicked
+        // portal synchronously here; that can swallow the React button action.
         const source=inferProSource(b);
-        try{if(typeof window.lifeOpenProPlans==='function')window.lifeOpenProPlans(source);else window.dispatchEvent(new CustomEvent('life:open-pro-plans',{detail:{source}}));}catch(err){storeError('pro-plans-fallback',err)}
-        setTimeout(()=>{if(!document.querySelector('.life-pro-paywall'))openRuntimeProPlans(source)},140);
+        setTimeout(()=>{
+          if(document.querySelector('.life-pro-paywall'))return;
+          try{if(typeof window.lifeOpenProPlans==='function')window.lifeOpenProPlans(source);else window.dispatchEvent(new CustomEvent('life:open-pro-plans',{detail:{source}}));}catch(err){storeError('pro-plans-fallback',err)}
+          setTimeout(()=>{if(!document.querySelector('.life-pro-paywall'))openRuntimeProPlans(source)},180);
+        },70);
       }else if(looksLikeProButton(b)){
         const source=inferProSource(b);
         if(!b.dataset.lifeProSource)b.dataset.lifeProSource=source;

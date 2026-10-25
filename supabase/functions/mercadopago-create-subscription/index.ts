@@ -1,4 +1,4 @@
-/** LIFE OS 15.8.1 — checkout server-side: recurring card or manually renewed Pix/boleto. */
+/** LIFE OS 15.8.2 — checkout server-side: recurring card or manually renewed Pix/boleto. */
 import { createClient } from 'npm:@supabase/supabase-js@2.49.10';
 const get=(k:string)=>Deno.env.get(k)||'';
 const allowed=new Set(get('LIFE_ALLOWED_ORIGINS').split(',').map(s=>s.trim()).filter(Boolean));
