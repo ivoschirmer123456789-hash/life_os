@@ -32,10 +32,10 @@ check('300 combinações de dados legados não causam exceções',()=>{
   const a=Brain.analyze({profile,context:c,now:'2026-10-14'});assert.ok(Array.isArray(a.suggestions));
  }
 });
-check('Chat libera estado de envio também após exceção',()=>{const a=file('assets/js/life-app-15.8.2.js');const start=a.indexOf('const submitLifeAI = async');const end=a.indexOf('const aiQuickPrompt',start);const part=a.slice(start,end);assert.ok(part.includes('} finally {\n            setAiBusy(false);'));assert.ok(part.indexOf('const deterministic =')>part.indexOf('try {'))});
-check('Análise local evita segunda análise redundante durante render',()=>{const a=file('assets/js/life-app-15.8.2.js');assert.ok(a.includes('buildAIContext(false)'));assert.ok(a.includes('const buildAIContext = (includeBrain = true) => {'))});
-check('Nenhuma faixa de progresso é representada como completa por padrão',()=>{const a=file('assets/js/life-app-15.8.2.js');assert.ok(!a.includes('life1464-projection-track'))});
+check('Chat libera estado de envio também após exceção',()=>{const a=file('assets/js/life-app-15.8.3.js');const start=a.indexOf('const submitLifeAI = async');const end=a.indexOf('const aiQuickPrompt',start);const part=a.slice(start,end);assert.ok(part.includes('} finally {\n            setAiBusy(false);'));assert.ok(part.indexOf('const deterministic =')>part.indexOf('try {'))});
+check('Análise local evita segunda análise redundante durante render',()=>{const a=file('assets/js/life-app-15.8.3.js');assert.ok(a.includes('buildAIContext(false)'));assert.ok(a.includes('const buildAIContext = (includeBrain = true) => {'))});
+check('Nenhuma faixa de progresso é representada como completa por padrão',()=>{const a=file('assets/js/life-app-15.8.3.js');assert.ok(!a.includes('life1464-projection-track'))});
 check('Contexto remoto nunca é cortado no meio do JSON',()=>{const x=file('supabase/functions/life-ai/index.ts');assert.ok(!x.includes('JSON.stringify(parts).slice(0,10500)'));assert.ok(x.includes('JSON.stringify(bounded)'))});
-check('Configuração, manifest e página usam release 15.8.2',()=>{assert.match(file('assets/js/config-15.8.2.js'),/version:'15\.8\.2'/);assert.match(file('manifest.webmanifest'),/15\.8\.2/);assert.match(file('index.html'),/name="life-build" content="15\.8\.2"/)});
+check('Configuração, manifest e página usam release 15.8.3',()=>{assert.match(file('assets/js/config-15.8.3.js'),/version:'15\.8\.3'/);assert.match(file('manifest.webmanifest'),/15\.8\.3/);assert.match(file('index.html'),/name="life-build" content="15\.8\.3"/)});
 check('Identidade FREE original permaneceu intacta',()=>{const css=file('assets/css/free-product-grade-14.6.1.css');assert.ok(css.length>1000);assert.ok(!file('assets/css/life-brain-projection-14.6.4.css').includes('.life-free-active'))});
 console.log('\n'+checks.length+' verificações adicionais aprovadas.');

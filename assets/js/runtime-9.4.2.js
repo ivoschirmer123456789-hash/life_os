@@ -366,7 +366,7 @@
     layer.addEventListener('click',e=>{if(e.target===layer)close()});
     layer.querySelector('.life-runtime-pro-close').onclick=close;
     layer.querySelector('footer .ghost').onclick=close;
-    layer.querySelector('footer .primary').onclick=()=>{try{if(typeof window.lifeOpenProPlans==='function')window.lifeOpenProPlans(source);else window.dispatchEvent(new CustomEvent('life:open-pro-plans',{detail:{source}}));setTimeout(()=>{if(document.querySelector('.life-pro-paywall')){close();return;}const message=layer.querySelector('section>p');if(message)message.textContent='O seletor de pagamento não carregou. Atualize os arquivos do LIFE e verifique se as funções do Mercado Pago estão publicadas no Supabase. Nenhuma cobrança foi criada.';},250);}catch(err){storeError('pro-checkout-fallback',err)}};
+    layer.querySelector('footer .primary').onclick=()=>{try{if(typeof window.lifeStartProCheckout==='function'){close();window.lifeStartProCheckout();}else{const message=layer.querySelector('section>p');if(message)message.textContent='O LIFE ainda não carregou o pagamento. Recarregue a página. Se persistir, confira a publicação das funções do Supabase.';}}catch(err){storeError('pro-checkout-fallback',err)}};
   };
   const openRuntimeProPreview=(source)=>{
     removeRuntimeProFallback();
@@ -383,7 +383,7 @@
     layer.addEventListener('click',e=>{if(e.target===layer)close()});
     layer.querySelector('.life-runtime-pro-close').onclick=close;
     layer.querySelector('footer .ghost').onclick=close;
-    layer.querySelector('footer .primary').onclick=()=>{close();try{if(typeof window.lifeOpenProPlans==='function')window.lifeOpenProPlans(source);else window.dispatchEvent(new CustomEvent('life:open-pro-plans',{detail:{source}}));}catch(err){storeError('pro-plans-runtime',err)}setTimeout(()=>{if(!document.querySelector('.life-pro-paywall'))openRuntimeProPlans(source)},140)};
+    layer.querySelector('footer .primary').onclick=()=>{close();try{if(typeof window.lifeStartProCheckout==='function')window.lifeStartProCheckout();else openRuntimeProPlans(source);}catch(err){storeError('pro-plans-runtime',err)}};
   };
   document.addEventListener('click',e=>{
     const disabled=e.target?.closest?.('[aria-disabled="true"],button:disabled');

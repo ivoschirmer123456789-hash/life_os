@@ -1,4 +1,4 @@
-/** LIFE OS 15.8.2 — signed Mercado Pago payment / recurring invoice webhook. */
+/** LIFE OS 15.8.3 — signed Mercado Pago payment / recurring invoice webhook. */
 import { createClient } from 'npm:@supabase/supabase-js@2.49.10';
 const get=(key:string)=>Deno.env.get(key)||'';
 const respond=(v:unknown,s=200)=>Response.json(v,{status:s,headers:{'Cache-Control':'no-store'}});
