@@ -1,6 +1,6 @@
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),vm=require('vm');
-const root=path.join(__dirname,'..'),code=fs.readFileSync(path.join(root,'assets/js/life-app-15.8.3.js'),'utf8');
+const root=path.join(__dirname,'..'),code=fs.readFileSync(path.join(root,'assets/js/life-app-15.7.1.js'),'utf8');
 const begin=code.indexOf('function LifeNutritionStudio('),end=code.indexOf('const LIFE_AREA_DEPTH_V81',begin);assert(begin>=0&&end>begin);
 let state=[],cursor=0;
 const React={Fragment:'Fragment',createElement:(tag,props,...children)=>({tag,props:props||{},children:children.flat(Infinity).filter(x=>x!==false&&x!==null&&x!==undefined)}),useState:(init)=>{const i=cursor++;if(!(i in state))state[i]=typeof init==='function'?init():init;return [state[i],newValue=>{state[i]=typeof newValue==='function'?newValue(state[i]):newValue}]},useEffect:()=>{}};
