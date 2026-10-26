@@ -6242,7 +6242,10 @@ function LifeOSV18() {
         return () => { cancelled = true; if (timer) clearTimeout(timer); };
     }, [lifeAccess]);
     const lifeCheckoutUrlFrom = (data) => String(data?.checkout_url || data?.checkoutUrl || data?.url || data?.init_point || data?.sandbox_init_point || '').trim();
-    const startLifeProCheckout = async () => {
+    const [proCheckoutMethod, setProCheckoutMethod] = React.useState('card');
+    const startLifeProCheckout = async (selectedMethod = 'card') => {
+        const checkoutMethod = selectedMethod === 'pix' ? 'pix' : 'card';
+        setProCheckoutMethod(checkoutMethod);
         if (proCheckoutBusy || life126CheckoutLock.current) return;
         life126CheckoutLock.current=true;
         let life126RedirectStarted=false;
@@ -6257,11 +6260,12 @@ function LifeOSV18() {
             if (!window.lifeSupabase) throw new Error('Conexão com a conta indisponível.');
             const { data: { session } } = await window.lifeSupabase.auth.getSession();
             if (!session?.user) { window.lifeOpenAuth && window.lifeOpenAuth('main'); throw new Error('Entre na sua conta antes de assinar.'); }
-            setToast('ABRINDO CHECKOUT SEGURO…');
+            setToast(checkoutMethod === 'pix' ? 'PREPARANDO PAGAMENTO VIA PIX…' : 'ABRINDO ASSINATURA POR CARTÃO…');
+            const functionName = checkoutMethod === 'pix' ? 'mercadopago-create-pix' : 'mercadopago-create-subscription';
             let data = null, invokeError = null;
-            try { const result = await window.lifeSupabase.functions.invoke('mercadopago-create-subscription', { body: {} }); data = result?.data || null; invokeError = result?.error || null; } catch (e) { invokeError = e; }
+            try { const result = await window.lifeSupabase.functions.invoke(functionName, { body: {} }); data = result?.data || null; invokeError = result?.error || null; } catch (e) { invokeError = e; }
             if ((!lifeCheckoutUrlFrom(data) || invokeError) && window.LIFE_BACKEND?.supabaseUrl && window.LIFE_BACKEND?.publishableKey) {
-                const res = await fetch(window.LIFE_BACKEND.supabaseUrl.replace(/\/$/,'') + '/functions/v1/mercadopago-create-subscription', { method: 'POST', headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + session.access_token, 'apikey': window.LIFE_BACKEND.publishableKey }, body: '{}' });
+                const res = await fetch(window.LIFE_BACKEND.supabaseUrl.replace(/\/$/,'') + '/functions/v1/' + functionName, { method: 'POST', headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + session.access_token, 'apikey': window.LIFE_BACKEND.publishableKey }, body: '{}' });
                 const fallback = await res.json().catch(() => ({}));
                 if (res.ok && lifeCheckoutUrlFrom(fallback)) { data = fallback; invokeError = null; }
                 else if (!lifeCheckoutUrlFrom(data)) invokeError = new Error(fallback?.error || fallback?.message || ('Backend respondeu ' + res.status));
@@ -6269,7 +6273,7 @@ function LifeOSV18() {
             if (invokeError && !lifeCheckoutUrlFrom(data)) throw invokeError;
             const checkoutUrl = lifeCheckoutUrlFrom(data);
             if (!window.LifeIntegrity123?.validCheckoutUrl(checkoutUrl) || !window.LifeProduction126?.requestGuard({checkoutUrl,loggedIn:true,role:realPlan}).ok) throw new Error('O servidor retornou um endereço de pagamento não confiável.');
-            try { lifeSessionSet('life_pro_checkout_pending', String(Date.now())); window.lifeProductEvent && window.lifeProductEvent('checkout_started', { plan: 'PRO' }); } catch (e) {}
+            try { lifeSessionSet('life_pro_checkout_pending', String(Date.now())); window.lifeProductEvent && window.lifeProductEvent('checkout_started', { plan: 'PRO', method: checkoutMethod }); } catch (e) {}
             window.location.assign(checkoutUrl);
             life126RedirectStarted=true;
             return;
@@ -6277,7 +6281,7 @@ function LifeOSV18() {
             try { lifeSessionRemove('life_pro_checkout_pending'); } catch (_) {}
             console.error('LIFE PRO checkout indisponível');
             const raw = String(e?.message || 'Checkout indisponível no momento.').trim();
-            const friendly = /não confiável/i.test(raw) ? 'O servidor retornou um endereço de pagamento não confiável.' : /entre na sua conta/i.test(raw) ? 'Entre na sua conta antes de assinar.' : /failed to fetch|network/i.test(raw) ? 'Não foi possível falar com o servidor de pagamento. Confira a internet e tente novamente.' : /function|backend|404/i.test(raw) ? 'O checkout ainda não está disponível no servidor. A função de pagamento precisa estar publicada no backend.' : 'Não foi possível abrir a assinatura. Confira a conexão e tente novamente.';
+            const friendly = /não confiável/i.test(raw) ? 'O servidor retornou um endereço de pagamento não confiável.' : /entre na sua conta/i.test(raw) ? 'Entre na sua conta antes de assinar.' : /failed to fetch|network/i.test(raw) ? 'Não foi possível falar com o servidor de pagamento. Confira a internet e tente novamente.' : /function|backend|404/i.test(raw) ? 'O checkout ainda não está disponível no servidor. A função de pagamento precisa estar publicada no backend.' : 'Não foi possível abrir o pagamento. Confira a conexão e tente novamente.';
             setProCheckoutError(friendly);
             setToast('NÃO FOI POSSÍVEL ABRIR O CHECKOUT'); setTimeout(() => setToast(''), 3600);
         } finally {
@@ -11474,9 +11478,12 @@ function LifeOSV18() {
                         React.createElement("span", null, LIFE_STUDY_TOPICS.length + "+ trilhas de estudo e conhecimento, incluindo marketing, filosofia, persuasão, tecnologia e negócios"),
                         React.createElement("span", null, "+9 áreas e sistemas exclusivos: Notas, Receitas, LIFE AI, Planner OS, Biblioteca, Favoritos, Meu LIFE, Evolução e Archive"),
                         React.createElement("span", null, tasks.filter(t => !taskIsDone(t)).length ? ('Hoje você já tem ' + tasks.filter(t => !taskIsDone(t)).length + ' tarefa(s) que o PRO pode cruzar no planejamento.') : 'Quando você registrar mais coisas, o PRO cruza contexto entre as áreas.'),
-                        React.createElement("button", { type: "button", onClick: startLifeProCheckout, disabled: proCheckoutBusy, 'aria-busy': proCheckoutBusy, className: proCheckoutBusy ? "is-loading" : "" }, proCheckoutBusy ? "ABRINDO CHECKOUT…" : "DESBLOQUEAR LIFE OS PRO →"),
-                        proCheckoutError && React.createElement("div", { className: "life-pro-checkout-error-v67", role: "alert" }, React.createElement("b", null, "NÃO CONSEGUIMOS ABRIR A ASSINATURA"), React.createElement("p", null, proCheckoutError), realPlan !== 'OWNER' && React.createElement("button", { type: "button", onClick: startLifeProCheckout, disabled: proCheckoutBusy }, "TENTAR NOVAMENTE")),
-                        React.createElement("p", { className: "life-pro-secure" }, "Assinatura mensal · checkout seguro pelo Mercado Pago · seus dados continuam seus"))),
+                        React.createElement('div', { className: 'life-pro-payment-choices' },
+                            React.createElement('button', { type: 'button', onClick: () => startLifeProCheckout('card'), disabled: proCheckoutBusy, 'aria-busy': proCheckoutBusy, className: 'life-pro-pay-card' }, proCheckoutBusy && proCheckoutMethod === 'card' ? 'ABRINDO CARTÃO…' : 'ASSINAR COM CARTÃO →'),
+                            React.createElement('button', { type: 'button', onClick: () => startLifeProCheckout('pix'), disabled: proCheckoutBusy, 'aria-busy': proCheckoutBusy, className: 'life-pro-pay-pix' }, proCheckoutBusy && proCheckoutMethod === 'pix' ? 'ABRINDO PIX…' : 'PAGAR 30 DIAS COM PIX →')),
+                        React.createElement('small', { className: 'life-pro-payment-note' }, 'Cartão: renovação automática. Pix: pagamento único de 30 dias, sem renovação automática; outros meios podem aparecer no Mercado Pago.'),
+                        proCheckoutError && React.createElement("div", { className: "life-pro-checkout-error-v67", role: "alert" }, React.createElement("b", null, "NÃO CONSEGUIMOS ABRIR A ASSINATURA"), React.createElement("p", null, proCheckoutError), realPlan !== 'OWNER' && React.createElement("button", { type: "button", onClick: () => startLifeProCheckout(proCheckoutMethod), disabled: proCheckoutBusy }, "TENTAR NOVAMENTE")),
+                        React.createElement("p", { className: "life-pro-secure" }, "Pagamento processado pelo Mercado Pago · liberação somente após aprovação"))),
                 React.createElement("section", { className: "life-pro-universe-showcase" },
                     React.createElement("div", { className: "life-pro-universe-head" },
                         React.createElement("small", null, "O QUE SOME NO FREE E APARECE NO PRO"),

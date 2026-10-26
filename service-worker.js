@@ -1,4 +1,4 @@
-const LIFE_CACHE='life-os-15.7.1-projects';
+const LIFE_CACHE='life-os-15.7.1-pix-card';
 const ASSET_BUILD='15.7.1';
 const SHELL=[
   './',

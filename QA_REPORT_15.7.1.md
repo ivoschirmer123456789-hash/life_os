@@ -36,3 +36,10 @@ Atualização incremental sobre o ZIP completo da 15.7.0. Estrutura, módulos FR
 3. Forçar falha de armazenamento em ambiente controlado e verificar que o formulário permanece aberto e o registro anterior é preservado.
 4. Conferir que a lista de compras corresponde ao plano, e que plano bloqueado por restrições não vira uma recomendação alimentar validada.
 5. Testar login, pagamentos e sincronização com contas de teste antes de publicar para clientes reais.
+
+## Adendo: Pix + cartão (integração preparada em 26/10/2026)
+
+- Preservada a chamada existente `mercadopago-create-subscription` para cartão. Novo botão de Pix chama `mercadopago-create-pix`; o retorno só libera PRO após aprovação do webhook no Supabase.
+- Novos arquivos: `supabase/functions/mercadopago-create-pix/index.ts`, `supabase/functions/mercadopago-pix-webhook/index.ts`, `database/life-pix-payments.sql`. Para preservar o limite de 100 arquivos, foram excluídas três cópias **byte a byte idênticas** de suítes de testes, mantendo as versões originais.
+- Verificados `node --check` para o app/SW, 10/10 suítes Node (TZ America/Campo_Grande), os três testes Python do repositório e ensaios isolados simulados das Edge Functions Pix (criação de preferência, autenticação, bloqueio de origem, validação de assinatura HMAC, pagamento aprovado). As verificações são locais, não bancárias.
+- Limitação: não foi possível publicar as funções, executar SQL, realizar transações nem validar credenciais reais Mercado Pago/Supabase. O botão Pix só passa a operar depois da configuração descrita em `supabase/README_CONFIGURACAO.md`.
