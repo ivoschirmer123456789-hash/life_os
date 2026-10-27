@@ -36,6 +36,6 @@ check('Chat libera estado de envio também após exceção',()=>{const a=file('a
 check('Análise local evita segunda análise redundante durante render',()=>{const a=file('assets/js/life-app-15.7.1.js');assert.ok(a.includes('buildAIContext(false)'));assert.ok(a.includes('const buildAIContext = (includeBrain = true) => {'))});
 check('Nenhuma faixa de progresso é representada como completa por padrão',()=>{const a=file('assets/js/life-app-15.7.1.js');assert.ok(!a.includes('life1464-projection-track'))});
 check('Contexto remoto nunca é cortado no meio do JSON',()=>{const x=file('supabase/functions/life-ai/index.ts');assert.ok(!x.includes('JSON.stringify(parts).slice(0,10500)'));assert.ok(x.includes('JSON.stringify(bounded)'))});
-check('Configuração, manifest e página usam release 15.7.1',()=>{assert.match(file('assets/js/config-15.7.1.js'),/version:'15\.7\.1'/);assert.match(file('manifest.webmanifest'),/15\.7\.1/);assert.match(file('index.html'),/name="life-build" content="15\.7\.1"/)});
+check('Configuração, manifest e página usam release 15.7.2',()=>{assert.match(file('assets/js/config-15.7.1.js'),/version:'15\.7\.2'/);assert.match(file('manifest.webmanifest'),/15\.7\.2/);assert.match(file('index.html'),/name="life-build" content="15\.7\.2"/)});
 check('Identidade FREE original permaneceu intacta',()=>{const css=file('assets/css/free-product-grade-14.6.1.css');assert.ok(css.length>1000);assert.ok(!file('assets/css/life-brain-projection-14.6.4.css').includes('.life-free-active'))});
 console.log('\n'+checks.length+' verificações adicionais aprovadas.');

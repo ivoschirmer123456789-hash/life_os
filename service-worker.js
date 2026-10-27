@@ -1,5 +1,5 @@
-const LIFE_CACHE='life-os-15.7.1-pix-card';
-const ASSET_BUILD='15.7.1';
+const LIFE_CACHE='life-os-15.7.2-guest-pix-card';
+const ASSET_BUILD='15.7.2';
 const SHELL=[
   './',
   './index.html',
@@ -56,6 +56,7 @@ const SHELL=[
   './assets/js/life-production-12.6.js',
   './assets/js/life-extras-13.0.js',
   './assets/js/config-15.7.1.js',
+  './assets/js/guest-session-15.7.2.js',
   './assets/js/product-core-9.4.2.js',
   './assets/js/product-spacious-9.4.2.js',
   './assets/js/clarity-guardrails-9.4.2.js',

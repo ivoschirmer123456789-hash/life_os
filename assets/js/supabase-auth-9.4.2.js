@@ -1,4 +1,50 @@
 (async function(){
+// Acesso convidado NÃO depende de uma conta ou da biblioteca Supabase.
+// Somente armazenamento efêmero: nenhum cadastro, evento remoto ou sincronização.
+if (window.lifeGuest?.active) {
+  const auth = document.getElementById('life-auth');
+  const chip = document.getElementById('life-account-chip');
+  const owner = document.getElementById('life-owner-open');
+  const exitBtn = document.getElementById('life-account-exit');
+  const exitMenu = document.getElementById('life-account-exit-menu');
+  const exitEmail = document.getElementById('life-exit-email');
+  const exitPlan = document.getElementById('life-exit-plan');
+  const exitConfirm = document.getElementById('life-account-exit-confirm');
+  document.documentElement.dataset.lifePlan = 'FREE';
+  document.documentElement.dataset.lifeSessionPending = 'false';
+  document.documentElement.classList.add('life-account-active');
+  if (auth) auth.classList.add('hidden');
+  if (chip) { chip.textContent='CONVIDADO'; chip.style.display='block'; }
+  if (owner) owner.style.display='none';
+  if (exitBtn) exitBtn.style.display='grid';
+  if (exitEmail) exitEmail.textContent='Sessão convidada';
+  if (exitPlan) exitPlan.textContent='FREE · SEM SALVAR';
+  if (exitConfirm) {
+    exitConfirm.innerHTML='<span class="material-symbols-rounded">logout</span> SAIR DO MODO CONVIDADO';
+    exitConfirm.onclick=()=>window.lifeGuest.exit();
+  }
+  if (exitBtn && exitMenu) {
+    exitBtn.onclick=(event)=>{
+      event.stopPropagation();
+      const open=!exitMenu.classList.contains('open');
+      exitMenu.classList.toggle('open',open);
+      exitMenu.setAttribute('aria-hidden',open?'false':'true');
+      exitBtn.setAttribute('aria-expanded',open?'true':'false');
+    };
+    document.addEventListener('click',(event)=>{
+      if(!exitMenu.contains(event.target) && !exitBtn.contains(event.target)){
+        exitMenu.classList.remove('open');
+        exitMenu.setAttribute('aria-hidden','true');
+        exitBtn.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+  window.lifeOpenAuth=()=>window.lifeGuest.exit();
+  window.lifeOpenOwnerControl=()=>{};
+  window.lifeLastSupabaseProfile={user:null,plan:'FREE',rawPlan:'FREE',proUntil:null,subscriptionStatus:null,guest:true};
+  window.dispatchEvent(new CustomEvent('life:supabase-profile',{detail:window.lifeLastSupabaseProfile}));
+  return;
+}
 const URL='https://hyakbyxkhbruybjuczvo.supabase.co', KEY='sb_publishable_yx17nsbW7vyMut_LYM5OYA_iC40kSYt';
 window.LIFE_BACKEND={supabaseUrl:URL,publishableKey:KEY};
 if(!window.supabase || typeof window.supabase.createClient!=='function'){
@@ -30,6 +76,24 @@ function paintAccountControls(user,currentPlan){const active=!!user;document.doc
 function showSessionGate(user,currentPlan){sessionGatePending=true;sessionConfirmed=false;if(exitBtn)exitBtn.style.display='none';if(exitMenu){exitMenu.classList.remove('open');exitMenu.setAttribute('aria-hidden','true');}if(sessionEmail)sessionEmail.textContent=user?.email||'Conta LIFE';if(sessionPlan)sessionPlan.textContent=String(currentPlan||'FREE').toUpperCase();auth.classList.remove('hidden');authView('session');document.documentElement.dataset.lifeSessionPending='true';}
 async function profile(user){
   me=user;
+  if(window.lifeGuest?.active && !user){
+    plan='FREE';
+    window.lifeLastSupabaseProfile=null;
+    document.documentElement.dataset.lifePlan='FREE';
+    document.documentElement.dataset.lifeSessionPending='false';
+    chip.textContent='CONVIDADO'; chip.style.display='block';
+    owner.style.display='none';
+    paintAccountControls(null,'FREE');
+    document.documentElement.classList.add('life-account-active');
+    if(exitBtn)exitBtn.style.display='grid';
+    if(exitEmail)exitEmail.textContent='Sessão convidada';
+    if(exitPlan)exitPlan.textContent='FREE · SEM SALVAR';
+    const exitAction=document.getElementById('life-account-exit-confirm');
+    if(exitAction)exitAction.innerHTML='<span class="material-symbols-rounded">logout</span> SAIR DO MODO CONVIDADO';
+    auth.classList.add('hidden');
+    window.dispatchEvent(new CustomEvent('life:supabase-profile',{detail:{user:null,plan:'FREE',rawPlan:'FREE',proUntil:null,subscriptionStatus:null,guest:true}}));
+    return;
+  }
   if(!user){
     window.lifeLastSupabaseProfile=null;
     auth.classList.remove('hidden');
@@ -90,6 +154,11 @@ async function profile(user){
     document.documentElement.dataset.lifeSessionPending='false';
   }
 }
+const guestButton=document.getElementById('la-guest');
+const savedSessionGuestButton=document.getElementById('la-session-guest');
+const openGuest=()=>{if(!window.lifeGuest?.enter?.())say('O modo convidado não está disponível. Verifique as configurações do navegador.');};
+if(guestButton)guestButton.onclick=openGuest;
+if(savedSessionGuestButton)savedSessionGuestButton.onclick=openGuest;
 document.getElementById('la-login').onclick=()=>lifeAuthAction('la-login',async()=>{
   if(!email.value.trim()||!pass.value){say('Informe seu e-mail e senha.');return;}
   say('Entrando…');
@@ -109,9 +178,10 @@ const sessionContinue=document.getElementById('la-session-continue'),sessionSwit
 if(sessionContinue)sessionContinue.onclick=async()=>{sessionConfirmed=true;sessionGatePending=false;forcedAuthView=null;document.documentElement.dataset.lifeSessionPending='false';auth.classList.add('hidden');window.lifeProductEvent&&window.lifeProductEvent('session_confirmed',{plan});await profile(me);};
 if(sessionSwitch)sessionSwitch.onclick=async()=>{sessionConfirmed=false;sessionGatePending=false;forcedAuthView='main';window.lifeExplicitAuth=true;document.documentElement.dataset.lifeSessionPending='false';await db.auth.signOut();email.value='';pass.value='';auth.classList.remove('hidden');authView('main');setTimeout(()=>email.focus(),40);};
 if(exitBtn){exitBtn.onclick=(e)=>{e.stopPropagation();const open=!exitMenu.classList.contains('open');exitMenu.classList.toggle('open',open);exitMenu.setAttribute('aria-hidden',open?'false':'true');exitBtn.setAttribute('aria-expanded',open?'true':'false');};}
-const exitConfirm=document.getElementById('life-account-exit-confirm');if(exitConfirm)exitConfirm.onclick=async()=>{sessionConfirmed=false;sessionGatePending=false;forcedAuthView='main';window.lifeExplicitAuth=true;exitMenu?.classList.remove('open');await db.auth.signOut();auth.classList.remove('hidden');authView('main');setTimeout(()=>email.focus(),40);};
+const exitConfirm=document.getElementById('life-account-exit-confirm');if(exitConfirm)exitConfirm.onclick=async()=>{if(window.lifeGuest?.active){window.lifeGuest.exit();return;}sessionConfirmed=false;sessionGatePending=false;forcedAuthView='main';window.lifeExplicitAuth=true;exitMenu?.classList.remove('open');await db.auth.signOut();auth.classList.remove('hidden');authView('main');setTimeout(()=>email.focus(),40);};
 document.addEventListener('click',(e)=>{if(!exitMenu||!exitBtn)return;if(!exitMenu.contains(e.target)&&!exitBtn.contains(e.target)){exitMenu.classList.remove('open');exitMenu.setAttribute('aria-hidden','true');exitBtn.setAttribute('aria-expanded','false');}});
 window.lifeOpenAuth=async(mode='main')=>{
+  if(window.lifeGuest?.active){window.lifeGuest.exit();return;}
   forcedAuthView=mode;
   window.lifeAuthIntent=mode;
   if(mode==='main'||mode==='signup') window.lifeExplicitAuth=true;

@@ -1034,3 +1034,15 @@ html.life-theme-day[data-life-apex] .life-week-folder-icon-v1546{color:#a74a13!i
 .life-pro-payment-choices button:disabled { opacity:.6; cursor:progress; }
 .life-pro-payment-note { display:block; line-height:1.55; color:#b8bec7; margin:4px 0 12px; }
 @media (max-width:530px) { .life-pro-payment-choices { grid-template-columns:1fr; } }
+
+/* LIFE OS 15.7.2: escolha de convidado (mesmo acabamento da tela de acesso). */
+html.life14-ultra #life-auth .la-guest-separator{display:flex;align-items:center;gap:12px;margin:16px 0 12px;color:#9aa3b1;font-size:10px;font-weight:800;letter-spacing:.10em;text-align:center}
+html.life14-ultra #life-auth .la-guest-separator:before,html.life14-ultra #life-auth .la-guest-separator:after{content:"";height:1px;min-width:12px;flex:1;background:linear-gradient(90deg,transparent,rgba(255,255,255,.20),transparent)}
+html.life14-ultra #life-auth .la-guest-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:45px;border:1px solid rgba(255,154,82,.5)!important;border-radius:12px;background:linear-gradient(135deg,rgba(239,143,76,.13),rgba(239,143,76,.035))!important;color:#f7d6b3!important;font-size:12px;font-weight:900;letter-spacing:.055em;transition:background .18s ease,border-color .18s ease,transform .18s ease}
+html.life14-ultra #life-auth .la-guest-btn:hover{background:rgba(239,143,76,.23)!important;border-color:rgba(255,166,100,.8)!important;transform:translateY(-1px)}
+html.life14-ultra #life-auth .la-guest-btn .material-symbols-rounded{font-size:19px}
+html.life14-ultra #life-auth .la-guest-note{margin:10px 0 4px;color:#a8afbd;font-size:11px;line-height:1.55;text-align:center}
+html.life14-ultra .life-entry-guest{border:1px solid rgba(239,143,76,.58)!important;background:rgba(239,143,76,.08)!important;color:#f5bb8d!important}
+html.life14-ultra .life-entry-guest-note{display:block;text-align:center;color:#a8afbd;line-height:1.55;font-size:11px;max-width:320px;margin:2px auto 0}
+html[data-life-guest="true"] #life-account-chip{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;letter-spacing:.04em}
+@media(max-width:480px){html.life14-ultra #life-auth .la-guest-separator{margin:13px 0 10px;font-size:9px}html.life14-ultra #life-auth .la-guest-note{font-size:10px}}

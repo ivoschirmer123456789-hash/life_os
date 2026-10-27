@@ -5866,6 +5866,7 @@ function LifeOSV18() {
         return true;
     };
     const pushLifeCloud = async (showMessage = false) => {
+        if(window.lifeGuest?.active){setCloudStatus('local');return false;}
         try {
             const db=window.lifeSupabase;
             if(!db){setCloudStatus('local');return false;}
@@ -5898,6 +5899,7 @@ function LifeOSV18() {
         }catch(e){console.warn('LIFE sync 12.3:',e);setCloudStatus('local');if(showMessage)setToast('SEM SINCRONIZAÇÃO · INSTALE A RPC NO SUPABASE');return false;}
     };
     const forcePushLifeCloud = async (showMessage = false) => {
+        if(window.lifeGuest?.active)return false;
         try {
             const db=window.lifeSupabase;if(!db)return false;
             const {data:{session}}=await db.auth.getSession();if(!session?.user)return false;
@@ -6001,6 +6003,12 @@ function LifeOSV18() {
         const boot = async () => {
             if (cancelled)
                 return;
+            if (window.lifeGuest?.active) {
+                setRealPlan('FREE');
+                setCloudStatus('local');
+                setLifeAccess('open');
+                return;
+            }
             if (!window.lifeSupabase) {
                 if (tries++ < 120)
                     return setTimeout(boot, 50);
@@ -6032,6 +6040,12 @@ function LifeOSV18() {
             // Uma sessão autenticada deve retomar o LIFE sem pedir um segundo clique.
             // O perfil do Supabase continua sendo a fonte da verdade para FREE/PRO/OWNER.
             if (!e?.detail?.user) {
+                if(window.lifeGuest?.active){
+                    setRealPlan('FREE');
+                    setCloudStatus('local');
+                    setLifeAccess('open');
+                    return;
+                }
                 setShowProPreview(false);setShowPlanChoice(false);
                 setLife1459Profile(null);setLife1459Edit(false);setLife1459Scope('');
                 setLifeAccountSwitch(null);setLifeBackupDownloadStarted(false);
@@ -6128,6 +6142,7 @@ function LifeOSV18() {
         return { plan: access, rawPlan, proUntil, subscriptionStatus };
     };
     const readLifePlanProfile = async () => {
+        if(window.lifeGuest?.active)return null;
         const db = window.lifeSupabase;
         if (!db) return null;
         const { data: { session } } = await db.auth.getSession();
@@ -6138,6 +6153,7 @@ function LifeOSV18() {
         return resolveLifePlanRecord(result.data || {});
     };
     const enterSavedLife = async () => {
+        if(window.lifeGuest?.active){setLifeAccess('open');return;}
         window.lifeExplicitAuth = false;
         if (!window.lifeSupabase)
             return;
@@ -6174,6 +6190,7 @@ function LifeOSV18() {
         }
     };
     const switchLifeAccount = async () => {
+        if(window.lifeGuest?.active){window.lifeGuest.exit();return;}
         try {
             if (window.lifeSupabase)
                 await window.lifeSupabase.auth.signOut();
@@ -10044,7 +10061,9 @@ function LifeOSV18() {
                 React.createElement("p", null, "Crie uma conta para manter organização, preferências e progresso conectados ao seu acesso."),
                 React.createElement("div", { className: "life-entry-actions" },
                     React.createElement("button", { type: "button", className: "primary", onClick: () => { window.lifeExplicitAuth = true; window.lifeOpenAuth && window.lifeOpenAuth('signup'); } }, "CRIAR CONTA →"),
-                    React.createElement("button", { type: "button", onClick: () => { window.lifeExplicitAuth = true; window.lifeOpenAuth && window.lifeOpenAuth('main'); } }, "JÁ TENHO CONTA"))));
+                    React.createElement("button", { type: "button", onClick: () => { window.lifeExplicitAuth = true; window.lifeOpenAuth && window.lifeOpenAuth('main'); } }, "JÁ TENHO CONTA"),
+                    React.createElement("button", {type:"button", className:"life-entry-guest", onClick:()=>window.lifeGuest?.enter?.()}, "ENTRAR COMO CONVIDADO"),
+                    React.createElement("small", {className:"life-entry-guest-note"}, "Sem cadastro. Seus dados não são salvos e somem ao sair ou atualizar a página."))));
     }
     
 
