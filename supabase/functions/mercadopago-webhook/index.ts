@@ -72,15 +72,22 @@ Deno.serve(async(req)=>{
   if(topic==='payment'&&checkout.method==='card'&&actualMethod!=='card')return respond({ok:true,ignored:true});
   if(actualMethod==='card'&&String(checkout.provider_id||'')!==subscriptionId)return respond({error:'subscription_mismatch'},409);
   if(actualMethod&&actualMethod!==checkout.method)return respond({ok:true,ignored:true});
-  const approved=payment?.status==='approved';
-  if(!approved)return respond({ok:true,pending:true});
+  const remoteStatus=String(payment?.status||'').toLowerCase();
+  if(!['approved','refunded','charged_back'].includes(remoteStatus))return respond({ok:true,pending:true});
   if(String(payment.currency_id)!=='BRL'||Math.abs(Number(payment.transaction_amount)-money)>0.001)return respond({error:'payment_mismatch'},409);
   if(checkout.method!=='card'&&String(payment.external_reference)!==checkout.id)return respond({error:'reference_mismatch'},409);
-  // Checkout Pro can still show Mercado Pago wallet; it cannot be excluded from classic preferences.
-  // An approved payment with matching amount/currency/external reference is sufficient.
   if(checkout.method==='card'&&!['credit_card','debit_card','prepaid_card','account_money'].includes(String(payment.payment_type_id)))return respond({error:'method_mismatch'},409);
-  // Admin RPC applies entitlement and inserts unique transaction in one database transaction.
-  const {data:applied,error}=await admin.rpc('life_apply_mp_payment',{p_checkout_id:checkout.id,p_payment_id:String(payment.id),p_amount:money,p_currency:'BRL'});
+  if(remoteStatus!=='approved'){
+   const {data:reversed,error}=await admin.rpc('life_reverse_mp_payment_v1584',{p_checkout_id:checkout.id,p_payment_id:String(payment.id),p_reason:remoteStatus});
+   if(error)throw error;
+   return respond({ok:true,reversed:Boolean(reversed)});
+  }
+  const approvedDate=new Date(String(payment.date_approved||payment.date_created||''));
+  if(!Number.isFinite(approvedDate.getTime())||approvedDate.getTime()>Date.now()+300000)return respond({error:'invalid_approval_date'},409);
+  // SQL transacional: insere pagamento uma vez, bloqueia perfil e credita 30 dias da aprovação.
+  const {data:applied,error}=await admin.rpc('life_apply_mp_payment_v1584',{
+   p_checkout_id:checkout.id,p_payment_id:String(payment.id),p_amount:money,p_currency:'BRL',p_paid_at:approvedDate.toISOString()
+  });
   if(error)throw error;
   return respond({ok:true,applied:Boolean(applied)});
  }catch(e){console.error('billing_webhook_failure',String(e).slice(0,120));return respond({error:'retry_later'},503)}

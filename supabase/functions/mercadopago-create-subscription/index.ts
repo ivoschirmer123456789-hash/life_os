@@ -34,6 +34,37 @@ Deno.serve(async(req)=>{
    const {data}=await admin.from('life_mp_checkouts').select('method,status,created_at,provider_id').eq('user_id',user.id).order('created_at',{ascending:false}).limit(4);
    return out({payments:(data||[]).map((x:any)=>({method:x.method,status:x.status,created_at:x.created_at}))},200,origin);
   }
+  if(action==='reconcile'){
+   // Conta autenticada. Somente pedidos do próprio usuário, nunca IDs enviados pelo navegador.
+   const cutoff=new Date(Date.now()-45*24*3600*1000).toISOString();
+   const [newOrders,oldOrders]=await Promise.all([
+    admin.from('life_mp_checkouts').select('id,method,status').eq('user_id',user.id).in('status',['pending','created','active']).gte('created_at',cutoff).order('created_at',{ascending:false}).limit(4),
+    admin.from('life_pix_orders').select('id,status').eq('user_id',user.id).eq('status','pending').gte('created_at',cutoff).order('created_at',{ascending:false}).limit(4)
+   ]);
+   if(newOrders.error || oldOrders.error)return out({error:'Estrutura de cobranças incompleta. Confira a migração do banco.'},503,origin);
+   let checked=0,applied=0;
+   for(const item of [...(newOrders.data||[]).map((x:any)=>({...x,legacy:false})),...(oldOrders.data||[]).map((x:any)=>({...x,legacy:true}))]){
+    const search=await mp('/v1/payments/search?external_reference='+encodeURIComponent(item.id)+'&limit=10');
+    for(const candidate of (Array.isArray(search?.results)?search.results:[])){
+     if(!/^\d{1,25}$/.test(String(candidate.id||'')))continue;
+     const payment=await mp('/v1/payments/'+encodeURIComponent(String(candidate.id)));
+     checked++;
+     if(String(payment.external_reference)!==item.id || String(payment.status)!=='approved' ||
+        payment.currency_id!=='BRL' || Math.abs(Number(payment.transaction_amount)-money)>0.001 ||
+        !Number.isFinite(Number(payment.transaction_amount)))continue;
+     const approvedDate=new Date(String(payment.date_approved||payment.date_created||''));
+     if(!Number.isFinite(approvedDate.getTime()) || approvedDate.getTime()>Date.now()+300000)continue;
+     // Na reconciliação, pagamentos de até 45 dias; o período é contado desde a aprovação.
+     const args=item.legacy
+      ? {p_order_id:item.id,p_payment_id:String(payment.id),p_amount_cents:2990,p_currency:'BRL'}
+      : {p_checkout_id:item.id,p_payment_id:String(payment.id),p_amount:money,p_currency:'BRL',p_paid_at:approvedDate.toISOString()};
+     const rpc=await admin.rpc(item.legacy?'life_apply_pix_payment':'life_apply_mp_payment_v1584',args);
+     if(rpc.error){console.error('billing_reconciliation_rpc_failed',rpc.error.code);throw Error('db_reconcile_failed');}
+     if(rpc.data===true || rpc.data==='applied') applied++;
+    }
+   }
+   return out({ok:true,checked,applied},200,origin);
+  }
   if(action==='cancel'){
    const {data:latest,error}=await admin.from('life_mp_checkouts').select('id,provider_id,status').eq('user_id',user.id).eq('method','card').in('status',['pending','created','active','paid']).order('created_at',{ascending:false}).limit(1).maybeSingle();
    if(error)return out({error:'Não foi possível consultar a assinatura.'},503,origin);

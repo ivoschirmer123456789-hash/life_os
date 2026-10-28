@@ -34,8 +34,30 @@ check('Identificador da conta depende de permissão de memória',()=>assert.ok(a
 check('Grafo filtra IDs de áreas sem permissão',()=>assert.ok(app.includes('links:[...lifeGraphLinks,...derivedGraphLinks].filter(allowedLink).slice(0,60)')));
 check('Compartilhamento da versão remota não recebe contexto ilimitado',()=>assert.ok(app.includes('const b=window.LifeBrain1463.analyze({profile:allowedUid?life1459Profile:null,context:ctx,userId:allowedUid})')));
 check('Assets CSS não foram substituídos',()=>assert.ok(fs.statSync(path.join(base,'assets/css/life-app-14.3.css')).size>1000000));
-check('Manifest, cache, HTML e config no mesmo build',()=>{assert.equal(JSON.parse(read('manifest.webmanifest')).name.includes('15.7.2'),true);assert.ok(read('service-worker.js').includes("ASSET_BUILD='15.7.2'"));assert.ok(read('assets/js/config-15.7.1.js').includes("version:'15.7.2'"));assert.ok(read('index.html').includes('content="15.7.2"'))});
+check('Manifest, cache, HTML e config no mesmo build',()=>{assert.equal(JSON.parse(read('manifest.webmanifest')).name.includes('15.8.5'),true);assert.ok(read('service-worker.js').includes("ASSET_BUILD='15.8.5'"));assert.ok(read('assets/js/config-15.7.1.js').includes("version:'15.8.5'"));assert.ok(read('index.html').includes('content="15.8.5"'))});
 check('HTML referencia arquivos existentes',()=>{const html=read('index.html');const regex=/(?:src|href)="((?:assets\/(?:css|js|media|icons)\/)[^"?]+)(?:\?[^"\s]*)?"/g;let m,count=0;while((m=regex.exec(html))){assert.ok(fs.existsSync(path.join(base,m[1])),m[1]);count++}assert.ok(count>=26)});
 check('ServiceWorker precache encontra tudo',()=>{const sw=read('service-worker.js');const paths=sw.match(/'\.\/(?:assets\/[^']+|[^']+)'/g)||[];for(const q of paths){const f=q.slice(3,-1);assert.ok(fs.existsSync(path.join(base,f)),f)}assert.ok(paths.length>=40)});
 check('Filtros funcionam em cenários com entradas incompletas',()=>{const bad=[null,false,'x',123,{},[],{text:'A',priority:'Alta',dueAt:'xx'},{id:'bad',text:'B',dueAt:[]}];for(let i=0;i<200;i++){const t=bad.slice(i%bad.length);const a=B.analyze({context:{tasks:t,projects:bad,events:bad},profile:{minutes:30}});assert.ok(Array.isArray(a.suggestions))}});
+
+// 15.8.5: timezone, charts, CSV, payment race and video fallback.
+check('Gráficos agrupam data simples no próprio dia local, sem deslocamento UTC',()=>{
+  const child=require('node:child_process');
+  const script=`const Q=require('./assets/js/life-quality-12.4.js');const now=new Date(2026,9,28,12).getTime();const rows=Q.dailySeries([{date:'2026-10-28'},{date:'2026-10-28T09:00:00-04:00'}],7,now);if(rows.at(-1).count!==2||rows.at(-1).date!=='2026-10-28')process.exit(7);`;
+  child.execFileSync(process.execPath,['-e',script],{cwd:base,env:{...process.env,TZ:'America/Campo_Grande'},timeout:8000});
+});
+check('Datas inválidas não entram em gráficos e resultado vazio é zero',()=>{
+ const Q=require('../assets/js/life-quality-12.4.js'); const rows=Q.dailySeries([{date:'2026-02-30'},{}],14);assert.equal(rows.reduce((n,x)=>n+x.count,0),0);
+});
+check('Exportação CSV conserva aspas e protege fórmulas',()=>{
+ const Q=require('../assets/js/life-quality-12.4.js');const csv=Q.exportTasks([{text:'=1+2',category:'mercado;frutas',priority:'alta',done:true},{text:'"Revisão"'}]);
+ assert(csv.startsWith('\ufeff'));assert(csv.includes('"\'=1+2"'));assert(csv.includes('"mercado;frutas"'));assert(csv.includes('"""Revisão"""'));
+});
+check('Vídeos mantêm busca exata e link externo de recuperação',()=>{
+ assert.ok(app.includes("'ABRIR NO YOUTUBE'"));assert.ok(app.includes('https://www.youtube.com/watch?v='));assert.ok(app.includes("'BUSCAR EXATO'"));
+});
+check('Webhook aceita pagamento aprovado mesmo durante estado pending',()=>{
+ const sql=read('database/life-pix-payments.sql');assert.ok(sql.includes("('pending','created','active','paid','cancelled')"));
+ const fn=read('supabase/functions/mercadopago-webhook/index.ts');assert.ok(fn.includes("await signed(req,id)"));assert.ok(fn.includes('life_apply_mp_payment_v1584'));
+});
+
 console.log(`PASS ${n} novos testes de auditoria`);

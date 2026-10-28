@@ -88,7 +88,7 @@
  function dailySeries(activity=[],days=14,now=Date.now()){
    const n=Math.max(7,Math.min(30,Math.floor(Number(days)||14))),today=new Date(now),day=new Date(today.getFullYear(),today.getMonth(),today.getDate());
    const bins=Array.from({length:n},(_,i)=>{const d=new Date(day.getFullYear(),day.getMonth(),day.getDate()-(n-1-i));return {date:localKey(d),count:0,label:pad(d.getDate())+'/'+pad(d.getMonth()+1)};});
-   const byKey=new Map(bins.map((b,i)=>[b.date,i]));for(const x of Array.isArray(activity)?activity:[]){const t=new Date(x?.date);if(Number.isNaN(t.getTime())||t.getTime()>now)continue;const index=byKey.get(localKey(t));if(index!==undefined)bins[index].count++;}return bins;
+   const byKey=new Map(bins.map((b,i)=>[b.date,i]));for(const x of Array.isArray(activity)?activity:[]){const raw=String(x?.date||'').trim();const plain=/^\d{4}-\d{2}-\d{2}$/.test(raw);const t=plain?dateFromKey(raw):new Date(raw);if(!t||Number.isNaN(t.getTime())||t.getTime()>now)continue;const index=byKey.get(localKey(t));if(index!==undefined)bins[index].count++;}return bins;
  }
  return Object.freeze({buildWeek,validateWeek,validateBackup,csvTable,exportTasks,exportActivity,dailySeries,localKey,allowed});
 });

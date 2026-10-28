@@ -218,7 +218,7 @@ const save = (key, value) => {
         try { window.dispatchEvent(new CustomEvent('life:storage-error')); } catch (_) {}
     }
 };
-// LIFE 15.7.1 — Only explicit user actions may claim a saved plan after read-back verification.
+// LIFE 15.8.5 — Only explicit user actions may claim a saved plan after read-back verification.
 function lifeVerifiedSave1542(key, value) {
     try {
         if (window.lifeStorageReadBlockedKeys154?.has(String(key))) return false;
@@ -1062,7 +1062,7 @@ const lifeWorkoutSessionStats = (workout) => {
         ['Mobilidade', String(mobility)]
     ];
 };
-// 15.7.1: a failure in optional exercise media must not erase a generated workout.
+// 15.8.5: a failure in optional exercise media must not erase a generated workout.
 const life1543SafeWorkoutCards = (day, onOpenExercise) => {
     try { return lifeRenderWorkoutExerciseCards(day, onOpenExercise); }
     catch (e) {
@@ -1096,7 +1096,7 @@ const lifeWorkoutDayShortV1497 = (label, index = 0) => {
     const map = { Segunda:'SEG', 'Terça':'TER', Quarta:'QUA', Quinta:'QUI', Sexta:'SEX', 'Sábado':'SÁB', Domingo:'DOM' };
     return map[lifeWorkoutDayNameV1497(label, index)] || String(label || ('D' + (index + 1))).slice(0, 3).toUpperCase();
 };
-// LIFE 15.7.1 — Organizador de semana: exibe pastas de dias, não exercícios empilhados.
+// LIFE 15.8.5 — Organizador de semana: exibe pastas de dias, não exercícios empilhados.
 // O usuário informa a quantidade de sessões; o LIFE distribui dias de treino e descanso.
 const LIFE_WEEK_DAYS_V1546 = Object.freeze(['Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado','Domingo']);
 const lifeWorkoutWeekSlotsV1546 = count => {
@@ -1267,6 +1267,7 @@ const lifeRenderWorkoutExerciseCards = (session, onOpenExercise) => {
             ? [React.createElement('button', { type: 'button', key: 'optional', onClick: searchExact }, 'BUSCAR VÍDEO OPCIONAL')]
             : [
                 React.createElement('button', { type: 'button', key: 'watch', className: 'hot', onClick: watchAction }, info?.id ? '▶ REPRODUZIR' : '▶ BUSCAR VÍDEO'),
+                React.createElement('button', { type: 'button', key: 'youtube', onClick: () => { if(info?.id && typeof window !== 'undefined' && window.open) window.open('https://www.youtube.com/watch?v='+encodeURIComponent(info.id), '_blank', 'noopener,noreferrer'); else searchExact(); } }, info?.id ? 'ABRIR NO YOUTUBE' : 'BUSCAR VÍDEO'),
                 React.createElement('button', { type: 'button', key: 'search', onClick: searchExact }, 'BUSCAR EXATO')
             ];
         if (ex)
@@ -4108,13 +4109,15 @@ function LifeInsights123({activity=[],tasks=[],sets=[],studyPlan=null,onGo}) {
 function LifeEvolutionQuality({ activity = [], tasks = [], notes = [], workouts = [], finance = [] }) {
     const now = new Date();
     const localKey = (d) => {
+        const raw=String(d||'').trim();
+        if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) { const [y,m,day]=raw.split('-').map(Number); const local=new Date(y,m-1,day); return local.getFullYear()===y&&local.getMonth()===m-1&&local.getDate()===day?raw:''; }
         const x = new Date(d);
         if (Number.isNaN(x.getTime())) return '';
         return [x.getFullYear(), String(x.getMonth() + 1).padStart(2, '0'), String(x.getDate()).padStart(2, '0')].join('-');
     };
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const last7 = Array.from({ length: 7 }, (_, i) => {
-        const d = new Date(startOfDay - (6 - i) * 86400000);
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (6 - i));
         const key = localKey(d);
         return { key, label: d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '').slice(0, 3), count: activity.filter(a => localKey(a.date) === key).length };
     });
@@ -4128,7 +4131,7 @@ function LifeEvolutionQuality({ activity = [], tasks = [], notes = [], workouts 
     const activeKeys = new Set(activity.map(a => localKey(a.date)).filter(Boolean));
     let streak = 0;
     for (let i = 0; i < 365; i++) {
-        const d = new Date(startOfDay - i * 86400000);
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
         if (activeKeys.has(localKey(d))) streak++;
         else break;
     }
@@ -5507,6 +5510,8 @@ function LifeOSV18() {
     const [planMeta, setPlanMeta] = React.useState({ rawPlan: 'FREE', proUntil: null, subscriptionStatus: null, checkedAt: null });
     const [proActivation, setProActivation] = React.useState('idle');
     const [proCheckoutBusy, setProCheckoutBusy] = React.useState(false);
+    const [lifeBillingStatus, setLifeBillingStatus] = React.useState(null);
+    const [lifeBillingBusy, setLifeBillingBusy] = React.useState(false);
     const life126CheckoutLock = React.useRef(false);
     const [proCheckoutError, setProCheckoutError] = React.useState('');
     const [ownerPreview, setOwnerPreview] = React.useState(() => { try {
@@ -6200,6 +6205,28 @@ function LifeOSV18() {
         setLifeAccess('first');
         setTimeout(() => window.lifeOpenAuth && window.lifeOpenAuth('main'), 0);
     };
+    // Reprocessa apenas pedidos do usuário autenticado, consultando diretamente o Mercado Pago.
+    // Nunca libera PRO a partir do retorno ou de dados fornecidos pelo navegador.
+    const reconcileLifePayments = async (showMessage = false) => {
+        if (window.lifeGuest?.active || !window.lifeSupabase) return false;
+        try {
+            const {data:{session}} = await window.lifeSupabase.auth.getSession();
+            if (!session?.user) return false;
+            const result = await window.lifeSupabase.functions.invoke('mercadopago-create-subscription', {body:{action:'reconcile'}});
+            if (result?.error || result?.data?.error) throw result?.error || new Error(result?.data?.error);
+            if (showMessage && !(result?.data?.applied > 0)) {
+                setToast('PAGAMENTO AINDA NÃO CONFIRMADO · NÃO PAGUE NOVAMENTE');
+                setTimeout(()=>setToast(''),3500);
+            }
+            return !!(result?.data?.applied > 0);
+        } catch (e) {
+            if (showMessage) {
+                setToast('VERIFICAÇÃO INDISPONÍVEL · CONSULTE O SUPORTE, NÃO PAGUE NOVAMENTE');
+                setTimeout(()=>setToast(''),4500);
+            }
+            return false;
+        }
+    };
     const refreshLifePlan = async (showMessage = false) => {
         try {
             const info = await readLifePlanProfile();
@@ -6242,6 +6269,7 @@ function LifeOSV18() {
         let cancelled = false, tries = 0, timer = null;
         setProActivation('checking');
         const poll = async () => {
+            if (tries === 0 || tries === 4 || tries === 8) await reconcileLifePayments(false);
             const plan = await refreshLifePlan(false);
             if (cancelled) return;
             if (plan === 'PRO') {
@@ -6259,10 +6287,7 @@ function LifeOSV18() {
         return () => { cancelled = true; if (timer) clearTimeout(timer); };
     }, [lifeAccess]);
     const lifeCheckoutUrlFrom = (data) => String(data?.checkout_url || data?.checkoutUrl || data?.url || data?.init_point || data?.sandbox_init_point || '').trim();
-    const [proCheckoutMethod, setProCheckoutMethod] = React.useState('card');
-    const startLifeProCheckout = async (selectedMethod = 'card') => {
-        const checkoutMethod = selectedMethod === 'pix' ? 'pix' : 'card';
-        setProCheckoutMethod(checkoutMethod);
+    const startLifeProCheckout = async () => {
         if (proCheckoutBusy || life126CheckoutLock.current) return;
         life126CheckoutLock.current=true;
         let life126RedirectStarted=false;
@@ -6276,13 +6301,12 @@ function LifeOSV18() {
         try {
             if (!window.lifeSupabase) throw new Error('Conexão com a conta indisponível.');
             const { data: { session } } = await window.lifeSupabase.auth.getSession();
-            if (!session?.user) { window.lifeOpenAuth && window.lifeOpenAuth('main'); throw new Error('Entre na sua conta antes de assinar.'); }
-            setToast(checkoutMethod === 'pix' ? 'PREPARANDO PAGAMENTO VIA PIX…' : 'ABRINDO ASSINATURA POR CARTÃO…');
-            const functionName = checkoutMethod === 'pix' ? 'mercadopago-create-pix' : 'mercadopago-create-subscription';
+            if (!session?.user) { setShowProPreview(false); setShowPlanChoice(false); window.lifeOpenAuth && window.lifeOpenAuth('main'); setToast('ENTRE NA SUA CONTA PARA ABRIR O MERCADO PAGO'); setTimeout(()=>setToast(''),3600); return; }
+            setToast('ABRINDO CHECKOUT SEGURO…');
             let data = null, invokeError = null;
-            try { const result = await window.lifeSupabase.functions.invoke(functionName, { body: {} }); data = result?.data || null; invokeError = result?.error || null; } catch (e) { invokeError = e; }
+            try { const result = await window.lifeSupabase.functions.invoke('mercadopago-create-subscription', { body: {action:'create',method:'checkout'} }); data = result?.data || null; invokeError = result?.error || null; } catch (e) { invokeError = e; }
             if ((!lifeCheckoutUrlFrom(data) || invokeError) && window.LIFE_BACKEND?.supabaseUrl && window.LIFE_BACKEND?.publishableKey) {
-                const res = await fetch(window.LIFE_BACKEND.supabaseUrl.replace(/\/$/,'') + '/functions/v1/' + functionName, { method: 'POST', headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + session.access_token, 'apikey': window.LIFE_BACKEND.publishableKey }, body: '{}' });
+                const res = await fetch(window.LIFE_BACKEND.supabaseUrl.replace(/\/$/,'') + '/functions/v1/mercadopago-create-subscription', { method: 'POST', headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + session.access_token, 'apikey': window.LIFE_BACKEND.publishableKey }, body: JSON.stringify({action:'create',method:'checkout'}) });
                 const fallback = await res.json().catch(() => ({}));
                 if (res.ok && lifeCheckoutUrlFrom(fallback)) { data = fallback; invokeError = null; }
                 else if (!lifeCheckoutUrlFrom(data)) invokeError = new Error(fallback?.error || fallback?.message || ('Backend respondeu ' + res.status));
@@ -6290,7 +6314,7 @@ function LifeOSV18() {
             if (invokeError && !lifeCheckoutUrlFrom(data)) throw invokeError;
             const checkoutUrl = lifeCheckoutUrlFrom(data);
             if (!window.LifeIntegrity123?.validCheckoutUrl(checkoutUrl) || !window.LifeProduction126?.requestGuard({checkoutUrl,loggedIn:true,role:realPlan}).ok) throw new Error('O servidor retornou um endereço de pagamento não confiável.');
-            try { lifeSessionSet('life_pro_checkout_pending', String(Date.now())); window.lifeProductEvent && window.lifeProductEvent('checkout_started', { plan: 'PRO', method: checkoutMethod }); } catch (e) {}
+            try { lifeSessionSet('life_pro_checkout_pending', String(Date.now())); window.lifeProductEvent && window.lifeProductEvent('checkout_started', { plan: 'PRO', method: 'checkout_pro' }); } catch (e) {}
             window.location.assign(checkoutUrl);
             life126RedirectStarted=true;
             return;
@@ -6298,7 +6322,8 @@ function LifeOSV18() {
             try { lifeSessionRemove('life_pro_checkout_pending'); } catch (_) {}
             console.error('LIFE PRO checkout indisponível');
             const raw = String(e?.message || 'Checkout indisponível no momento.').trim();
-            const friendly = /não confiável/i.test(raw) ? 'O servidor retornou um endereço de pagamento não confiável.' : /entre na sua conta/i.test(raw) ? 'Entre na sua conta antes de assinar.' : /failed to fetch|network/i.test(raw) ? 'Não foi possível falar com o servidor de pagamento. Confira a internet e tente novamente.' : /function|backend|404/i.test(raw) ? 'O checkout ainda não está disponível no servidor. A função de pagamento precisa estar publicada no backend.' : 'Não foi possível abrir o pagamento. Confira a conexão e tente novamente.';
+            const friendly = /assinatura automática anterior|tentativa de assinatura/i.test(raw) ? 'Já existe uma tentativa de assinatura por cartão. Confira a assinatura no seu Perfil antes de começar outra.' : /não confiável/i.test(raw) ? 'O servidor retornou um endereço de pagamento não confiável.' : /entre na sua conta/i.test(raw) ? 'Entre na sua conta antes de assinar.' : /failed to fetch|network/i.test(raw) ? 'Não foi possível falar com o servidor de pagamento. Confira a internet e tente novamente.' : /function|backend|404/i.test(raw) ? 'O Checkout Pro não está publicado no Supabase. Instale a função de pagamento e o banco desta versão.' : 'Não foi possível abrir a assinatura. Confira a conexão e tente novamente.';
+            setShowProPreview(false); setShowPlanChoice(true);
             setProCheckoutError(friendly);
             setToast('NÃO FOI POSSÍVEL ABRIR O CHECKOUT'); setTimeout(() => setToast(''), 3600);
         } finally {
@@ -6365,6 +6390,23 @@ function LifeOSV18() {
     const lifeAdvancedIntentKey = lifeNormalizeText(advancedIntent || '');
     const [recipeWorkspace, setRecipeWorkspace] = React.useState('Explorar');
     const lifeOrgInitialView = /projet/.test(lifeAdvancedIntentKey) ? 'Projetos' : /agenda/.test(lifeAdvancedIntentKey) ? 'Agenda' : /7 dias/.test(lifeAdvancedIntentKey) ? '7 dias' : /atras/.test(lifeAdvancedIntentKey) ? 'Atrasadas' : /aguard/.test(lifeAdvancedIntentKey) ? 'Aguardando' : 'Hoje';
+    const lifeBillingRequest = async (action) => {
+        if (!window.lifeSupabase) throw new Error('Entre na sua conta.');
+        const result = await window.lifeSupabase.functions.invoke('mercadopago-create-subscription',{body:{action}});
+        if (result?.error) throw result.error;
+        return result?.data || {};
+    };
+    const refreshLifeBillingStatus = async () => {
+        try { const data = await lifeBillingRequest('status'); setLifeBillingStatus(data.payments || []); }
+        catch(e) { setLifeBillingStatus([]); setToast('STATUS DE PAGAMENTO INDISPONÍVEL'); }
+    };
+    const cancelLifeRecurringPayment = async () => {
+        if (lifeBillingBusy || !window.confirm('Cancelar a renovação automática do cartão? O período que já foi pago permanece ativo até o vencimento.')) return;
+        setLifeBillingBusy(true);
+        try { const data=await lifeBillingRequest('cancel'); setToast(data?.message || 'RENOVAÇÃO CANCELADA'); await refreshLifeBillingStatus(); await refreshLifePlan(false); }
+        catch(e) { setToast('NÃO FOI POSSÍVEL CANCELAR. CONFIRA O MERCADO PAGO.'); }
+        finally { setLifeBillingBusy(false); }
+    };
     React.useEffect(() => {
         if (!advancedArea || advancedArea !== view || !advancedIntent) return;
         const intent = lifeNormalizeText(advancedIntent);
@@ -8742,12 +8784,12 @@ function LifeOSV18() {
         setTimeout(() => setToast(''), 2200);
         return true;
     };
-    // 15.7.1: Generate the useful plan even when non-essential AI/recommendation modules fail.
+    // 15.8.5: Generate the useful plan even when non-essential AI/recommendation modules fail.
     // No profile answers are written to diagnostics; failures stay explainable to the user.
     const life1543GeneratorResult = (kind, outcome, reason='') => {
         try {
             window.LIFE_GENERATOR_DIAGNOSTICS = {
-                version:'15.7.1',kind,ok:!!(outcome && !outcome.blocked && Array.isArray(outcome.items) && outcome.items.length),
+                version:'15.8.5',kind,ok:!!(outcome && !outcome.blocked && Array.isArray(outcome.items) && outcome.items.length),
                 blocked:!!outcome?.blocked,days:Array.isArray(outcome?.items)?outcome.items.length:0,
                 code:String(reason||'').slice(0,65),at:new Date().toISOString()
             };
@@ -8767,7 +8809,7 @@ function LifeOSV18() {
             }
         } catch (error) { console.warn('[LIFE] Atualização do cache parcialmente indisponível.', error); }
         const target = new URL(location.href);
-        target.searchParams.set('life_build', '15.7.1');
+        target.searchParams.set('life_build', '15.8.5');
         target.searchParams.set('life_reload', String(Date.now()));
         location.replace(target.href);
     };
@@ -8778,12 +8820,12 @@ function LifeOSV18() {
             else if(result && Array.isArray(result.items) && result.items.length) life1543GeneratorResult(personalFlow,result);
             else {
                 life1543GeneratorResult(personalFlow,result,'empty_generation');
-                setPfPlan({type:personalFlow==='training'?'training':'diet',blocked:true,items:[],message:'O gerador não retornou sessões. Suas respostas foram mantidas. Toque em REVISAR RESPOSTAS e tente novamente. Se persistir, confirme a versão 15.7.1 publicada.'});
+                setPfPlan({type:personalFlow==='training'?'training':'diet',blocked:true,items:[],message:'O gerador não retornou sessões. Suas respostas foram mantidas. Toque em REVISAR RESPOSTAS e tente novamente. Se persistir, confirme a versão 15.8.5 publicada.'});
             }
         } catch (e) {
-            console.error('[LIFE GENERATOR 15.7.1] Erro no fluxo de geração',e);
+            console.error('[LIFE GENERATOR 15.8.5] Erro no fluxo de geração',e);
             life1543GeneratorResult(personalFlow,null, String(e?.name||'generation_exception'));
-            setPfPlan({type:personalFlow==='training'?'training':'diet',blocked:true,items:[],message:'O LIFE não conseguiu montar o plano nesta tentativa. Nenhuma resposta foi apagada. Use REVISAR RESPOSTAS e, se continuar, confira se o site está na versão 15.7.1.'});
+            setPfPlan({type:personalFlow==='training'?'training':'diet',blocked:true,items:[],message:'O LIFE não conseguiu montar o plano nesta tentativa. Nenhuma resposta foi apagada. Use REVISAR RESPOSTAS e, se continuar, confira se o site está na versão 15.8.5.'});
         }
     };
     const buildPfPlan = () => {
@@ -10061,9 +10103,7 @@ function LifeOSV18() {
                 React.createElement("p", null, "Crie uma conta para manter organização, preferências e progresso conectados ao seu acesso."),
                 React.createElement("div", { className: "life-entry-actions" },
                     React.createElement("button", { type: "button", className: "primary", onClick: () => { window.lifeExplicitAuth = true; window.lifeOpenAuth && window.lifeOpenAuth('signup'); } }, "CRIAR CONTA →"),
-                    React.createElement("button", { type: "button", onClick: () => { window.lifeExplicitAuth = true; window.lifeOpenAuth && window.lifeOpenAuth('main'); } }, "JÁ TENHO CONTA"),
-                    React.createElement("button", {type:"button", className:"life-entry-guest", onClick:()=>window.lifeGuest?.enter?.()}, "ENTRAR COMO CONVIDADO"),
-                    React.createElement("small", {className:"life-entry-guest-note"}, "Sem cadastro. Seus dados não são salvos e somem ao sair ou atualizar a página."))));
+                    React.createElement("button", { type: "button", onClick: () => { window.lifeExplicitAuth = true; window.lifeOpenAuth && window.lifeOpenAuth('main'); } }, "JÁ TENHO CONTA"))));
     }
     
 
@@ -11425,7 +11465,7 @@ function LifeOSV18() {
                 React.createElement("small", null, "LIFE OS"),
                 React.createElement("b", null, pageTransition.label),
                 React.createElement("i", null))),
-        showProPreview && !hasV18Pro && lifePortal((() => {
+        showProPreview && !showPlanChoice && !hasV18Pro && lifePortal((() => {
             const preview = lifeProPreviewFor(proPreviewSource);
             return React.createElement("div", { className: "life-pro-preview-overlay" + (lifeTheme === 'day' ? " life-theme-day" : ""), role: "dialog", "aria-modal": "true", "aria-label": "Prévia do LIFE OS PRO", onClick: (e) => { if (e.target === e.currentTarget) setShowProPreview(false); } },
                 React.createElement("section", { className: "life-pro-preview-card", onClick: e => e.stopPropagation() },
@@ -11466,10 +11506,10 @@ function LifeOSV18() {
                                 React.createElement("div", { className: "life-pro-demo-benefit" }, React.createElement("b", null, "COMO ISSO AJUDA"), React.createElement("p", null, preview.benefit)))),
                     React.createElement("footer", { className: "life-pro-preview-actions" },
                         React.createElement("button", { type: "button", className: "ghost", onClick: () => setShowProPreview(false) }, "CONTINUAR COM OS LIMITES DO FREE"),
-                        React.createElement("button", { type: "button", className: "primary", "data-life-pro-action": "plans", onClick: () => openLifeProPlans(proPreviewSource) }, "DESBLOQUEAR O SISTEMA COMPLETO →"))),
+                        React.createElement("button", { type: "button", className: "primary", disabled: proCheckoutBusy, onClick: (event) => { event.stopPropagation(); startLifeProCheckout(); } }, proCheckoutBusy ? "ABRINDO MERCADO PAGO…" : "DESBLOQUEAR O SISTEMA COMPLETO →"))),
             ));
         })()),
-        showPlanChoice && !hasV18Pro && lifePortal(React.createElement("div", { className: "life-pro-paywall" + (lifeTheme === 'day' ? " life-theme-day" : ""), onClick: () => setShowPlanChoice(false) },
+        showPlanChoice && !hasV18Pro && lifePortal(React.createElement("div", { className: "life-pro-paywall life-billing-visible-v1582" + (lifeTheme === 'day' ? " life-theme-day" : ""), onClick: () => setShowPlanChoice(false) },
             React.createElement("section", { className: "life-pro-paywall-card", onClick: e => e.stopPropagation(), role: "dialog", "aria-modal": "true", "aria-label": "LIFE OS PRO" },
                 React.createElement("button", { type: "button", className: "life-pro-paywall-close", onClick: () => setShowPlanChoice(false), "aria-label": "Fechar" }, "×"),
                 React.createElement("header", { className: "life-pro-paywall-head" },
@@ -11491,18 +11531,19 @@ function LifeOSV18() {
                         React.createElement("div", { className: "life-pro-badge" }, "EXPERIÊNCIA COMPLETA"),
                         React.createElement("small", null, "LIFE OS PRO"),
                         React.createElement("h3", null, "O LIFE inteiro aparece."),
-                        React.createElement("strong", null, "R$ 29,90 ", React.createElement("em", null, "/ mês")),
+                        React.createElement("strong", null, "R$ 29,90 ", React.createElement("em", null, "/ 30 dias")),
                         React.createElement("span", null, v33Profile.focusArea === 'Estudos' ? 'Planejamento e acompanhamento avançado de estudos' : v33Profile.focusArea === 'Fitness' ? 'Treino e alimentação personalizados pela sua rotina' : v33Profile.focusArea === 'Finanças' ? 'Análises financeiras e histórico mais profundos' : 'Planejamento avançado conectado ao seu LIFE'),
                         React.createElement("span", null, "LIFE AI com Planejador, Memória permitida, contexto e histórico de ações"),
                         React.createElement("span", null, LIFE_STUDY_TOPICS.length + "+ trilhas de estudo e conhecimento, incluindo marketing, filosofia, persuasão, tecnologia e negócios"),
                         React.createElement("span", null, "+9 áreas e sistemas exclusivos: Notas, Receitas, LIFE AI, Planner OS, Biblioteca, Favoritos, Meu LIFE, Evolução e Archive"),
                         React.createElement("span", null, tasks.filter(t => !taskIsDone(t)).length ? ('Hoje você já tem ' + tasks.filter(t => !taskIsDone(t)).length + ' tarefa(s) que o PRO pode cruzar no planejamento.') : 'Quando você registrar mais coisas, o PRO cruza contexto entre as áreas.'),
-                        React.createElement('div', { className: 'life-pro-payment-choices' },
-                            React.createElement('button', { type: 'button', onClick: () => startLifeProCheckout('card'), disabled: proCheckoutBusy, 'aria-busy': proCheckoutBusy, className: 'life-pro-pay-card' }, proCheckoutBusy && proCheckoutMethod === 'card' ? 'ABRINDO CARTÃO…' : 'ASSINAR COM CARTÃO →'),
-                            React.createElement('button', { type: 'button', onClick: () => startLifeProCheckout('pix'), disabled: proCheckoutBusy, 'aria-busy': proCheckoutBusy, className: 'life-pro-pay-pix' }, proCheckoutBusy && proCheckoutMethod === 'pix' ? 'ABRINDO PIX…' : 'PAGAR 30 DIAS COM PIX →')),
-                        React.createElement('small', { className: 'life-pro-payment-note' }, 'Cartão: renovação automática. Pix: pagamento único de 30 dias, sem renovação automática; outros meios podem aparecer no Mercado Pago.'),
-                        proCheckoutError && React.createElement("div", { className: "life-pro-checkout-error-v67", role: "alert" }, React.createElement("b", null, "NÃO CONSEGUIMOS ABRIR A ASSINATURA"), React.createElement("p", null, proCheckoutError), realPlan !== 'OWNER' && React.createElement("button", { type: "button", onClick: () => startLifeProCheckout(proCheckoutMethod), disabled: proCheckoutBusy }, "TENTAR NOVAMENTE")),
-                        React.createElement("p", { className: "life-pro-secure" }, "Pagamento processado pelo Mercado Pago · liberação somente após aprovação"))),
+                        React.createElement('div', {className:'life-billing-options-v158'},
+                            React.createElement('p',{className:'life-billing-label-v158'},'PAGAR NO MERCADO PAGO · R$ 29,90 / 30 DIAS'),
+                            React.createElement('button',{type:'button',onClick:()=>startLifeProCheckout(),disabled:proCheckoutBusy}, proCheckoutBusy?'ABRINDO MERCADO PAGO…':'IR PARA O MERCADO PAGO →'),
+                            React.createElement('small',{className:'life-billing-note-v158'},'A escolha entre Pix, cartão e boleto acontece no Mercado Pago, conforme a disponibilidade. Acesso PRO por 30 dias após aprovação; renovação manual. Nenhum pagamento será cobrado automaticamente.'),
+                            proCheckoutBusy&&React.createElement('small',{role:'status'},'GERANDO LINK OFICIAL DO MERCADO PAGO…')),
+                        proCheckoutError && React.createElement("div", { className: "life-pro-checkout-error-v67", role: "alert" }, React.createElement("b", null, "NÃO CONSEGUIMOS ABRIR A ASSINATURA"), React.createElement("p", null, proCheckoutError), realPlan !== 'OWNER' && React.createElement("button", { type: "button", onClick: () => { setProCheckoutError(''); startLifeProCheckout(); }, disabled: proCheckoutBusy }, "TENTAR ABRIR MERCADO PAGO")),
+                        React.createElement("p", { className: "life-pro-secure" }, "Pagamento no Mercado Pago · PRO por 30 dias · renovação manual"))),
                 React.createElement("section", { className: "life-pro-universe-showcase" },
                     React.createElement("div", { className: "life-pro-universe-head" },
                         React.createElement("small", null, "O QUE SOME NO FREE E APARECE NO PRO"),
@@ -11525,7 +11566,7 @@ function LifeOSV18() {
                 React.createElement("h2", null, proActivation === 'success' ? 'Seu LIFE PRO está ativo.' : proActivation === 'pending' ? 'Pagamento em processamento.' : 'Confirmando seu LIFE PRO…'),
                 React.createElement("p", null, proActivation === 'success' ? 'A experiência completa foi liberada nesta conta. Seus dados e sua navegação continuam exatamente de onde estavam.' : proActivation === 'pending' ? 'O Mercado Pago ainda não refletiu a ativação no perfil. Seus dados continuam seguros; você pode verificar novamente sem refazer o pagamento.' : 'Estamos consultando o status da sua conta. Isso normalmente leva apenas alguns segundos.'),
                 proActivation === 'success' ? React.createElement("button", { type: "button", onClick: () => { setProActivation('idle'); setShowPlanChoice(false); } }, "ENTRAR NO LIFE PRO →") : proActivation === 'pending' ? React.createElement("div", { className: "life-pro-activation-actions" },
-                    React.createElement("button", { type: "button", onClick: async () => { setProActivation('checking'); const plan = await refreshLifePlan(true); setProActivation(plan === 'PRO' ? 'success' : 'pending'); } }, "VERIFICAR NOVAMENTE"),
+                    React.createElement("button", { type: "button", onClick: async () => { setProActivation('checking'); await reconcileLifePayments(true); const plan = await refreshLifePlan(true); setProActivation(plan === 'PRO' ? 'success' : 'pending'); } }, "VERIFICAR NOVAMENTE"),
                     React.createElement("button", { type: "button", className: "ghost", onClick: () => setProActivation('idle') }, "CONTINUAR NO FREE POR ENQUANTO")) : React.createElement("div", { className: "life-pro-loader" }))),
         realPlan === 'OWNER' && effectivePlan !== 'OWNER' && React.createElement("div", { className: "life-owner-preview-banner" },
             React.createElement("span", null,
@@ -11538,7 +11579,7 @@ function LifeOSV18() {
                 React.createElement("b", null, "Você está usando a versão essencial."),
                 React.createElement("span", null, "PRO libera planejamento completo, personalização, catálogo avançado e automações em todo o LIFE.")),
             React.createElement("div", { className: "life-free-conversion-actions" },
-                React.createElement("span", null, "R$ 29,90/mês"),
+                React.createElement("span", null, "R$ 29,90 / 30 dias"),
                 React.createElement("button", { type: "button", onClick: () => openLifePro('header') }, "VER TUDO DO PRO →"))),
         React.createElement("div", { className: 'v53-context ' + (view === 'Estudos' ? 'estudos' : view === 'Fitness' ? 'fitness' : view === 'Receitas' ? 'receitas' : view === 'Finanças' ? 'financas' : view === 'IA' ? 'life' : view === 'Meu LIFE' ? 'life' : view === 'Life' ? 'life' : view === 'Projetos' ? 'life' : view === 'Tarefas' ? 'life' : view === 'Notas' ? 'life' : view === 'Evolução' ? 'evolucao' : view === 'Archive' ? 'archive' : view === 'Perfil' ? 'perfil' : 'hoje') }),
         React.createElement("div", { className: "v35-ambient" },
@@ -12251,7 +12292,7 @@ function LifeOSV18() {
         lifeTodayPlans.length?lifeTodayPlans.slice(0,4).map((t,i)=>React.createElement('button',{type:'button',key:t.id||i,className:'life143-mini-task',onClick:()=>toggleLifeTask(t.id)},React.createElement('span',{className:'life143-mini-check '+(taskIsDone(t)?'done':''),'aria-hidden':true},taskIsDone(t)?'✓':''),React.createElement('span',null,t.text||t.title||'Tarefa'))):React.createElement('p',{className:'life143-no-mini'},'Nenhuma tarefa registrada para hoje.')),
       React.createElement('section',{className:'life143-focus-card'},React.createElement('span',null,'ESPAÇO DE CONCENTRAÇÃO'),React.createElement('strong',null,'Seu tempo, protegido.'),React.createElement('button',{type:'button',onClick:()=>setFocus(true)},'Entrar no modo foco',life143Icon('arrow_forward'))),
       lifeHomeShown('ai') && React.createElement('button',{type:'button',className:'life143-ai-card',onClick:()=>{setAiOriginView('Hoje');setAiQuickOpen(true);}},React.createElement('span',{className:'life143-ai-icon'},life143Icon('psychology')),React.createElement('span',null,React.createElement('strong',null,'LIFE AI'),React.createElement('small',null,'Seu parceiro de evolução.')),life143Icon('arrow_forward')))),
-  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 15.7.1 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
+  React.createElement('div',{className:'life143-footerline'},React.createElement('span',null,'LIFE OS 15.8.5 · POWER PREMIUM'),React.createElement('button',{type:'button',onClick:()=>setLifeCustomizeHome(x=>!x)},lifeCustomizeHome?'Fechar personalização':'Personalizar minha Home',life143Icon('tune')),
     lifeCustomizeHome && React.createElement('div',{className:'life121-home-pref-options'},[['capture','Captura rápida'],['metrics','Indicadores'],['agenda','Agenda e foco'],['areas','Áreas do LIFE'],['ai','LIFE AI']].map(([id,label])=>React.createElement('label',{key:id},React.createElement('input',{type:'checkbox',checked:lifeHomeShown(id),onChange:()=>lifeToggleHome(id)}),label))))),
             false && (!areaFocusMode || areaFocusMode==='__full__') && view === 'Hoje' && React.createElement("main", { className: "life-today-minimal" },
                 React.createElement("section", { className: "life-today-minimal-head" },
@@ -13813,10 +13854,16 @@ function LifeOSV18() {
                             React.createElement("b", null, cloudStatus === 'synced' ? 'Nuvem ativa' : cloudStatus === 'syncing' ? 'Sincronizando' : cloudStatus === 'conflict' ? 'Conflito para revisar' : 'Local'),
                             React.createElement("span", null, cloudLastSync ? new Date(cloudLastSync).toLocaleString('pt-BR') : 'Sem sincronização registrada'))),
                     React.createElement("div", { className: "life-account-actions" },
-                        React.createElement("button", { type: "button", onClick: () => refreshLifePlan(true) }, "VERIFICAR ASSINATURA"),
+                        React.createElement("button", { type: "button", onClick: async () => { await reconcileLifePayments(true); await refreshLifePlan(true); } }, "VERIFICAR PAGAMENTO / PRO"),
+                        React.createElement('button',{type:'button',onClick:refreshLifeBillingStatus},'STATUS DOS PAGAMENTOS'),
+                        React.createElement('button',{type:'button',onClick:async()=>{await reconcileLifePayments(true);await refreshLifePlan(true);await refreshLifeBillingStatus();}},'RECONCILIAR PAGAMENTO'),
                         React.createElement("button", { type: "button", onClick: () => cloudStatus === 'conflict' ? setSettingsOpen(true) : pushLifeCloud(true) }, cloudStatus === 'conflict' ? "REVISAR SINCRONIZAÇÃO" : "SINCRONIZAR"),
                         React.createElement("button", { type: "button", onClick: exportLifeData }, "EXPORTAR DADOS"),
                         React.createElement("button", { type: "button", onClick: switchLifeAccount }, "TROCAR DE CONTA"))),
+                lifeBillingStatus && React.createElement('section',{className:'v18-sec life-billing-status-v158'},
+                    React.createElement('h3',null,'Pagamentos LIFE OS'),
+                    React.createElement('p',null,lifeBillingStatus.length?'Status registrado no servidor. Pendente não significa pago.':'Nenhum pagamento registrado nesta integração. Assinaturas antigas podem estar em outro sistema.'),
+                    lifeBillingStatus.map((x,i)=>React.createElement('p',{key:i},(x.method==='checkout'?'MERCADO PAGO':String(x.method).toUpperCase()),' · ',x.status==='paid'?'PAGO':x.status==='active'?'ASSINATURA ATIVA':x.status==='created'?'CHECKOUT CRIADO / EM ACOMPANHAMENTO':x.status==='cancelled'?'RENOVAÇÃO CANCELADA':x.status==='pending'?'PREPARANDO CHECKOUT':x.status==='failed'?'TENTATIVA NÃO CONCLUÍDA':x.status==='paused'?'ASSINATURA PAUSADA':String(x.status).toUpperCase(),' · ',new Date(x.created_at).toLocaleDateString('pt-BR')))),
                 React.createElement("section", { className: "v18-sec life-market-profile" },
                     React.createElement("div", null,
                         React.createElement("div", { className: "v28-k" }, "PRIVACIDADE / DADOS / SUPORTE"),
@@ -14517,7 +14564,8 @@ function LifeOSV18() {
                                 React.createElement("iframe", { src: 'https://www.youtube-nocookie.com/embed/' + vi.id + '?rel=0&playsinline=1&iv_load_policy=3', title: 'Tutorial ' + selectedLifeExercise.name, loading: "lazy", referrerPolicy: "strict-origin-when-cross-origin", allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture", allowFullScreen: true })),
                             React.createElement("div", { className: "life-exercise-video-meta" },
                                 React.createElement("b", null, "V\u00CDDEO INCORPORADO \u00B7 abre dentro do LIFE"),
-                                React.createElement("span", null, vi.exact ? 'TUTORIAL FIXADO PARA ESTE EXERCÍCIO' : vi.label))) : null; })(),
+                                React.createElement("span", null, vi.exact ? 'TUTORIAL FIXADO PARA ESTE EXERCÍCIO' : vi.label),
+                                React.createElement('a', {href:'https://www.youtube.com/watch?v='+encodeURIComponent(vi.id),target:'_blank',rel:'noopener noreferrer',style:{display:'inline-flex',padding:'8px 10px',fontSize:'11px',fontWeight:700,color:'inherit',textDecoration:'underline'}},'ABRIR NO YOUTUBE SE O VÍDEO NÃO CARREGAR'))) : null; })(),
                         React.createElement("div", { className: "life-exercise-meta" },
                             React.createElement("span", null, lifeExerciseGroup(selectedLifeExercise)),
                             React.createElement("span", null, lifeExerciseMeta(selectedLifeExercise).equipment),
@@ -14681,13 +14729,13 @@ function LifeOSV18() {
                     closePf(); } },
                 React.createElement("div", { className: "v27-sheet" },
                     React.createElement("div", { className: "flex items-center justify-between" },
-                        React.createElement("div", { className: "micro" }, personalFlow === "training" ? "LIFE / FITNESS / PERSONAL · V15.7.1" : "LIFE / DIETA / PERSONAL"),
+                        React.createElement("div", { className: "micro" }, personalFlow === "training" ? "LIFE / FITNESS / PERSONAL · V15.8.5" : "LIFE / DIETA / PERSONAL"),
                         React.createElement("button", { type: "button", onClick: closePf, className: "iconbtn" }, "\u00D7")),
                     !pfPlan ? React.createElement(React.Fragment, null,
                         React.createElement("div", { className: "v27-progress" },
                             React.createElement("i", { style: { width: ((pfStep + 1) / qs.length * 100) + "%" } })),
                         React.createElement("div", { className: "v27-q" }, qs[pfStep][0]),
-                        personalFlow === "training" && React.createElement("small",{className:"micro",style:{opacity:.78}},"GERADOR LOCAL · LIFE 15.7.1 · ETAPA "+(pfStep+1)+" / "+qs.length),
+                        personalFlow === "training" && React.createElement("small",{className:"micro",style:{opacity:.78}},"GERADOR LOCAL · LIFE 15.8.5 · ETAPA "+(pfStep+1)+" / "+qs.length),
                         personalFlow === "training" && React.createElement("button",{type:"button",className:"life-version-refresh-v1545",onClick:lifeRefreshVersion1545,title:"Atualiza os arquivos sem apagar sua conta ou dados"},"ATUALIZAR ARQUIVOS DO LIFE"),
                         React.createElement("div", { className: "v27-help" }, personalFlow === "training" ? (qs[pfStep][1][0] === "__AGE__" ? "A idade ajuda o LIFE a escolher um nível de cautela adequado. Menores de 18 anos não recebem automaticamente estruturas avançadas de alto volume." : qs[pfStep][1][0] === "__HEIGHT__" ? "A altura serve apenas como referência de ajuste de equipamentos e ergonomia, nunca como padrão corporal." : "O plano cruza objetivo, experiência, musculação, corrida/cardio, frequência, recuperação, ambiente e limitações antes de montar a semana.") : "O LIFE usa rotina e preferências para organizar refeições variadas — sem metas agressivas de peso."),
                         personalFlow === "training" && qs[pfStep][1][0] === "__HEIGHT__" ? React.createElement("div", { className: "vfit-height" },
@@ -14702,7 +14750,7 @@ function LifeOSV18() {
                             React.createElement("button", { type: "button", className: "v27-back", disabled: pfStep === 0, onClick: () => setPfStep(x => Math.max(0, x - 1)) }, "VOLTAR"),
                             React.createElement("button", { type: "button", className: "v27-next", disabled: personalFlow === "training" && qs[pfStep][1][0] === "__AGE__" ? !(Number(pfAnswers[pfStep]) >= 13 && Number(pfAnswers[pfStep]) <= 90) : personalFlow === "training" && qs[pfStep][1][0] === "__HEIGHT__" ? !(pfAnswers[pfStep] === "Prefiro não informar" || (Number(pfAnswers[pfStep]) >= 120 && Number(pfAnswers[pfStep]) <= 230)) : !pfAnswers[pfStep], onClick: () => { if (pfStep < qs.length - 1) {setPfStep(x => x + 1);return;} runPfGenerate() } }, pfStep < qs.length - 1 ? "CONTINUAR" : "GERAR COM LIFE"))) : React.createElement(React.Fragment, null,
                         React.createElement("div", { className: "v27-q" }, personalFlow === "training" ? (pfPlan.blocked ? "Antes de montar seu treino." : (!hasV18Pro ? "Seu treino foi gerado." : "Sua semana de treino está pronta.")) : (pfPlan.blocked ? "Antes de montar sua rotina alimentar." : "Sua rotina alimentar foi organizada.")),
-                        React.createElement("small", { className:"micro life-version-result-v1545", style:{display:"block",opacity:.86,marginTop:8}}, personalFlow === "training" ? "GERADOR ATIVO · LIFE 15.7.1" : "LIFE 15.7.1"),
+                        React.createElement("small", { className:"micro life-version-result-v1545", style:{display:"block",opacity:.86,marginTop:8}}, personalFlow === "training" ? "GERADOR ATIVO · LIFE 15.8.5" : "LIFE 15.8.5"),
                         personalFlow === "training" && React.createElement("button",{type:"button",className:"life-version-refresh-v1545",onClick:lifeRefreshVersion1545,title:"Atualiza os arquivos sem apagar sua conta ou dados"},"ATUALIZAR ARQUIVOS DO LIFE"),
                         React.createElement("div", { className: "v27-help" }, pfPlan.blocked ? pfPlan.message : (personalFlow === "training" && !hasV18Pro ? "A semana está organizada em pastas. Você pode abrir o primeiro dia como amostra; as fichas completas ficam no PRO." : "Plano criado a partir das respostas desta sessão. Você pode refazer o questionário quando sua rotina mudar.")),
                         personalFlow === "training" && !pfPlan.blocked && !hasV18Pro && React.createElement('p',{className:'life-week-free-note-v1546'},'Você pode abrir a primeira pasta como demonstração. As demais fichas completas ficam no PRO.'),

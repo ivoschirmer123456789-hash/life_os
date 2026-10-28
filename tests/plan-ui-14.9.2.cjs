@@ -80,4 +80,10 @@ check('fechar pasta interrompe o iframe para não deixar áudio oculto',()=>{
   assert(iframe.src.includes('youtube-nocookie.com/embed/'));
   assert(!iframe.src.includes('autoplay=1'));
 });
+
+check('vídeo com incorporação bloqueada pode abrir na origem',()=>{
+  const btn=flat(direct).find(x=>x.tag==='button'&&words(x)==='ABRIR NO YOUTUBE');
+  assert(btn);btn.props.onClick();const dest=opened.at(-1);assert(dest.url==='https://www.youtube.com/watch?v='+exercise.video_id);assert.equal(dest.target,'_blank');
+});
+
 console.log(`PASS ${count} testes de planilhas`);

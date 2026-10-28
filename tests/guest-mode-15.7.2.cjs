@@ -3,7 +3,7 @@ const fs=require('fs');
 const path=require('path');
 const vm=require('vm');
 const assert=require('assert');
-const guestFile=path.join(__dirname,'../assets/js/guest-session-15.7.2.js');
+const guestFile=path.join(__dirname,'../assets/js/guest-session-15.8.5.js');
 const source=fs.readFileSync(guestFile,'utf8');
 function mockStorage(){let map=new Map();return {
   get length(){return map.size;},

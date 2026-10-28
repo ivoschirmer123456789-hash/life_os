@@ -461,7 +461,7 @@
     navigator.serviceWorker.addEventListener('controllerchange',()=>{
       if(!hadController||reloaded)return;
       reloaded=true;
-      const key='life_sw_reload_8_4_2';
+      const key='life_sw_reload_8_5_1';
       try{if(sessionStorage.getItem(key)==='1')return;sessionStorage.setItem(key,'1')}catch(_){ }
       location.reload();
     });

@@ -1046,3 +1046,24 @@ html.life14-ultra .life-entry-guest{border:1px solid rgba(239,143,76,.58)!import
 html.life14-ultra .life-entry-guest-note{display:block;text-align:center;color:#a8afbd;line-height:1.55;font-size:11px;max-width:320px;margin:2px auto 0}
 html[data-life-guest="true"] #life-account-chip{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;letter-spacing:.04em}
 @media(max-width:480px){html.life14-ultra #life-auth .la-guest-separator{margin:13px 0 10px;font-size:9px}html.life14-ultra #life-auth .la-guest-note{font-size:10px}}
+
+/* 15.8.5 — Checkout Pro / pagamentos */
+/* 15.8.3 - show the actual payment selector above the PRO preview; avoid invisible overlays. */
+.life-pro-paywall.life-billing-visible-v1582{z-index:100345!important;pointer-events:auto!important;}
+.life-pro-paywall.life-billing-visible-v1582 .life-pro-paywall-card{position:relative;z-index:1;pointer-events:auto!important;}
+.life-pro-preview-overlay .life-pro-preview-actions .primary{position:relative;z-index:6;pointer-events:auto!important;touch-action:manipulation;}
+.life-runtime-pro-fallback footer button{pointer-events:auto;touch-action:manipulation;}
+
+.life-billing-options-v158 .life-billing-retry-v1582{min-height:42px;border:1px solid rgba(255,135,45,.45);background:rgba(255,137,45,.10);color:#ffc18d;font-weight:800;cursor:pointer;}
+
+/* LIFE 15.8 — payment methods and reliable status */
+.life-billing-options-v158{display:grid;gap:10px;margin:15px 0}.life-billing-label-v158{font-weight:800;letter-spacing:.08em;color:#ff9c3a;margin:0}.life-billing-options-v158 button{width:100%;min-height:46px;white-space:normal;line-height:1.4;text-align:center;border:1px solid rgba(255,150,38,.55);background:#26170c;color:#fff;padding:12px 13px;border-radius:12px;cursor:pointer}.life-billing-options-v158 button:first-of-type{background:linear-gradient(100deg,#ff912e,#c6530a);color:#101010;font-weight:800}.life-billing-options-v158 button:disabled{opacity:.48;cursor:not-allowed}.life-billing-note-v158{line-height:1.6;color:#d4cbc1;font-size:12px}.life-billing-status-v158 p{overflow-wrap:anywhere}
+@media(max-width:420px){.life-billing-options-v158 button{font-size:12px;padding:12px 7px}}
+
+/* 15.8.3 - show the actual payment selector above the PRO preview; avoid invisible overlays. */
+.life-pro-paywall.life-billing-visible-v1582{z-index:100345!important;pointer-events:auto!important;}
+.life-pro-paywall.life-billing-visible-v1582 .life-pro-paywall-card{position:relative;z-index:1;pointer-events:auto!important;}
+.life-pro-preview-overlay .life-pro-preview-actions .primary{position:relative;z-index:6;pointer-events:auto!important;touch-action:manipulation;}
+.life-runtime-pro-fallback footer button{pointer-events:auto;touch-action:manipulation;}
+
+.life-billing-options-v158 .life-billing-retry-v1582{min-height:42px;border:1px solid rgba(255,135,45,.45);background:rgba(255,137,45,.10);color:#ffc18d;font-weight:800;cursor:pointer;}
