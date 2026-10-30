@@ -6212,7 +6212,7 @@ function LifeOSV18() {
         try {
             const {data:{session}} = await window.lifeSupabase.auth.getSession();
             if (!session?.user) return false;
-            const result = await window.lifeSupabase.functions.invoke('mercadopago-create-subscription', {body:{action:'reconcile'}});
+            const result = await window.lifeSupabase.functions.invoke('mercadopago-create-checkout', {body:{action:'reconcile'}});
             if (result?.error || result?.data?.error) throw result?.error || new Error(result?.data?.error);
             if (showMessage && !(result?.data?.applied > 0)) {
                 setToast('PAGAMENTO AINDA NÃO CONFIRMADO · NÃO PAGUE NOVAMENTE');
@@ -6304,13 +6304,7 @@ function LifeOSV18() {
             if (!session?.user) { setShowProPreview(false); setShowPlanChoice(false); window.lifeOpenAuth && window.lifeOpenAuth('main'); setToast('ENTRE NA SUA CONTA PARA ABRIR O MERCADO PAGO'); setTimeout(()=>setToast(''),3600); return; }
             setToast('ABRINDO CHECKOUT SEGURO…');
             let data = null, invokeError = null;
-            try { const result = await window.lifeSupabase.functions.invoke('mercadopago-create-subscription', { body: {action:'create',method:'checkout'} }); data = result?.data || null; invokeError = result?.error || null; } catch (e) { invokeError = e; }
-            if ((!lifeCheckoutUrlFrom(data) || invokeError) && window.LIFE_BACKEND?.supabaseUrl && window.LIFE_BACKEND?.publishableKey) {
-                const res = await fetch(window.LIFE_BACKEND.supabaseUrl.replace(/\/$/,'') + '/functions/v1/mercadopago-create-subscription', { method: 'POST', headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + session.access_token, 'apikey': window.LIFE_BACKEND.publishableKey }, body: JSON.stringify({action:'create',method:'checkout'}) });
-                const fallback = await res.json().catch(() => ({}));
-                if (res.ok && lifeCheckoutUrlFrom(fallback)) { data = fallback; invokeError = null; }
-                else if (!lifeCheckoutUrlFrom(data)) invokeError = new Error(fallback?.error || fallback?.message || ('Backend respondeu ' + res.status));
-            }
+            try { const result = await window.lifeSupabase.functions.invoke('mercadopago-create-checkout', { body: {action:'create',method:'checkout'} }); data = result?.data || null; invokeError = result?.error || null; } catch (e) { invokeError = e; }
             if (invokeError && !lifeCheckoutUrlFrom(data)) throw invokeError;
             const checkoutUrl = lifeCheckoutUrlFrom(data);
             if (!window.LifeIntegrity123?.validCheckoutUrl(checkoutUrl) || !window.LifeProduction126?.requestGuard({checkoutUrl,loggedIn:true,role:realPlan}).ok) throw new Error('O servidor retornou um endereço de pagamento não confiável.');
@@ -6322,7 +6316,7 @@ function LifeOSV18() {
             try { lifeSessionRemove('life_pro_checkout_pending'); } catch (_) {}
             console.error('LIFE PRO checkout indisponível');
             const raw = String(e?.message || 'Checkout indisponível no momento.').trim();
-            const friendly = /assinatura automática anterior|tentativa de assinatura/i.test(raw) ? 'Já existe uma tentativa de assinatura por cartão. Confira a assinatura no seu Perfil antes de começar outra.' : /não confiável/i.test(raw) ? 'O servidor retornou um endereço de pagamento não confiável.' : /entre na sua conta/i.test(raw) ? 'Entre na sua conta antes de assinar.' : /failed to fetch|network/i.test(raw) ? 'Não foi possível falar com o servidor de pagamento. Confira a internet e tente novamente.' : /function|backend|404/i.test(raw) ? 'O Checkout Pro não está publicado no Supabase. Instale a função de pagamento e o banco desta versão.' : 'Não foi possível abrir a assinatura. Confira a conexão e tente novamente.';
+            const friendly = /assinatura automática anterior|tentativa de assinatura/i.test(raw) ? 'Já existe uma tentativa de assinatura por cartão. Confira a assinatura no seu Perfil antes de começar outra.' : /não confiável/i.test(raw) ? 'O servidor retornou um endereço de pagamento não confiável.' : /entre na sua conta/i.test(raw) ? 'Entre na sua conta antes de assinar.' : /failed to fetch|network/i.test(raw) ? 'Não foi possível falar com o servidor de pagamento. Confira a internet e tente novamente.' : /function|backend|404/i.test(raw) ? 'O checkout do Mercado Pago ainda não está disponível. Consulte o suporte.' : 'Não foi possível abrir a assinatura. Confira a conexão e tente novamente.';
             setShowProPreview(false); setShowPlanChoice(true);
             setProCheckoutError(friendly);
             setToast('NÃO FOI POSSÍVEL ABRIR O CHECKOUT'); setTimeout(() => setToast(''), 3600);
@@ -6392,7 +6386,7 @@ function LifeOSV18() {
     const lifeOrgInitialView = /projet/.test(lifeAdvancedIntentKey) ? 'Projetos' : /agenda/.test(lifeAdvancedIntentKey) ? 'Agenda' : /7 dias/.test(lifeAdvancedIntentKey) ? '7 dias' : /atras/.test(lifeAdvancedIntentKey) ? 'Atrasadas' : /aguard/.test(lifeAdvancedIntentKey) ? 'Aguardando' : 'Hoje';
     const lifeBillingRequest = async (action) => {
         if (!window.lifeSupabase) throw new Error('Entre na sua conta.');
-        const result = await window.lifeSupabase.functions.invoke('mercadopago-create-subscription',{body:{action}});
+        const result = await window.lifeSupabase.functions.invoke('mercadopago-create-checkout',{body:{action}});
         if (result?.error) throw result.error;
         return result?.data || {};
     };

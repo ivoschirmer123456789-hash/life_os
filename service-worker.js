@@ -1,4 +1,4 @@
-const LIFE_CACHE='life-os-15.8.5-guest-pro-reconciliation';
+const LIFE_CACHE='life-os-15.8.5-checkout1';
 const ASSET_BUILD='15.8.5';
 const SHELL=[
   './',
@@ -80,7 +80,7 @@ self.addEventListener('install',event=>{
     try {
       // Mirror the page's release query for CSS/JS. Avoid duplicate downloads
       // when installing the PWA just after the page has loaded them.
-      const urls=SHELL.map(p=>p.startsWith('./assets/')&&/\.(css|js)$/.test(p)?p+'?v='+ASSET_BUILD:p);
+      const urls=SHELL.map(p=>p.endsWith('/life-app-15.7.1.js')?p+'?v=15.8.5-checkout1':(p.startsWith('./assets/')&&/\.(css|js)$/.test(p)?p+'?v='+ASSET_BUILD:p));
       await cache.addAll(urls);
     } catch (e) {
       await caches.delete(LIFE_CACHE);

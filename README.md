@@ -278,3 +278,24 @@ Nota: se já houver uma função `life-ai` publicada, compare as versões e faç
 - Os arquivos SQL e Edge Functions **precisam** ser implantados separadamente da Vercel.
 - Para desfazer a alteração no frontend, restaure o ZIP anterior. Para reverter o backend, interrompa somente as novas funções, preservando os registros financeiros e logs (não apague pagamentos históricos).
 - O webhook confere assinatura, existência de pedido e valor/moeda, e obtém status na API. Ainda assim, para uso comercial, execute testes de integração e conciliação com um responsável pelo negócio. Não há confirmação de ambiente produtivo nesta entrega.
+
+
+## Patch de checkout (30/10/2026) — pré-publicação, NÃO ativado
+
+Este pacote mantém a base LIFE OS 15.8.5 e a estrutura original de 100 arquivos.
+A interface agora chama a Edge Function **mercadopago-create-checkout** nas ações de
+criar checkout, consultar status e reconciliar pagamentos, em vez da função antiga.
+A segunda tentativa HTTP de criar checkout foi retirada para evitar pedidos
+duplicados quando a primeira resposta não é recebida. O service worker usa novo
+cache para entregar o JavaScript atualizado.
+
+**Não publicar nem habilitar novas cobranças sem validação:** a função
+mercadopago-create-checkout implantada no Supabase deve ser revisada para chamar
+a RPC `life_apply_checkout_payment_v1585`, e a função
+mercadopago-checkout-webhook deve ter Verify JWT desativado e assinatura HMAC
+válida. Mantenha `LIFE_BILLING_ENABLED=0` até testes em ambiente de testes
+e autorização do responsável pela conta comercial. A publicação do site não publica
+Edge Functions automaticamente e não prova que Pix/cartão estão disponíveis.
+
+O código de referência legado em `supabase/functions/mercadopago-create-subscription`
+foi preservado para histórico; não use esse arquivo para substituir a função nova.
