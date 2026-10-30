@@ -1,3 +1,36 @@
+## Ajuste do botão de compra — 30/10/2026
+
+## AUDITORIA DE ENTREGA — 30/10/2026
+
+- Base: LIFE OS 15.8.5, **100 arquivos**. Foram revisadas as referências a assets e cache,
+  sintaxe JS/TS, opções de login/convidado, navegação, treinos, alimentação, estudos,
+  organizador, IA local, visualização FREE/PRO e a ligação do botão **ASSINAR O PRO**.
+- A interface chama `mercadopago-create-checkout` e o arquivo-fonte correspondente
+  foi atualizado para o código corrigido, sem sobrescrever a função legada no Supabase.
+  **Este ZIP NÃO publica Edge Functions automaticamente.**
+- Foram verificados estaticamente cerca de 810 elementos `button` construídos pelo
+  aplicativo. A maioria declara `onClick`; os demais usam callbacks abreviados,
+  `submit` de formulário ou `onPointerDown` para arrastar. Isso é verificação de
+  ligação, **não 810 cliques E2E reais**.
+- Os testes de código passaram no fuso do projeto e a suíte foi tornada independente
+  do fuso da máquina. Não foi possível abrir o site completo autenticado e executar
+  cliques reais com Supabase/Mercado Pago nesta auditoria.
+- **Pagamentos não estão verificados em produção.** Enquanto `LIFE_BILLING_ENABLED=0`,
+  a criação de checkout está corretamente bloqueada. Testes de retorno, webhook,
+  estorno e disponibilização de Pix/cartão/boleto exigem credenciais de teste, conta
+  compatível e validação ponta a ponta, antes de receber dinheiro real.
+- Não execute migrações SQL legadas deste pacote sobre um banco de produção já
+  configurado; revise scripts e mantenha cópia de segurança.
+
+---
+
+
+- A tela PRO exibe apenas o botão principal **ASSINAR O PRO**. O valor R$ 29,90/30 dias e a renovação manual permanecem visíveis.
+- O botão pede um checkout hospedado ao Supabase, valida a URL retornada e redireciona na mesma aba ao ambiente do Mercado Pago. Os meios (Pix, cartão ou boleto) aparecem **somente lá**, conforme habilitação e disponibilidade da conta vendedora.
+- Removidos o bloco explicativo de métodos e o segundo botão de tentativa. Erros são exibidos discretamente, sem simular sucesso.
+- A variável do Supabase `LIFE_BILLING_ENABLED` continua em `0`: o servidor bloqueará o pagamento até que os testes e a liberação administrativa sejam concluídos. **Nunca ative cobranças apenas para eliminar o erro da interface.**
+- O checkout real e os webhooks não foram testados contra credenciais do Mercado Pago nesta revisão.
+
 # LIFE OS 15.8.5 — Auditoria de gráficos, vídeos e geração + ativação PRO
 
 **Versão 15.8.5 · 100 arquivos · baseada na 15.7.2 mais recente (modo convidado + design Power Premium)**
@@ -19,8 +52,8 @@ Cobertura: lógica do cérebro LIFE, regras de planos e questionários, nutriç�
 ## O que esta correção faz
 
 - **Checkout único do Mercado Pago**: o comprador escolhe Pix, cartão ou boleto na página oficial, se estiverem disponíveis na conta do vendedor. R$ 29,90 por **30 dias de acesso**, pagamento avulso com renovação manual — não é débito automático.
-- **Confirmação obrigatória no servidor**: a notificação assinada chega em `mercadopago-webhook`, o backend busca o pagamento real, valida valor, moeda, referência e aprovação, e grava o PRO por RPC transacional no Supabase. Voltar ao site não libera acesso por si só.
-- **Recuperação de pagamentos aprovados**: a função autenticada `mercadopago-create-subscription` aceita `action=reconcile` para consultar somente pedidos do próprio usuário registrados em `life_mp_checkouts` e em `life_pix_orders`. Ela consulta a API oficial e aplica com idempotência pagamentos que não foram refletidos pelo webhook. A interface executa esse processo ao voltar do checkout e quando a pessoa seleciona **VERIFICAR PAGAMENTO / PRO** no Perfil.
+- **Confirmação obrigatória no servidor**: a notificação do checkout novo chega em `mercadopago-checkout-webhook`, o backend busca o pagamento real, valida valor, moeda, referência e aprovação, e grava o PRO por RPC transacional no Supabase. Voltar ao site não libera acesso por si só.
+- **Recuperação de pagamentos aprovados**: a função autenticada `mercadopago-create-checkout` aceita `action=reconcile` para consultar somente pedidos do próprio usuário registrados em `life_mp_checkouts` e em `life_pix_orders`. Ela consulta a API oficial e aplica com idempotência pagamentos que não foram refletidos pelo webhook. A interface executa esse processo ao voltar do checkout e quando a pessoa seleciona **VERIFICAR PAGAMENTO / PRO** no Perfil.
 - **Recibos em duplicidade** não adicionam tempo duas vezes. Estornos/chargebacks do checkout novo têm reversão idempotente; o webhook Pix legado permanece preservado para pagamentos antigos.
 - **Guest/FREE e todas as abas** mantidos, com o projeto em 100 arquivos.
 
@@ -35,17 +68,17 @@ Cobertura: lógica do cérebro LIFE, regras de planos e questionários, nutriç�
    - `LIFE_ALLOWED_ORIGINS` (origem HTTPS do LIFE, sem barra final; se forem vários, separar por vírgula)
    - `LIFE_BILLING_ENABLED=1` **apenas após** instalar a função, a migração e validar a configuração.
    - O Supabase fornece os segredos padrão `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`. **Não cole segredos no navegador, HTML, GitHub ou em um chat**. O webhook Pix legado, se ainda em uso, usa os nomes antigos `MP_ACCESS_TOKEN` e `MP_WEBHOOK_SECRET`.
-4. Publique pelo Supabase CLI as funções:
+4. **Confira as funções novas já publicadas** no painel Supabase. Os comandos abaixo são exemplos para uma instalação via CLI com os arquivos de código completos (o código do novo webhook foi fornecido em pacote separado):
 
    ```sh
-   supabase functions deploy mercadopago-create-subscription
-   supabase functions deploy mercadopago-webhook --no-verify-jwt
-   supabase functions deploy mercadopago-pix-webhook --no-verify-jwt
+   supabase functions deploy mercadopago-create-checkout
+   supabase functions deploy mercadopago-checkout-webhook --no-verify-jwt
+   # manter publicadas as funções legadas sem substituí-las
    ```
 
    **Atenção:** as funções webhook são públicas somente para receber notificações de máquinas, mas verificam HMAC e consultam a API antes de aplicar o pagamento. A função de criação/reconciliação exige um usuário autenticado. O comando `--no-verify-jwt` deve ser usado *somente* nos webhooks, nunca na função de checkout.
-5. Na aplicação do **Mercado Pago → Webhooks → Produção**, habilite o evento **Pagamentos (`payment`)** e registre esta URL do seu projeto Supabase: `https://SEU_PROJECT_REF.supabase.co/functions/v1/mercadopago-webhook`. A assinatura secreta deve ser a mesma do segredo `MERCADOPAGO_WEBHOOK_SECRET`. Não substitua a configuração antiga Pix se houver pedidos pendentes sem antes planejar a transição; o checkout novo já possui `notification_url` própria.
-6. Ative `LIFE_BILLING_ENABLED=1` e publique **este ZIP com `index.html` na raiz da Vercel**. Ao abrir, confira a versão 15.8.5; se ainda aparecer uma anterior, faça atualização forçada/limpe o cache do aplicativo instalado.
+5. Confirme que o Mercado Pago está enviando notificações `payment` para a URL HTTPS de `mercadopago-checkout-webhook` (a preferência do novo checkout já fornece `notification_url`). O segredo HMAC precisa corresponder ao webhook configurado. Preserve a URL antiga usada por outras assinaturas e por Pix legado.
+6. Publique primeiro **em Preview** na Vercel e faça os testes sem cobrança; não altere `LIFE_BILLING_ENABLED=0` por enquanto. A habilitação (`1`) depende de testes de integração autorizados com responsável pela conta comercial. O ZIP não libera pagamentos por si só.
 7. **Sem cobrar novamente**, entre na mesma conta que realizou o pagamento anterior e toque em **Perfil → VERIFICAR PAGAMENTO / PRO**. Confirme que o perfil muda para `PRO` e que `pro_until` foi preenchido; um pedido pago registrado nas duas tabelas pode ser reconciliado. Se não mudar, confira os **Logs** de ambas as Edge Functions e os dados do pedido no Supabase. Para pagamentos antigos de cartão que não têm pedido registrado nessas tabelas, é necessária conciliação administrativa com recibo oficial e número da transação; não force o plano pelo navegador.
 8. Antes de vender, faça **testes autorizados em ambiente de teste do Mercado Pago** para Pix e cartão. Verifique que uma notificação duplicada não dobra o período, um pagamento pendente não ativa PRO, a falha do webhook é recuperada pela reconciliação, o perfil de outra pessoa permanece FREE e o estorno altera o acesso corretamente. Não realize transações reais repetidas para diagnóstico. A conta de vendedor deve atender aos requisitos oficiais de titularidade e idade; quando necessário, use a de um responsável autorizado.
 
@@ -297,5 +330,7 @@ válida. Mantenha `LIFE_BILLING_ENABLED=0` até testes em ambiente de testes
 e autorização do responsável pela conta comercial. A publicação do site não publica
 Edge Functions automaticamente e não prova que Pix/cartão estão disponíveis.
 
-O código de referência legado em `supabase/functions/mercadopago-create-subscription`
-foi preservado para histórico; não use esse arquivo para substituir a função nova.
+A partir desta auditoria, o código-fonte do checkout corrigido está em
+`supabase/functions/mercadopago-create-checkout/index.ts`. O checkout legado que
+já estiver publicado no Supabase não é alterado pelo ZIP; mantenha o backup anterior
+caso precise consultar a versão antiga.

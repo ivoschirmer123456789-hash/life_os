@@ -6305,7 +6305,20 @@ function LifeOSV18() {
             setToast('ABRINDO CHECKOUT SEGURO…');
             let data = null, invokeError = null;
             try { const result = await window.lifeSupabase.functions.invoke('mercadopago-create-checkout', { body: {action:'create',method:'checkout'} }); data = result?.data || null; invokeError = result?.error || null; } catch (e) { invokeError = e; }
-            if (invokeError && !lifeCheckoutUrlFrom(data)) throw invokeError;
+            if (invokeError && !lifeCheckoutUrlFrom(data)) {
+                // Supabase inclui a mensagem do servidor na resposta de erros HTTP.
+                // Evita ocultar a flag de cobrança desligada sob uma mensagem genérica.
+                let serverMessage = '';
+                try {
+                    const response = invokeError.context;
+                    if (response && typeof response.clone === 'function') {
+                        const payload = await response.clone().json();
+                        serverMessage = String(payload?.error || '').trim();
+                    }
+                } catch (_) {}
+                throw new Error(serverMessage || invokeError.message || 'Checkout indisponível.');
+            }
+            if (data?.error) throw new Error(String(data.error));
             const checkoutUrl = lifeCheckoutUrlFrom(data);
             if (!window.LifeIntegrity123?.validCheckoutUrl(checkoutUrl) || !window.LifeProduction126?.requestGuard({checkoutUrl,loggedIn:true,role:realPlan}).ok) throw new Error('O servidor retornou um endereço de pagamento não confiável.');
             try { lifeSessionSet('life_pro_checkout_pending', String(Date.now())); window.lifeProductEvent && window.lifeProductEvent('checkout_started', { plan: 'PRO', method: 'checkout_pro' }); } catch (e) {}
@@ -6316,7 +6329,7 @@ function LifeOSV18() {
             try { lifeSessionRemove('life_pro_checkout_pending'); } catch (_) {}
             console.error('LIFE PRO checkout indisponível');
             const raw = String(e?.message || 'Checkout indisponível no momento.').trim();
-            const friendly = /assinatura automática anterior|tentativa de assinatura/i.test(raw) ? 'Já existe uma tentativa de assinatura por cartão. Confira a assinatura no seu Perfil antes de começar outra.' : /não confiável/i.test(raw) ? 'O servidor retornou um endereço de pagamento não confiável.' : /entre na sua conta/i.test(raw) ? 'Entre na sua conta antes de assinar.' : /failed to fetch|network/i.test(raw) ? 'Não foi possível falar com o servidor de pagamento. Confira a internet e tente novamente.' : /function|backend|404/i.test(raw) ? 'O checkout do Mercado Pago ainda não está disponível. Consulte o suporte.' : 'Não foi possível abrir a assinatura. Confira a conexão e tente novamente.';
+            const friendly = /pagamento ainda não configurado|billing.*disabled|não habilitad/i.test(raw) ? 'Pagamento temporariamente indisponível. O checkout ainda não foi liberado.' : /assinatura automática anterior|tentativa de assinatura/i.test(raw) ? 'Já existe uma tentativa de pagamento. Confira seu Perfil antes de tentar novamente.' : /não confiável/i.test(raw) ? 'O link de pagamento não pôde ser validado.' : /entre na sua conta|sessão inválida/i.test(raw) ? 'Entre na sua conta antes de assinar.' : /failed to fetch|network/i.test(raw) ? 'Sem conexão com o servidor de pagamentos. Tente novamente depois.' : /function|backend|404/i.test(raw) ? 'O checkout está indisponível no momento. Consulte o suporte.' : 'Não foi possível abrir o pagamento agora. Tente novamente mais tarde.';
             setShowProPreview(false); setShowPlanChoice(true);
             setProCheckoutError(friendly);
             setToast('NÃO FOI POSSÍVEL ABRIR O CHECKOUT'); setTimeout(() => setToast(''), 3600);
@@ -11500,7 +11513,7 @@ function LifeOSV18() {
                                 React.createElement("div", { className: "life-pro-demo-benefit" }, React.createElement("b", null, "COMO ISSO AJUDA"), React.createElement("p", null, preview.benefit)))),
                     React.createElement("footer", { className: "life-pro-preview-actions" },
                         React.createElement("button", { type: "button", className: "ghost", onClick: () => setShowProPreview(false) }, "CONTINUAR COM OS LIMITES DO FREE"),
-                        React.createElement("button", { type: "button", className: "primary", disabled: proCheckoutBusy, onClick: (event) => { event.stopPropagation(); startLifeProCheckout(); } }, proCheckoutBusy ? "ABRINDO MERCADO PAGO…" : "DESBLOQUEAR O SISTEMA COMPLETO →"))),
+                        React.createElement("button", { type: "button", className: "primary", disabled: proCheckoutBusy, onClick: (event) => { event.stopPropagation(); startLifeProCheckout(); } }, proCheckoutBusy ? "ABRINDO PAGAMENTO…" : "ASSINAR O PRO"))),
             ));
         })()),
         showPlanChoice && !hasV18Pro && lifePortal(React.createElement("div", { className: "life-pro-paywall life-billing-visible-v1582" + (lifeTheme === 'day' ? " life-theme-day" : ""), onClick: () => setShowPlanChoice(false) },
@@ -11532,12 +11545,10 @@ function LifeOSV18() {
                         React.createElement("span", null, "+9 áreas e sistemas exclusivos: Notas, Receitas, LIFE AI, Planner OS, Biblioteca, Favoritos, Meu LIFE, Evolução e Archive"),
                         React.createElement("span", null, tasks.filter(t => !taskIsDone(t)).length ? ('Hoje você já tem ' + tasks.filter(t => !taskIsDone(t)).length + ' tarefa(s) que o PRO pode cruzar no planejamento.') : 'Quando você registrar mais coisas, o PRO cruza contexto entre as áreas.'),
                         React.createElement('div', {className:'life-billing-options-v158'},
-                            React.createElement('p',{className:'life-billing-label-v158'},'PAGAR NO MERCADO PAGO · R$ 29,90 / 30 DIAS'),
-                            React.createElement('button',{type:'button',onClick:()=>startLifeProCheckout(),disabled:proCheckoutBusy}, proCheckoutBusy?'ABRINDO MERCADO PAGO…':'IR PARA O MERCADO PAGO →'),
-                            React.createElement('small',{className:'life-billing-note-v158'},'A escolha entre Pix, cartão e boleto acontece no Mercado Pago, conforme a disponibilidade. Acesso PRO por 30 dias após aprovação; renovação manual. Nenhum pagamento será cobrado automaticamente.'),
-                            proCheckoutBusy&&React.createElement('small',{role:'status'},'GERANDO LINK OFICIAL DO MERCADO PAGO…')),
-                        proCheckoutError && React.createElement("div", { className: "life-pro-checkout-error-v67", role: "alert" }, React.createElement("b", null, "NÃO CONSEGUIMOS ABRIR A ASSINATURA"), React.createElement("p", null, proCheckoutError), realPlan !== 'OWNER' && React.createElement("button", { type: "button", onClick: () => { setProCheckoutError(''); startLifeProCheckout(); }, disabled: proCheckoutBusy }, "TENTAR ABRIR MERCADO PAGO")),
-                        React.createElement("p", { className: "life-pro-secure" }, "Pagamento no Mercado Pago · PRO por 30 dias · renovação manual"))),
+                            React.createElement('button',{type:'button',onClick:()=>startLifeProCheckout(),disabled:proCheckoutBusy,'aria-label':'Assinar o PRO por R$ 29,90, acesso por 30 dias'}, proCheckoutBusy?'ABRINDO PAGAMENTO…':'ASSINAR O PRO'),
+                            proCheckoutBusy&&React.createElement('small',{role:'status'},'CONECTANDO AO MERCADO PAGO…')),
+                        proCheckoutError && React.createElement('small',{role:'alert',style:{display:'block',color:'#ffcaac',lineHeight:1.5,margin:'8px 0'}},proCheckoutError),
+                        React.createElement("p", { className: "life-pro-secure" }, "R$ 29,90 por 30 dias · renovação manual · sem cobrança automática"))),
                 React.createElement("section", { className: "life-pro-universe-showcase" },
                     React.createElement("div", { className: "life-pro-universe-head" },
                         React.createElement("small", null, "O QUE SOME NO FREE E APARECE NO PRO"),

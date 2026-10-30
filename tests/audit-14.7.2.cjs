@@ -1,3 +1,5 @@
+// Audit dates are defined in the LIFE OS Brazil timezone; deterministic on CI.
+process.env.TZ = 'America/Campo_Grande';
 'use strict';
 const fs=require('node:fs'), path=require('node:path'),vm=require('node:vm'), assert=require('node:assert/strict');
 const base=path.resolve(__dirname,'..');

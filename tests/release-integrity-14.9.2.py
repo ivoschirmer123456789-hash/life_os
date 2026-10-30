@@ -35,3 +35,22 @@ print('PASS',len(references),'HTML local asset links exist')
 print('PASS',len(swassets),'SW precache paths exist')
 print('PASS configuration, manifest, HTML and cache aligned')
 print('PASS 21+ CSS, latest CSS syntax and dual-theme styles')
+
+
+# LIFE OS 15.8.5 — structural control/checkout regression checks (not remote E2E)
+app=(root/'assets/js/life-app-15.7.1.js').read_text()
+assert app.count('React.createElement("button"') + app.count("React.createElement('button'") >= 600
+assert "functions.invoke('mercadopago-create-checkout'" in app
+assert "onClick:()=>startLifeProCheckout()" in app
+assert "'ASSINAR O PRO'" in app
+assert 'lifeCheckoutUrlFrom' in app and 'validCheckoutUrl(checkoutUrl)' in app
+assert "'mercadopago-create-subscription'" not in app
+assert 'LIFE_VALID_AREAS' in app
+assert 'function validCheckoutUrl(' in (root/'assets/js/life-integrity-12.3.js').read_text()
+assert (root/'supabase/functions/mercadopago-create-checkout/index.ts').exists()
+assert 'life_apply_checkout_payment_v1585' in (root/'supabase/functions/mercadopago-create-checkout/index.ts').read_text()
+assert 'mercadopago-checkout-webhook' in (root/'supabase/functions/mercadopago-create-checkout/index.ts').read_text()
+assert not (root/'supabase/functions/mercadopago-create-subscription/index.ts').exists()
+for page in ('landing.html','offline.html','privacy.html','support.html','terms.html'):
+ assert (root/page).is_file()
+print('PASS 12 checkout, CTA, pages, and action wiring regression guards')
